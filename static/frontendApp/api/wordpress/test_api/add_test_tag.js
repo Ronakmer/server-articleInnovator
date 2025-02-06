@@ -24,7 +24,7 @@ async function add_test_tag() {
             
 
             const loader = document.getElementById('loader4-spinner');
-            if (data.status_code === 200 | data.status_code === 201) {
+            if (data.status_code === 200 || data.status_code === 201) {
                 // tagLabel.innerText = 'Success';
                 
                 // loader.innerText = 'Please download and connect botoxbyte plugin';

@@ -24,7 +24,7 @@ async function add_test_category() {
             
 
             const loader = document.getElementById('loader6-spinner');
-            if (data.status_code === 200 | data.status_code === 201) {
+            if (data.status_code === 200 || data.status_code === 201) {
                 // categoryLabel.innerText = 'Success';
                 
                 loader.classList.remove('animate-spin');

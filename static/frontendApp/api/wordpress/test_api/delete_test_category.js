@@ -28,7 +28,7 @@ async function delete_test_category(test_category_id) {
             // const deletecategoryLabel = document.getElementById('delete_test_category_id');
             const loader = document.getElementById('loader7-spinner');
                 
-            if (data.status_code === 200 | data.status_code === 201) {
+            if (data.status_code === 200 || data.status_code === 201) {
                 // deletecategoryLabel.innerText = 'Success';
                 loader.classList.remove('animate-spin');
                 loader.classList.remove('border-t-indigo-600');

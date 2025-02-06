@@ -205,7 +205,6 @@ def update_competitor_domain_mapping(request, slug_id):
         data["article_type_id"] = article_type_obj.id  
         data["prompt_id"] = prompt_obj.id  
         data["competitor_id"] = competitor_obj.id  
-        data["created_by"] = competitor_obj.id  
         data['created_by'] = obj.created_by.id
         # if 'created_by' in data:
         #     del data['created_by']
