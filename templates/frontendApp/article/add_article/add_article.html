@@ -1,0 +1,112 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Article</h3>
+        <p class="text-xs text-gray-500">Create new article here.</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_article_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+            Back
+        </a>
+    </div>
+</div>
+
+<div class="col-span-12 lg:col-span-12 mt-4">
+    <div class="w-full">
+        <div class="p-4 mb-4 border border-gray-200 rounded-2xl">
+            <div class="flex items-center justify-between">
+                <!-- Step 1 -->
+                <div class="flex-1 flex items-center justify-center">
+                    <div id="step1-circle"
+                        class="flex items-center justify-center w-[34px] h-[34px] bg-indigo-600 text-white rounded-full">
+                        1
+                    </div>
+                    <p class="text-sm text-gray-500 ml-2">Article Type</p>
+                </div>
+                <div id="line1" class="flex-1 h-0.5 bg-gray-300"></div>
+                <!-- Step 2 -->
+                <div class="flex-1 flex items-center justify-center">
+                    <div id="step2-circle"
+                        class="flex ml-2 items-center justify-center w-[34px] h-[34px] bg-gray-200 text-white rounded-full">
+                        2
+                    </div>
+                    <p class="text-sm text-gray-500 ml-2 mr-2">Article Details</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--step 1 -->
+<div id="step1" class="p-4 mb-4 border border-gray-200 rounded-2xl">
+    {% include 'frontendApp/article/add_article/article_type.html' %}
+
+</div>
+
+<!-- article_type api -->
+<script src="{% static 'frontendApp/api/article/add_article/article_type.js' %}"></script>
+
+
+
+
+
+
+<!--step 2 -->
+<div id="step2" class="hidden">
+
+    <div id="add_article_ai" class="hidden">
+        {% include 'frontendApp/article/add_article/add_article_ai.html' %}
+        
+    </div>    
+     
+    <div id="add_article_manual" class="hidden">
+
+        {% include 'frontendApp/article/add_article/add_article_manual.html' %}
+
+    </div> 
+
+</div>    
+
+
+
+
+
+<!--article_scheduled-->
+<script src="{% static 'frontendApp/api/article/base/article_scheduled.js' %}"></script>
+
+
+
+<!-- article_step api -->
+<script src="{% static 'frontendApp/api/article/add_article/article_step.js' %}"></script>
+
+
+
+<!-- add_article api -->
+{% comment %} <script src="{% static 'frontendApp/api/article/add_article/add_article.js' %}"></script> {% endcomment %}
+
+
+
+{% endblock body %}

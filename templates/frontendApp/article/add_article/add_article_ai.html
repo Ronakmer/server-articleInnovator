@@ -1,0 +1,168 @@
+{% load static%}
+
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-3 font-poppins">
+    <div class="col-span-12 lg:col-span-4">
+        <div class="p-4 border border-gray-200 rounded-2xl ">
+            <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                Article Details</h5>
+
+            <form method="POST" action="" name="ai_article_form" id="ai_article_form" nctype="multipart/form-data" class="flex flex-col gap-4 pt-4 ">
+
+                <div class="flex items-center p-2 border border-gray-200 rounded-2xl">
+                    <div class="text-indigo-500 bg-gray-200 border-solid border-gray-200 rounded-xl p-1">
+                        <svg class="w-6 h-6" viewBox="0 0 22 22"  fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.0126 9.84869H15.3069L21.1141 6.49733L19.9625 4.50267L14.1545 7.854L17.5067 2.04967L15.5116 0.898331L12.1587 6.7012V0H9.85395V6.70193L6.5011 0.898331L4.50521 2.04967L7.85736 7.85253L2.05089 4.50267L0.898552 6.49733L6.70575 9.84869H0V12.152H6.70502L0.898552 15.5034L2.05016 17.498L7.85809 14.1467L4.50521 19.951L6.50037 21.1024L9.85395 15.2988V22H12.1587V15.155L15.5731 21.0657L17.4444 19.9863L14.0291 14.0742L19.961 17.4973L21.1134 15.5027L15.3069 12.1513H22.0119V9.84869H22.0126ZM11.0063 14.1313C10.5949 14.1314 10.1875 14.0504 9.8074 13.8931C9.42733 13.7357 9.0819 13.505 8.79097 13.2142C8.50004 12.9234 8.26921 12.5782 8.11174 12.1982C7.95426 11.8182 7.8732 11.4109 7.87313 10.9997C7.87305 10.5883 7.95403 10.181 8.11145 9.801C8.26888 9.42101 8.49955 9.07566 8.79048 8.78481C9.08132 8.49397 9.42659 8.26322 9.80675 8.10575C10.1868 7.9483 10.5941 7.86727 11.0056 7.8672C11.8364 7.86713 12.6333 8.19698 13.2209 8.78432C13.8085 9.37167 14.1387 10.1683 14.1388 10.9989C14.1389 11.8295 13.8089 12.6263 13.2214 13.2137C12.634 13.8012 11.8371 14.1312 11.0063 14.1313Z" fill="#5753F3"/>
+                        </svg>
+                    </div>
+                    <span class="ml-2 text-gray-600 text-center font-bold" name="article_type_title" id="article_type_title"></span>
+                    
+                    <!--for api -->
+                    <input type="hidden" id="ai_article_type_slug_id" name="ai_article_type_slug_id" placeholder="Enter AI Article Type Slug ID"/>
+                </div>                
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Select Domain</label>
+                            <div class="relative">
+                                <select id="type" name="ai_domain_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                </select>
+
+                                <!-- for pass data in api -->
+                                <input type="hidden" name="ai_domain_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                                placeholder="">
+
+                                <!-- Custom dropdown arrow -->
+                                <div
+                                    class="  pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Select Prompt</label>
+                            <div class="relative">
+                                <select id="type" name="prompt_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                </select>
+
+                                <!-- for pass data in api -->
+                                <input type="hidden" name="prompt_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                                placeholder="">
+                                
+                                <!-- Custom dropdown arrow -->
+                                <div
+                                    class="  pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full">
+                        <label for="countries"
+                        class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Status</label>
+
+                        <div class="wordpress-status">
+                            <div class="flex items-center">
+                                <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                    <label>
+                                        <input type="radio" class="status-radio" name="wp_status_ai" value="draft" id="draft" onclick="ai_toggle_date_time_fields()" checked> Draft
+                                    </label>
+                                </div>
+                                <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                    <label>
+                                        <input type="radio" class="status-radio" name="wp_status_ai" value="publish" id="publish" onclick="ai_toggle_date_time_fields()"> Publish
+                                    </label>
+                                </div>
+                                <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                    <label>
+                                        <input type="radio" class="status-radio" name="wp_status_ai" value="scheduled" id="ai_scheduled" onclick="ai_toggle_date_time_fields()"> Scheduled
+                                    </label>
+                                </div>
+                            </div>
+                
+                            <!-- Date and Time fields -->
+                            <div id="ai_date_time_fields" class="flex items-center mt-4 hidden ">
+                                <div class="mr-4">
+                                    <input type="date" class="border border-gray-300 rounded-md p-2" />
+                                </div>
+                                <div class="mr-4">
+                                    <input type="time" class="border border-gray-300 rounded-md p-2" />
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3" id="ai_url">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Url
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                            fill="#EF4444"></path>
+                        </svg></label>
+                        <textarea id="default-search" name="url" rows="4" 
+                        class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed" 
+                        placeholder="https://domain.com/article1" required=""></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-start gap-3" id="ai_keyword">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Keyword
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                            fill="#EF4444"></path>
+                        </svg></label>
+                        <textarea id="default-search" name="keyword" rows="4" 
+                        class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed" 
+                        placeholder="Keyword .." required=""></textarea>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <button type="button" onclick="add_ai_article_api()"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+
+                        Save
+                    </button>
+
+                    <button type="button" id="" onclick="step_1()"
+                        class="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 flex-shrink-0 ">
+                        Back
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- add_article api -->
+ 
+<script src="{% static 'frontendApp/api/article/add_article/add_ai_article/article_dropdowns.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/add_article/add_ai_article/add_ai_article.js' %}"></script>
+
+    

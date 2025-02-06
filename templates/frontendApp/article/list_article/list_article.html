@@ -1,0 +1,713 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static %}
+
+
+{% block body %}
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Team & list</h3>
+        <p class="text-xs text-gray-500">Manage your Team.</p>
+    </div>
+
+
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Filter Button -->
+        <button id="filterButton"
+            class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700  border border-gray-300 rounded-lg hover:bg-indigo-50 active:border-indigo-600">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.25 5.25H15.75M4.5 9H13.5M7.5 12.75H10.5" stroke="#4F46E5"
+                    stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+
+            Filter
+        </button>
+        <button id="clearFilterButton"
+            class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg ml-2">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.75 16.5H15.75" stroke="#4F46E5" stroke-width="1.125"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M2.18352 13.185L4.81602 15.8175C5.69352 16.695 7.12602 16.695 7.99602 15.8175L15.8186 7.99498C16.6961 7.11748 16.6961 5.68497 15.8186 4.81497L13.186 2.18248C12.3085 1.30498 10.8761 1.30498 10.0061 2.18248L2.18352 10.005C1.30602 10.875 1.30602 12.3075 2.18352 13.185Z"
+                    stroke="#4F46E5" stroke-width="1.125" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path d="M5.33984 6.84753L11.1523 12.66" stroke="#4F46E5" stroke-width="1.125"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M2.63867 13.245L6.87614 9" stroke="#4F46E5" stroke-width="1.125"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4.75391 15.3675L8.99889 11.1225" stroke="#4F46E5" stroke-width="1.125"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Clear Filter
+        </button>
+
+
+        <!-- Sort By Button -->
+        <button
+            class="filterButton flex  items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700  border border-gray-300 rounded-lg hover:bg-gray-50">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.75719 15.375L2.99219 11.6175" stroke="#292D32" stroke-width="1.125"
+                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6.75781 2.625V15.375" stroke="#292D32" stroke-width="1.125"
+                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M11.2422 2.625L15.0072 6.3825" stroke="#292D32" stroke-width="1.125"
+                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M11.2422 15.375V2.625" stroke="#292D32" stroke-width="1.125"
+                    stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+            Sort by
+
+        </button>
+
+        <!-- Last 7 Days Button -->
+
+
+        <!-- new code start calender -->
+
+        <div x-data="datePicker()" x-init="init" class="relative">
+            <button @click="calendarVisible = !calendarVisible"
+                class=" filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 1.5V3.75" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12.0078 1.5V3.75" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M2.625 6.81738H15.375" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                        d="M15.7539 6.375V12.75C15.7539 15 14.6289 16.5 12.0039 16.5H6.00391C3.37891 16.5 2.25391 15 2.25391 12.75V6.375C2.25391 4.125 3.37891 2.625 6.00391 2.625H12.0039C14.6289 2.625 15.7539 4.125 15.7539 6.375Z"
+                        stroke="#292D32" stroke-width="1.125" stroke-miterlimit="10"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.7771 10.2751H11.7839" stroke="#292D32" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.7771 12.5251H11.7839" stroke="#292D32" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.00369 10.2751H9.01043" stroke="#292D32" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.00369 12.5251H9.01043" stroke="#292D32" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.2283 10.2751H6.23504" stroke="#292D32" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.2283 12.5251H6.23504" stroke="#292D32" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                <span x-text="startDate ? startDate + ' to ' + endDate : 'Last 7 Days'"></span>
+            </button>
+
+            <!-- Dialog Box -->
+            <div x-show="calendarVisible" @click.outside="calendarVisible = false"
+                class="absolute z-50 mt-2 bg-white rounded-lg shadow-lg w-[520px] max-w-screen-lg">
+                <div class="flex">
+                    <!-- Left Side -->
+                    <div class="w-1/3 p-4 border-r">
+                        <p class="text-sm font-medium text-gray-500 pb-3">Custom Date</p>
+                        <hr>
+                        <ul class="mt-3 space-y-4 text-sm">
+                            <li :class="selectedDate === 'yesterday' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                @click="setPredefinedDates('yesterday'); selectedDate = 'yesterday'"
+                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                Yesterday
+                            </li>
+                            <li :class="selectedDate === 'last7days' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                @click="setPredefinedDates('last7days'); selectedDate = 'last7days'"
+                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                Last 7 Days
+                            </li>
+                            <li :class="selectedDate === 'last15days' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                @click="setPredefinedDates('last15days'); selectedDate = 'last15days'"
+                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                Last 15 Days
+                            </li>
+                            <li :class="selectedDate === 'last30days' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                @click="setPredefinedDates('last30days'); selectedDate = 'last30days'"
+                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                Last 30 Days
+                            </li>
+                            <li :class="selectedDate === 'last3months' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                @click="setPredefinedDates('last3months'); selectedDate = 'last3months'"
+                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                Last 3 Months
+                            </li>
+                        </ul>
+
+
+                    </div>
+
+                    <!-- Right Side -->
+                    <div class="w-2/3 p-4">
+                        <div class="flex items-center gap-2 mb-4">
+                            <input type="text" placeholder="Start date" x-model="startDate"
+                                class="w-1/2 px-3 py-2 text-xs border rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 flatpickr-input active"
+                                readonly>
+                            <input type="text" placeholder="End date" x-model="endDate"
+                                class="w-1/2 px-3 py-2 text-xs border rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 flatpickr-input active"
+                                readonly>
+                        </div>
+                        <!-- Flatpickr Calendar (Always visible) -->
+                        <div id="flatpickr-calendar"></div>
+                        <div class="flex justify-between px-4 py-2">
+                            <button id="clearButton"
+                                class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                Clear all
+                            </button>
+                            <button id="applyButton"
+                                class="px-4 py-1 text-sm text-white bg-indigo-600 rounded-lg">Apply
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- new code end calender  -->
+
+        <!-- All Button -->
+
+        <div x-data="{
+            open: false,
+            searchTerms: [],
+            domains: ['topmovieranking.com', 'example.com', 'anotherdomain.com', 'yetanotherdomain.com'],
+            selectedDomains: [],
+            filteredDomains: [],
+            searchQuery: '',
+            init() {
+                this.filteredDomains = this.domains;
+            },
+            filterDomains() {
+                if (this.searchQuery.trim() === '') {
+                    this.filteredDomains = this.domains;
+                } else {
+                    this.filteredDomains = this.domains.filter(domain => domain.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                }
+            }
+        }" class="relative inline-block text-left">
+            <button @click="open = !open"
+                class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700  border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z"
+                        stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M6.00117 2.25H6.75117C5.28867 6.63 5.28867 11.37 6.75117 15.75H6.00117"
+                        stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M11.25 2.25C12.7125 6.63 12.7125 11.37 11.25 15.75" stroke="#292D32"
+                        stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M2.25 12V11.25C6.63 12.7125 11.37 12.7125 15.75 11.25V12"
+                        stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2.25 6.74995C6.63 5.28745 11.37 5.28745 15.75 6.74995"
+                        stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                All
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.0007 5.99973L8.00057 9.9999L3.99805 5.99738" stroke="#111827"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div x-show="open" @click.outside="open = false"
+                class="absolute left-0 mt-2 z-50 w-64 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-w-md:relative">
+                <!-- Search Box -->
+                <div class="p-4 border-b border-gray-200">
+                    <input type="text" x-model="searchQuery" @input="filterDomains"
+                        placeholder="Search..."
+                        class="w-full px-3 py-2 text-sm border rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <!-- Domain List -->
+                <div class="p-4 max-h-64 overflow-y-auto scrollbar-custom">
+                    <template x-for="domain in filteredDomains" :key="domain">
+                        <label
+                            class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                            <input type="checkbox" x-model="selectedDomains" :value="domain"
+                                class="mr-2">
+                            <span x-text="domain"></span>
+                        </label>
+                    </template>
+                    <!-- Clear and Apply Buttons -->
+                    <div class="flex justify-between px-4 py-2">
+                        <button @click="selectedDomains = []; searchQuery = ''; filterDomains()"
+                            class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">Clear
+                            all</button>
+                        <button @click="open = false"
+                            class="px-4 py-1 text-sm text-white bg-indigo-600 rounded-lg">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Search Box -->
+        <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                    fill="none">
+                    <path
+                        d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                        stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <input type="search" id="default-search"
+                class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                placeholder="Search here . . .">
+        </div>
+
+        <!-- Add Article Button -->
+        <a href="{% url 'add_article_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                    stroke-linecap="round"></path>
+            </svg>
+            New Article
+        </a>
+    </div>
+</div>
+
+
+
+<div id="filterSection" class="hidden  top-full mt-4 border-b pb-4  border-gray-300 ">
+    <div class="flex flex-wrap items-center justify-start gap-2">
+
+
+        <div x-data="{ open: false }" class="relative inline-block text-left">
+
+            <button @click="open = !open"
+                class="filterButton flex gap-2 border border-gray-300 rounded-lg items-center px-3 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50">
+                Clicks
+                <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div x-show="open" @click.outside="open = false"
+                class="absolute font-poppins left-0 mt-1 z-10 w-56 rounded-2xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div class="flex items-center px-4 pb-3 pt-4">
+
+                    <div class="block text-left">
+                        <p class="font-semibold text-sm  ">
+                            Filter by Clicks count
+                        </p>
+                    </div>
+                </div>
+                <div class="px-4 pb-3">
+
+                    <input type="search" id="default-search"
+                        class="block w-full max-w-xs px-4 mb-3 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                        placeholder="From">
+
+                    <input type="search" id="default-search"
+                        class="block w-full max-w-xs px-4 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                        placeholder="To">
+
+
+                </div>
+                <div class="flex justify-between px-4 pt-0 pb-4">
+                    <button
+                        class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">Clear
+                        all</button>
+                    <button
+                        class="px-3 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-600/70">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <button id=""
+            class=" filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Traffics
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Impressions
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+
+
+        <div x-data="{ open: false }" class="relative inline-block text-left">
+
+            <button @click="open = !open"
+                class="filterButton flex gap-2 border border-gray-300 rounded-lg items-center px-3 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50">
+                Articles by
+                <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div x-show="open" @click.outside="open = false"
+                class="absolute font-poppins left-0 mt-1 z-50 w-64 rounded-2xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+
+                <div class="p-4">
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 bg-indigo-600/15">
+                        <input type="checkbox" class="mr-2" checked=""> <img
+                            src="assets/images/leave-img-4.png" class="w-6 h-6 mr-1" /> John Smith
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="checkbox" class="mr-2"> <img
+                            src="assets/images/leave-img-4.png" class="w-6 h-6 mr-1" /> John Smith
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="checkbox" class="mr-2"> <img
+                            src="assets/images/leave-img-4.png" class="w-6 h-6 mr-1" /> John Smith
+                    </label>
+                    <div class="flex justify-between pt-2">
+                        <button
+                            class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">Clear
+                            all</button>
+                        <button
+                            class="px-4 py-1 text-sm text-white bg-indigo-600 rounded-lg">Apply</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div x-data="{ open: false }" class="relative inline-block text-left">
+
+            <button @click="open = !open"
+                class="filterButton flex gap-2 border border-gray-300 rounded-lg items-center px-3 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50">
+                Shared on
+                <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div x-show="open" @click.outside="open = false"
+                class="absolute font-poppins left-0 mt-1 z-50 w-64 rounded-2xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+
+                <div class="p-4">
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 bg-indigo-600/15">
+                        <input type="checkbox" class="mr-2" checked=""> <svg class="mr-2" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="12" fill="#0866FF" />
+                            <path
+                                d="M13.4329 17.5999H11.0887V13.8232H10.5938C10.2917 13.8232 10.0469 13.5783 10.0469 13.2762V12.2864C10.0469 11.9843 10.2917 11.7395 10.5938 11.7395H11.0887V10.4371C11.0887 9.35881 11.9639 8.48364 13.0422 8.48364H14.4487C14.7509 8.48364 14.9957 8.72847 14.9957 9.03061V10.2809C14.9957 10.583 14.7509 10.8278 14.4487 10.8278H13.4329V11.7395H14.4123C14.579 11.7395 14.73 11.8124 14.8342 11.9374C14.9384 12.0624 14.9801 12.2291 14.9488 12.3906L14.7509 13.3804C14.6988 13.6356 14.4748 13.818 14.2143 13.818H13.4329V17.5999ZM11.8701 16.8185H12.6515V13.0418H14.0268L14.131 12.5209H12.6567V10.5934C12.6567 10.2913 12.9016 10.0464 13.2037 10.0464H14.2195V9.26504H13.0422C12.3963 9.26504 11.8701 9.79118 11.8701 10.4371V12.5209H10.8283V13.0418H11.8701V16.8185Z"
+                                fill="white" />
+                            <path
+                                d="M13.5632 17.6H10.4376C7.60895 17.6 6.40039 16.3915 6.40039 13.5628V10.4372C6.40039 7.60858 7.60895 6.40002 10.4376 6.40002H13.5632C16.3918 6.40002 17.6004 7.60858 17.6004 10.4372V13.5628C17.6004 16.3915 16.3918 17.6 13.5632 17.6ZM10.4376 7.18142C8.03611 7.18142 7.18179 8.03575 7.18179 10.4372V13.5628C7.18179 15.9643 8.03611 16.8186 10.4376 16.8186H13.5632C15.9647 16.8186 16.819 15.9643 16.819 13.5628V10.4372C16.819 8.03575 15.9647 7.18142 13.5632 7.18142H10.4376Z"
+                                fill="white" />
+                        </svg>
+                        Facebook
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="checkbox" class="mr-2"> <svg class="mr-2" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="12" fill="black" />
+                            <g clip-path="url(#clip0_177_14849)">
+                                <path
+                                    d="M14.9881 6.69525H9.0119C7.73453 6.69525 6.69531 7.73447 6.69531 9.01184V14.988C6.69531 16.2654 7.73453 17.3046 9.0119 17.3046H14.9881C16.2655 17.3046 17.3047 16.2654 17.3047 14.988V9.01184C17.3047 7.73447 16.2655 6.69525 14.9881 6.69525ZM16.7578 14.988C16.7578 15.9639 15.9639 16.7578 14.9881 16.7578H9.0119C8.03607 16.7578 7.24219 15.9639 7.24219 14.988V9.01184C7.24219 8.03601 8.03607 7.24213 9.0119 7.24213H14.9881C15.9639 7.24213 16.7578 8.03601 16.7578 9.01184V14.988ZM12.7531 11.4983L14.817 8.92589C14.9115 8.80809 14.8926 8.636 14.7748 8.54148C14.657 8.447 14.4849 8.46584 14.3904 8.58365L12.4025 11.0613L10.4146 8.58365C10.389 8.55172 10.3565 8.52595 10.3196 8.50824C10.2827 8.49052 10.2422 8.48133 10.2013 8.48132H8.59128C8.53975 8.48132 8.48926 8.49589 8.44564 8.52334C8.40202 8.55079 8.36705 8.59001 8.34476 8.63648C8.32246 8.68295 8.31376 8.73477 8.31964 8.78597C8.32552 8.83717 8.34575 8.88567 8.378 8.92587L11.2469 12.5016L9.183 15.074C9.0885 15.1918 9.10738 15.3639 9.22516 15.4584C9.2736 15.4974 9.33393 15.5186 9.39611 15.5186C9.43709 15.5186 9.47755 15.5094 9.51451 15.4917C9.55146 15.474 9.58395 15.4482 9.60957 15.4162L11.5975 12.9386L13.5854 15.4162C13.611 15.4482 13.6435 15.4739 13.6804 15.4916C13.7173 15.5094 13.7577 15.5186 13.7987 15.5186H15.4091C15.5601 15.5186 15.6826 15.3961 15.6826 15.2451C15.6826 15.1754 15.6565 15.1118 15.6136 15.0635L12.7531 11.4983ZM13.9299 14.9717L9.16126 9.0282H10.0701L14.8387 14.9717H13.9299Z"
+                                    fill="white" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_177_14849">
+                                    <rect width="11.2" height="11.2" fill="white"
+                                        transform="translate(6.40039 6.39996)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        X (Twitter)
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="checkbox" class="mr-2"> <svg class="mr-2" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="12" fill="black" />
+                            <g clip-path="url(#clip0_177_14849)">
+                                <path
+                                    d="M14.9881 6.69525H9.0119C7.73453 6.69525 6.69531 7.73447 6.69531 9.01184V14.988C6.69531 16.2654 7.73453 17.3046 9.0119 17.3046H14.9881C16.2655 17.3046 17.3047 16.2654 17.3047 14.988V9.01184C17.3047 7.73447 16.2655 6.69525 14.9881 6.69525ZM16.7578 14.988C16.7578 15.9639 15.9639 16.7578 14.9881 16.7578H9.0119C8.03607 16.7578 7.24219 15.9639 7.24219 14.988V9.01184C7.24219 8.03601 8.03607 7.24213 9.0119 7.24213H14.9881C15.9639 7.24213 16.7578 8.03601 16.7578 9.01184V14.988ZM12.7531 11.4983L14.817 8.92589C14.9115 8.80809 14.8926 8.636 14.7748 8.54148C14.657 8.447 14.4849 8.46584 14.3904 8.58365L12.4025 11.0613L10.4146 8.58365C10.389 8.55172 10.3565 8.52595 10.3196 8.50824C10.2827 8.49052 10.2422 8.48133 10.2013 8.48132H8.59128C8.53975 8.48132 8.48926 8.49589 8.44564 8.52334C8.40202 8.55079 8.36705 8.59001 8.34476 8.63648C8.32246 8.68295 8.31376 8.73477 8.31964 8.78597C8.32552 8.83717 8.34575 8.88567 8.378 8.92587L11.2469 12.5016L9.183 15.074C9.0885 15.1918 9.10738 15.3639 9.22516 15.4584C9.2736 15.4974 9.33393 15.5186 9.39611 15.5186C9.43709 15.5186 9.47755 15.5094 9.51451 15.4917C9.55146 15.474 9.58395 15.4482 9.60957 15.4162L11.5975 12.9386L13.5854 15.4162C13.611 15.4482 13.6435 15.4739 13.6804 15.4916C13.7173 15.5094 13.7577 15.5186 13.7987 15.5186H15.4091C15.5601 15.5186 15.6826 15.3961 15.6826 15.2451C15.6826 15.1754 15.6565 15.1118 15.6136 15.0635L12.7531 11.4983ZM13.9299 14.9717L9.16126 9.0282H10.0701L14.8387 14.9717H13.9299Z"
+                                    fill="white" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_177_14849">
+                                    <rect width="11.2" height="11.2" fill="white"
+                                        transform="translate(6.40039 6.39996)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Google
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="checkbox" class="mr-2"> <svg class="mr-2" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="12" fill="#34A853" />
+                            <rect x="6.68039" y="6.68002" width="10.64" height="10.64" rx="2.92"
+                                stroke="white" stroke-width="0.56" />
+                            <mask id="mask0_177_14864" style="mask-type:luminance"
+                                maskUnits="userSpaceOnUse" x="8" y="8" width="8" height="8">
+                                <path d="M15.0008 15.0001V9.00009H9.00078V15.0001H15.0008Z"
+                                    fill="white" stroke="white" stroke-width="0.4" />
+                            </mask>
+                            <g mask="url(#mask0_177_14864)">
+                                <path
+                                    d="M9.6446 13.9968L9.01953 10.8544L13.4576 9.97159L13.7628 11.5062"
+                                    stroke="white" stroke-width="0.4" stroke-miterlimit="10" />
+                                <path d="M14.3576 13.9968L14.9827 10.8544L13.5781 10.575"
+                                    stroke="white" stroke-width="0.4" stroke-miterlimit="10" />
+                                <path
+                                    d="M11.3008 13.1624H12.207C12.207 13.6629 11.8013 14.0686 11.3008 14.0686C10.8003 14.0686 10.3945 13.6629 10.3945 13.1624C10.3945 12.6618 10.8003 12.2561 11.3008 12.2561C11.5431 12.2561 11.7632 12.3512 11.9258 12.5061"
+                                    stroke="white" stroke-width="0.4" stroke-miterlimit="10" />
+                                <path d="M12.7695 12.4124H13.7945" stroke="white" stroke-width="0.4"
+                                    stroke-miterlimit="10" />
+                                <path d="M12.7695 13.1624H13.7945" stroke="white" stroke-width="0.4"
+                                    stroke-miterlimit="10" />
+                                <path d="M12.7695 13.9124H13.7945" stroke="white" stroke-width="0.4"
+                                    stroke-miterlimit="10" />
+                                <path d="M9.83203 10.6927V9.18163H14.1695V10.6927" stroke="white"
+                                    stroke-width="0.4" stroke-miterlimit="10" />
+                                <path d="M14.357 14.8186H9.64453V11.5061H14.357V14.8186Z"
+                                    stroke="white" stroke-width="0.4" stroke-miterlimit="10" />
+                            </g>
+                        </svg>
+                        Google News
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="checkbox" class="mr-2"> <svg class="mr-2" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="12" fill="#7EB4FF" />
+                            <rect x="6.68039" y="6.68002" width="10.64" height="10.64" rx="2.92"
+                                stroke="white" stroke-width="0.56" />
+                            <g clip-path="url(#clip0_177_14882)">
+                                <path
+                                    d="M11.8184 15.104H9.39444C9.26644 15.104 9.13844 15.048 9.04244 14.96C8.94644 14.864 8.89844 14.744 8.89844 14.608V9.392C8.89844 9.264 8.95444 9.136 9.04244 9.04C9.13844 8.944 9.25844 8.896 9.39444 8.896H11.8184C11.9464 8.896 12.0744 8.952 12.1704 9.04C12.2664 9.136 12.3144 9.256 12.3144 9.392V14.608C12.3144 14.736 12.2584 14.864 12.1704 14.96C12.0744 15.056 11.9544 15.104 11.8184 15.104ZM9.39444 9.016C9.29844 9.016 9.20244 9.056 9.13044 9.128C9.05844 9.2 9.01844 9.296 9.01844 9.392V14.608C9.01844 14.704 9.05844 14.8 9.13044 14.872C9.20244 14.944 9.29844 14.984 9.39444 14.984H11.8184C11.9144 14.984 12.0104 14.944 12.0824 14.872C12.1544 14.8 12.1944 14.704 12.1944 14.608V9.392C12.1944 9.296 12.1544 9.2 12.0824 9.128C12.0104 9.056 11.9144 9.016 11.8184 9.016H9.39444ZM12.9624 14.416C12.9064 14.416 12.8584 14.392 12.8184 14.36C12.7784 14.32 12.7624 14.272 12.7624 14.216V9.784C12.7624 9.784 12.7624 9.72 12.7864 9.688C12.8024 9.656 12.8264 9.632 12.8504 9.616C12.8744 9.6 12.9064 9.584 12.9464 9.584C12.9784 9.584 13.0104 9.584 13.0424 9.6L13.4904 9.8C13.5624 9.832 13.6344 9.888 13.6744 9.96C13.7224 10.032 13.7464 10.112 13.7464 10.192V13.808C13.7464 13.888 13.7224 13.968 13.6744 14.04C13.6264 14.112 13.5624 14.168 13.4904 14.2L13.0424 14.4C13.0424 14.4 12.9864 14.416 12.9624 14.416ZM12.9624 9.712C12.9624 9.712 12.9224 9.72 12.9064 9.736C12.8904 9.752 12.8824 9.768 12.8824 9.792V14.224C12.8824 14.224 12.8824 14.248 12.8904 14.264C12.8904 14.272 12.9064 14.288 12.9144 14.296C12.9224 14.296 12.9384 14.304 12.9544 14.312C12.9704 14.312 12.9784 14.312 12.9944 14.312L13.4424 14.112C13.4984 14.088 13.5464 14.048 13.5784 14C13.6104 13.952 13.6264 13.888 13.6264 13.832V10.192C13.6264 10.136 13.6104 10.072 13.5784 10.024C13.5464 9.976 13.4984 9.936 13.4424 9.912L12.9944 9.712C12.9944 9.712 12.9704 9.712 12.9624 9.712ZM14.3864 13.736C14.3304 13.736 14.2824 13.712 14.2424 13.68C14.2024 13.64 14.1864 13.592 14.1864 13.536V10.472C14.1864 10.472 14.1944 10.408 14.2104 10.376C14.2264 10.344 14.2504 10.32 14.2744 10.304C14.3064 10.288 14.3384 10.272 14.3704 10.272C14.4024 10.272 14.4344 10.272 14.4664 10.288L14.8664 10.472C14.9384 10.504 15.0024 10.56 15.0424 10.632C15.0824 10.704 15.1064 10.784 15.1064 10.864V13.144C15.1064 13.224 15.0824 13.304 15.0424 13.376C15.0024 13.448 14.9384 13.496 14.8664 13.536L14.4664 13.72C14.4664 13.72 14.4104 13.736 14.3784 13.736H14.3864ZM14.3864 10.392C14.3864 10.392 14.3544 10.392 14.3464 10.408C14.3384 10.408 14.3224 10.424 14.3224 10.44C14.3224 10.448 14.3144 10.464 14.3144 10.48V13.544C14.3144 13.544 14.3144 13.568 14.3224 13.584C14.3224 13.592 14.3384 13.608 14.3464 13.616C14.3544 13.616 14.3704 13.624 14.3864 13.632C14.4024 13.64 14.4104 13.632 14.4264 13.632L14.8264 13.448C14.8824 13.424 14.9224 13.384 14.9544 13.336C14.9864 13.288 15.0024 13.232 15.0024 13.168V10.888C15.0024 10.832 14.9864 10.776 14.9544 10.72C14.9224 10.672 14.8824 10.632 14.8264 10.608L14.4264 10.424C14.4264 10.424 14.4024 10.416 14.3944 10.416L14.3864 10.392Z"
+                                    fill="white" />
+                                <path
+                                    d="M11.8187 15.2H9.39473C9.23473 15.2 9.09073 15.136 8.97873 15.024C8.86673 14.912 8.80273 14.76 8.80273 14.608V9.39205C8.80273 9.23205 8.86673 9.08805 8.97873 8.97605C9.09073 8.86405 9.24273 8.80005 9.39473 8.80005H11.8187C11.9787 8.80005 12.1227 8.86405 12.2347 8.97605C12.3467 9.08805 12.4107 9.24005 12.4107 9.39205V14.608C12.4107 14.768 12.3467 14.912 12.2347 15.024C12.1227 15.136 11.9707 15.2 11.8187 15.2ZM9.39473 9.11205C9.32273 9.11205 9.25073 9.14405 9.19473 9.19205C9.13873 9.24005 9.11473 9.31205 9.11473 9.39205V14.608C9.11473 14.68 9.14673 14.752 9.19473 14.808C9.25073 14.864 9.32273 14.888 9.39473 14.888H11.8187C11.8907 14.888 11.9627 14.856 12.0187 14.808C12.0747 14.752 12.0987 14.688 12.0987 14.608V9.39205C12.0987 9.32005 12.0667 9.24805 12.0187 9.19205C11.9627 9.13605 11.8987 9.11205 11.8187 9.11205H9.39473ZM12.9627 14.512C12.8827 14.512 12.8107 14.48 12.7547 14.424C12.6987 14.368 12.6667 14.296 12.6667 14.216V9.78405C12.6667 9.73605 12.6827 9.68805 12.6987 9.64005C12.7227 9.60005 12.7547 9.56005 12.7947 9.53605C12.8347 9.51205 12.8827 9.49605 12.9307 9.48805C12.9787 9.48805 13.0267 9.48805 13.0747 9.51205L13.5227 9.71205C13.6187 9.75205 13.6907 9.81605 13.7467 9.90405C13.8027 9.99205 13.8347 10.088 13.8347 10.192V13.808C13.8347 13.912 13.8027 14.008 13.7467 14.096C13.6907 14.184 13.6107 14.248 13.5227 14.288L13.0827 14.488C13.0427 14.504 13.0027 14.512 12.9627 14.512ZM12.9787 9.80805V14.184L13.4027 14C13.4427 13.984 13.4747 13.96 13.4987 13.92C13.5227 13.888 13.5307 13.848 13.5307 13.8V10.192C13.5307 10.152 13.5147 10.112 13.4987 10.08C13.4827 10.048 13.4427 10.016 13.4027 10L12.9787 9.81605V9.80805ZM14.3867 13.824C14.3067 13.824 14.2347 13.792 14.1787 13.736C14.1227 13.68 14.0907 13.608 14.0907 13.528V10.456C14.0907 10.408 14.1067 10.36 14.1307 10.312C14.1547 10.272 14.1867 10.232 14.2347 10.208C14.2747 10.184 14.3227 10.168 14.3707 10.16C14.4187 10.16 14.4667 10.16 14.5147 10.184L14.9147 10.368C15.0027 10.408 15.0827 10.48 15.1307 10.56C15.1867 10.648 15.2107 10.744 15.2107 10.84V13.12C15.2107 13.216 15.1787 13.32 15.1307 13.4C15.0747 13.488 15.0027 13.552 14.9147 13.592L14.5147 13.776C14.5147 13.776 14.4347 13.8 14.3947 13.8L14.3867 13.824ZM14.3947 10.488V13.504L14.7707 13.328C14.8107 13.312 14.8347 13.28 14.8587 13.248C14.8827 13.216 14.8907 13.176 14.8907 13.136V10.856C14.8907 10.816 14.8827 10.776 14.8587 10.744C14.8347 10.712 14.8107 10.68 14.7707 10.664L14.3947 10.488Z"
+                                    fill="white" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_177_14882">
+                                    <rect width="6.4" height="6.4" fill="white"
+                                        transform="translate(8.80078 8.80005)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Web Stories
+                    </label>
+                    <label
+                        class="flex items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30 ">
+                        <input type="checkbox" class="mr-2"> <svg class="mr-2" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="12" fill="#F6B200" />
+                            <rect x="6.68039" y="6.68002" width="10.64" height="10.64" rx="2.92"
+                                stroke="white" stroke-width="0.56" />
+                            <g clip-path="url(#clip0_177_14892)">
+                                <path
+                                    d="M9.60404 14.4C9.56867 14.4 9.53476 14.386 9.50976 14.361C9.48475 14.336 9.4707 14.3021 9.4707 14.2667V8.93336C9.47064 8.91154 9.47595 8.89004 9.48615 8.87076C9.49636 8.85147 9.51115 8.835 9.52922 8.82277C9.54729 8.81055 9.56809 8.80296 9.58979 8.80066C9.61148 8.79837 9.63341 8.80145 9.65364 8.80962L10.987 9.34296C11.0376 9.36322 11.0707 9.41202 11.0707 9.46669V12.9334C11.0707 12.9688 11.0566 13.0027 11.0318 13.0278L9.69844 14.3611C9.67332 14.386 9.6394 14.4 9.60404 14.4ZM9.73737 9.13016V13.9448L10.804 12.8782V9.55682L9.73737 9.13016Z"
+                                    fill="white" />
+                                <path
+                                    d="M10.9371 15.2C10.913 15.2 10.8893 15.1934 10.8686 15.1811L9.53527 14.3811C9.51525 14.369 9.49876 14.3519 9.48743 14.3314C9.4761 14.311 9.47034 14.2879 9.47072 14.2645C9.4711 14.2412 9.4776 14.2183 9.48958 14.1982C9.50157 14.1782 9.51861 14.1616 9.539 14.1501L14.339 11.4835C14.3593 11.4722 14.3822 11.4664 14.4054 11.4667C14.4286 11.467 14.4514 11.4733 14.4714 11.4851C14.4914 11.4969 14.508 11.5137 14.5195 11.5338C14.5311 11.554 14.5371 11.5768 14.5371 11.6V12.9333C14.5371 12.9561 14.5313 12.9785 14.5202 12.9984C14.5091 13.0183 14.4931 13.035 14.4737 13.0469L11.007 15.1803C10.986 15.1932 10.9618 15.2 10.9371 15.2ZM9.87047 14.2712L10.9363 14.9107L14.2705 12.8589V11.8267L9.87047 14.2712Z"
+                                    fill="white" />
+                                <path
+                                    d="M13.1256 12.4441C13.1088 12.444 13.0922 12.4409 13.0765 12.4347L11.9555 11.9907C11.9386 11.9841 11.9233 11.974 11.9105 11.9612C11.8976 11.9484 11.8875 11.9332 11.8808 11.9163L11.3475 10.583C11.3379 10.5591 11.3354 10.5329 11.3404 10.5077C11.3453 10.4824 11.3575 10.4591 11.3754 10.4406C11.3933 10.4221 11.4162 10.4092 11.4413 10.4034C11.4664 10.3976 11.4926 10.3993 11.5168 10.4081L14.4501 11.4747C14.4742 11.4835 14.4952 11.4989 14.5107 11.5193C14.5262 11.5396 14.5355 11.564 14.5375 11.5895C14.5395 11.615 14.5342 11.6405 14.5221 11.6631C14.51 11.6856 14.4917 11.7042 14.4693 11.7166L13.1904 12.4273C13.1706 12.4383 13.1483 12.4441 13.1256 12.4441ZM12.1069 11.7638L13.116 12.1633L14.0843 11.6254L11.7056 10.7603L12.1069 11.7638Z"
+                                    fill="white" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_177_14892">
+                                    <rect width="6.4" height="6.4" fill="white"
+                                        transform="translate(8.80078 8.80005)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
+                        Bing
+                    </label>
+
+                    <div class="flex justify-between pt-2">
+                        <button
+                            class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">Clear
+                            all</button>
+                        <button
+                            class="px-4 py-1 text-sm text-white bg-indigo-600 rounded-lg">Apply</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Status
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Crawl date
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Categories
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Date
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Words
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Images
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Headings
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Position
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Internal Link
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            External Link
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button id="filterButton"
+            class="filterButton flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 border  border-gray-300 rounded-lg hover:bg-indigo-50"
+            fdprocessedid="8gyucmw">
+            Serp Keywords
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.1101 5.99973L8.10994 9.9999L4.10742 5.99738" stroke="#111827"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+
+
+
+<div id='article_tbody'>
+</div>
+
+
+{% comment %} <script src="{% static 'frontendApp/api/article/update_article/update_article.js' %}"></script> {% endcomment %}
+<script src="{% static 'frontendApp/api/article/delete_article/delete_article.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/list_article/list_article.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/list_article/table_data_article.js' %}"></script>
+
+<script>
+  
+
+
+
+
+
+</script>
+
+{% endblock body %}
+
+

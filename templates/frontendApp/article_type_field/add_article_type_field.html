@@ -1,0 +1,139 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Article Type Field</h3>
+        <p class="text-xs text-gray-500">Create new article type field</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_article_type_field_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+
+            Back
+        </a>
+    </div>
+</div>
+
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+    <div class="col-span-12 lg:col-span-4">
+        <div class="p-4 border border-gray-200 rounded-2xl ">
+            <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                Article Type Field Details</h5>
+
+            <form method="POST" action=""  id="article_type_field_form" name="article_type_field_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full md:w-1/2">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Name
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+                        <input type="text" id="default-search" name="name"  value=""
+                            class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Name" required="">
+                    </div>
+                    <div class="block w-full md:w-1/2">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Label
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+                        <input type="text" id="default-search"  name="label"  value=""
+                            class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Label" required="">
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full md:w-1/2">
+                        <div class="relative">
+                            <label
+                                class="flex  items-center mb-2 text-gray-600 text-sm font-medium">
+                                Placeholder
+                            </label>
+                            <input type="text" name="placeholder"  value=""
+                                class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                placeholder="Placeholder" required="">
+
+                        </div>
+
+
+                    </div>
+                    <div class="block w-full md:w-1/2">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Type</label>
+                            <div class="relative">
+                                <select id="type" name="field_type"
+                                    class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option selected="">Select</option>
+                                    <option value="textarea">Textarea</option>
+                                    <option value="text" >Text</option>
+                                </select>
+                                <!-- Custom dropdown arrow -->
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
+                    </div>
+
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3 p-[10px]  border border-gray-300 rounded-lg">
+                    <input id="checkbox-for-all" type="checkbox" value="" name="required" checked
+                        class="w-4 h-4 border border-gray-300 rounded-sm  hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-900"><label
+                        class=" text-sm font-medium text-gray-900 w-full flex items-center">Required</label>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <button type="button" onclick="add_article_type_field_api()"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+
+                        Save
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- end field data  -->
+
+<!-- article_type_field api -->
+<script src="{% static 'frontendApp/api/article_type_field/add_article_type_field.js' %}"></script>
+
+
+{% endblock body %}

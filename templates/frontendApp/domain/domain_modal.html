@@ -1,0 +1,379 @@
+
+
+
+<style>
+    /* Modal Styles */
+    .modal {
+        display: none; /* Hide by default */
+        align-items: center; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+        position: fixed; /* Fixed position */
+        top: 0;
+        left: 0;
+        width: 100vw; /* Full width */
+        height: 100vh; /* Full height */
+        background: rgba(0, 0, 0, 0.5); /* Dark background */
+        z-index: 1000; /* Ensure it's above other content */
+    }
+    .modal.active {
+        display: flex; /* Show modal when active */
+    }
+    .modal-content {
+        background: white; /* Modal background */
+        border-radius: 8px; /* Rounded corners */
+        padding: 20px; /* Inner padding */
+        width: 90%; /* Set width as desired */
+        max-width: 500px; /* Maximum width */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add shadow */
+        transform: translateY(-50px); /* Start slightly off-screen */
+        opacity: 0; /* Start invisible */
+        transition: transform 0.3s ease, opacity 0.3s ease; /* Transition effects */
+    }
+    .modal.active .modal-content {
+        transform: translateY(0); /* Move to position */
+        opacity: 1; /* Fade in */
+    }
+</style>
+
+
+
+
+
+<!-- Main modal -->
+<div id="default-modal" class="modal">
+    <div class="modal-content">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between rounded-t">
+            <h3 class="text-xl font-semibold text-gray-900"></h3>
+            
+        </div>
+        <!-- Modal body -->
+        <div class="">
+            <div class="bg-white  border border-gray-200 rounded-xl p-3">
+                <div class="flex justify-between items-center">
+                    <div class="flex space-x-6">
+                        <button class="font-medium p-2 text-indigo-600 border-b-2 border-indigo-600 pb-2 tab-modal-button active" data-modal-target="category">Category</button>
+                        <button class="font-medium p-2 text-gray-500 hover:text-gray-700 tab-modal-button" data-modal-target="tag">Tag</button>
+                        <button class="font-medium p-2 text-gray-500 hover:text-gray-700 tab-modal-button" data-modal-target="author">Author</button>
+                    </div>
+                    <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center close-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                
+                <hr>
+
+                <!-- category modal -->
+                <div id="category" class="tab-modal-content mt-4 ">
+                    <form method="POST" id="category_form" name="category_form" action="" class="flex flex-col gap-4" enctype="multipart/form-data" >
+                       
+                        <input type="hidden" id="category_slug_id" value="" name="category_slug_id" />
+                        <input type="hidden" id="category_wp_id" value="" name="wp_cat_id" />
+
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Name
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" id="category_name" name="name"  value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Name" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Slug
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" id="category_slug" name="slug"  value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Slug" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Description
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" id="category_description" name="description"  value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Description" required="">
+                            </div>
+        
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <button type="button" onclick="add_category_api()"
+                                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+        
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- tag modal -->
+                <div id="tag" class="tab-modal-content hidden mt-4">
+                    <form method="POST" id="tag_form" name="tag_form" action="" class="flex flex-col gap-4" enctype="multipart/form-data" >
+        
+                        <input type="hidden" id="tag_slug_id" value="" name="tag_slug_id" />
+                        <input type="hidden" id="tag_wp_id" value="" name="wp_tag_id" />
+      
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Name
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" id="tag_name" name="name"  value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Name" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Slug
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" id="tag_slug" name="slug"  value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Slug" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Description
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" id="tag_description" name="description"  value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Description" required="">
+                            </div>
+        
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <button type="button" onclick="add_tag_api()"
+                                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+        
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- author modal -->
+                <div id="author" class="tab-modal-content hidden mt-4">
+                    <form method="POST" action="" id="author_form" name="author_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4">
+        
+                        <input type="hidden" id="author_slug_id" value="" name="author_slug_id" />
+                        <input type="hidden" id="wp_author_id" name="wp_author_id" value="" />
+              
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Name
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" name="username" id="author_username" value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Name" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Email
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" name="email" id="author_email" value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Email" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Password
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" name="password" id="author_password" value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Password" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    First Name
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" name="first_name" id="author_first_name" value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="First Name" required="">
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Last Name
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" name="last_name" id="author_last_name" value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Last Name" required="">
+                            </div>
+        
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                    Bio
+                                    <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                    </svg></label>
+                                <input type="text" name="bio" id="author_bio" value=""
+                                    class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                    placeholder="Bio" required="">
+                            </div>
+        
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <button type="button" onclick="add_author_api()"
+                                class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    // set update data in tag
+    function set_update_tag_data(slug_id, name, slug, description, wp_tag_id){
+
+        tag_slug_id.value = slug_id
+        tag_name.value = name
+        tag_slug.value = slug
+        tag_description.value = description
+        tag_wp_id.value = wp_tag_id
+
+        // open modal
+        openModal("tag")
+    }
+
+    // set update data in category
+    function set_update_category_data(slug_id, name, slug, description, wp_cat_id){
+
+
+        category_slug_id.value = slug_id
+        category_name.value = name
+        category_slug.value = slug
+        category_description.value = description
+        category_wp_id.value = wp_cat_id
+
+        // open modal
+        openModal("category")
+    }
+
+
+    // set update data in author
+    function set_update_author_data(slug_id, username, first_name, last_name, email, bio, password, wp_author_id){        
+
+        author_slug_id.value = slug_id
+        author_username.value = username
+        author_first_name.value = first_name
+        author_last_name.value = last_name
+        author_email.value = email
+        author_bio.value = bio
+        author_password.value = password
+        wp_author_id.value = wp_author_id
+
+
+        // open modal
+        openModal("author")
+    }
+   
+   
+   
+</script>

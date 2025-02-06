@@ -1,0 +1,41 @@
+
+
+{% load static%}
+
+
+
+<div class="flex space-x-4 mb-4 bg-gray-100 p-2 rounded-2xl max-md:block">
+    
+    <button class="px-4 py-2 bg-white rounded hover:bg-gray-200" onclick="article_type_api('all')"
+        data-category="All">All</button>
+    <button class="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="article_type_api('generative')"
+        data-category="Generative">Generative</button>
+    <button class="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="article_type_api('rephrase')"
+        data-category="Rephrase">Rephrase</button>
+    <button class="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="article_type_api('outliner')"
+        data-category="Outliner">Outliner</button>
+    <button class="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="article_type_api('manual')"
+        data-category="Manual">Manual</button>
+</div>
+
+
+<div id="articles-container" class="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Tools will be dynamically inserted here -->
+</div>
+    
+
+
+<div class="flex flex-col md:flex-row items-start gap-3 pt-4">
+
+    <button type="button" id="next_button" onclick="step_2()"
+        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 flex-shrink-0">
+        Next
+    </button>
+    
+    {% comment %} <button type="button" id="next_button" onclick="step_2()" disabled
+    class="px-4 py-2 text-sm font-medium text-white bg-indigo-400 rounded-lg cursor-not-allowed flex-shrink-0">
+    Next
+</button> {% endcomment %}
+
+</div>
+

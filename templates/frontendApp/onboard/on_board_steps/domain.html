@@ -1,0 +1,150 @@
+{% load static%}
+
+
+<!-- all Message ui -->
+<script src="{% static 'frontendApp/api/base/alert_message/alert_message.js' %}"></script>
+
+<!-- api error Message -->
+<script src="{% static 'frontendApp/api/base/error_message_data/error_message_data.js' %}"></script>
+
+
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+   
+    <div class="col-span-12 lg:col-span-5">
+        <form method="POST" action=""  id="domain_form" name="domain_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+        
+
+            <!-- Step 1: Connect -->
+            <div id="step1" class="p-4 mb-4 border border-gray-200 rounded-2xl">
+                <label for="domain-name" class="block pb-1 text-sm font-medium text-gray-600">Domain Name</label>
+                <div class="flex items-center gap-x-4">
+                    <div class="flex-1">
+                        <input type="text" id="domain-name" name="domain_name" value="" 
+                            class="block w-full px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg focus:outline-none"
+                            placeholder="Enter your domain name" />
+                    </div>
+                    <button type="button"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 flex-shrink-0"
+                        onclick="connect_domain()">Connect</button>
+                </div>
+
+            </div>
+            
+            <!-- mainLoader -->
+            <div id="mainLoader" class="hidden mt-4 p-4 border mb-4 border-gray-200 rounded-2xl">
+                <div id="loader1" class="loader mb-4 hidden">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Connecting...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg  loader_mn">
+                            <div id="loader1-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loader2" class="loader mb-4 hidden">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Creating Test Article...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader2-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loader3" class="loader hidden">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Deleting Test Article...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader3-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader4" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Creating Test Tag..</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader4-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader5" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Deleting Test Tag...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader5-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader6" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Creating Catgory Tag..</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader6-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader7" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Deleting Catgory Tag...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader7-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ErrorDomain-->
+            <div id="ErrorDomain" class=" ">
+            </div>
+
+            <button type="button" id=""
+            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 flex-shrink-0"
+            onclick="add_domain_api()">Save</button>
+
+            
+            <button type="button" id="back_button_id"
+            class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 flex-shrink-0"
+            onclick="previousStep()">Back</button>
+
+        </form>
+    </div>
+            
+</div>
+
+
+<script src="{% static 'frontendApp/api/onboard/connect_domain.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/add_test_article.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/delete_test_article.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/add_test_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/delete_test_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/add_test_category.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/delete_test_category.js' %}"></script>
+
+<script src="{% static 'frontendApp/api/onboard/add_domain.js' %}"></script>

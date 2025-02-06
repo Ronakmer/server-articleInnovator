@@ -1,0 +1,81 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Image Template Category</h3>
+        <p class="text-xs text-gray-500">Create new image template category</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_image_template_category_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+
+            Back
+        </a>
+    </div>
+</div>
+
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+    <div class="col-span-12 lg:col-span-4">
+        <div class="p-4 border border-gray-200 rounded-2xl ">
+            <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                Image Template Category Details</h5>
+
+            <form method="POST" action=""  id="image_template_category_form" name="image_template_category_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Name
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+                        <input type="text" id="default-search" name="name"  value=""
+                            class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Name" required="">
+                    </div>
+
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <button type="button" onclick="add_image_template_category_api()"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+
+                        Save
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- end field data  -->
+
+<!-- image_template_category api -->
+<script src="{% static 'frontendApp/api/image_gen/image_template_category/add_image_template_category.js' %}"></script>
+
+
+{% endblock body %}

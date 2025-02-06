@@ -1,0 +1,284 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Domain</h3>
+        <p class="text-xs text-gray-500">Create new domain</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_domain_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+
+            Back
+        </a>
+    </div>
+</div>
+
+<!-- start field data  -->
+ 
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+    <div class="col-span-12 lg:col-span-12">
+        <div class="w-full">
+            <!-- Multi-Step Progress Bar -->
+            <div class="p-4 mb-4 border border-gray-200 rounded-2xl">
+                <div class="flex items-center justify-between">
+                    <!-- Step 1 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step1-circle"
+                            class="flex items-center justify-center w-[34px] h-[34px] bg-indigo-600 text-white rounded-full">
+                            1
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2">Connect</p>
+                    </div>
+                    <div id="line1" class="flex-1 h-0.5 bg-gray-300"></div>
+                    <!-- Step 2 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step2-circle"
+                            class="flex ml-2 items-center justify-center w-[34px] h-[34px] bg-gray-200 text-white rounded-full">
+                            2
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2 mr-2">Configurations</p>
+                    </div>
+                    <div id="line2" class="flex-1 h-0.5 bg-gray-300"></div>
+                    <!-- Step 3 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step3-circle"
+                            class="flex items-center justify-center w-[34px] h-[34px] bg-gray-200 text-white rounded-full">
+                            3
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2">Assign</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-span-12 lg:col-span-5">
+        <form method="POST" action=""  id="domain_form" name="domain_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+        
+
+            <!-- Step 1: Connect -->
+            <div id="step1" class="p-4 mb-4 border border-gray-200 rounded-2xl">
+                <label for="domain-name" class="block pb-1 text-sm font-medium text-gray-600">Domain Name</label>
+                <div class="flex items-center gap-x-4">
+                    <div class="flex-1">
+                        <input type="text" id="domain-name" name="name" value="" 
+                            class="block w-full px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg focus:outline-none"
+                            placeholder="Enter your domain name" />
+                    </div>
+                    <button type="button"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 flex-shrink-0"
+                        onclick="connect_domain()">Connect</button>
+                </div>
+
+            </div>
+            
+            <!-- mainLoader -->
+            <div id="mainLoader" class="hidden mt-4 p-4 border mb-4 border-gray-200 rounded-2xl">
+                <div id="loader1" class="loader mb-4 hidden">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Connecting...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg  loader_mn">
+                            <div id="loader1-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loader2" class="loader mb-4 hidden">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Creating Test Article...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader2-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loader3" class="loader hidden">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Deleting Test Article...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader3-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader4" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Creating Test Tag..</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader4-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader5" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Deleting Test Tag...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader5-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader6" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Creating Catgory Tag..</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader6-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader7" class="loader hidden mt-3">
+                    <div class="flex max-md:flex-col items-center">
+                        <div class="flex-1 max-md:flex-auto bg-gray-50 px-4 py-2 rounded-lg">
+                            <div class="text-sm text-gray-900">Deleting Catgory Tag...</div>
+                        </div>
+                        <div class="bg-indigo-100 p-2 ml-2 rounded-lg loader_mn">
+                            <div id="loader7-spinner"
+                                class="p-1 border-2 w-6 h-6 text-white text-4xl animate-spin border-white flex items-center justify-center border-t-indigo-600 rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ErrorDomain-->
+            <div id="ErrorDomain" class=" ">
+            </div>
+
+            <!-- Step 2: Configurations -->
+            <div id="step2" class="hidden p-4  mb-4 border border-gray-200 rounded-2xl">
+                <div class="p-2">
+                    <label for="config"
+                        class="block pb-2 text-sm font-medium text-gray-600">Manager</label>
+                    <div class="custom-select manager_custom_select bg-white rounded-lg  border border-gray-300">
+                        <div class="flex flex-wrap items-center p-2 min-h-[42px]">
+                            <div class="selected-items manager_selected_items flex flex-wrap gap-2"></div>
+                            <input type="text" class="flex-grow text-sm outline-none px-2 py-1"
+                                placeholder="">
+                            <input type="hidden" name="manager_data" class="flex-grow text-sm outline-none px-2 py-1"
+                                placeholder=""> 
+                        </div>
+                        <div
+                            class="custom-select-dropdown manager_custom_select_dropdown text-sm mt-1 py-4 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        </div>
+                    </div>
+                    <!-- for pass data in api -->
+                    <input type="text" name="manager_id" class="flex-grow text-sm outline-none px-2 py-1"
+                      placeholder="">
+                </div>
+
+                <div class="p-2">
+
+                    <label for="assignments"
+                        class="block pb-2 text-sm font-medium text-gray-600">Assign To</label>
+                    <div class="custom-select writer_custom_select bg-white rounded-lg border border-gray-300">
+                        <div class="flex flex-wrap items-center p-2 min-h-[42px]">
+                            <div class="selected-items writer_selected_items flex flex-wrap gap-2"></div>
+                            <input type="text" class="flex-grow text-sm outline-none px-2 py-1"
+                            >
+                            <input type="hidden" name="writer_data" class="flex-grow text-sm outline-none px-2 py-1"
+                            placeholder="">   
+                        </div>
+                        <div
+                            class="custom-select-dropdown writer_custom_select_dropdown text-sm mt-1 py-4 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        </div>
+                    </div>
+                    <!-- for pass data in api -->
+                    <input type="text" name="writer_id" class="flex-grow text-sm outline-none px-2 py-1"
+                      placeholder="">
+                </div>
+
+
+                <div class="p-2">
+
+                    <label for="" class="block pb-1 text-sm font-medium text-gray-600">Perma Links</label>
+
+                    <input id="tagInput" type="text"  name="permalinks" value=""  class="w-full border border-gray-300 p-2 rounded" placeholder="" readonly />
+
+                    <div class="bg-white rounded-lg max-w-2xl mx-auto mt-3">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span onclick="perma_links('%year%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%year%</span>
+                            <span onclick="perma_links('%monthnum%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%monthnum%</span>
+                            <span onclick="perma_links('%day%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%day%</span>
+                            <span onclick="perma_links('%hour%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%hour%</span>
+                            <span onclick="perma_links('%minute%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%minute%</span>
+                            <span onclick="perma_links('%second%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%second%</span>
+                            <span onclick="perma_links('%post_id%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%post_id%</span>
+                            <span onclick="perma_links('%postname%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%postname%</span>
+                            <span onclick="perma_links('%category%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%category%</span>
+                            <span onclick="perma_links('%author%')" class="cursor-pointer inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs border border-blue-200">%author%</span>
+                        </div>
+                
+                    </div>
+                </div>
+
+
+
+                <button type="button" onclick="add_domain_api()"
+                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">Assign</button>
+
+            </div>
+
+
+        </form>
+    </div>
+            
+</div>
+
+<!-- end field data  -->
+
+<!-- domain api -->
+<script src="{% static 'frontendApp/api/domain/connect_domain.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/add_test_article.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/delete_test_article.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/add_test_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/delete_test_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/add_test_category.js' %}"></script>
+<script src="{% static 'frontendApp/api/wordpress/test_api/delete_test_category.js' %}"></script>
+
+<script src="{% static 'frontendApp/api/domain/add_domain.js' %}"></script>
+<script src="{% static 'frontendApp/api/domain/domain_dropdowns.js' %}"></script>
+
+<script src="{% static 'frontendApp/api/domain/perma_links.js' %}"></script>
+
+
+{% endblock body %}

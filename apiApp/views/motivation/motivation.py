@@ -1,0 +1,202 @@
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from apiApp.serializers import motivation_serializer
+from apiApp.models import motivation, workspace
+from django.db.models import Q
+
+
+# show motivation
+@api_view(['GET'])
+def list_motivation(request):
+    try:
+        # Get query parameters
+        offset = int(request.GET.get('offset', 0))
+        limit = int(request.GET.get('limit', 100))
+        status = request.GET.get('status', None)
+        workspace_slug_id = request.GET.get('workspace_slug_id', None)
+        slug_id = request.GET.get('slug_id', None)
+        search = request.GET.get('search', '')
+        
+
+        # Initialize filters
+        filters = Q()
+
+        # Apply filters based on provided parameters
+        if status:
+            filters &= Q(status=status)
+        if slug_id:
+            filters &= Q(slug_id=slug_id)
+        if search:
+            filters &= Q(quote__icontains=search) 
+
+        if workspace_slug_id:
+            try:
+                workspace_slug_id = workspace.objects.get(slug_id=workspace_slug_id)
+                filters &= Q(workspace_id=workspace_slug_id)
+            except workspace.DoesNotExist:
+                return JsonResponse({
+                    "error": "workspace not found.",
+                }, status=404)  
+
+        try:
+            obj = motivation.objects.filter(filters).order_by('-created_date')
+        except motivation.DoesNotExist:
+            return JsonResponse({
+                "error": "motivation not found.",
+            }, status=404) 
+
+        # Apply pagination
+        total_count = obj.count()
+        obj = obj[offset:offset + limit]
+
+        serialized_data = motivation_serializer(obj, many=True)
+        
+        return JsonResponse({
+            "redirect": "",
+            "motivations":serialized_data.data,
+            "total_count": total_count,
+        }, status=200)
+
+    except Exception as e:
+        print("This error is list_motivation --->: ",e)
+        return JsonResponse({"error": "Internal Server error."}, status=500)
+
+
+
+# add motivation
+@api_view(['POST'])
+def add_motivation(request):
+    try:
+        request_user = request.user
+
+        # Retrieve workspace using slug ID
+        workspace_slug = request.data.get("workspace_slug_id")  
+        if not workspace_slug:
+            return JsonResponse({
+                "error": "workspace slug id is required."
+            }, status=400)
+        
+        try:
+            workspace_obj = workspace.objects.get(slug_id=workspace_slug)
+        except workspace.DoesNotExist:
+            return JsonResponse({
+                "error": "workspace not found "
+            }, status=404)
+
+        # Prepare the data for the serializer, replacing slug with the workspace instance's PK
+        data = request.data.copy()
+        data["workspace_id"] = workspace_obj.id  
+
+
+        serialized_data = motivation_serializer(data=data)
+
+        if serialized_data.is_valid():
+            serialized_data.save()
+            
+            return JsonResponse({
+                "message": "Data added successfully.",
+                "motivation": serialized_data.data,
+            }, status=200)
+        else:
+            return JsonResponse({
+                "error": "Invalid data.",
+                "errors": serialized_data.errors, 
+            }, status=400)
+
+    except Exception as e:
+        print("This error is add_motivation --->: ", e)
+        return JsonResponse({"error": "Internal server error."}, status=500)
+
+    
+    
+# update motivation
+@api_view(['PUT'])
+def update_motivation(request, slug_id):
+    try:
+        try:
+            obj = motivation.objects.get(slug_id=slug_id)
+        except motivation.DoesNotExist:
+            return JsonResponse({
+                "error": "motivation not found.",
+            }, status=404)   
+            
+        # Retrieve workspace using slug ID
+        workspace_slug_id = request.data.get("workspace_slug_id")  
+        if not workspace_slug_id:
+            return JsonResponse({
+                "error": "workspace slug id is required."
+            }, status=400)
+            
+        if (obj.workspace_id.slug_id != workspace_slug_id):
+            return JsonResponse({
+                "error": "You Don't have permission."
+            }, status=404)   
+                  
+        try:
+            workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
+        except workspace.DoesNotExist:
+            return JsonResponse({
+                "error": "workspace not found "
+            }, status=404)
+
+        # Prepare the data for the serializer, replacing slug with the workspace instance's PK
+        data = request.data.copy()
+        data["workspace_id"] = workspace_obj.id 
+        # data['created_by'] = obj.created_by.id
+        # if 'created_by' in data:
+        #     del data['created_by']
+
+        serialized_data = motivation_serializer(instance=obj, data=data)        
+        
+        if serialized_data.is_valid():
+            serialized_data.save()
+            
+            return JsonResponse({
+                "message": "Data updated successfully.",
+                "motivation": serialized_data.data,
+            }, status=200)
+        else:
+            return JsonResponse({
+                "error": "Invalid data.",
+                "errors": serialized_data.errors, 
+            }, status=400)
+
+    except Exception as e:
+        print("This error is update_motivation --->: ", e)
+        return JsonResponse({"error": "Internal server error."}, status=500)
+
+
+# delete motivation
+@api_view(['DELETE'])
+def delete_motivation(request, slug_id):
+    try:
+        try:
+            obj = motivation.objects.get(slug_id=slug_id)
+        except motivation.DoesNotExist:
+            return JsonResponse({
+                "error": "motivation not found.",
+            }, status=404) 
+
+        workspace_slug_id = request.GET.get("workspace_slug_id")  
+        if not workspace_slug_id:
+            return JsonResponse({
+                "error": "workspace slug id is required."
+            }, status=400)
+            
+        if (obj.workspace_id.slug_id != workspace_slug_id):
+            return JsonResponse({
+                "error": "You Don't have permission."
+            }, status=404)          
+
+        obj.delete()
+        
+        return JsonResponse({
+            "message": "Data Deleted successfully.",
+        }, status=200)
+
+    except Exception as e:
+        print("This error is delete_motivation --->: ", e)
+        return JsonResponse({"error": "Internal server error."}, status=500)
+
+

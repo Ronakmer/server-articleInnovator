@@ -1,0 +1,36 @@
+
+// list article api
+async function list_article_api() {
+  
+
+
+    let current_page = 1; // Initialize current page
+    const limit = 10; // Number of items per page
+    const offset = (current_page - 1) * limit; // Calculate offset based on current page
+
+    const searchInput = document.getElementById('search-input');
+
+    // const filters = {};
+    const filters = {
+        // status: document.getElementById('status-filter').value,
+        // search: document.getElementById('search-input').value,
+        search: searchInput ? searchInput.value : '',
+
+    };
+    const current_page_url = window.location.href;
+    const domain_slug_id = current_page_url.split('/').pop();
+
+
+
+    // const api_url = `${list_article_url}&domain_slug_id=${domain_slug_id}`
+
+    const response_data = await list_api(list_article_url, 'article_tbody', offset, limit, filters, 'delete_article_api', 'status_article_api', '', current_page, 'articles', domain_slug_id, '');
+    console.log(response_data,'0')
+    
+    table_data_article('article_tbody', response_data, 'delete_article_api', 'status_article_api', update_article_page_url, current_page, limit)
+    
+}
+
+list_article_api()
+
+

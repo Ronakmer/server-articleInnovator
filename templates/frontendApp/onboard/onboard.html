@@ -1,0 +1,138 @@
+
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Article Innovator</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pagedone@1.1.2/src/js/pagedone.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.52.0/apexcharts.min.css" integrity="sha512-w3pXofOHrtYzBYpJwC6TzPH6SxD6HLAbT/rffdkA759nCQvYi5AHy5trNWFboZnj4xtdyK0AFMBtck9eTmwybg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+            
+    <!-- <link rel="stylesheet" href="src/assets/css/styles-output.css" /> -->
+    <link rel="stylesheet" href="{% static 'frontendApp/src/output.css' %}" />
+    <link rel="stylesheet" href="{% static 'frontendApp/assets/css/custom-style.css' %}" />
+    
+    
+    <!-- image upload  -->
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css" rel="stylesheet">
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- sweetalert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- all url -->
+    <script src="{% static 'frontendApp/api/base/all_url/api_urls.js' %}"></script>
+    <script src="{% static 'frontendApp/api/base/all_url/page_urls.js' %}"></script>
+    
+    <!-- all Message ui -->
+    <script src="{% static 'frontendApp/api/base/alert_message/alert_message.js' %}"></script>
+
+    <!-- api error Message -->
+    <script src="{% static 'frontendApp/api/base/error_message_data/error_message_data.js' %}"></script>
+
+    <script src="{% static 'frontendApp/api/base/api_call/add_api.js' %}"></script>
+
+
+
+</head>
+
+<body class="font-inter">
+    <div>
+        <div class="flex overflow-y-hidden bg-white" x-data="setup()">
+            <!-- Sidebar -->
+
+            <div class="h-full overflow-hidden lg:ml-auto max-lg:w-full relative border-b border-solid border-gray-200"
+                :class="{'lg:w-[calc(100%-256px)]':isSidebarOpen ,'lg:w-[calc(100%-80px)]': !isSidebarOpen}">
+                <!-- header  -->
+                {% include 'frontendApp/onboard/onboard_header.html' %}
+
+                <!-- Main content -->
+                <div class="w-full  px-8 py-6 pt-28 h-[calc(100vh-0px)] overflow-y-auto">
+                    <div id="onboard_progress">
+                        {% include 'frontendApp/onboard/onboard_progress.html' %}
+
+                    </div>
+
+
+                                        
+                    {% comment %} <div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+                        <div class="col-span-12 lg:col-span-5">
+                            <div id="workspace_on_board_page" class="p-4 mb-4 border border-gray-200 rounded-2xl">
+                                {% include 'frontendApp/onboard/on_board_steps/workspace.html' %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ai_configuration_on_board_page" class="p-4 mb-4 border border-gray-200 rounded-2xl hidden">
+                        {% include 'frontendApp/onboard/on_board_steps/ai_configuration.html' %}
+                    </div>
+
+                    <div id="team_on_board_page" class="p-4 mb-4 border border-gray-200 rounded-2xl hidden">
+                        {% include 'frontendApp/onboard/on_board_steps/user_detail.html' %}
+                    </div>
+
+                    <div id="domain_on_board_page" class="p-4 mb-4 hidden">
+                        {% include 'frontendApp/onboard/on_board_steps/domain.html' %}
+                    </div> {% endcomment %}
+
+
+                    <div id="workspace_on_board_page" class="onboard-step p-4 mb-4 border border-gray-200 rounded-2xl">
+                        {% include 'frontendApp/onboard/on_board_steps/workspace.html' %}
+                    </div>
+                    
+                    <div id="ai_configuration_on_board_page" class="onboard-step p-4 mb-4 border border-gray-200 rounded-2xl hidden">
+                        {% include 'frontendApp/onboard/on_board_steps/ai_configuration.html' %}
+                    </div>
+                    
+                    <div id="team_on_board_page" class="onboard-step p-4 mb-4 border border-gray-200 rounded-2xl hidden">
+                        {% include 'frontendApp/onboard/on_board_steps/user_detail.html' %}
+                    </div>
+                    
+                    <div id="domain_on_board_page" class="onboard-step p-4 mb-4 border border-gray-200 rounded-2xl hidden">
+                        {% include 'frontendApp/onboard/on_board_steps/domain.html' %}
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- table data -->
+    <script src="{% static 'frontendApp/api/base/image_file/image_file.js' %}"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
+    <script src="{% static 'frontendApp/assets/js/app.js' %}"></script>    
+    
+    <script src="{% static 'frontendApp/assets/js/custom-script.js' %}"></script>
+    
+
+    <!-- image upload  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="{% static 'frontendApp/assets/js/app.js' %}"></script>
+    <script src="{% static 'frontendApp/api/onboard/onboard.js' %}"></script>
+
+</body>
+
+</html>
+
+
+

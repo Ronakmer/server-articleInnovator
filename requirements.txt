@@ -1,0 +1,14 @@
+loguru
+Django
+psycopg2-binary
+Pillow
+django-extensions
+requests
+Werkzeug
+pyOpenSSL
+beautifulsoup4==4.12.3
+lxml
+djangorestframework
+boto3
+imagekitio
+djangorestframework-simplejwt

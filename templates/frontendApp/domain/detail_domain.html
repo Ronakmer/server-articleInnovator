@@ -1,0 +1,1227 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static %}
+
+
+{% block body %}
+
+
+
+
+<div class="flex flex-col mb-6   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+    <!-- Left Side: Title Section -->
+    <div>
+      <h3 class="text-lg font-semibold text-black">Detail demo.com</h3>
+      <p class="text-xs text-gray-500">Show new demo.com detail.</p>
+    </div>
+  
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+      <!-- Search Box -->
+      <div class="relative hidden text-gray-500 focus-within:text-gray-900 ">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                  fill="none">
+                  <path
+                      d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                      stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round"></path>
+              </svg>
+          </div>
+          <input type="search" id="default-search"
+              class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+              placeholder="Search here . . .">
+      </div>
+  
+      <!-- Add Article Button -->
+      <button onclick=""
+          class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+          fdprocessedid="fwfkzn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M8.0007 15.1671C4.53404 15.1671 1.7207 12.3471 1.7207 8.88708C1.7207 7.64042 2.08737 6.43375 2.7807 5.39375C2.93404 5.16708 3.24737 5.10042 3.47404 5.25375C3.7007 5.40708 3.76737 5.72042 3.61404 5.94708C3.03404 6.81375 2.72737 7.83375 2.72737 8.88042C2.72737 11.7937 5.09404 14.1604 8.00737 14.1604C10.9207 14.1604 13.2874 11.7937 13.2874 8.88042C13.2874 5.96708 10.914 3.60042 8.0007 3.60042C7.38737 3.60042 6.78737 3.68708 6.2207 3.86042C5.95404 3.94042 5.67404 3.79375 5.59404 3.52708C5.51404 3.26042 5.6607 2.98042 5.92737 2.90042C6.59404 2.70042 7.28737 2.59375 8.0007 2.59375C11.4674 2.59375 14.2807 5.41375 14.2807 8.87375C14.2807 12.3338 11.4674 15.1671 8.0007 15.1671Z"
+                  fill="white" />
+              <path
+                  d="M5.24625 4.0461C5.13292 4.0461 5.01292 4.0061 4.91959 3.9261C4.70626 3.73943 4.68626 3.4261 4.86626 3.21943L6.79292 1.0061C6.97292 0.799429 7.29292 0.772763 7.49959 0.959429C7.70625 1.13943 7.72625 1.45943 7.54625 1.6661L5.61959 3.87276C5.51959 3.9861 5.37959 4.0461 5.24625 4.0461Z"
+                  fill="white" />
+              <path
+                  d="M7.49241 5.6861C7.39241 5.6861 7.28574 5.65277 7.19907 5.59277L4.94574 3.9461C4.72574 3.7861 4.67907 3.47277 4.83907 3.25277C4.99907 3.0261 5.31241 2.97943 5.53907 3.13943L7.78574 4.77943C8.00574 4.93943 8.05907 5.25277 7.89241 5.47943C7.79907 5.61943 7.64574 5.6861 7.49241 5.6861Z"
+                  fill="white" />
+          </svg>
+  
+  
+          Fetch all
+      </button>
+      <!-- Modal toggle button -->
+  
+      <button class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+          fdprocessedid="fwfkzn" data-modal-target="default-modal" data-modal-toggle="default-modal" >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                  stroke-linecap="round"></path>
+          </svg>
+          Add 
+      </button>
+      <button class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+          fdprocessedid="fwfkzn">
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                  fill="white"></path>
+          </svg>
+  
+          Back
+      </button>
+  
+    </div>
+  </div>
+  
+  
+  <!-- top 4 div   -->
+  
+  <div class="grid grid-cols-5 gap-6 mb-3 w-full">
+      <div class="flex items-center space-x-3  rounded-xl mt-4 p-4 border border-solid border-gray-200 w-full relative group hover:bg-gray-100">
+          <div class="text-indigo-500 bg-gray-200 border-solid border-gray-200 rounded-xl p-2">
+              <svg width="30" height="30" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.0126 9.84869H15.3069L21.1141 6.49733L19.9625 4.50267L14.1545 7.854L17.5067 2.04967L15.5116 0.898331L12.1587 6.7012V0H9.85395V6.70193L6.5011 0.898331L4.50521 2.04967L7.85736 7.85253L2.05089 4.50267L0.898552 6.49733L6.70575 9.84869H0V12.152H6.70502L0.898552 15.5034L2.05016 17.498L7.85809 14.1467L4.50521 19.951L6.50037 21.1024L9.85395 15.2988V22H12.1587V15.155L15.5731 21.0657L17.4444 19.9863L14.0291 14.0742L19.961 17.4973L21.1134 15.5027L15.3069 12.1513H22.0119V9.84869H22.0126ZM11.0063 14.1313C10.5949 14.1314 10.1875 14.0504 9.8074 13.8931C9.42733 13.7357 9.0819 13.505 8.79097 13.2142C8.50004 12.9234 8.26921 12.5782 8.11174 12.1982C7.95426 11.8182 7.8732 11.4109 7.87313 10.9997C7.87305 10.5883 7.95403 10.181 8.11145 9.801C8.26888 9.42101 8.49955 9.07566 8.79048 8.78481C9.08132 8.49397 9.42659 8.26322 9.80675 8.10575C10.1868 7.9483 10.5941 7.86727 11.0056 7.8672C11.8364 7.86713 12.6333 8.19698 13.2209 8.78432C13.8085 9.37167 14.1387 10.1683 14.1388 10.9989C14.1389 11.8295 13.8089 12.6263 13.2214 13.2137C12.634 13.8012 11.8371 14.1312 11.0063 14.1313Z" fill="#5753F3"/>
+              </svg>
+          </div>
+          <div class="">
+              <span class="text-gray-600">Article</span><br>
+              <span class="relative  text-2xl font-semibold pr-2">20</span>
+              <button class="add-button hidden absolute bottom-2 right-3 mt-1  z-10 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg group-hover:flex">
+                  + Add
+              </button>
+          </div>
+      </div>
+      <div class="flex items-center space-x-3  rounded-xl mt-4 p-4 border border-solid border-gray-200 w-full relative group hover:bg-gray-100">
+          
+          <div class="text-indigo-500 bg-gray-200 border-solid border-gray-200 rounded-xl p-2">
+              <svg width="30" height="30" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.0126 9.84869H15.3069L21.1141 6.49733L19.9625 4.50267L14.1545 7.854L17.5067 2.04967L15.5116 0.898331L12.1587 6.7012V0H9.85395V6.70193L6.5011 0.898331L4.50521 2.04967L7.85736 7.85253L2.05089 4.50267L0.898552 6.49733L6.70575 9.84869H0V12.152H6.70502L0.898552 15.5034L2.05016 17.498L7.85809 14.1467L4.50521 19.951L6.50037 21.1024L9.85395 15.2988V22H12.1587V15.155L15.5731 21.0657L17.4444 19.9863L14.0291 14.0742L19.961 17.4973L21.1134 15.5027L15.3069 12.1513H22.0119V9.84869H22.0126ZM11.0063 14.1313C10.5949 14.1314 10.1875 14.0504 9.8074 13.8931C9.42733 13.7357 9.0819 13.505 8.79097 13.2142C8.50004 12.9234 8.26921 12.5782 8.11174 12.1982C7.95426 11.8182 7.8732 11.4109 7.87313 10.9997C7.87305 10.5883 7.95403 10.181 8.11145 9.801C8.26888 9.42101 8.49955 9.07566 8.79048 8.78481C9.08132 8.49397 9.42659 8.26322 9.80675 8.10575C10.1868 7.9483 10.5941 7.86727 11.0056 7.8672C11.8364 7.86713 12.6333 8.19698 13.2209 8.78432C13.8085 9.37167 14.1387 10.1683 14.1388 10.9989C14.1389 11.8295 13.8089 12.6263 13.2214 13.2137C12.634 13.8012 11.8371 14.1312 11.0063 14.1313Z" fill="#5753F3"/>
+              </svg>
+          </div>
+          <div class="">
+              <span class="text-gray-600">Competitors</span><br>
+              <span class="relative  text-2xl font-semibold pr-2">20</span>
+              <button class="add-button hidden absolute bottom-2 right-3 z-10 px-2 py-1 mt-1 bg-indigo-500 text-white text-xs rounded-lg group-hover:flex">
+                  + Add
+              </button>
+          </div>
+      </div>
+      <div class="flex items-center space-x-3  rounded-xl mt-4 p-4 border border-solid border-gray-200 w-full relative group hover:bg-gray-100">
+          
+          <div class="text-indigo-500 bg-gray-200 border-solid border-gray-200 rounded-xl p-2">
+              <svg width="30" height="30" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.0126 9.84869H15.3069L21.1141 6.49733L19.9625 4.50267L14.1545 7.854L17.5067 2.04967L15.5116 0.898331L12.1587 6.7012V0H9.85395V6.70193L6.5011 0.898331L4.50521 2.04967L7.85736 7.85253L2.05089 4.50267L0.898552 6.49733L6.70575 9.84869H0V12.152H6.70502L0.898552 15.5034L2.05016 17.498L7.85809 14.1467L4.50521 19.951L6.50037 21.1024L9.85395 15.2988V22H12.1587V15.155L15.5731 21.0657L17.4444 19.9863L14.0291 14.0742L19.961 17.4973L21.1134 15.5027L15.3069 12.1513H22.0119V9.84869H22.0126ZM11.0063 14.1313C10.5949 14.1314 10.1875 14.0504 9.8074 13.8931C9.42733 13.7357 9.0819 13.505 8.79097 13.2142C8.50004 12.9234 8.26921 12.5782 8.11174 12.1982C7.95426 11.8182 7.8732 11.4109 7.87313 10.9997C7.87305 10.5883 7.95403 10.181 8.11145 9.801C8.26888 9.42101 8.49955 9.07566 8.79048 8.78481C9.08132 8.49397 9.42659 8.26322 9.80675 8.10575C10.1868 7.9483 10.5941 7.86727 11.0056 7.8672C11.8364 7.86713 12.6333 8.19698 13.2209 8.78432C13.8085 9.37167 14.1387 10.1683 14.1388 10.9989C14.1389 11.8295 13.8089 12.6263 13.2214 13.2137C12.634 13.8012 11.8371 14.1312 11.0063 14.1313Z" fill="#5753F3"/>
+              </svg>
+          </div>
+          <div class="">
+              <span class="text-gray-600">Keywords</span><br>
+              <span class="relative  text-2xl font-semibold pr-2">20</span>
+              <button class="add-button hidden absolute bottom-2 right-3 mt-1  z-10 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg group-hover:flex">
+                  + Add
+              </button>
+          </div>
+      </div>
+      <div class="flex items-center space-x-3  rounded-xl mt-4 p-4 border border-solid border-gray-200 w-full relative group hover:bg-gray-100">
+          
+          <div class="text-indigo-500 bg-gray-200 border-solid border-gray-200 rounded-xl p-2">
+              <svg width="30" height="30" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.0126 9.84869H15.3069L21.1141 6.49733L19.9625 4.50267L14.1545 7.854L17.5067 2.04967L15.5116 0.898331L12.1587 6.7012V0H9.85395V6.70193L6.5011 0.898331L4.50521 2.04967L7.85736 7.85253L2.05089 4.50267L0.898552 6.49733L6.70575 9.84869H0V12.152H6.70502L0.898552 15.5034L2.05016 17.498L7.85809 14.1467L4.50521 19.951L6.50037 21.1024L9.85395 15.2988V22H12.1587V15.155L15.5731 21.0657L17.4444 19.9863L14.0291 14.0742L19.961 17.4973L21.1134 15.5027L15.3069 12.1513H22.0119V9.84869H22.0126ZM11.0063 14.1313C10.5949 14.1314 10.1875 14.0504 9.8074 13.8931C9.42733 13.7357 9.0819 13.505 8.79097 13.2142C8.50004 12.9234 8.26921 12.5782 8.11174 12.1982C7.95426 11.8182 7.8732 11.4109 7.87313 10.9997C7.87305 10.5883 7.95403 10.181 8.11145 9.801C8.26888 9.42101 8.49955 9.07566 8.79048 8.78481C9.08132 8.49397 9.42659 8.26322 9.80675 8.10575C10.1868 7.9483 10.5941 7.86727 11.0056 7.8672C11.8364 7.86713 12.6333 8.19698 13.2209 8.78432C13.8085 9.37167 14.1387 10.1683 14.1388 10.9989C14.1389 11.8295 13.8089 12.6263 13.2214 13.2137C12.634 13.8012 11.8371 14.1312 11.0063 14.1313Z" fill="#5753F3"/>
+              </svg>
+          </div>
+          <div class="">
+              <span class="text-gray-600">Selectors</span><br>
+              <span class="relative  text-2xl font-semibold pr-2">20</span>
+              <button class="add-button hidden absolute bottom-2  right-3 mt-1 z-10 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg group-hover:flex">
+                  + Add
+              </button>
+          </div>
+      </div>
+      <div class="flex items-center space-x-3  rounded-xl mt-4 p-4 border border-solid border-gray-200 w-full relative group hover:bg-gray-100">
+          
+          <div class="text-indigo-500 bg-gray-200 border-solid border-gray-200 rounded-xl p-2">
+              <svg width="30" height="30" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.0126 9.84869H15.3069L21.1141 6.49733L19.9625 4.50267L14.1545 7.854L17.5067 2.04967L15.5116 0.898331L12.1587 6.7012V0H9.85395V6.70193L6.5011 0.898331L4.50521 2.04967L7.85736 7.85253L2.05089 4.50267L0.898552 6.49733L6.70575 9.84869H0V12.152H6.70502L0.898552 15.5034L2.05016 17.498L7.85809 14.1467L4.50521 19.951L6.50037 21.1024L9.85395 15.2988V22H12.1587V15.155L15.5731 21.0657L17.4444 19.9863L14.0291 14.0742L19.961 17.4973L21.1134 15.5027L15.3069 12.1513H22.0119V9.84869H22.0126ZM11.0063 14.1313C10.5949 14.1314 10.1875 14.0504 9.8074 13.8931C9.42733 13.7357 9.0819 13.505 8.79097 13.2142C8.50004 12.9234 8.26921 12.5782 8.11174 12.1982C7.95426 11.8182 7.8732 11.4109 7.87313 10.9997C7.87305 10.5883 7.95403 10.181 8.11145 9.801C8.26888 9.42101 8.49955 9.07566 8.79048 8.78481C9.08132 8.49397 9.42659 8.26322 9.80675 8.10575C10.1868 7.9483 10.5941 7.86727 11.0056 7.8672C11.8364 7.86713 12.6333 8.19698 13.2209 8.78432C13.8085 9.37167 14.1387 10.1683 14.1388 10.9989C14.1389 11.8295 13.8089 12.6263 13.2214 13.2137C12.634 13.8012 11.8371 14.1312 11.0063 14.1313Z" fill="#5753F3"/>
+              </svg>
+          </div>
+          <div class="">
+              <span class="text-gray-600">Selectors2</span><br>
+              <span class="relative  text-2xl font-semibold pr-2">20</span>
+              <button class="add-button hidden absolute bottom-2 right-3 mt-1  z-10 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg group-hover:flex">
+                  + Add
+              </button>
+          </div>
+      </div>
+  
+  </div>
+  
+  <style>
+    /* Show button on hover */
+    .group:hover .add-button {
+        display: inline-flex;
+    }
+  </style>
+  
+<div>
+</div>
+
+
+
+<!--main content-->
+
+
+<div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 xl:col-span-8">
+        <div class="flex flex-col gap-6 w-full">
+            <!-- first start -->
+            <div class="rounded-xl p-4 border border-solid border-gray-200">
+                <div class="flex flex-col   lg:flex-row items-center justify-between gap-4  ">
+
+                    <!-- Left Side: Title Section -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-black">Stats</h3>
+                    </div>
+
+                    <!-- Right Side: Buttons and Search -->
+                    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+
+                        <!-- Search Box -->
+                        <div x-data="datePicker()" x-init="init" class="relative">
+                            <button @click="calendarVisible = !calendarVisible"
+                                class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                                fdprocessedid="v99hsd">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 1.5V3.75" stroke="#292D32" stroke-width="1.125"
+                                        stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M12.0078 1.5V3.75" stroke="#292D32"
+                                        stroke-width="1.125" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M2.625 6.81738H15.375" stroke="#292D32"
+                                        stroke-width="1.125" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path
+                                        d="M15.7539 6.375V12.75C15.7539 15 14.6289 16.5 12.0039 16.5H6.00391C3.37891 16.5 2.25391 15 2.25391 12.75V6.375C2.25391 4.125 3.37891 2.625 6.00391 2.625H12.0039C14.6289 2.625 15.7539 4.125 15.7539 6.375Z"
+                                        stroke="#292D32" stroke-width="1.125" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M11.7771 10.2751H11.7839" stroke="#292D32"
+                                        stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M11.7771 12.5251H11.7839" stroke="#292D32"
+                                        stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M9.00369 10.2751H9.01043" stroke="#292D32"
+                                        stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M9.00369 12.5251H9.01043" stroke="#292D32"
+                                        stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M6.2283 10.2751H6.23504" stroke="#292D32"
+                                        stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M6.2283 12.5251H6.23504" stroke="#292D32"
+                                        stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+
+                                <span
+                                    x-text="startDate ? startDate + ' to ' + endDate : 'Last 7 Days'">Last
+                                    7 Days</span>
+                            </button>
+
+                            <!-- Dialog Box -->
+                            <div x-show="calendarVisible" @click.outside="calendarVisible = false"
+                                class="absolute z-50 mt-2 -right-20 max-md:right-auto bg-white rounded-lg shadow-lg w-[520px] max-w-screen-lg"
+                                style="display: none;">
+                                <div class="flex">
+                                    <!-- Left Side -->
+                                    <div class="w-1/3 p-4 border-r">
+                                        <p class="text-sm font-medium text-gray-500 pb-3">Custom
+                                            Date</p>
+                                        <hr>
+                                        <ul class="mt-3 space-y-4 text-sm">
+                                            <li :class="selectedDate === 'yesterday' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                                @click="setPredefinedDates('yesterday'); selectedDate = 'yesterday'"
+                                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                                Yesterday
+                                            </li>
+                                            <li :class="selectedDate === 'last7days' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                                @click="setPredefinedDates('last7days'); selectedDate = 'last7days'"
+                                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                                Last 7 Days
+                                            </li>
+                                            <li :class="selectedDate === 'last15days' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                                @click="setPredefinedDates('last15days'); selectedDate = 'last15days'"
+                                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                                Last 15 Days
+                                            </li>
+                                            <li :class="selectedDate === 'last30days' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                                @click="setPredefinedDates('last30days'); selectedDate = 'last30days'"
+                                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                                Last 30 Days
+                                            </li>
+                                            <li :class="selectedDate === 'last3months' ? 'bg-indigo-600/20 text-indigo-700 focus:ring focus:ring-indigo-300' : 'bg-indigo-600/10 text-gray-700 focus:ring focus:ring-indigo-100'"
+                                                @click="setPredefinedDates('last3months'); selectedDate = 'last3months'"
+                                                class="cursor-pointer px-4 py-3 rounded-xl hover:bg-indigo-600/20 focus:outline-none">
+                                                Last 3 Months
+                                            </li>
+                                        </ul>
+
+
+                                    </div>
+
+                                    <!-- Right Side -->
+                                    <div class="w-2/3 p-4">
+                                        <div class="flex items-center gap-2 mb-4">
+                                            <input type="text" placeholder="Start date"
+                                                x-model="startDate" name="start_date"
+                                                class="w-1/2 px-3 py-2 text-xs border rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 flatpickr-input active"
+                                                readonly="">
+                                            <input type="text" placeholder="End date"
+                                                x-model="endDate" name="end_date"
+                                                class="w-1/2 px-3 py-2 text-xs border rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 flatpickr-input active"
+                                                readonly="">
+                                        </div>
+                                        <!-- Flatpickr Calendar (Always visible) -->
+                                        <div id="flatpickr-calendar" class="flatpickr-input"
+                                            readonly="readonly"></div>
+                                        <div class="flatpickr-calendar rangeMode animate inline"
+                                            tabindex="-1">
+                                            <div class="flatpickr-months"><span
+                                                    class="flatpickr-prev-month"><svg version="1.1"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        viewBox="0 0 17 17">
+                                                        <g></g>
+                                                        <path
+                                                            d="M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z">
+                                                        </path>
+                                                    </svg></span>
+                                                <div class="flatpickr-month">
+                                                    <div class="flatpickr-current-month"><select
+                                                            class="flatpickr-monthDropdown-months"
+                                                            aria-label="Month" tabindex="-1">
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="0" tabindex="-1">January
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="1" tabindex="-1">February
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="2" tabindex="-1">March
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="3" tabindex="-1">April
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="4" tabindex="-1">May</option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="5" tabindex="-1">June
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="6" tabindex="-1">July
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="7" tabindex="-1">August
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="8" tabindex="-1">September
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="9" tabindex="-1">October
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="10" tabindex="-1">November
+                                                            </option>
+                                                            <option
+                                                                class="flatpickr-monthDropdown-month"
+                                                                value="11" tabindex="-1">December
+                                                            </option>
+                                                        </select>
+                                                        <div class="numInputWrapper"><input
+                                                                class="numInput cur-year"
+                                                                type="number" tabindex="-1"
+                                                                aria-label="Year"><span
+                                                                class="arrowUp"></span><span
+                                                                class="arrowDown"></span></div>
+                                                    </div>
+                                                </div><span class="flatpickr-next-month"><svg
+                                                        version="1.1"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        viewBox="0 0 17 17">
+                                                        <g></g>
+                                                        <path
+                                                            d="M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z">
+                                                        </path>
+                                                    </svg></span>
+                                            </div>
+                                            <div class="flatpickr-innerContainer">
+                                                <div class="flatpickr-rContainer">
+                                                    <div class="flatpickr-weekdays">
+                                                        <div class="flatpickr-weekdaycontainer">
+                                                            <span class="flatpickr-weekday">
+                                                                Sun</span><span
+                                                                class="flatpickr-weekday">Mon</span><span
+                                                                class="flatpickr-weekday">Tue</span><span
+                                                                class="flatpickr-weekday">Wed</span><span
+                                                                class="flatpickr-weekday">Thu</span><span
+                                                                class="flatpickr-weekday">Fri</span><span
+                                                                class="flatpickr-weekday">Sat
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flatpickr-days" tabindex="-1">
+                                                        <div class="dayContainer"><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 1, 2024"
+                                                                tabindex="-1">1</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 2, 2024"
+                                                                tabindex="-1">2</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 3, 2024"
+                                                                tabindex="-1">3</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 4, 2024"
+                                                                tabindex="-1">4</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 5, 2024"
+                                                                tabindex="-1">5</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 6, 2024"
+                                                                tabindex="-1">6</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 7, 2024"
+                                                                tabindex="-1">7</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 8, 2024"
+                                                                tabindex="-1">8</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 9, 2024"
+                                                                tabindex="-1">9</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 10, 2024"
+                                                                tabindex="-1">10</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 11, 2024"
+                                                                tabindex="-1">11</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 12, 2024"
+                                                                tabindex="-1">12</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 13, 2024"
+                                                                tabindex="-1">13</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 14, 2024"
+                                                                tabindex="-1">14</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 15, 2024"
+                                                                tabindex="-1">15</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 16, 2024"
+                                                                tabindex="-1">16</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 17, 2024"
+                                                                tabindex="-1">17</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 18, 2024"
+                                                                tabindex="-1">18</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 19, 2024"
+                                                                tabindex="-1">19</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 20, 2024"
+                                                                tabindex="-1">20</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 21, 2024"
+                                                                tabindex="-1">21</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 22, 2024"
+                                                                tabindex="-1">22</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 23, 2024"
+                                                                tabindex="-1">23</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 24, 2024"
+                                                                tabindex="-1">24</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 25, 2024"
+                                                                tabindex="-1">25</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 26, 2024"
+                                                                tabindex="-1">26</span><span
+                                                                class="flatpickr-day today"
+                                                                aria-label="September 27, 2024"
+                                                                aria-current="date"
+                                                                tabindex="-1">27</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 28, 2024"
+                                                                tabindex="-1">28</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 29, 2024"
+                                                                tabindex="-1">29</span><span
+                                                                class="flatpickr-day"
+                                                                aria-label="September 30, 2024"
+                                                                tabindex="-1">30</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 1, 2024"
+                                                                tabindex="-1">1</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 2, 2024"
+                                                                tabindex="-1">2</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 3, 2024"
+                                                                tabindex="-1">3</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 4, 2024"
+                                                                tabindex="-1">4</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 5, 2024"
+                                                                tabindex="-1">5</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 6, 2024"
+                                                                tabindex="-1">6</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 7, 2024"
+                                                                tabindex="-1">7</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 8, 2024"
+                                                                tabindex="-1">8</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 9, 2024"
+                                                                tabindex="-1">9</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 10, 2024"
+                                                                tabindex="-1">10</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 11, 2024"
+                                                                tabindex="-1">11</span><span
+                                                                class="flatpickr-day nextMonthDay"
+                                                                aria-label="October 12, 2024"
+                                                                tabindex="-1">12</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-between px-4 py-2">
+                                            <button id="clearButton"
+                                                class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                Clear all
+                                            </button>
+                                            <button id="applyButton" onclick="filter_by_date()"
+                                                class="px-4 py-1 text-sm text-white bg-indigo-600 rounded-lg">Apply
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Article Button -->
+                        <butto
+                            class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                            fdprocessedid="zx8ebw">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z"
+                                    stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path
+                                    d="M6.00117 2.25H6.75117C5.28867 6.63 5.28867 11.37 6.75117 15.75H6.00117"
+                                    stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path d="M11.25 2.25C12.7125 6.63 12.7125 11.37 11.25 15.75"
+                                    stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path d="M2.25 12V11.25C6.63 12.7125 11.37 12.7125 15.75 11.25V12"
+                                    stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path d="M2.25 6.74995C6.63 5.28745 11.37 5.28745 15.75 6.74995"
+                                    stroke="#292D32" stroke-width="1.125" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                            All Time
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.0007 5.99973L8.00057 9.9999L3.99805 5.99738"
+                                    stroke="#111827" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </svg>
+                            </button>
+
+                    </div>
+                </div>
+                <div class="rounded-xl mt-4  border border-solid border-gray-200">
+                    <div
+                        class="w-full overflow-x-auto  scrollbar-thin scrollbar-thumb-indigo-600 scrollbar-thumb-rounded-full scrollbar-track-white rounded-2xl ">
+                        <div class="flex space-x-0 ">
+                            <div class="flex-shrink-0 w-48 p-4 bg-blue-500 text-white ">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_click"></div>
+                                        <div class="text-sm">Clicks</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-purple-500 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_impressions"></div>
+                                        <div class="text-sm">Impressions</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-green-500 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_ctr"></div>
+                                        <div class="text-sm">Average CTR</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-orange-500 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_position"></div>
+                                        <div class="text-sm">Positions</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-pink-500 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_article"></div>
+                                        <div class="text-sm">Articles</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-blue-400 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_traffic"></div>
+                                        <div class="text-sm">Users</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-indigo-500 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_new_user"></div>
+                                        <div class="text-sm">New Users</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-48 p-4 bg-green-400 text-white">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-2xl font-bold" id="total_average_time"></div>
+                                        <div class="text-sm">Average Time</div>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Graph  -->
+                    <div class=" ">
+                        <h3 class="text-lg px-4 py-4 font-semibold text-black">Stats</h3>
+                        <div id="detail_domain_chart"></div>
+                    </div>
+                    <!-- End Graph  -->
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+    <div class="col-span-12 xl:col-span-4 text-sm">
+        <div class="flex flex-col gap-2.5 w-full ">
+
+            <div class="rounded-xl  border border-solid border-gray-200">
+                <!-- right saidbar data -->
+
+                <div class="flex flex-col   lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                    <!-- Left Side: Title Section -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-black">Wordpress</h3>
+                    </div>
+                </div>
+                
+
+                <!-- Right Side: Buttons and Search -->
+                <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+                    <table class="w-full rounded-xl">
+                        <thead>
+                            <tr class="bg-gray-50 text-sm">
+                                <th scope="col"
+                                    class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                                    categories
+                                </th>
+
+                                <th scope="col"
+                                    class="py-3.5 pl-4 w-20 text-left whitespace-nowrap  font-medium text-gray-900 capitalize pr-4">
+                                    Counts
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 text-sm text-gray-900" id="right_said_bar_category_count_id">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+
+<div class="rounded-xl mt-4 border border-solid border-gray-200 overflow-auto">
+
+    <!-- start table tabbed code  -->
+    <div class=" ">
+        <div class="w-full  rounded-lg ">
+
+          <ul class="flex cursor-pointer border-b  border-gray-200 text-sm">
+              <li class="tab-button active-tab py-2 px-4 border-b-2 border-indigo-600  pb-1 text-indigo-600"
+                  onclick="show_table(event, 'table1', 'queries')">Queries </li>
+              <li class="tab-button py-2 px-4" onclick="show_table(event, 'table2', 'page')">
+                  Pages</li>
+              <li class="tab-button py-2 px-4 " onclick="show_table(event, 'table3', 'countries')">
+                  Countries</li>
+              <li class="tab-button py-2 px-4 " onclick="show_table(event, 'table7', 'date')">
+                  Date</li>
+              <li class="tab-button py-2 px-4 " onclick="show_table(event, 'table4', 'categories')">
+                  Category<span id="total_category" class="ml-1 inline-flex items-center justify-center w-6 h-6 text-black text-xs font-semibold bg-gray-200 rounded-full count-number">
+                    0</span></li>
+              <li class="tab-button py-2 px-4 " onclick="show_table(event, 'table5', 'tags')">
+                  Tags<span id="total_tag" class="tag_number ml-1 inline-flex items-center justify-center w-6 h-6 text-black text-xs font-semibold bg-gray-200 rounded-full count-number">
+                    0</span></li>
+              <li class="tab-button py-2 px-4 " onclick="show_table(event, 'table6', 'authors')">
+                Authors<span id="total_author" class="ml-1 inline-flex items-center justify-center w-6 h-6 text-black text-xs font-semibold bg-gray-200 rounded-full count-number">
+                   0</span>
+            </li>
+          </ul>
+          <!-- Tab 1 Table Queries  -->
+          <div id="table1" class="tab-content">
+              <div
+                  class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                  <!-- Left Side: Title Section -->
+                  <div>
+                      <h3 class="text-base font-semibold text-black">Queries
+                      </h3>
+                  </div>
+
+                  <!-- Right Side: Buttons and Search -->
+                  <div
+                      class="flex flex-wrap items-center justify-end gap-2 max-md:justify-center">
+                  </div>
+              </div>
+
+                <!-- Data table start  -->
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full rounded-xl font-poppins">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="py-3.5 pl-4 text-left whitespace-nowrap text-xs font-medium text-gray-900 capitalize">Queries</th>
+                                <th class="py-3.5 pl-4 text-left whitespace-nowrap text-xs font-medium text-gray-900 capitalize">Clicks</th>
+                                <th class="py-3.5 pl-4 text-left whitespace-nowrap text-xs font-medium text-gray-900 capitalize">Impressions</th>
+                                <th class="py-3.5 pl-4 text-left whitespace-nowrap text-xs font-medium text-gray-900 capitalize">CTR</th>
+                                <th class="py-3.5 pl-4 text-left whitespace-nowrap text-xs font-medium text-gray-900 capitalize">Position</th>
+                            </tr>
+                        </thead>
+                        <tbody id="queries_tbody" class="divide-y divide-gray-200">
+                            <!-- Rows will be dynamically populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+
+          </div>
+
+          <!-- Tab 2 Table  Pages -->
+          <div id="table2" class="tab-content hidden">
+              <div
+                  class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                  <!-- Left Side: Title Section -->
+                  <div>
+                      <h3 class="text-base font-semibold text-black">Pages
+                      </h3>
+                  </div>
+
+                 
+              </div>
+              
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full font-poppins">
+                        <thead>
+                            <tr class="w-full bg-gray-50 text-gray-900    text-sm leading-normal">
+                                <th class="py-3 px-6 text-left font-medium">Page</th>
+                                <th class="py-3 px-6 text-left font-medium">Clicks</th>
+                                <th class="py-3 px-6 text-center font-medium">Impressions</th>
+                                <th class="py-3 px-6 text-center font-medium">CTR</th>
+                                <th class="py-3 px-6 text-center font-medium">Position</th>
+                            </tr>
+                        </thead>
+                        <tbody id="page_tbody" class="text-gray-600 text-sm font-normal">
+                            <!-- Rows will be dynamically populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                
+          </div>
+
+          <!-- Tab 3 Table Countries -->
+          <div id="table3" class="tab-content hidden">
+              <div
+                  class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                  <!-- Left Side: Title Section -->
+                  <div>
+                      <h3 class="text-base font-semibold text-black">Countries
+                      </h3>
+                  </div>
+              </div>
+                     <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full font-poppins">
+                        <thead>
+                            <tr class="w-full bg-gray-50 text-gray-900    text-sm leading-normal">
+                                <th class="py-3 px-6 text-left font-medium">Countries</th>
+                                <th class="py-3 px-6 text-left font-medium">Clicks</th>
+                                <th class="py-3 px-6 text-center font-medium">Impressions</th>
+                                <th class="py-3 px-6 text-center font-medium">CTR</th>
+                                <th class="py-3 px-6 text-center font-medium">Position</th>
+                            </tr>
+                        </thead>
+                        <tbody id="countries_tbody" class="text-gray-600 text-sm font-normal">
+                            <!-- Rows will be dynamically populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                
+          </div>
+
+          <!-- Tab 4 Table Category -->
+          <div id="table4" class="tab-content hidden">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                <!-- Left Side: Title Section -->
+                <div>
+                    <h3 class="text-base font-semibold text-black">Category
+                    </h3>
+                </div>
+                
+
+                <!-- Right Side: Buttons and Search -->
+                <div class="flex flex-wrap items-center justify-end gap-2 max-md:justify-center">
+
+                    
+
+                    <!-- Search Box -->
+                    <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 18 18" fill="none">
+                                <path
+                                    d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                                    stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search"
+                            class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Search keywords . . .">
+                    </div>
+
+                    <!-- start Pagignation  -->
+                    
+                    <!-- pagination -->
+                    <div id="pagination" class="flex justify-center mt-4"></div>
+
+                    <!-- add button -->
+                    <button onclick="openModal('category')"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                        fdprocessedid="fwfkzn" data-modal-target="default-modal" data-modal-toggle="default-modal" >
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                                stroke-linecap="round"></path>
+                        </svg> 
+                    </button>
+
+                </div>
+            </div>
+            <table class="w-full rounded-xl" id="category_data">
+                <thead>
+                    <tr class="bg-gray-50 text-sm">
+
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            #
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Name
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Slug
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Description
+                        </th>
+                        
+                        <th scope="col"
+                            class="py-3.5 pl-4 w-20 text-left whitespace-nowrap  font-medium text-gray-900 capitalize pr-4">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm text-gray-900" id="categories_tbody">
+                   
+                </tbody>
+            </table>
+          </div>
+
+           <!-- Tab 5 Table Tag  -->
+           <div id="table5" class="tab-content hidden">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                <!-- Left Side: Title Section -->
+                <div>
+                    <h3 class="text-base font-semibold text-black">Tag
+                    </h3>
+                </div>
+                
+
+                <!-- Right Side: Buttons and Search -->
+                <div class="flex flex-wrap items-center justify-end gap-2 max-md:justify-center">
+                    
+                    <!-- Search Box -->
+                    <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 18 18" fill="none">
+                                <path
+                                    d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                                    stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search"
+                            class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Search keywords . . .">
+                    </div>
+
+                    <!-- pagination -->
+                    <div id="pagination" class="flex justify-center mt-4"></div>
+
+
+                    <!-- add button -->
+                    <button onclick="openModal('tag')"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                       fdprocessedid="fwfkzn" data-modal-target="default-modal" data-modal-toggle="default-modal" >
+                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                               stroke-linecap="round"></path>
+                       </svg> 
+                   </button>
+
+                </div>
+            </div>
+            <table class="w-full rounded-xl" id="tag_data">
+                <thead>
+                    <tr class="bg-gray-50 text-sm">
+
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            #
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Name
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Slug
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Description
+                        </th>
+                        
+                        <th scope="col"
+                            class="py-3.5 pl-4 w-20 text-left whitespace-nowrap  font-medium text-gray-900 capitalize pr-4">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm text-gray-900" id="tag_tbody">
+                   
+                </tbody>
+               
+
+            </table>
+            <!-- Pagination -->
+             
+          </div>
+
+           <!-- Tab 6 Table Author -->
+           <div id="table6" class="tab-content hidden">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                <!-- Left Side: Title Section -->
+                <div>
+                    <h3 class="text-base font-semibold text-black">Author
+                    </h3>
+                </div>
+                
+                <!-- Right Side: Buttons and Search -->
+                <div class="flex flex-wrap items-center justify-end gap-2 max-md:justify-center">
+                    <!-- Search Box -->
+                    <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 18 18" fill="none">
+                                <path
+                                    d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                                    stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round">
+                                </path>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search"
+                            class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Search keywords . . .">
+                    </div>
+
+                    <!-- start Pagignation  -->
+                    
+                    <!-- pagination -->
+                    <div id="pagination" class="flex justify-center mt-4"></div>
+
+                    <!-- add button -->
+                    <button onclick="openModal('author')" 
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                       fdprocessedid="fwfkzn" data-modal-target="default-modal" data-modal-toggle="default-modal" >
+                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                               stroke-linecap="round"></path>
+                       </svg> 
+                   </button>
+                </div>
+            </div>
+            <table class="w-full rounded-xl" id="author_data">
+                <thead>
+                    <tr class="bg-gray-50 text-sm">
+
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            #
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            User Name
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            First Name
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Last Name
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            Email
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                            bio
+                        </th>
+                        <th scope="col"
+                            class="py-3.5 pl-4 w-20 text-left whitespace-nowrap  font-medium text-gray-900 capitalize pr-4">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm text-gray-900" id="author_tbody">
+                   
+                </tbody>
+            </table>
+          </div>
+
+           <!-- Tab 3 Table Date -->
+           <div id="table7" class="tab-content hidden">
+            <div
+                class="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 border-b border-gray-200">
+                <!-- Left Side: Title Section -->
+                <div>
+                    <h3 class="text-base font-semibold text-black">Date
+                    </h3>
+                </div>
+            </div>
+            <!-- Data table start  -->
+             <!-- Table -->
+             <div class="overflow-x-auto">
+                <table class="min-w-full font-poppins">
+                    <thead>
+                        <tr class="w-full bg-gray-50 text-gray-900    text-sm leading-normal">
+                            <th class="py-3 px-6 text-left font-medium">Date</th>
+                            <th class="py-3 px-6 text-left font-medium">Clicks</th>
+                            <th class="py-3 px-6 text-center font-medium">Impressions</th>
+                            <th class="py-3 px-6 text-center font-medium">CTR</th>
+                            <th class="py-3 px-6 text-center font-medium">Position</th>
+                        </tr>
+                    </thead>
+                    <tbody id="date_tbody" class="text-gray-600 text-sm font-normal">
+                        <!-- Rows will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            
+        </div>
+
+          <!-- Tabs Navigation -->
+
+
+        </div>
+    </div>
+
+    <!-- end table tabbed code  -->
+    
+    <!-- tab table  -->
+    <script src="{% static 'frontendApp/api/domain/table_tab_content.js' %}"></script>
+    <script src="{% static 'frontendApp/api/domain/table_tab_content_api.js' %}"></script>
+
+
+</div>
+
+<!--domain modal -->
+{% include 'frontendApp/domain/domain_modal.html' %}
+
+<script src="{% static 'frontendApp/api/domain/domain_modal.js' %}"></script>
+
+
+<!-- css -->
+<script src="{% static 'frontendApp/assets/js/apexcharts.js' %}"></script>
+<script src="{% static 'frontendApp/assets/js/custom-graph.js' %}"></script>
+<script src="{% static 'frontendApp/assets/js/custom-calender.js' %}"></script>
+
+
+
+<!-- flatpickr -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- domain api -->
+<script src="{% static 'frontendApp/api/domain/graph_domain.js' %}"></script>
+<script src="{% static 'frontendApp/api/domain/detail_domain_chart.js' %}"></script>
+<script src="{% static 'frontendApp/api/domain/right_said_bar_category_count.js' %}"></script>
+<script src="{% static 'frontendApp/api/domain/detail_domain.js' %}"></script>
+
+<!-- category api -->
+<script src="{% static 'frontendApp/api/category/list_category.js' %}"></script>
+<script src="{% static 'frontendApp/api/category/add_category.js' %}"></script>
+<script src="{% static 'frontendApp/api/category/delete_category.js' %}"></script>
+<script src="{% static 'frontendApp/api/category/status_category.js' %}"></script>
+<script src="{% static 'frontendApp/api/category/table_data_category.js' %}"></script>
+
+<!-- tag api -->
+<script src="{% static 'frontendApp/api/tag/list_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/tag/add_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/tag/delete_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/tag/status_tag.js' %}"></script>
+<script src="{% static 'frontendApp/api/tag/table_data_tag.js' %}"></script>
+
+<!-- author api -->
+<script src="{% static 'frontendApp/api/author/list_author.js' %}"></script>
+<script src="{% static 'frontendApp/api/author/add_author.js' %}"></script>
+<script src="{% static 'frontendApp/api/author/delete_author.js' %}"></script>
+<script src="{% static 'frontendApp/api/author/status_author.js' %}"></script>
+<script src="{% static 'frontendApp/api/author/table_data_author.js' %}"></script>
+
+
+
+
+{% endblock body %}

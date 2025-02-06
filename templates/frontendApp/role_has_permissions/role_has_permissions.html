@@ -1,0 +1,219 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static %}
+
+
+{% block body %}
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Role has Permissions</h3>
+        <p class="text-xs text-gray-500">role has permissions details </p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+      
+
+    </div>
+</div>
+
+
+
+
+<div id="permissionsTable" class="rounded-xl mt-4 border border-solid border-gray-200 overflow-auto">
+    <!-- Content will be dynamically inserted here -->
+</div>
+
+{% comment %} <script>
+    // Your provided JSON data
+    const responseData = {
+        "status": "success",
+        "data": {
+            "roles": [
+                {
+                    "name": "admin",
+                    "slug_id": "dde0dc0b-8df8-46fe-bc0d-3d4a611765cc",
+                    "permissions": [
+                        {
+                            "name": "list_workspace",
+                            "slug_id": "4a66d788-469b-44cc-a99c-29b33d4f9e31"
+                            
+                        },
+                        {
+                            "name": "add_workspace",
+                            "slug_id": "46e9f4b9-ec32-41a8-a891-31ec567c011b"
+                        },
+                        {
+                            "name": "update_workspace",
+                            "slug_id": "f5d918c9-933c-420f-99d5-070b85f426ea"
+                        }
+                    ]
+                },
+                {
+                    "name": "manager",
+                    "slug_id": "030f008a-3043-43b5-9b59-55f93eb7a1c1",
+                    "permissions": [
+                        {
+                            "name": "list_tag",
+                            "slug_id": "95edd8a0-c37c-43c5-8899-fbee8fa4f71a"
+                        },
+                        {
+                            "name": "add_tag",
+                            "slug_id": "ebb31f36-3d2d-46d5-b597-6e1ad56db6e5"
+                        }
+                    ]
+                }
+            ],
+            "grouped_permissions": {
+                "jwt": [
+                    {
+                        "slug_id": "61700c72-2bde-4cd7-b09f-08f46fee311c",
+                        "name": "TokenObtainPairView"
+                    },
+                    {
+                        "slug_id": "b077ace8-d7bb-4321-b7a0-d55aea978e48",
+                        "name": "TokenRefreshView"
+                    }
+                ],
+                "login": [
+                    {
+                        "slug_id": "40b4fb85-dfb3-4ea2-a6af-81e0ee95e7a9",
+                        "name": "admin_login"
+                    },
+                    {
+                        "slug_id": "89131360-5557-4191-a25b-fda1c2d85d50",
+                        "name": "admin_logout"
+                    },
+                    {
+                        "slug_id": "1f83228f-ca82-47a4-a245-859535bf8f88",
+                        "name": "send_otp"
+                    }
+                ]
+            }
+        }
+    };
+
+    function formatPermissionName(name) {
+        return name
+            .split(/(?=[A-Z])|_/)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    }
+
+    function hasPermission(roleName, permissionName) {
+        const role = responseData.data.roles.find(r => r.name === roleName);
+        return role && role.permissions.some(p => p.name === permissionName);
+    }
+
+    function renderTable() {
+        const container = document.getElementById('permissionsTable');
+        
+        // Start with the header
+        let html = `
+            <div class="grid grid-cols-[1fr_repeat(3,80px)] items-center bg-white border-b py-3 px-4">
+                <div class="font-medium text-gray-900">Roles</div>
+                <div class="text-center text-sm font-medium text-gray-900">Member</div>
+                <div class="text-center text-sm font-medium text-gray-900">Manager</div>
+                <div class="text-center text-sm font-medium text-gray-900">Admin</div>
+            </div>
+        `;
+
+        // Render each permission group
+        Object.entries(responseData.data.grouped_permissions).forEach(([groupName, permissions]) => {
+            // Add group header
+            html += `
+                <div class="bg-gray-50 px-4 py-3">
+                    <h3 class="text-sm font-medium text-gray-800">${formatPermissionName(groupName)}</h3>
+                </div>
+            `;
+
+            // Add permissions for this group
+            permissions.forEach(permission => {
+                html += `
+                    <div class="grid grid-cols-[1fr_repeat(3,80px)] items-center bg-white px-4 py-2 border-b last:border-b-0">
+                        <div class="text-sm text-gray-600">${formatPermissionName(permission.name)}</div>
+                        <div class="flex justify-center">
+                            <input type="checkbox" 
+                                class="h-4 w-4 rounded border-gray-300 text-blue-600"
+                                data-permission="${permission.slug_id}"
+                                data-role="member"
+                                ${hasPermission('member', permission.name) ? 'checked' : ''}>
+                        </div>
+                        <div class="flex justify-center">
+                            <input type="checkbox" 
+                                class="h-4 w-4 rounded border-gray-300 text-blue-600"
+                                data-permission="${permission.slug_id}"
+                                data-role="manager"
+                                ${hasPermission('manager', permission.name) ? 'checked' : ''}>
+                        </div>
+                        <div class="flex justify-center">
+                            <input type="checkbox" 
+                                class="h-4 w-4 rounded border-gray-300 text-blue-600"
+                                data-permission="${permission.slug_id}"
+                                data-role="admin"
+                                ${hasPermission('admin', permission.name) ? 'checked' : ''}>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        container.innerHTML = html;
+
+
+
+        const rolePermissions = {};
+
+        // Add event listeners to all checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const permission = e.target.dataset.permission;
+                const role = e.target.dataset.role;
+                const isChecked = e.target.checked;
+
+                // Initialize the role in the object if it doesn't exist
+                if (!rolePermissions[role]) {
+                    rolePermissions[role] = [];
+                }
+
+                // Update the permissions list for the role
+                if (isChecked) {
+                    rolePermissions[role].push(permission);
+                } else {
+                    const index = rolePermissions[role].indexOf(permission);
+                    if (index > -1) {
+                        rolePermissions[role].splice(index, 1);
+                    }
+                }
+
+                // Log the updated permissions for the role
+                console.log(`Role: ${role}, Permissions: ${rolePermissions[role].join(', ')}`);
+
+                // Here you would typically make an API call to update the permissions
+            });
+        });
+
+
+    }
+
+    // Initialize the table when the document loads
+    document.addEventListener('DOMContentLoaded', renderTable);
+</script> {% endcomment %}
+
+
+
+<script>
+    
+</script>
+
+
+<!-- role_has_permissions -->
+
+<script src="{% static 'frontendApp/api/role_has_permissions/table_data_role_has_permissions.js' %}"></script>
+
+
+{% endblock body %}

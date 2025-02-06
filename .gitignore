@@ -1,0 +1,6 @@
+
+# Ignore migration files
+**/migrations/*
+
+# Ignore Python bytecode files
+__pycache__

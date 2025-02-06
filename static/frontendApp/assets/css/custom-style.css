@@ -1,0 +1,106 @@
+.apexcharts-canvas,
+.apexcharts-canvas svg {
+  width: 100% !important;
+}
+
+.flatpickr-calendar {
+  box-shadow: none;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  font-family: "Poppins";
+  font-size: 14px;
+}
+
+/* Custom Scrollbar Styles */
+
+/* Start Toggle switch button css  */
+.flipswitch {
+  position: relative;
+  width: 75px;
+}
+
+.flipswitch input[type="checkbox"] {
+  display: none;
+}
+
+.flipswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+.flipswitch-inner {
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in;
+  font-size: 0px;
+}
+
+.flipswitch-inner:before,
+.flipswitch-inner:after {
+  float: left;
+  width: 50%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 10px;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.flipswitch-inner:before {
+  content: "Active";
+  padding-left: 7px;
+  background-color: #4f46e5;
+  color: #ffffff;
+}
+
+.flipswitch-inner:after {
+  content: "Inactive";
+  padding-right: 7px;
+  background-color: #eaecf0;
+  color: #111827;
+  text-align: right;
+}
+
+.flipswitch-switch {
+  height: 25px;
+  width: 25px;
+  background: #ffffff;
+  border-radius: 50px;
+  position: absolute;
+  top: 2px;
+  right: 46px;
+  transition: all 0.3s ease-in;
+}
+
+.flipswitch-cb:checked + .flipswitch-label .flipswitch-inner {
+  margin-left: 0;
+}
+
+.flipswitch-cb:checked + .flipswitch-label .flipswitch-switch {
+  right: 0;
+}
+
+/* End Toggle switch button css  */
+
+div#swal2-html-container {
+  padding-top: 5px;
+}
+button.swal2-confirm.swal2-styled.swal2-default-outline {
+  font-size: 14px;
+}
+div#swal2-html-container {
+  font-size: 16px;
+}
+/* Create a domain page  */
+.custom-select-dropdown {
+  display: none;
+}
+
+.custom-select.active .custom-select-dropdown {
+  display: block;
+}

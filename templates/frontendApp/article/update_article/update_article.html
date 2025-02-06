@@ -1,0 +1,509 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Article</h3>
+        <p class="text-xs text-gray-500">Create new article here.</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_article_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+            Back
+        </a>
+    </div>
+</div>
+
+
+
+
+
+<div class="px-4 sm:px-4 py-6 w-full h-[calc(100vh-0px)] ">
+  
+
+    <form method="POST" id="add_article_form" name="manual_article_form" action="" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4">
+        
+
+
+    <div class="gap-6 grid grid-cols-12">
+        <div class="col-span-12 xl:col-span-8">
+            <div class="flex flex-col gap-6 w-full">
+                <!-- first start -->
+                <div
+                    class="border-gray-200 grid grid-cols-12 max-md:grid-cols-1 p-4 border border-solid rounded-xl">
+                    <!-- Adjusted column span for full width -->
+                    <div class="col-span-12 max-md:col-span-1 lg:col-span-12">
+                        <div class="grid grid-cols-1">
+                            <div class="max-md:block flex border rounded-lg w-full max-md:text-center overflow-hidden">
+                                <!-- URL Input (full width in flex) -->
+                
+                                <select id="domain_id_type" name="manual_domain_data" onchange="domain_slug_value()"
+                                    class="flex-grow max-md:border-0 bg-gray-50 max-md:bg-gray-100 px-4 py-2 border-r focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+               
+                               </select>
+
+                               <!-- for pass data in api -->
+                               <input type="hidden" name="manual_domain_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                               placeholder="">
+
+
+                                <!-- Category Input (full width in flex) -->
+                                <input type="text" id="category_permalink" name="wp_slug_category_permalink"
+                                placeholder="Category"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Year Input (full width in flex) -->
+                                <input type="text" id="year_permalink" name="wp_slug_year_permalink"
+                                placeholder="Year"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Month Input (full width in flex) -->
+                                <input type="text" id="month_permalink" name="wp_slug_month_permalink"
+                                placeholder="Month"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Day Input (full width in flex) -->
+                                <input type="text" id="day_permalink" name="wp_slug_day_permalink"
+                                placeholder="Day"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Hour Input (full width in flex) -->
+                                <input type="text" id="hour_permalink" name="wp_slug_hour_permalink"
+                                placeholder="Hour"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Minute Input (full width in flex) -->
+                                <input type="text" id="minute_permalink" name="wp_slug_minute_permalink"
+                                placeholder="Minute"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Second Input (full width in flex) -->
+                                <input type="text" id="second_permalink" name="wp_slug_second_permalink"
+                                placeholder="Second"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                <!-- Author Input (full width in flex) -->
+                                <input type="text" id="author_permalink" name="wp_slug_author_permalink"
+                                placeholder="Author"
+                                class="flex-grow hidden w-20 px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none">
+
+                                
+                                <!-- Slug Input (full width in flex) -->
+                                <input type="text" name="wp_slug_data" id="wp_slug_data"
+                                    class="flex-grow px-4 py-2 max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none"
+                                    placeholder="Slug"
+                                    value="">
+                                <!-- Slug Input (full width in flex) -->
+                                <input type="hidden" name="wp_slug" id="wp_slug"
+                                    value="">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-gray-200 p-4 border border-solid rounded-xl">
+                    <div class="flex flex-col px-3 pb-2">
+                        <span class="text-gray-600">Title</span>
+                    </div>
+
+                    <!-- title Input (full width in flex) -->
+                    <input type="text" name="wp_title"
+                    class="flex-grow px-4 py-2 w-full border-gray-200 p-4 border border-solid rounded-xl max-md:border max-md:border-b-0 focus:ring focus:ring-indigo-500 max-md:w-full max-md:text-center outline-none"
+                    placeholder="Title"
+                    value="">
+                </div>
+                <div class="border-gray-200 p-4 border border-solid rounded-xl">
+                
+                    <div class="flex flex-col px-3 pb-2">
+                        <span class="text-gray-600">Article</span>
+                    </div>
+
+                    <div class="editor-container mt-3">
+                        <textarea id="editor" name="wp_content"></textarea>
+                        <script>
+                            ClassicEditor
+                                .create(document.querySelector('#editor'), {
+                                    toolbar: [
+                                        'heading', '|',
+                                        'bold', 'italic', 'underline', 'strikethrough', '|',
+                                        'link', 'bulletedList', 'numberedList', '|',
+                                        'blockQuote', 'insertTable', 'mediaEmbed', '|',
+                                        'undo', 'redo'
+                                    ],
+                                    {% comment %} // Setting height directly in CKEditor configuration
+                                    editor: {
+                                        height: 600  // Set height in pixels
+                                    } {% endcomment %}
+                                })
+                                .then(editor => {
+                                    // Set the custom height using CSS
+                                    editor.ui.view.editable.element.style.height = '600px';
+                                    editor.ui.view.editable.element.style.minHeight = '600px';
+
+                                    // Attach an event listener to get content when needed
+                                    document.querySelector('#editor').addEventListener('click', () => {
+                                        const wp_content = editor.getData();  // Get content from CKEditor
+                                        console.log(wp_content); // Print content to console
+
+                                    });
+
+                                })
+                
+                                .catch(error => {
+                                    console.error(error);
+                                });
+                        </script>
+                    </div>
+
+                    
+                </div>
+                <div class="border-gray-200 p-3 border border-solid rounded-xl">
+                    <div class="flex flex-col px-3 pb-2">
+                        <span class="text-gray-600">Excerpt</span>
+                    </div>
+
+
+                    <textarea name="wp_excerpt"
+                    class="flex-grow w-full border-gray-200 p-4 border border-solid rounded-xl px-4 py-2 max-md:border max-md:border-b-0  max-md:w-full max-md:text-center outline-none"
+                    placeholder="Excerpt .."
+                    rows="4" ></textarea>
+
+                </div>
+
+                
+                <div class="flex max-md:flex-wrap max-md:justify-center items-center gap-2">
+
+
+                    <!-- Search Box -->
+                    <div class="relative hidden text-gray-500 focus-within:text-gray-900">
+                        <div
+                            class="left-0 absolute inset-y-0 flex items-center pl-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 18 18" fill="none">
+                                <path
+                                    d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                                    stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round"></path>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search"
+                            class="block border-gray-300 bg-transparent shadow-xs py-2 pr-4 pl-8 border rounded-lg w-full max-w-xs font-normal text-gray-900 text-sm leading-relaxed placeholder-gray-400 focus:outline-none"
+                            placeholder="Search here . . .">
+                    </div>
+
+                    <!-- Add Article Button -->
+
+                    <button type="button" id="submit_btn" onclick="add_ai_article_api()"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                        Save
+                    </button>
+                
+                
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="col-span-12 xl:col-span-4 text-sm">
+            <div class="flex flex-col gap-2.5 w-full">
+                <div class="border-gray-200 p-3 border border-solid rounded-xl">
+                    <span 
+                        class="inline-flex items-center bg-emerald-50 mr-2 px-4 py-1 rounded-full h-6 font-medium text-emerald-600 text-xs leading-5" name="manual_article_type_title" id="manual_article_type_title">
+                        {% comment %} Keyword Generative {% endcomment %}
+                    </span>
+                    <!--for api -->
+                    <input type="hidden" id="manual_article_type_slug_id" name="manual_article_type_slug_id" placeholder="Enter AI Article Type Slug ID"/>
+                </div>
+
+               
+                <div class="border-gray-200 border border-solid rounded-xl mb-5">
+                    <div
+                        class="flex justify-between items-center border-gray-200 p-4 pb-4 border-b border-solid">
+                        <h5 class="font-semibold text-base text-gray-900">
+                            Edit More
+                        </h5>
+
+                    </div>
+                    <div class="pt-4 px-4 flex flex-col ">
+                        <span class="text-gray-600">Status</span>
+                    </div>
+                    <div class="flex flex-wrap p-4 items-center  ">
+                    <!-- Radio Buttons -->
+                    <div class="flex items-center space-x-2 mb-2">
+                    <div class="wordpress-status">
+                                <div class="flex items-center">
+                                    <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                        <label>
+                                            <input type="radio" class="status-radio" name="wp_status_manual" value="draft" id="draft" onclick="manual_toggle_date_time_fields()" checked> Draft
+                                        </label>
+                                    </div>
+                                    <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                        <label>
+                                            <input type="radio" class="status-radio" name="wp_status_manual" value="publish" id="publish" onclick="manual_toggle_date_time_fields()"> Publish
+                                        </label>
+                                    </div>
+                                    <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                        <label>
+                                            <input type="radio" class="status-radio" name="wp_status_manual" value="scheduled" id="ai_scheduled" onclick="manual_toggle_date_time_fields()"> Scheduled
+                                        </label>
+                                    </div>
+                                </div>
+                    
+                                <!-- Date and Time fields -->
+                                <div id="manual_date_time_fields" class="flex items-center mt-4 hidden">
+                                    <div class="mr-4">
+                                        <input type="date" class="border border-gray-300 rounded-md p-2" />
+                                    </div>
+                                    <div class="mr-4">
+                                        <input type="time" class="border border-gray-300 rounded-md p-2" />
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 pt-0 rounded-lg">
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="pb-1 text-gray-600">Author</span>
+                            <!-- Add button -->
+                            <button class="add-button mt-1 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg"
+                                onclick="openModal('author')" type="button">
+                                + Add
+                            </button>
+                        </div>
+
+                        <div class="relative author-search">
+                            <div class="flex flex-wrap gap-2 mb-2 pt-2" id="selected-authors"></div>
+                            {% comment %} <input type="text" id="author-input" placeholder="Search Authora"
+                                class="px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-300"> {% endcomment %}
+
+                                <select id="type" name="author_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                </select>
+
+                                <!-- for pass data in api -->
+                                <input type="hidden" name="author_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                                placeholder="">
+
+                            {% comment %} <div id="author-dropdown"
+                                class="z-10 absolute border-gray-200 hidden bg-white shadow-lg mt-1 border rounded-lg w-full max-h-60 overflow-y-auto !appearance-none">
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 pt-0 rounded-lg">
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="pb-1 text-gray-600">Categories</span>
+                            <!-- Add button -->
+                            <button class="add-button mt-1 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg"
+                                onclick="openModal('category')" type="button">
+                                + Add
+                            </button>
+                        </div>
+
+
+
+                        <div class="category-search relative">
+                            <div class="flex flex-wrap gap-2 mb-2 pt-2 " id="selected-categories"></div>
+                            <input type="text" id="category-input" placeholder="Search Categories"
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            <div id="category-dropdown"
+                                class="hidden absolute z-10  mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        <!-- for pass data in api -->
+                        <input type="hidden" name="category_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                        placeholder=""> 
+
+
+                    </div>
+                    <div class="bg-white p-4 pt-0 rounded-lg">
+
+                        <div class="flex items-center justify-between">
+                            <span class="pb-1 text-gray-600">Tags</span>
+                            <!-- Add button -->
+                            <button class="add-button mt-1 px-2 py-1 bg-indigo-500 text-white text-xs rounded-lg"
+                                onclick="openModal('tag')" type="button">
+                                + Add
+                            </button>
+                        </div>
+                                                
+                        {% comment %} <div class="relative tag-search">
+                            <div class="flex flex-wrap gap-2 mb-2 pt-2" id="selected-tags"></div>
+                            <input type="text" id="tag-input" placeholder="Search tags"
+                                class="px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-300">
+
+                            <input type="hidden" id="" name="tag_id">
+
+                            <div id="tag-dropdown"
+                                class="z-10 absolute border-gray-200 hidden bg-white shadow-lg mt-1 border rounded-lg w-full max-h-60 overflow-y-auto !appearance-none">
+                            </div>
+                        </div> {% endcomment %}
+  
+                        
+                        <div class="tag-search relative">
+                            <div class="flex flex-wrap gap-2 mb-2 pt-2 " id="selected-tag"></div>
+                            <input type="text" id="tag-input" placeholder="Search Categories"
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            <div id="tag-dropdown"
+                                class="hidden absolute z-10  mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        <!-- for pass data in api -->
+                        <input type="hidden" name="tag_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                        placeholder="">
+
+
+
+                    </div>
+                        
+                        <!-- featured image -->
+                    <div class="flex flex-col p-4 pt-0">
+                        <span class="pb-1 text-gray-600">Featured Image</span>
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full ">
+                                <!-- image upload  -->
+        
+                                <div class="w-full py-9 bg-gray-50 rounded-2xl border-2 border-gray-300 gap-3 grid border-dashed">
+                                    <!-- Upload and Preview Section -->
+                                    <div class="grid gap-1">
+                                        <!-- Icon and Info -->
+                                        <div class="text-center" id="drag-logo-text">
+                                            <svg class="mx-auto" width="41" height="40" viewBox="0 0 41 40"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.4974 28.333V18.333L12.1641 21.6663"
+                                                    stroke="#4F46E5" stroke-width="2.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M15.5 18.333L18.8333 21.6663" stroke="#4F46E5"
+                                                    stroke-width="2.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M37.1693 16.6663V24.9997C37.1693 33.333 33.8359 36.6663 25.5026 36.6663H15.5026C7.16927 36.6663 3.83594 33.333 3.83594 24.9997V14.9997C3.83594 6.66634 7.16927 3.33301 15.5026 3.33301H23.8359"
+                                                    stroke="#4F46E5" stroke-width="2.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path
+                                                    d="M37.1693 16.6663H30.5026C25.5026 16.6663 23.8359 14.9997 23.8359 9.99967V3.33301L37.1693 16.6663Z"
+                                                    stroke="#4F46E5" stroke-width="2.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <h2 class="text-gray-600 text-sm leading-4 pt-2 pb-2">Drag Image
+                                                here</h2>
+                                            <span class="text-gray-400 font-normal text-sm"
+                                                id="choose-file-text">OR</span>
+                                        </div>
+        
+                                        <!-- Image Preview & Crop Section -->
+                                        <div class="flex flex-col items-center justify-center mt-0">
+                                            <div id="preview-container"
+                                                class="relative w-64 h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md hidden">
+                                                <!-- Cropped Image Preview -->
+                                                <img id="cropped-image"
+                                                    class="object-cover w-full h-full" />
+                                            </div>
+        
+                                            <!-- File Input -->
+                                            <label class="mt-4">
+                                                <input type="file" id="file-input" accept="image/*" name="wp_featured_image" hidden>
+        
+                                                <div
+                                                    class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
+                                                    Choose File
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+        
+                                    <!-- Crop Controls (visible after upload) -->
+                                    <div id="crop-controls"
+                                        class="flex items-center justify-center gap-2 mt-2 hidden">
+                                        <button id="crop-button" type="button"
+                                            class="px-4 py-2 bg-indigo-600 text-xs text-white rounded-md">Crop</button>
+                                        <button id="reset-button" type="button"
+                                            class="px-4 py-2 bg-red-600 text-white text-xs rounded-md">Reset</button>
+        
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </form>
+</div>
+
+{% include 'frontendApp/article/update_article/article_modal.html' %}
+<script src="{% static 'frontendApp/api/article/base/add_wp_data_api.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/update_article/add_wp_data.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/update_article/article_modal.js' %}"></script>
+
+
+<script src="{% static 'frontendApp/api/article/update_article/article_dropdowns.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/update_article/domain_slug_value.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/update_article/update_article.js' %}"></script>
+
+
+{% comment %} 
+
+
+<script>
+$(document).ready(function() {
+    // Handle the click event of the "Generate Slug" button
+    $('#submit_btn').click(function() {
+        let slug_data = [
+            $('#category_permalink').val(),
+            $('#year_permalink').val(),
+            $('#month_permalink').val(),
+            $('#day_permalink').val(),
+            $('#hour_permalink').val(),
+            $('#minute_permalink').val(),
+            $('#second_permalink').val(),
+            $('#author_permalink').val(),
+            $('#wp_slug_data').val()
+        ].filter(Boolean).join('/'); // Filter out empty values and join with '/'
+        console.log(slug_data, 'slug_data'); // Debugging output
+
+        const wp_slug_id = document.querySelector('[name="wp_slug"]');
+        wp_slug_id.value = slug_data;
+
+
+    });
+});
+</script>
+
+ {% endcomment %}
+
+
+
+
+
+<!--article_scheduled-->
+<script src="{% static 'frontendApp/api/article/base/article_scheduled.js' %}"></script>
+
+
+{% endblock body %}

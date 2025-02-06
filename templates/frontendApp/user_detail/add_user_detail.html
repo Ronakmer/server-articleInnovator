@@ -1,0 +1,225 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">User Detail</h3>
+        <p class="text-xs text-gray-500">Create new user detail</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_user_detail_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+
+            Back
+        </a>
+    </div>
+</div>
+
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+    <div class="col-span-12 lg:col-span-4">
+        <div class="p-4 border border-gray-200 rounded-2xl ">
+            <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                User Details</h5>
+
+            <form method="POST" action=""  id="user_detail_form" name="user_detail_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                            Full Name
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+                        <input type="text" id="default-search" name="full_name"  value=""
+                            class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Full Name" required="">
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                            E-Mail
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+                        <input type="email" id="default-search" name="email"  value=""
+                            class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="E-Mail" required="">
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                            Password
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+                        <input type="password" id="" name="password"  
+                            class="block w-full px-4 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                            placeholder="Password" >
+
+                    </div>
+
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Profile Image
+                        </label>
+                        <!-- image upload  -->
+                        
+
+                        <div
+                            class="w-full py-9 bg-gray-50 rounded-2xl border-2 border-gray-300 gap-3 grid border-dashed">
+                            <!-- Upload and Preview Section -->
+                            <div class="grid gap-1">
+                                <!-- Icon and Info -->
+                                <div class="text-center" id="drag-logo-text">
+                                    <svg class="mx-auto" width="41" height="40" viewBox="0 0 41 40"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15.4974 28.333V18.333L12.1641 21.6663"
+                                            stroke="#4F46E5" stroke-width="2.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M15.5 18.333L18.8333 21.6663" stroke="#4F46E5"
+                                            stroke-width="2.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M37.1693 16.6663V24.9997C37.1693 33.333 33.8359 36.6663 25.5026 36.6663H15.5026C7.16927 36.6663 3.83594 33.333 3.83594 24.9997V14.9997C3.83594 6.66634 7.16927 3.33301 15.5026 3.33301H23.8359"
+                                            stroke="#4F46E5" stroke-width="2.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M37.1693 16.6663H30.5026C25.5026 16.6663 23.8359 14.9997 23.8359 9.99967V3.33301L37.1693 16.6663Z"
+                                            stroke="#4F46E5" stroke-width="2.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <h2 class="text-gray-600 text-sm leading-4 pt-2 pb-2">Drag logo
+                                        here</h2>
+                                    <span class="text-gray-400 font-normal text-sm"
+                                        id="choose-file-text">OR</span>
+                                </div>
+
+                                <!-- Image Preview & Crop Section -->
+                                <div class="flex flex-col items-center justify-center mt-0">
+                                    <div id="preview-container"
+                                        class="relative w-64 h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md hidden">
+                                        <!-- Cropped Image Preview -->
+                                        <img id="cropped-image"
+                                            class="object-cover w-full h-full" />
+                                    </div>
+
+                                    <!-- File Input -->
+                                    <label class="mt-4">
+                                        <input type="file" id="file-input" accept="image/*"name="profile_image" value=""  hidden>
+
+                                        <div
+                                            class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
+                                            Choose File
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Crop Controls (visible after upload) -->
+                            <div id="crop-controls"
+                                class="flex items-center justify-center gap-2 mt-2 hidden">
+                                <button id="crop-button" type="button"
+                                    class="px-4 py-2 bg-indigo-600 text-xs text-white rounded-md">Crop</button>
+                                <button id="reset-button" type="button"
+                                    class="px-4 py-2 bg-red-600 text-white text-xs rounded-md">Reset</button>
+
+                            </div>  
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="flex flex-wrap -m-2 mt-3">
+                    <label for="countries"
+                        class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                        Avatar
+                    </label>
+
+                    <div id="avatar-images-container"></div>
+                </div>
+
+
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="assignments" class="block pb-2 text-sm font-medium text-gray-600">Workspace</label>
+
+                        <div class="custom-select member_custom_select  bg-white rounded-lg  border border-gray-300" id="">
+                            <div class="flex flex-wrap items-center p-2 min-h-[42px]" id="">
+                                <div class="selected-items member_selected_items flex flex-wrap gap-2" id=""></div>
+                                <input type="text" class="flex-grow text-sm outline-none px-2 py-1" name=""
+                                    placeholder="">
+                            </div>
+                            <div id=""
+                                class="custom-select-dropdown member_custom_select_dropdown text-sm mt-1 py-4 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        <!-- for pass data in api -->
+                        <input type="text" name="workspace_id" class="flex-grow text-sm outline-none px-2 py-1"
+                          placeholder="">
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <button type="button" onclick="add_user_detail_api()"
+                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+
+                        Save
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- end field data  -->
+
+<!-- user_detail api -->
+<script src="{% static 'frontendApp/api/user_detail/get_avatar_image.js' %}"></script>
+
+<script src="{% static 'frontendApp/api/user_detail/add_user_detail.js' %}"></script>
+<script src="{% static 'frontendApp/api/user_detail/user_detail_dropdowns.js' %}"></script>
+
+
+{% endblock body %}
