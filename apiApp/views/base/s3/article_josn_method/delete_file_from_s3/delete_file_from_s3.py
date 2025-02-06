@@ -10,12 +10,6 @@ def delete_file_from_s3(file_path):
 
     s3_options = settings.STORAGES['custom_s3']['OPTIONS']
 
-    # s3_client = boto3.client(
-    #     's3',
-    #     aws_access_key_id='AKIA6GBMBSQAVBQZMKF2',
-    #     aws_secret_access_key='MnWSXROk051tdTH4HRBt/SLCWHB3+pPXr9l9H9MV',
-    #     region_name='us-east-1'  # e.g., 'us-east-1'
-    # )
     s3_client = boto3.client(
         's3',
         aws_access_key_id=s3_options['access_key'],

@@ -40,12 +40,6 @@ def create_article_folder_and_file_s3(data):
     # Serialize the data to JSON
     json_data = json.dumps(article_data, indent=4)
 
-    # s3_client = boto3.client(
-    #     's3',
-    #     aws_access_key_id='AKIA6GBMBSQAVBQZMKF2',
-    #     aws_secret_access_key='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',
-    #     region_name='us-east-1'
-    # )
 
     s3_client = boto3.client(
         's3',

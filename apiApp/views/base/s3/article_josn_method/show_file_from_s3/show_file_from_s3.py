@@ -17,14 +17,6 @@ def show_file_from_s3(s3_url):
 
         # Combine the remaining parts to reconstruct the key
         key = key_parts[0] if key_parts else ""
-
-        # s3_client = boto3.client(
-        #         's3',
-        #         aws_access_key_id='AKIA6GBMBSQAVBQZMKF2',
-        #         aws_secret_access_key='MnWSXROk051tdTH4HRBt/SLCWHB3+pPXr9l9H9MV',
-        #         region_name='us-east-1'  # e.g., 'us-east-1'
-        #     )
-        
         
         s3_client = boto3.client(
             's3',

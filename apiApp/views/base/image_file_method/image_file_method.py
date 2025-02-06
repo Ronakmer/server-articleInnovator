@@ -40,17 +40,3 @@ def upload_to_imagekit(image):
 
 
 
-#         # url = "https://file-examples.com/wp-content/uploads/2017/10/file_example_JPG_100kB.jpg"
-#         # upload = imagekit.upload_file(
-#         #         file=url,
-#         #         file_name=image,
-#         #         options=UploadFileRequestOptions(
-#         #             response_fields=["is_private_file", "tags"],
-#         #             tags=["tag1", "tag2"]
-#         #         )
-#         #     )
-
-
-
-# # if 'url' in response:
-# #     return response['url']
