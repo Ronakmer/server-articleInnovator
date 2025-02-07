@@ -111,4 +111,3 @@ var delete_image_template_category_page_url = `${page_url}image-template-categor
 var progress_bar_page_url = `${page_url}fetch/wp-data/`;
 
 var list_role_has_permissions_page = `${page_url}role-has-permissions/`;
-// var domain_console_metrics_page_url = `${page_url}domain/console-metrics-graph/`;

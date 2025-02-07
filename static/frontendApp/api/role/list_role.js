@@ -14,10 +14,7 @@ async function list_role_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -26,7 +23,6 @@ async function list_role_api() {
     const response_data = await  list_api(list_role_url, 'role_tbody', offset, limit, filters, 'delete_role_api', 'status_role_api', update_role_page_url, current_page, 'roles', '', render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_role('role_tbody', response_data, 'delete_role_api', 'status_role_api', update_role_page_url)
    
 }
 list_role_api()

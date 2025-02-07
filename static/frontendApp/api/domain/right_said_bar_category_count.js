@@ -1,33 +1,4 @@
 
-// // Function to render dynamic 
-// async function right_said_bar_category_count(domain_article_data) {
-
-//     const domain_article_data_obj = await domain_article_data; // Await the promise
-
-//     const tbody = document.getElementById('right_said_bar_category_count_id'); 
-
-//     const temp = domain_article_data_obj.metrics_data.category_article_count
-//     console.log(temp,'temp')
-
-//     tbody.innerHTML = ''; 
-
-
-//     domain_article_data_obj.prompts.forEach((obj, index) => {
-//         const tr = document.createElement('tr');
-//         tr.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
-
-//         tr.innerHTML = `
-//             <td class="py-3.5 pl-4">${index + 1}</td>
-//             <td class="py-3.5 pl-4">
-//                 ${obj.name}
-//             </td>
-//         `;
-//         tbody.appendChild(tr);
-//     });
-// }
-
-
-
 
 // Function to render dynamic category count data
 async function right_said_bar_category_count(domain_article_data) {

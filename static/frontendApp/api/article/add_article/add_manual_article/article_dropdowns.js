@@ -40,24 +40,6 @@ function set_domain_dropdown(domain_data){
 
         });
 
-        // // set slug_id in update time
-        // if (set_color_slug_id) {
-
-        //     const options = selectElement.querySelectorAll('option');
-        //     options.forEach(option => {
-        //         if (option.value === set_color_slug_id) {
-        //             option.selected = true;
-        //             // document.getElementById(`set_manager_${managerId}`).click();
-
-        //         }
-        //     });
-
-        //     // Additionally, set the color input field's value
-        //     const color_input = document.querySelector("input[name='color']");
-        //     color_input.value = set_color_slug_id;
-        // }
-
-
     }) 
 
 };
@@ -106,22 +88,6 @@ function set_author_dropdown(author_data){
 
         });
 
-        // // set slug_id in update time
-        // if (set_color_slug_id) {
-
-        //     const options = selectElement.querySelectorAll('option');
-        //     options.forEach(option => {
-        //         if (option.value === set_color_slug_id) {
-        //             option.selected = true;
-        //             // document.getElementById(`set_manager_${managerId}`).click();
-
-        //         }
-        //     });
-
-        //     // Additionally, set the color input field's value
-        //     const color_input = document.querySelector("input[name='color']");
-        //     color_input.value = set_color_slug_id;
-        // }
 
 
     }) 
@@ -143,13 +109,6 @@ function set_category_dropdown(category_data) {
         const categories = response.categories || [];  // Ensure data is loaded
         console.log(categories, '0w');
 
-        // const categories = [
-        //     { slug_id: 1, name: 'text', count: 15 },
-        //     { slug_id: 2, name: 'textarea', count: 10 },
-        //     { slug_id: 3, name: 'text', count: 8 },
-        //     { slug_id: 4, name: 'Category 4', count: 12 },
-        //     { slug_id: 5, name: 'Category 5', count: 20 },
-        // ];
         
         const input = document.getElementById('category-input');
         const dropdown = document.getElementById('category-dropdown');
@@ -303,14 +262,6 @@ function set_tag_dropdown(tag_data) {
         // Access article_type_fields once the promise is resolved
         const categories = response.tags || [];  // Ensure data is loaded
         console.log(categories, '0w');
-
-        // const categories = [
-        //     { slug_id: 1, name: 'text', count: 15 },
-        //     { slug_id: 2, name: 'textarea', count: 10 },
-        //     { slug_id: 3, name: 'text', count: 8 },
-        //     { slug_id: 4, name: 'Category 4', count: 12 },
-        //     { slug_id: 5, name: 'Category 5', count: 20 },
-        // ];
         
         const input = document.getElementById('tag-input');
         const dropdown = document.getElementById('tag-dropdown');

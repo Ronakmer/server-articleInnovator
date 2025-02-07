@@ -1,50 +1,6 @@
 
 
 
-// function set_workspace() {
-//     const all_workspace_slug_id = sessionStorage.getItem("all_workspace_slug_id");
-//     let parsed_workspaces = [];
-
-//     if (all_workspace_slug_id) {
-//         try {
-//             parsed_workspaces = JSON.parse(all_workspace_slug_id);
-//         } catch (error) {
-//             console.error("Error parsing workspace data:", error);
-//             return;
-//         }
-//     }
-
-//     console.log(parsed_workspaces);
-//     const div_data = document.getElementById('workspace_list');
-//     div_data.innerHTML = ""; // Clear existing content
-
-//     function set_workspace_to_session(slug_id, name, logo){
-//         console.log(slug_id, name, logo)
-//     }
-
-//     parsed_workspaces.forEach((obj) => {
-//         div_data.innerHTML += `
-//             <label onclick="set_workspace_to_session('${obj.slug_id}','${obj.name}','${obj.logo}')"
-//                 class="flex items-center px-4 py-3 text-sm cursor-pointer rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
-//                 <img src="${obj.logo}" class="w-[26px] h-[26px] mr-2 rounded-full">
-//                 ${obj.name}
-//             </label>
-//         `;
-//     });
-    
-    
-    
-// }
-
-// set_workspace();
-
-
-
-
-
-
-
-
 
 function set_workspace() {
     const all_workspace_slug_id = sessionStorage.getItem("all_workspace_slug_id");
@@ -65,11 +21,13 @@ function set_workspace() {
 
     // Define the function here so it can be accessed from event listeners
     function set_workspace_to_session(slug_id, name, logo) {
-        // console.log(slug_id, name, logo);  // This will log the slug_id, name, and logo when clicked
+        const temp_workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+        
         sessionStorage.setItem("workspace_slug_id", slug_id);
-        // location.reload();
-        // window.location.href = dashboard_page_url
 
+        if(temp_workspace_slug_id != slug_id){
+            location.reload();
+        }
 
         const image = document.getElementById("workspace_logo");  // Assuming you assign an ID to the image
         const text = document.getElementById("workspace_name");  // Assuming you assign an ID to the second <p> tag
@@ -79,7 +37,7 @@ function set_workspace() {
     
         // Change the text content of the second <p> tag
         text.textContent = name;  // Set new text here
-    
+        
         
     }
 
@@ -112,5 +70,7 @@ function set_workspace() {
 
 
 set_workspace();
+
+
 
 

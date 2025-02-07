@@ -36,8 +36,6 @@ async function login_api() {
             const refresh_token = data.refresh_token;
 
             if (access_token && refresh_token) {
-                // localStorage.setItem("access_token", access_token);
-                // localStorage.setItem("refresh_token", refresh_token);
                 sessionStorage.setItem("access_token", access_token);
                 sessionStorage.setItem("refresh_token", refresh_token);
                 
@@ -45,11 +43,7 @@ async function login_api() {
 
             // Store workspce
             if (data.workspaces_data && data.workspaces_data.length > 0) {
-                const first_workspace_slug_id = data.workspaces_data[1].slug_id;
                 const all_workspace_slug_id = JSON.stringify(data.workspaces_data);
-                // console.log("all_workspace_slug_id:", all_workspace_slug_id);
-                // console.log("First workspace slug_id:", first_workspace_slug_id);
-                // sessionStorage.setItem("workspace_slug_id", first_workspace_slug_id);
                 sessionStorage.setItem("all_workspace_slug_id", all_workspace_slug_id);
             }
 

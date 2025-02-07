@@ -2,7 +2,6 @@
 
 function render_data_to_table(response_data, current_page, limit){
     
-    // table_data_permission('permission_tbody', response_data, 'delete_permission_api', 'status_permission_api', update_permission_page_url, current_page, limit)
     table_data_author('author_tbody', response_data, 'delete_author_api', 'status_author_api', '', current_page, limit)
 }
 
@@ -19,8 +18,6 @@ async function list_author_api() {
 
     // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -29,15 +26,12 @@ async function list_author_api() {
 
 
 
-    // const api_url = `${list_author_url}&domain_slug_id=${domain_slug_id}`
 
     const response_data = await list_api(list_author_url, 'author_tbody', offset, limit, filters, 'delete_author_api', 'status_author_api', '', current_page, 'authors', domain_slug_id, render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_author('author_tbody', response_data, 'delete_author_api', 'status_author_api', '')
     
 }
 
-// list_author_api()
 
 

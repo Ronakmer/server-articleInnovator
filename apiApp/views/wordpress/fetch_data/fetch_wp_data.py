@@ -16,13 +16,10 @@ from apiApp.models import domain, wp_tag, workspace
 def fetch_wp_data(request):
     try:
         
-        # time.sleep(30)
-        
         # Retrieve domain_id from GET request parameters
         domain_slug_id = request.GET.get('domain_slug_id')
         workspace_slug_id = request.GET.get('workspace_slug_id')
 
-        print(domain_slug_id,'b0b')
 
         if not domain_slug_id:
             return JsonResponse({"error": "Domain ID is required."}, status=400)
@@ -46,7 +43,6 @@ def fetch_wp_data(request):
             }, status=404)  
 
 
-        print(domain_slug_id,workspace_slug_id)
         
         obj_data={
             "domain_obj":domain_obj,

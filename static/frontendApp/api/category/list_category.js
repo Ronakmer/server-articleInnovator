@@ -15,10 +15,7 @@ async function list_category_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -27,15 +24,11 @@ async function list_category_api() {
 
 
 
-    // const api_url = `${list_category_url}&domain_slug_id=${domain_slug_id}`
-
     const response_data = await list_api(list_category_url, 'categories_tbody', offset, limit, filters, 'delete_category_api', 'status_category_api', '', current_page, 'categorys', domain_slug_id, render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_category('categories_tbody', response_data, 'delete_category_api', 'status_category_api', '')
     
 }
 
-// list_category_api()
 
 

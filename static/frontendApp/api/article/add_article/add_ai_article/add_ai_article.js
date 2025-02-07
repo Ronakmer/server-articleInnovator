@@ -64,8 +64,7 @@ function add_ai_article_api() {
 
 function get_domain_data(){
 
-    domain_data = get_data_api(list_domain_url)    
-    //set_domain_dropdown
+    const domain_data = get_data_api(list_domain_url)    
     set_domain_dropdown(domain_data)
 }
 get_domain_data()
@@ -75,8 +74,7 @@ get_domain_data()
 
 function get_prompt_data(){
 
-    prompt_data = get_data_api(list_prompt_url)    
-    //set_prompt_dropdown
+    const prompt_data = get_data_api(list_prompt_url)    
     set_prompt_dropdown(prompt_data)
 }
 get_prompt_data()

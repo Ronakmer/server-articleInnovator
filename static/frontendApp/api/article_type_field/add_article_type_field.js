@@ -12,14 +12,6 @@ function add_article_type_field_api() {
     const field_type = article_type_field_form.querySelector('[name="field_type"]').value;
     const required = article_type_field_form.querySelector('[name="required"]').checked;
 
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    //     label: label,
-    //     placeholder: placeholder,
-    //     field_type: field_type,
-    //     required: required,
-    // };
     const data = new FormData();
     data.append("name", name);
     data.append("label", label);
@@ -73,7 +65,6 @@ function add_article_type_field_api() {
             field_type.value = data_obj.article_type_fields[0].field_type;
             required.checked  = data_obj.article_type_fields[0].required;
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

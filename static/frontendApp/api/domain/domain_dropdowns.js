@@ -1,6 +1,5 @@
 
 
-console.log('0x0->',set_manager_ids)
 // manager
 document.addEventListener('DOMContentLoaded', function () {
     manager_data.then((response) => {
@@ -141,31 +140,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 child.style.display = name.includes(searchTerm) ? '' : 'none';
             });
         });
-        // set_manager_ids = 'c0eddf57-3c60-4278-bdbe-b0f24708686d'
         
-        // alert(set_manager_ids)
-        // update time set data
-        if (typeof set_manager_ids === 'string') {
-            if (set_manager_ids.includes(',')) {
-                // If it's a comma-separated list, split it into an array
-                set_manager_ids = set_manager_ids.split(',').map(item => item.trim());
-            } else {
-                // If it's just a single ID, convert it into an array
-                set_manager_ids = [set_manager_ids.trim()];
+        setTimeout(() => {
+            // alert(set_manager_ids)
+            // update time set data
+            if (typeof set_manager_ids === 'string') {
+                if (set_manager_ids.includes(',')) {
+                    // If it's a comma-separated list, split it into an array
+                    set_manager_ids = set_manager_ids.split(',').map(item => item.trim());
+                } else {
+                    // If it's just a single ID, convert it into an array
+                    set_manager_ids = [set_manager_ids.trim()];
+                }
             }
-        }
-        console.log(set_manager_ids,'x')
-        // update time set data
-        if (Array.isArray(set_manager_ids)) {
-            set_manager_ids.forEach(managerId => {
-                console.log(`manager ID: ${managerId}`);
-                document.getElementById(`set_manager_${managerId}`).click();
-                // managerElement.click();
+            // update time set data
+            if (Array.isArray(set_manager_ids)) {
+                set_manager_ids.forEach(managerId => {
+                    console.log(`manager ID: ${managerId}`);
+                    document.getElementById(`set_manager_${managerId}`).click();
+                    // managerElement.click();
 
-            });
-        } else {
-            console.error('set_manager is not an array:', set_manager_ids);
-        }
+                });
+            } else {
+                console.error('set_manager is not an array:', set_manager_ids);
+            }
+        }, 500);
+
 
         // Add keydown event listener for backspace functionality
         input.addEventListener('keydown', (e) => {
@@ -354,21 +354,32 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+        setTimeout(() => {
         
-        // update time set data
-        if (typeof set_writer_ids === 'string') {
-            set_writer_ids = set_writer_ids.split(',').map(item => item.trim()); // Convert the string to an array and trim spaces
-        }
-        // update time set data
-        if (Array.isArray(set_writer_ids)) {
-            set_writer_ids.forEach(writerId => {
-                console.log(`writer ID: ${writerId}`);
-                // document.getElementById(`set_writer_${writerId}`).click();
+            // update time set data
+            if (typeof set_writer_ids === 'string') {
+                if (set_writer_ids.includes(',')) {
+                    // If it's a comma-separated list, split it into an array
+                    set_writer_ids = set_writer_ids.split(',').map(item => item.trim());
+                } else {
+                    // If it's just a single ID, convert it into an array
+                    set_writer_ids = [set_writer_ids.trim()];
+                }
+            }
+            // update time set data
+            if (Array.isArray(set_writer_ids)) {
+                set_writer_ids.forEach(writerId => {
+                    console.log(`writer ID: ${writerId}`);
+                    document.getElementById(`set_writer_${writerId}`).click();
 
-            });
-        } else {
-            console.error('set_writer is not an array:', set_writer_ids);
-        }
+                });
+            } else {
+                console.error('set_writer is not an array:', set_writer_ids);
+            }
+
+
+        }, 500);
+        
 
         // Add keydown event listener for backspace functionality
         input.addEventListener('keydown', (e) => {

@@ -17,10 +17,7 @@ async function list_motivation_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -28,8 +25,6 @@ async function list_motivation_api() {
 
     const response_data = await list_api(list_motivation_url, 'motivation_tbody', offset, limit, filters, 'delete_motivation_api', 'status_motivation_api', update_motivation_page_url, current_page, 'motivations', '', render_data_to_table);
     console.log(response_data,'0')
-    
-    // table_data_motivation('motivation_tbody', response_data, 'delete_motivation_api', 'status_motivation_api', update_motivation_page_url)
     
 }
 

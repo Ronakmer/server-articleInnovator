@@ -25,7 +25,6 @@ def list_domain(request):
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
 
-        print(slug_id,'slug_id')
         # Initialize filters
         filters = Q()
         
@@ -53,7 +52,7 @@ def list_domain(request):
         if request_user.is_superuser:
             try:
                 obj = domain.objects.filter(filters).order_by('-created_date') 
-                print(obj,'obj0')    
+ 
             except domain.DoesNotExist:
                 return JsonResponse({
                     "error": "domain not found.",
@@ -82,7 +81,6 @@ def list_domain(request):
                     return JsonResponse({
                         "error": "domain not found.",
                     }, status=404)   
-        print(obj,'obj0')    
 
         # Apply pagination
         total_count = obj.count()

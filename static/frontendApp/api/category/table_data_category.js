@@ -8,8 +8,6 @@
 // Function to render dynamic 
 function table_data_category(tbody_name, response_data, delete_function_name, status_function_name, update_page_url) {
 
-    // alert(data_key)
-
     const tbody = document.getElementById(tbody_name); 
 
     tbody.innerHTML = ''; 

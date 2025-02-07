@@ -129,15 +129,6 @@ async function detail_domain_chart(domain_console_data, domain_analytics_data, d
     chart.render();
 }
 
-// // Initialize the chart when the DOM is fully loaded
-// if (document.readyState === 'loading') {
-//     document.addEventListener('DOMContentLoaded', () => {
-//         detail_domain_chart(domain_console_data, domain_analytics_data, domain_article_data, slug_id);
-//     });
-// } else {
-//     detail_domain_chart(domain_console_data, domain_analytics_data, domain_article_data, slug_id);
-// }
-
 
 
 

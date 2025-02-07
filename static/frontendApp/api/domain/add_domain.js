@@ -21,10 +21,6 @@ function add_domain_api() {
     wordpress_username = wp_username 
     wordpress_application_password = wp_password 
     
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("name", name);
     data.append("manager_slug_id", manager_id);
@@ -45,15 +41,14 @@ function add_domain_api() {
             console.log("Found ID:", slug_id);
             await update_api(update_domain_url, data, slug_id, list_domain_page_url);
         } else {
-            // await add_api(add_domain_url, data, list_domain_page_url);
 
-            // const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-            const workspace_slug_id = '77b4ad49-db8a-4434-aad5-c2351c953cc7';
+            const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
 
             const domain_slug_id = sessionStorage.getItem("domain_slug_id");
             
-            progress_bar_page_url += `?workspace_slug_id=${workspace_slug_id}&domain_slug_id=${domain_slug_id}`;
-            await add_api(add_domain_url, data, progress_bar_page_url);
+            // progress_bar_page_url += `?workspace_slug_id=${workspace_slug_id}&domain_slug_id=${domain_slug_id}`;
+            await add_api(add_domain_url, data, '');
+            // await add_api(add_domain_url, data, progress_bar_page_url);
         }
     })()
 
@@ -77,8 +72,6 @@ function add_domain_api() {
         // Collect form data using the name attributes
         const name = domain_form.querySelector('[name="name"]');
         const permalinks = domain_form.querySelector('[name="permalinks"]');
-        // wordpress_username = wp_username 
-        // wordpress_application_password = wp_password 
 
 
         // show step 2 in update time
@@ -92,15 +85,12 @@ function add_domain_api() {
             wp_username = data_obj.domains[0].wordpress_username;
             wp_password = data_obj.domains[0].wordpress_application_password;
 
-            alert(data_obj.domains[0].manager_id_data[0].slug_id)
-            // set_manager_ids = data_obj.domains[0].manager_id_data.map(manager => manager.slug_id);
-            set_manager_ids = data_obj.domains[0].manager_id_data[0].slug_id;
-            set_writer_ids = data_obj.domains[0].writer_id_data[0].slug_id;
+            set_manager_ids = data_obj.domains[0].manager_id_data.map(manager => manager.slug_id);
+            set_writer_ids = data_obj.domains[0].writer_id_data.map(writer => writer.slug_id);
 
             
 
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

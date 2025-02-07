@@ -70,11 +70,6 @@ if(file_input){
             
             cropper.destroy(); // Destroy the cropper after cropping
     
-            // Hide the crop button after cropping
-            // cropButton.classList.add('hidden');
-    
-         
-            // croppedImage.src = croppedCanvas.toDataURL();
         });
     
     

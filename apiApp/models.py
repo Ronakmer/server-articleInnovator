@@ -512,14 +512,14 @@ class article(models.Model):
     wp_post_id = models.CharField(max_length=200, default="",  blank=True)
     wp_excerpt = models.CharField(max_length=500, default="",  blank=True)
     wp_modified_date = models.CharField(max_length=200, default="",  blank=True)
-    keyword = models.CharField(max_length=200, default="",  blank=True)  # run time
-    url = models.CharField(max_length=200, default="",  blank=True)  # run time
+    keyword = models.CharField(max_length=200, default="",  blank=True)  
+    url = models.CharField(max_length=200, default="",  blank=True)  
     wp_slug = models.CharField(max_length=200, default="",  blank=True)
     wp_content = models.CharField(max_length=500, default="",  blank=True)
     meta_description = models.CharField(max_length=200, default="",  blank=True)
     meta_tag = models.CharField(max_length=200, default="",  blank=True)
     meta_keyword = models.CharField(max_length=200, default="",  blank=True)
-    wp_featured_image=models.CharField(max_length=200, default="",  blank=True)    
+    wp_featured_image=models.CharField(max_length=200, default="", null=True, blank=True)    
     wp_status = models.CharField(max_length=200, choices=WP_STATUS_CHOICES, null=True, blank=True)
     article_status = models.CharField(max_length=200, choices=ARTICLE_STATUS_CHOICES, null=True, blank=True)    
     wp_schedule_time = models.DateTimeField(null=True, blank=True)

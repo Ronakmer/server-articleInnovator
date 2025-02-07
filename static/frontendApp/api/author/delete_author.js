@@ -7,8 +7,6 @@ function delete_author_api(slug_id, new_author){
     const current_page_url = window.location.href;
     const domain_slug_id = current_page_url.split('/').pop();
 
-
-    // delete_api(api_url, slug_id)
     author_delete_toast(api_url, slug_id, new_author, domain_slug_id)
 
 }

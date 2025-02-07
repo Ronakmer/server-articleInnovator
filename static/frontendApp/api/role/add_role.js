@@ -8,10 +8,6 @@ function add_role_api() {
     // Collect form data using the name attributes
     const name = role_form.querySelector('[name="name"]').value;
 
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("name", name);
 
@@ -53,7 +49,6 @@ function add_role_api() {
         if (data_obj && data_obj.roles && data_obj.roles.length > 0) {
             name.value = data_obj.roles[0].name;
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

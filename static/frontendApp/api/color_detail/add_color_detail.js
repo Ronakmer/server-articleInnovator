@@ -9,10 +9,6 @@ function add_color_detail_api() {
     const bg_color = color_detail_form.querySelector('[name="bg_color"]').value;
     const text_color = color_detail_form.querySelector('[name="text_color"]').value;
 
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("bg_color", bg_color);
     data.append("text_color", text_color);
@@ -57,7 +53,6 @@ function add_color_detail_api() {
             bg_color.value = data_obj.colors[0].bg_color;
             text_color.value = data_obj.colors[0].text_color;
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

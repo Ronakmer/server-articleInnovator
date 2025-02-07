@@ -25,7 +25,6 @@ async function add_workspace_api() {
     if (logo && logo.files && logo.files[0]) {
         data.append('logo', logo.files[0]);
     }
-    // data.append("logo", logo);
 
 
     try {
@@ -35,11 +34,9 @@ async function add_workspace_api() {
         const response = await fetch(add_workspace_url, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
 
             },
-            // body: JSON.stringify(data),
             body: data,
         });
         

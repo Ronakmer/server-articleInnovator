@@ -20,8 +20,6 @@ async function list_article_type_field_api() {
 
     // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -30,7 +28,6 @@ async function list_article_type_field_api() {
     const response_data = await list_api(list_article_type_field_url, 'article_type_field_tbody', offset, limit, filters, 'delete_article_type_field_api', 'status_article_type_field_api', update_article_type_field_page_url, current_page, 'article_type_fields', '', render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_article_type_field('article_type_field_tbody', response_data, 'delete_article_type_field_api', 'status_article_type_field_api', update_article_type_field_page_url)
     
 }
 

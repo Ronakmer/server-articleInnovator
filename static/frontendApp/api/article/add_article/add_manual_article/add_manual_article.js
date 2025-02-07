@@ -121,7 +121,7 @@ function add_ai_article_api() {
 
 function get_domain_data(){
 
-    domain_data = get_data_api(list_domain_url)    
+    const domain_data = get_data_api(list_domain_url)    
     //set_domain_dropdown
     set_domain_dropdown(domain_data)
 }
@@ -132,21 +132,21 @@ get_domain_data()
 
 function get_author_data(domain_slug_id){
 
-    author_data = get_data_api(list_author_url, domain_slug_id)    
+    const author_data = get_data_api(list_author_url, domain_slug_id)    
     //set_author_dropdown
     set_author_dropdown(author_data)
 }
 
 function get_category_data(domain_slug_id){
 
-    category_data = get_data_api(list_category_url, domain_slug_id)    
+    const category_data = get_data_api(list_category_url, domain_slug_id)    
     //set_category_dropdown
     set_category_dropdown(category_data)
 }
 
 function get_tag_data(domain_slug_id){
 
-    tag_data = get_data_api(list_tag_url, domain_slug_id)    
+    const tag_data = get_data_api(list_tag_url, domain_slug_id)    
     //set_tag_dropdown
     set_tag_dropdown(tag_data)
 }

@@ -7,6 +7,12 @@ async function add_user_detail_api() {
     // Get the form element
     const user_detail_form = document.querySelector('[name="user_detail_form"]');
 
+    let temp_avatar_image_id = '';
+    if (avatar_image_id){
+
+        temp_avatar_image_id = avatar_image_id.replace('/media/', '');
+    }
+
     // Collect form data using the name attributes
     const full_name = user_detail_form.querySelector('[name="full_name"]').value;
     const email = user_detail_form.querySelector('[name="email"]').value;
@@ -23,6 +29,11 @@ async function add_user_detail_api() {
 
     if (profile_image && profile_image.files && profile_image.files[0]) {
         data.append('profile_image', profile_image.files[0]);
+    }
+
+    if(temp_avatar_image_id){
+
+        data.append("avatar_image_path", temp_avatar_image_id);
     }
 
 
@@ -62,18 +73,15 @@ async function add_user_detail_api() {
         const email = user_detail_form.querySelector('[name="email"]');
         const password = user_detail_form.querySelector('[name="password"]');
         const workspace_id = user_detail_form.querySelector('[name="workspace_id"]');
-        // const profile_image = user_detail_form.querySelector('[name="profile_image"]');
             
         if (data_obj && data_obj.user_details && data_obj.user_details.length > 0) {
             full_name.value = data_obj.user_details[0].full_name;
             email.value = data_obj.user_details[0].user_id.email;
             password.value = data_obj.user_details[0].password;
-            // workspace_id.value = data_obj.user_details[0].workspace_id.slug_id;
 
             set_workspace_ids = data_obj.user_details[0].workspace_id.map(field => field.slug_id).join(', ')
 
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

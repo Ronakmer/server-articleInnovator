@@ -78,15 +78,8 @@ function add_article_type_api() {
         if (data_obj && data_obj.article_types && data_obj.article_types.length > 0) {
             article_category.value = data_obj.article_types[0].article_category;
             category.value = data_obj.article_types[0].category;
-            // article_type_field_slug_id.value = data_obj.article_types[0].article_type_field_slug_id;
-            // color_slug_id.value = data_obj.article_types[0].color_slug_id;
-            // article_type_field_slug_id.value = data_obj.article_types[0].article_type_field_id_data.map(field => field.slug_id).join(', ')
             title.value  = data_obj.article_types[0].title;
-            description.value  = data_obj.article_types[0].description;
-
-            // alert(data_obj.article_types[0].color_detail_id_data.slug_id)
-            // color_slug_id.value = data_obj.article_types[0].color_detail_id_data.slug_id
-            
+            description.value  = data_obj.article_types[0].description;            
             set_color_slug_id = data_obj.article_types[0].color_detail_id_data.slug_id
             set_article_type_field_slug_id = data_obj.article_types[0].article_type_field_id_data.map(field => field.slug_id).join(', ')
             
@@ -102,7 +95,6 @@ function add_article_type_api() {
 function get_article_type_field_data(){
 
     article_type_field_data = get_data_api(list_article_type_field_url)
-    console.log(article_type_field_data,'000')
 }
 get_article_type_field_data()
 
@@ -111,6 +103,5 @@ get_article_type_field_data()
 function get_color_detail_data(){
     
     color_detail_data = get_data_api(list_color_detail_url)
-    console.log(color_detail_data,'11111')
 }
 get_color_detail_data()

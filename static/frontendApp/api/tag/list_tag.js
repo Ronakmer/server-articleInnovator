@@ -21,10 +21,7 @@ async function list_tag_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -33,15 +30,10 @@ async function list_tag_api() {
 
 
 
-    // const api_url = `${list_tag_url}&domain_slug_id=${domain_slug_id}`
-
     const response_data = await list_api(list_tag_url, 'tag_tbody', offset, limit, filters, 'delete_tag_api', 'status_tag_api', '', current_page, 'tags', domain_slug_id, render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_tag('tag_tbody', response_data, 'delete_tag_api', 'status_tag_api', '')
     
 }
-
-// list_tag_api()
 
 

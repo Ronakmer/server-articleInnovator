@@ -127,8 +127,6 @@ async function domain_article_graph_api(api_url, domain_slug_id, start_date, end
         }
 
         
-        // const a = 'https://127.0.0.1:8000/api/console-metrics?domain_slug_id=ec676a34-eb18-4610-b1b8-99ba7d26d87a'
-        
         const response = await fetch(`${api_url}?${query_params.toString()}`, {
         // const response = await fetch(`${a}`, {
             method: 'GET',

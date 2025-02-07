@@ -1,4 +1,16 @@
 
+
+
+function render_data_to_table(response_data, current_page, limit){
+    
+    // table_data_permission('permission_tbody', response_data, 'delete_permission_api', 'status_permission_api', update_permission_page_url, current_page, limit)
+    table_data_article('article_tbody', response_data, 'delete_article_api', 'status_article_api', update_article_page_url, current_page, limit)
+
+}
+
+
+
+
 // list article api
 async function list_article_api() {
   
@@ -24,10 +36,10 @@ async function list_article_api() {
 
     // const api_url = `${list_article_url}&domain_slug_id=${domain_slug_id}`
 
-    const response_data = await list_api(list_article_url, 'article_tbody', offset, limit, filters, 'delete_article_api', 'status_article_api', '', current_page, 'articles', domain_slug_id, '');
+    const response_data = await list_api(list_article_url, 'article_tbody', offset, limit, filters, 'delete_article_api', 'status_article_api', '', current_page, 'articles', domain_slug_id, render_data_to_table);
     console.log(response_data,'0')
     
-    table_data_article('article_tbody', response_data, 'delete_article_api', 'status_article_api', update_article_page_url, current_page, limit)
+    // table_data_article('article_tbody', response_data, 'delete_article_api', 'status_article_api', update_article_page_url, current_page, limit)
     
 }
 

@@ -18,14 +18,12 @@ async function add_user_detail_api() {
     const full_name = user_detail_form.querySelector('[name="full_name"]').value;
     const email = user_detail_form.querySelector('[name="email"]').value;
     const password = user_detail_form.querySelector('[name="password"]').value;
-    // const workspace_slug_id = user_detail_form.querySelector('[name="workspace_id"]').value;
     const profile_image = user_detail_form.querySelector('[name="profile_image"]');
 
     const data = new FormData();
     data.append("full_name", full_name);
     data.append("email", email);
     data.append("password", password);
-    // data.append("workspace_slug_id", workspace_slug_id);
 
     if(temp_avatar_image_id){
         data.append("avatar_image_path", temp_avatar_image_id);
@@ -52,11 +50,9 @@ async function add_user_detail_api() {
         const response = await fetch(add_user_detail_url, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
 
             },
-            // body: JSON.stringify(data),
             body: data,
         });
         

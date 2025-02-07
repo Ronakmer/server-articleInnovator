@@ -16,10 +16,7 @@ async function list_permission_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -28,7 +25,6 @@ async function list_permission_api() {
     const response_data = await list_api(list_permission_url, 'permission_tbody', offset, limit, filters, 'delete_permission_api', 'status_permission_api', update_permission_page_url, current_page, 'permissions', '', render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_permission('permission_tbody', response_data, 'delete_permission_api', 'status_permission_api', update_permission_page_url)
     
 }
 

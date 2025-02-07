@@ -3,7 +3,6 @@
 
 function render_data_to_table(response_data, current_page, limit){
     
-    // table_data_permission('permission_tbody', response_data, 'delete_permission_api', 'status_permission_api', update_permission_page_url, current_page, limit)
     table_data_image_tag('image_tag_tbody', response_data, 'delete_image_tag_api', 'status_image_tag_api', update_image_tag_page_url,current_page, limit)
 
 }
@@ -19,10 +18,7 @@ async function list_image_tag_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -30,8 +26,6 @@ async function list_image_tag_api() {
 
     const response_data = await list_api(list_image_tag_url, 'image_tag_tbody', offset, limit, filters, 'delete_image_tag_api', 'status_image_tag_api', update_image_tag_page_url, current_page, 'image_tags','', render_data_to_table);
     console.log(response_data,'0')
-    
-    // table_data_image_tag('image_tag_tbody', response_data, 'delete_image_tag_api', 'status_image_tag_api', update_image_tag_page_url)
     
 }
 

@@ -17,8 +17,6 @@ def process_author(obj_data):
     
     domain_obj = obj_data.get("domain_obj")
     workspace_obj = obj_data.get("workspace_obj")
-    print(f"domain_obj: {domain_obj}")
-    print(f"workspace_obj: {workspace_obj}")
 
     
     author_progress = 0        
@@ -80,9 +78,6 @@ def process_author(obj_data):
                 'username': author['username'],
                 'name': author['name'],
                 'bio': author['bio'],
-                # 'first_name': author['first_name'],
-                # 'last_name': author['last_name'],
-                # 'email': author['email'],
                 'exists': find_author
             }
             return_author.append(author['name']) 
@@ -140,9 +135,6 @@ def fetch_author_data(request):
         
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
-
-        print(domain_slug_id,'domain_slug_id')
-        print(workspace_slug_id,'workspace_slug_id')
 
         if not domain_slug_id:
             return JsonResponse({"error": "Domain slug ID is required."}, status=400)

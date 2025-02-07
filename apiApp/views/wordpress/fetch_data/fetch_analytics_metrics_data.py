@@ -13,170 +13,16 @@ from datetime import datetime, timedelta
 
 
 
-# def process_analytics_metrics(obj_data):
-    
-#     # time.sleep(30)
-    
-#     domain_obj = obj_data.get("domain_obj")
-#     workspace_obj = obj_data.get("workspace_obj")
-#     request_user = obj_data.get("request_user")
-#     print(f"domain_obj: {domain_obj}")
-#     print(f"workspace_obj: {workspace_obj}")
-    
-    
-#     domain_name = domain_obj.name
-#     username = domain_obj.wordpress_username
-#     password = domain_obj.wordpress_application_password
-    
-#     # domain_name = 'www.wikilistia.com'
-#     # username = 'Monty Dhanda'
-#     # password = 'Ocxq 6E3x mvJs zDvp UuoD vnnM'
-
-#     #  add category
-#     api_url = f'https://{domain_name}/wp-json/botxbyte/v1/analytics-data/'
-    
-#     username = username
-#     password = password
-    
-#     credentials = base64.b64encode(f'{username}:{password}'.encode('utf-8')).decode('utf-8')
-
-#     headers = {
-#         'Accept': 'application/json, */*;q=0.1',
-#         'Authorization': f"Basic {credentials}",
-#         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15',
-#         'Connection': 'keep-alive',
-#     }
-
-#     # Calculate start and end date
-#     today = datetime.today()
-#     start_date = (today - timedelta(days=90)).strftime('%Y-%m-%d')  # Approximately 3 months ago
-#     end_date = today.strftime('%Y-%m-%d')
-
-#     print(f"Fetching data from {start_date} to {end_date}")
-
-#     current_date = datetime.strptime(start_date, '%Y-%m-%d')
-#     end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
-
-
-
-#     # Loop through each date in the range
-#     while current_date <= end_date_obj:
-#         # Format date as string for API params
-#         date_str = current_date.strftime('%Y-%m-%d')
-
-#         params = {
-#             'startDate': date_str,
-#             'endDate': date_str,
-#             'metrics': 'activeUsers,newUsers,averageSessionDuration',
-#             'dimensions': 'date,pagePath',
-#             'limit': 25000  # Max limit per request
-#         }
-
-#         # Make API request for the current date
-#         response = requests.get(api_url, params=params, headers=headers)
-        
-
-#         if response.status_code != 200:
-#             # return JsonResponse({'error': 'Failed to fetch data from API'}, status=500)
-#             return "Failed to fetch analytics data from API."
-            
-
-#         data = response.json()
-#         # Check if 'rows' is present in the data
-#         if 'rows' not in data:
-#             # return JsonResponse({'error': 'No data available for the requested period or invalid response format.'}, status=500)
-#             return "No data available for the requested period or invalid response format Failed."
-
-#         total_records = len(data['rows'])
-#         print(f"Processing data for {date_str}, total records: {total_records}")
-
-#         if total_records == 0:
-#             # No data for the current date, move to next date
-#             current_date += timedelta(days=1)
-#             continue
-
-#         # Process the batch of data for the current date
-#         batch_size = 1000
-#         for i in range(0, total_records, batch_size):
-#             batch = data['rows'][i:i + batch_size]
-            
-#             for row in batch:
-#                 date_value = row["dimensionValues"][0]["value"]
-#                 page_value = row["dimensionValues"][1]["value"]
-#                 active_users = int(row["metricValues"][0]["value"])
-#                 new_users = int(row["metricValues"][1]["value"])
-#                 average_session_duration = float(row["metricValues"][2]["value"])
-
-#                 # Convert date_value from string to date format
-#                 date_value = datetime.strptime(date_value, "%Y%m%d").date()
-
-#                 # Check if record exists for the given date
-#                 existing_record_obj = analytics_metrics.objects.filter(date=date_value, domain_id=domain_obj).first()
-
-#                 # Save or update the record in the database
-#                 if existing_record_obj:
-#                     existing_record_obj.domain_id=domain_obj
-#                     existing_record_obj.workspace_id=workspace_obj
-#                     existing_record_obj.page = page_value
-#                     existing_record_obj.active_users = active_users
-#                     existing_record_obj.new_users = new_users
-#                     existing_record_obj.average_session_duration = average_session_duration
-#                     existing_record_obj.save()
-#                 else:
-#                     analytics_metrics_obj = analytics_metrics()
-#                     analytics_metrics_obj.domain_id=domain_obj
-#                     analytics_metrics_obj.workspace_id=workspace_obj
-#                     analytics_metrics_obj.date=date_value
-#                     analytics_metrics_obj.page=page_value
-#                     analytics_metrics_obj.active_users=active_users
-#                     analytics_metrics_obj.new_users=new_users
-#                     analytics_metrics_obj.average_session_duration=average_session_duration
-#                     analytics_metrics_obj.save()
-                    
-#                 # Add your provided code for logging and progress tracking
-#                 install_log_obj = domain_install_log()
-#                 install_log_obj.log_type = 'analytics metrics'
-#                 install_log_obj.log_text = f"analytics metrics: {page_value}"
-#                 install_log_obj.domain_id = domain_obj
-#                 install_log_obj.save()
-
-#                 analytics_metrics_progress = 30 / total_records
-
-#                 percentage_log_obj = domain_install_log_percentage()
-#                 percentage_log_obj.domain_install_log_id = install_log_obj
-#                 percentage_log_obj.log_percentage = analytics_metrics_progress
-#                 percentage_log_obj.domain_id = domain_obj
-#                 percentage_log_obj.save()
-
-
-#         # Move to the next date
-#         current_date += timedelta(days=1)
-        
-#     return "analytics metrics add successfully."
-
-
-
-
-
-
 def process_analytics_metrics(obj_data):
     
     domain_obj = obj_data.get("domain_obj")
     workspace_obj = obj_data.get("workspace_obj")
-    request_user = obj_data.get("request_user")
-    print(f"domain_obj: {domain_obj}")
-    print(f"workspace_obj: {workspace_obj}")
     
     
     # Domain credentials
-    domain_name = 'www.wikilistia.com'
-    username = 'Monty Dhanda'
-    password = 'Ocxq 6E3x mvJs zDvp UuoD vnnM'
-
-
-    # domain_name = domain_obj.name
-    # username = domain_obj.wordpress_username
-    # password = domain_obj.wordpress_application_password
+    domain_name = domain_obj.name
+    username = domain_obj.wordpress_username
+    password = domain_obj.wordpress_application_password
 
     # Add category API URL
     api_url = f'https://{domain_name}/wp-json/botxbyte/v1/analytics-data/'
@@ -195,7 +41,6 @@ def process_analytics_metrics(obj_data):
     start_date = (today - timedelta(days=90)).strftime('%Y-%m-%d')  # Approximately 3 months ago
     end_date = today.strftime('%Y-%m-%d')
 
-    print(f"Fetching data from {start_date} to {end_date}")
 
     current_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
@@ -226,7 +71,6 @@ def process_analytics_metrics(obj_data):
             return "No data available for the requested period or invalid response format."
 
         total_records = len(data['rows'])
-        print(f"Processing data for {date_str}, total records: {total_records}")
 
         if total_records == 0:
             # No data for the current date, move to next date

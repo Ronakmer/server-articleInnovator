@@ -22,8 +22,6 @@ function connect_domain() {
     window.location.href = connect_url;
     
     
-    //const connectDomain = document.getElementById('connecting_id');
-    //connectDomain.innerText = 'Success';
 
     return false; 
 }

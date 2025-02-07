@@ -18,11 +18,6 @@ function add_prompt_api() {
     const workspace_slug_id = prompt_form.querySelector('[name="workspace_id"]').value;
     const prompt_data = prompt_form.querySelector('[name="prompt_data"]').value;
 
-
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("name", name);
     data.append("article_type_slug_id", article_type_slug_id);
@@ -30,7 +25,6 @@ function add_prompt_api() {
     data.append("prompt_data", prompt_data);
 
 
-    // add_api(add_prompt_url, data, list_prompt_page_url);
 
     const current_url = window.location.pathname;
     const is_update_page = current_url.includes('/update/');
@@ -80,7 +74,6 @@ function add_prompt_api() {
 
             
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

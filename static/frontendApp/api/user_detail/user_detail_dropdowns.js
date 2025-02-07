@@ -69,15 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return div;
         }
 
-        // function addMemberToSelectedList(member) {
-        //     if (![...selectedItemsContainer.children].some(item => item.querySelector('button').dataset.slug_id == member.slug_id)) {
-        //         const selectedItem = createSelectedItemElement(member);
-        //         selectedItemsContainer.appendChild(selectedItem);
-        //         input.value = '';
-        //         input.focus();
-        //         alert(member.slug_id)
-        //     }
-        // }
 
         function addMemberToSelectedList(member) {
             // Check if the member is already added by slug_id
@@ -102,20 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         
-
-        // function removeMemberFromSelectedList(id) {
-        //     const itemToRemove = selectedItemsContainer.querySelector(`button[data-id="${slug_id}"]`);
-        //     if (itemToRemove) {
-        //         itemToRemove.closest('div').remove();
-        //         input.focus();
-        //     }
-        //     const memberElement = dropdownContainer.querySelector(`[data-id="${slug_id}"]`);
-        //     const checkbox = memberElement.querySelector('input[type="checkbox"]');
-        //     checkbox.checked = false;
-        //     const label = memberElement.querySelector('label');
-        //     label.classList.remove('bg-indigo-600/15');
-        //     label.classList.add('bg-white');
-        // }
 
         function removeMemberFromSelectedList(slug_id) {
             // Remove from selectedItemsContainer
@@ -166,30 +143,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
         
         // update time set data
-        // if (typeof set_workspace_ids === 'string') {
-        //     set_workspace_ids = set_workspace_ids.split(',').map(item => item.trim()); // Convert the string to an array and trim spaces
-        // }
-        if (typeof set_workspace_ids === 'string') {
-            if (set_workspace_ids.includes(',')) {
-                // If it's a comma-separated list, split it and trim each item
-                set_workspace_ids = set_workspace_ids.split(',').map(item => item.trim());
-            } else {
-                // If it's a single ID, wrap it in an array
-                set_workspace_ids = [set_workspace_ids.trim()];
+        setTimeout(() => {
+        
+            if (typeof set_workspace_ids === 'string') {
+                if (set_workspace_ids.includes(',')) {
+                    // If it's a comma-separated list, split it and trim each item
+                    set_workspace_ids = set_workspace_ids.split(',').map(item => item.trim());
+                } else {
+                    // If it's a single ID, wrap it in an array
+                    set_workspace_ids = [set_workspace_ids.trim()];
+                }
             }
-        }
-        
-        
-        // update time set data
-        if (Array.isArray(set_workspace_ids)) {
-            set_workspace_ids.forEach(workspaceId => {
-                console.log(`Workspace ID: ${workspaceId}`);
-                document.getElementById(`set_workspace_${workspaceId}`).click();
+            
+            
+            // update time set data
+            if (Array.isArray(set_workspace_ids)) {
+                set_workspace_ids.forEach(workspaceId => {
+                    console.log(`Workspace ID: ${workspaceId}`);
+                    document.getElementById(`set_workspace_${workspaceId}`).click();
 
-            });
-        } else {
-            console.error('set_workspace is not an array:', set_workspace_ids);
-        }
+                });
+            } else {
+                console.error('set_workspace is not an array:', set_workspace_ids);
+            }
+        }, 100);
+
 
         // Add keydown event listener for backspace functionality
         input.addEventListener('keydown', (e) => {

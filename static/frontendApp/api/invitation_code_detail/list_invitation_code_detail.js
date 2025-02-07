@@ -19,10 +19,7 @@ async function list_invitation_code_detail_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -32,7 +29,6 @@ async function list_invitation_code_detail_api() {
     const response_data = await  list_api(list_invitation_code_detail_url, 'invitation_code_detail_tbody', offset, limit, filters, 'delete_invitation_code_detail_api', 'status_invitation_code_detail_api', update_invitation_code_detail_page_url, current_page, 'invitation_code_details', '', render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_invitation_code_detail('invitation_code_detail_tbody', response_data, 'delete_invitation_code_detail_api', 'status_invitation_code_detail_api', update_invitation_code_detail_page_url)
    
 }
 list_invitation_code_detail_api()

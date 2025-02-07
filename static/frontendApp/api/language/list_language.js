@@ -18,10 +18,7 @@ async function list_language_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -30,7 +27,6 @@ async function list_language_api() {
     const response_data = await list_api(list_language_url, 'language_tbody', offset, limit, filters, 'delete_language_api', 'status_language_api', update_language_page_url, current_page, 'languages', '', render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_language('language_tbody', response_data, 'delete_language_api', 'status_language_api', update_language_page_url)
     
 }
 

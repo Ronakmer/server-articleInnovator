@@ -3,10 +3,7 @@
 function error_message_data(error_data){
 
     var error_messages = ''
-    // if (error_data.errors) {
-        
-    //     error_messages = error_data.errors.name ? `${name}${error_data.errors.name[0]}` : "An unknown error occurred";
-    // }
+
     // Check if there are specific field errors
     if (error_data.errors) {
         let fieldErrors = '';

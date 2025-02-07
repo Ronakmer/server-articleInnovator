@@ -29,7 +29,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                             class=" flex-col items-start w-full lg:w-1/3 xl:min-w-[430px] md:min-w-[345px] min-w-full   relative flex">
                                             <div
                                                 class="absolute right-2 top-2 z-10 bg-emerald-50 rounded-full px-3 py-1.5 font-poppins text-xs">
-                                                ${obj.article_type_id_data.title}</div>
+                                                ${obj.article_type_id_data?.title || 'N/A'}</div>
                                             <img src="assets/images/Frame.png" alt="Team & List"
                                                 class="mb-4 rounded-lg w-full h-[222px] object-cover" />
                                             <div class="flex items-center mb-4 text-gray-600  ">

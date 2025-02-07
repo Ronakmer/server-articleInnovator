@@ -9,18 +9,11 @@ async function add_dynamic_avatar_image_api() {
     const avatar_type = dynamic_avatar_image_form.querySelector('[name="avatar_type"]').value;
     const avatar_image = dynamic_avatar_image_form.querySelector('[name="avatar_image"]');
 
-    // // Prepare the data object
-    // const data = {
-    //     name: name,
-    //     dynamic_avatar_image_flag: base64Image,
-    // };
-
     const data = new FormData();
     data.append("avatar_type", avatar_type);
     if (avatar_image && avatar_image.files && avatar_image.files[0]) {
         data.append('avatar_image', avatar_image.files[0]);
     }
-    // data.append("avatar_image", avatar_image);
 
 
     const current_url = window.location.pathname;
@@ -60,7 +53,6 @@ async function add_dynamic_avatar_image_api() {
         if (data_obj && data_obj.dynamic_avatar_images && data_obj.dynamic_avatar_images.length > 0) {
             avatar_type.value = data_obj.dynamic_avatar_images[0].avatar_type;
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

@@ -150,5 +150,3 @@ var check_invitation_code_url = `${url}check-invitation-code/`;
 var admin_registration_url = `${url}registration/`;
 var registration_check_otp = `${url}registration-check-otp/`;
 
-
-// /api/registration/

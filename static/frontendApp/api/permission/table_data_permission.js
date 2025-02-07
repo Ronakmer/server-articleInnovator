@@ -7,7 +7,6 @@
 
 // Function to render dynamic 
 function table_data_permission(tbody_name, response_data, delete_function_name, status_function_name, update_page_url, current_page, limit) {
-    // permission_tbody
 
     const tbody = document.getElementById(tbody_name); 
 

@@ -9,14 +9,9 @@ async function get_avatar_image_api() {
 
         const access_token = sessionStorage.getItem("access_token");
         
-        // const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-        const workspace_slug_id = '77b4ad49-db8a-4434-aad5-c2351c953cc7';
-
         const query_params = new URLSearchParams();
 
-        // if (workspace_slug_id) {
-        //     query_params.append("workspace_slug_id", workspace_slug_id);
-        // }
+        
         if (query_params) {
             query_params.append("avatar_type", 'workspace');
         }

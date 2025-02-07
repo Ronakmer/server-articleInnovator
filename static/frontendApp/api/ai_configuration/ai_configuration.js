@@ -55,11 +55,14 @@ function handleTabSelection(tab) {
         });
     }
 
-    // Update hidden input field if it exists
+    // set hidden input field if it exists
     const apiProviderInput = document.getElementById('api_provider');
+
     if (apiProviderInput) {
         apiProviderInput.value = tabName;
     }
+
+
 }
 
 // Function to initialize the tabs on page load
@@ -70,20 +73,28 @@ function initializeTabs() {
         tab.addEventListener('click', () => handleTabSelection(tab));
     });
 
-    // Preselect a tab if 'api_provider' exists
-    const apiProviderInput = document.getElementById('api_provider');
-    if (apiProviderInput) {
-        const preselectedProvider = apiProviderInput.value;
-        if (preselectedProvider) {
-            const preselectedTab = Array.from(tabs).find((tab) => {
-                return tab.querySelector('span')?.textContent.trim() === preselectedProvider;
-            });
-            if (preselectedTab) {
-                handleTabSelection(preselectedTab);
+    setTimeout(() => {
+        // update time 'api_provider' exists
+        const apiProviderInput = document.getElementById('api_provider');
+        if (apiProviderInput) {
+            const preselectedProvider = apiProviderInput.value;
+            if (preselectedProvider) {
+                const preselectedTab = Array.from(tabs).find((tab) => {
+                    return tab.querySelector('span')?.textContent.trim() === preselectedProvider;
+                });
+                if (preselectedTab) {
+                    handleTabSelection(preselectedTab);
+                }
             }
         }
-    }
+    }, 500);
+
 }
 
 // Ensure the script runs after DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initializeTabs);
+
+
+
+
+

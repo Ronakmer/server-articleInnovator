@@ -16,10 +16,7 @@ async function list_dynamic_avatar_image_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -29,7 +26,6 @@ async function list_dynamic_avatar_image_api() {
     const response_data = await  list_api(list_dynamic_avatar_image_url, 'dynamic_avatar_image_tbody', offset, limit, filters, 'delete_dynamic_avatar_image_api', 'status_dynamic_avatar_image_api', update_dynamic_avatar_image_page_url, current_page, 'dynamic_avatar_images', '', render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_dynamic_avatar_image('dynamic_avatar_image_tbody', response_data, 'delete_dynamic_avatar_image_api', 'status_dynamic_avatar_image_api', update_dynamic_avatar_image_page_url)
    
 }
 list_dynamic_avatar_image_api()

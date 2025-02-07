@@ -9,16 +9,10 @@ function add_image_tag_api() {
     const name = image_tag_form.querySelector('[name="name"]').value;
     const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
 
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("name", name);
     data.append("workspace_slug_id", workspace_slug_id);
 
-
-    // add_api(add_image_tag_url, data, list_image_tag_page_url);
 
     const current_url = window.location.pathname;
     const is_update_page = current_url.includes('/update/');
@@ -56,8 +50,7 @@ function add_image_tag_api() {
         if (data_obj && data_obj.image_tags && data_obj.image_tags.length > 0) {
             name.value = data_obj.image_tags[0].name;
         } else {
-            // name.value = ''; 
-            // window.location.href = error_page;
+            window.location.href = error_page;
         }
         
     }

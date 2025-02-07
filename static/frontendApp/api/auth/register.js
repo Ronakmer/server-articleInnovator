@@ -14,11 +14,8 @@ async function check_invitation_code_api(){
         const response = await fetch(check_invitation_code_url, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${access_token}`,
 
             },
-            // body: JSON.stringify(data),
             body: data,
         });
         
@@ -67,8 +64,6 @@ async function check_invitation_code_api(){
 // admin_registration
 async function admin_registration_api(){
     
-    // const access_token = sessionStorage.getItem("access_token");
-
     const invitation_code = document.querySelector('[name="invitation_code"]').value;
     const full_name = document.querySelector('[name="full_name"]').value;
     const email = document.querySelector('[name="registration_email"]').value;
@@ -89,10 +84,8 @@ async function admin_registration_api(){
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${access_token}`,
             },
             body: JSON.stringify(data),
-            // body: data,
         });
         
 
@@ -140,8 +133,6 @@ async function admin_registration_api(){
 // verify_otp
 async function verify_otp_api(){
     
-    // const access_token = sessionStorage.getItem("access_token");
-
     const registration_email = sessionStorage.getItem("registration_email");
     const verify_form = document.querySelector('#verify_form');
 
@@ -165,10 +156,8 @@ async function verify_otp_api(){
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${access_token}`,
             },
             body: JSON.stringify(data),
-            // body: data,
         });
         
 

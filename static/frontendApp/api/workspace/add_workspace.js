@@ -15,11 +15,6 @@ async function add_workspace_api() {
     const name = workspace_form.querySelector('[name="name"]').value;
     const logo = workspace_form.querySelector('[name="logo"]');
 
-    // // Prepare the data object
-    // const data = {
-    //     name: name,
-    //     logo: base64Image,
-    // };
 
     const data = new FormData();
     data.append("name", name);
@@ -31,7 +26,6 @@ async function add_workspace_api() {
     if (logo && logo.files && logo.files[0]) {
         data.append('logo', logo.files[0]);
     }
-    // data.append("logo", logo);
 
 
     const current_url = window.location.pathname;
@@ -66,15 +60,10 @@ async function add_workspace_api() {
 
         // Collect form data using the name attributes
         const name = workspace_form.querySelector('[name="name"]');
-        // const logo = workspace_form.querySelector('[name="logo"]');
-        // console.log(logo)
-        // console.log(data_obj.workspaces[0].logo)
-
+        
         if (data_obj && data_obj.workspaces && data_obj.workspaces.length > 0) {
             name.value = data_obj.workspaces[0].name;
-            // logo.src = data_obj.workspaces[0].logo.files[0];
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

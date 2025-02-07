@@ -39,11 +39,9 @@ async function add_domain_api() {
         const response = await fetch(add_ai_configuration_url, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
 
             },
-            // body: JSON.stringify(data),
             body: data,
         });
         

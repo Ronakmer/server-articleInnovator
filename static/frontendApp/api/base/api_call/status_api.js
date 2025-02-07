@@ -15,7 +15,6 @@ async function status_api(api_url, data, slug_id, redirect_url) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
-                // 'slug_id': `${slug_id}`,
 
             },
             body: JSON.stringify(data),

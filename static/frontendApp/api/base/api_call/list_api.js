@@ -8,7 +8,6 @@ async function list_api(api_url, table_name, offset, limit, filters, delete_func
         const access_token = sessionStorage.getItem("access_token");
         
         const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-        // const workspace_slug_id = '77b4ad49-db8a-4434-aad5-c2351c953cc7';
 
         const query_params = new URLSearchParams({
             offset,
@@ -37,9 +36,6 @@ async function list_api(api_url, table_name, offset, limit, filters, delete_func
             const data = await response.json();
             console.log('Roles fetched successfully:', data);
             
-            const list_keys = Object.keys(data).filter((key) => Array.isArray(data[key]));
-            // table_data(table_name, response_data, delete_function_name, status_function_name, update_page_url, response_key)
-            console.log(render_data_to_table);
             render_pagination(data.total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table, domain_slug_id);
             render_data_to_table(data, current_page, limit)
             return data;

@@ -6,15 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     article_type_field_data.then((response) => {
         // Access article_type_fields once the promise is resolved
         const categories = response.article_type_fields || [];  // Ensure data is loaded
-        console.log(categories, '0w');
 
-        // const categories = [
-        //     { slug_id: 1, name: 'text', count: 15 },
-        //     { slug_id: 2, name: 'textarea', count: 10 },
-        //     { slug_id: 3, name: 'text', count: 8 },
-        //     { slug_id: 4, name: 'Category 4', count: 12 },
-        //     { slug_id: 5, name: 'Category 5', count: 20 },
-        // ];
         
         const input = document.getElementById('article_type_fields_input');
         const dropdown = document.getElementById('article_type_field_dropdown');

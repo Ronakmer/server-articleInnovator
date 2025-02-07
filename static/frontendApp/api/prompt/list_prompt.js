@@ -22,10 +22,7 @@ async function list_prompt_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
 
     };
@@ -33,8 +30,6 @@ async function list_prompt_api() {
 
     const response_data = await list_api(list_prompt_url, 'prompt_tbody', offset, limit, filters, 'delete_prompt_api', 'status_prompt_api', update_prompt_page_url, current_page, 'prompts', '', render_data_to_table);
     console.log(response_data,'0')
-    
-    // table_data_prompt('prompt_tbody', response_data, 'delete_prompt_api', 'status_prompt_api', update_prompt_page_url)
     
 }
 

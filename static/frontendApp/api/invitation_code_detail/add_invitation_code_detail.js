@@ -11,10 +11,6 @@ function add_invitation_code_detail_api() {
     const domain_limitation = invitation_code_detail_form.querySelector('[name="domain_limitation"]').value;
     const workspace_limitation = invitation_code_detail_form.querySelector('[name="workspace_limitation"]').value;
 
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("invitation_code", invitation_code);
     data.append("article_limitation", article_limitation);
@@ -65,7 +61,6 @@ function add_invitation_code_detail_api() {
             domain_limitation.value = data_obj.invitation_code_details[0].domain_limitation;
             workspace_limitation.value = data_obj.invitation_code_details[0].workspace_limitation;
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

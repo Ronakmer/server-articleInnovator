@@ -13,19 +13,12 @@ from datetime import datetime, timedelta
 
 
 def process_article(obj_data):
-     
-    # time.sleep(30)
-    
+         
     domain_obj = obj_data.get("domain_obj")
     workspace_obj = obj_data.get("workspace_obj")
     request_user = obj_data.get("request_user")
-    print(f"domain_obj: {domain_obj}")
-    print(f"workspace_obj: {workspace_obj}")
     
     # Replace with actual credentials
-    # username = 'Monty Dhanda'
-    # password = 'fmG1 qusr qI4d 5v7V twIC hPwM'
-    # domain_name = 'wikilistia.com'
 
     domain_name = domain_obj.name
     username = domain_obj.wordpress_username
@@ -57,11 +50,7 @@ def process_article(obj_data):
     # Initial request to get total pages
     response = requests.post(api_url, headers=headers, json=data)
 
-    print(response,'55555')
-    print(response.json())
-
     if response.status_code != 200:
-        # print(f"Error fetching data: {response.status_code}, {response.text}")
         return "Failed to fetch article data from API."
 
     response_data = response.json()
@@ -74,7 +63,6 @@ def process_article(obj_data):
         response = requests.post(api_url, headers=headers, json=data)
 
         if response.status_code != 200:
-            print(f"Error fetching data: {response.status_code}, {response.text}")
             # return "Failed to fetch article data from API."
             break
         
@@ -89,6 +77,8 @@ def process_article(obj_data):
         for data in article_datas:
             return_article.append(data['title'])
 
+            print(data)
+            
             # Date formatting
             date_string = data['date']
             naive_datetime = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
@@ -96,21 +86,20 @@ def process_article(obj_data):
 
             # Article save in database
             article_obj = article(
-                wp_title=data['title'],
-                wp_slug=data['slug'],
-                wp_content=data['content'],
-                wp_status=data['status'],
-                wp_featured_image=data['featured_image_url'],
-                wp_post_id=data['id'],
-                wp_excerpt=data['excerpt'],
-                wp_modified_date=data['modified_date'],
+                wp_title=data.get('title'),
+                wp_slug=data.get('slug'),
+                wp_content=data.get('content'),
+                wp_status=data.get('status'),
+                wp_featured_image=data.get('featured_image_url'),
+                wp_post_id=data.get('id'),
+                wp_excerpt=data.get('excerpt'),
+                wp_modified_date=data.get('modified_date'),
                 wp_schedule_time=aware_datetime,  # Store aware datetime
                 created_by=request_user,
                 workspace_id=workspace_obj
             )
             article_obj.save()
 
-            print('----------------------article done----------------------')
 
             # Save article info
             article_info_obj = article_info(
@@ -131,7 +120,6 @@ def process_article(obj_data):
             )
             article_info_obj.save()
 
-            print('----------------------add info done----------------------')
 
             # Handle internal links
             for link_data in ['inbound', 'outbound']:
@@ -155,7 +143,6 @@ def process_article(obj_data):
                 )
                 external_links_obj.save()
 
-            print('----------------------all done----------------------')
 
             # Log progress for each article
             install_log_obj = domain_install_log(
@@ -167,7 +154,6 @@ def process_article(obj_data):
             
             # Update progress
             article_progress = 30 / total_articles
-            print(article_progress, 'article_progress')
             
             # Save progress to percentage log
             percentage_log_obj = domain_install_log_percentage(
@@ -223,154 +209,6 @@ def fetch_article_data(request):
         return JsonResponse({'message': result}, status=200)
 
 
-
-
-        # article_progress = 0
-        # total_articles = 0
-        # return_article = []
-
-        # # Replace with actual credentials
-        # user_login = 'julie'
-        # password = 'N0is yOtT W3t7 FDsS MokQ pOJC'
-        # site_url = 'ronak-wolf.botxbyte.com'
-
-        # # Prepare API URL and credentials
-        # api_url = f'https://{site_url}/wp-json/botxbyte/v1/article-info-list/'
-        # credentials = base64.b64encode(f'{user_login}:{password}'.encode('utf-8')).decode('utf-8')
-
-        # headers = {
-        #     'Content-Type': 'application/json',
-        #     'Authorization': f'Basic {credentials}',
-        # }
-        
-        # page = 1
-        # per_page = 100
-
-        # while True:
-        #     data = {
-        #         'limit': per_page,
-        #         'offset': (page - 1) * per_page,
-        #     }
-
-        #     response = requests.post(api_url, headers=headers, json=data)
-
-        #     if response.status_code != 200:
-        #         print(f"Error fetching data: {response.status_code}, {response.text}")
-        #         break
-            
-        #     response_data = response.json()
-
-        #     if not response_data or 'articles' not in response_data:
-        #         break
-
-        #     article_datas = response_data['articles']
-        #     total_pages = response_data.get('max_pages', 1)
-        #     total_articles += len(article_datas)
-
-        #     for data in article_datas:
-        #         return_article.append(data['title'])
-
-        #         # Date formatting
-        #         date_string = data['date']
-        #         naive_datetime = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
-        #         aware_datetime = naive_datetime.date()
-
-        #         # Article save in database
-        #         article_obj = article(
-        #             wp_title=data['title'],
-        #             wp_slug=data['slug'],
-        #             wp_content=data['content'],
-        #             wp_status=data['status'],
-        #             wp_featured_image=data['featured_image_url'],
-        #             wp_post_id=data['id'],
-        #             wp_excerpt=data['excerpt'],
-        #             # modified_date=data['modified_date'],
-        #             wp_modified_date = data['modified_date'],
-
-        #             wp_schedule_time=aware_datetime,  # Store aware datetime
-        #             created_by=request_user,
-        #             workspace_id=workspace_obj
-        #         )
-        #         article_obj.save()
-
-        #         print('----------------------article done----------------------')
-
-        #         # Save article info
-        #         article_info_obj = article_info(
-        #             custom_fields=data['meta_data'],
-        #             word_count=data['content_analysis']['word_count'],
-        #             image_count=data['content_analysis']['image_count'],
-        #             heading_count=data['content_analysis']['heading_count'],
-        #             total_paragraphs=data['content_analysis']['total_paragraphs'],
-        #             long_paragraphs=data['content_analysis']['long_paragraphs'],
-        #             medium_paragraphs=data['content_analysis']['medium_paragraphs'],
-        #             short_paragraphs=data['content_analysis']['short_paragraphs'],
-        #             total_sentences=data['content_analysis']['total_sentences'],
-        #             long_sentences=data['content_analysis']['long_sentences'],
-        #             medium_sentences=data['content_analysis']['medium_sentences'],
-        #             short_sentences=data['content_analysis']['short_sentences'],
-        #             passive_sentences=data['content_analysis']['passive_sentences'],
-        #             article_id=article_obj
-        #         )
-        #         article_info_obj.save()
-
-        #         print('----------------------add info done----------------------')
-
-        #         # Handle internal links
-        #         for link_data in ['inbound', 'outbound']:
-        #             for link in data['content_analysis']['internal_links'][link_data]['list']:
-        #                 internal_links_obj = internal_links(
-        #                     link_type=link_data,
-        #                     # post_id=link['post_id'],
-        #                     post_title=link['post_title'],
-        #                     anchor_text=link['anchor_text'],
-        #                     url=link['url'],
-        #                     article_info_id=article_info_obj
-        #                 )
-        #                 internal_links_obj.save()
-
-        #         # Handle external links
-        #         external_links_data = data['content_analysis']['external_links']
-        #         for links in external_links_data['list']:
-        #             external_links_obj = external_links(
-        #                 anchor_text=links['anchor_text'],
-        #                 url=links['url'],
-        #                 article_info_id=article_info_obj
-        #             )
-        #             external_links_obj.save()
-
-        #         print('----------------------all done----------------------')
-
-        #         # Log progress for each article
-        #         install_log_obj = domain_install_log(
-        #             log_type='article',
-        #             log_text=f"Article: {data['title']}",
-        #             domain_id=domain_obj
-        #         )
-        #         install_log_obj.save()
-                
-        #         # Update progress
-        #         article_progress = 30 / total_articles
-        #         print(article_progress, 'article_progress')
-                
-        #         # Save progress to percentage log
-        #         percentage_log_obj = domain_install_log_percentage(
-        #             domain_install_log_id=install_log_obj,
-        #             log_percentage=article_progress,
-        #             domain_id=domain_obj
-        #         )
-        #         percentage_log_obj.save()
-
-        #     page += 1
-
-        #     # Break the loop if we've fetched all pages
-        #     if page > total_pages:
-        #         break
-
-        # print('this is article')
-        
-        # return JsonResponse({'status': 200, 'message': 'success'})
-    
     except Exception as e:
         print("This error is fetch_article_data --->: ", e)
         return JsonResponse({"error": "Internal server error."}, status=500)

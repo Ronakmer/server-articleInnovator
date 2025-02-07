@@ -9,7 +9,6 @@ async function update_api(api_url, data, slug_id, redirect_url) {
     const temp_api_url = `${api_url}${slug_id}`;
 
     const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-    // const workspace_slug_id = '77b4ad49-db8a-4434-aad5-c2351c953cc7';
 
     data.append("workspace_slug_id", workspace_slug_id);
 
@@ -19,12 +18,9 @@ async function update_api(api_url, data, slug_id, redirect_url) {
         const response = await fetch(temp_api_url, {
             method: 'PUT',
             headers: {
-                // 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
-                // 'slug_id': `${slug_id}`,
 
             },
-            // body: JSON.stringify(data),
             body: data,
         });
 

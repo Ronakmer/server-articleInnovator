@@ -41,23 +41,7 @@ function set_domain_dropdown(domain_data){
 
         });
 
-        // // set slug_id in update time
-        // if (set_color_slug_id) {
-
-        //     const options = selectElement.querySelectorAll('option');
-        //     options.forEach(option => {
-        //         if (option.value === set_color_slug_id) {
-        //             option.selected = true;
-        //             // document.getElementById(`set_manager_${managerId}`).click();
-
-        //         }
-        //     });
-
-        //     // Additionally, set the color input field's value
-        //     const color_input = document.querySelector("input[name='color']");
-        //     color_input.value = set_color_slug_id;
-        // }
-
+     
 
     }) 
 
@@ -108,22 +92,6 @@ function set_prompt_dropdown(prompt_data){
 
         });
 
-        // // set slug_id in update time
-        // if (set_color_slug_id) {
-
-        //     const options = selectElement.querySelectorAll('option');
-        //     options.forEach(option => {
-        //         if (option.value === set_color_slug_id) {
-        //             option.selected = true;
-        //             // document.getElementById(`set_manager_${managerId}`).click();
-
-        //         }
-        //     });
-
-        //     // Additionally, set the color input field's value
-        //     const color_input = document.querySelector("input[name='color']");
-        //     color_input.value = set_color_slug_id;
-        // }
 
 
     }) 

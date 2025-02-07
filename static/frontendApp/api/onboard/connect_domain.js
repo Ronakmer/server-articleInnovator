@@ -23,11 +23,6 @@ function connect_domain() {
     console.log(connect_url,'connect_url')
     window.location.href = connect_url;
     
-    
-    //const connectDomain = document.getElementById('connecting_id');
-    //connectDomain.innerText = 'Success';
-
-    // https://127.0.0.1:8000/domain/add/?site_url=https%3A%2F%2Fronak-wolf.botxbyte.com&user_login=julie&password=fFDE%20YrOf%20Vs9C%20PeFn%205wxz%20KcYs
     return false; 
 }
 

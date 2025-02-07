@@ -1,26 +1,39 @@
 
 
-// add api 
-async function add_api(api_url, data, redirect_url) {
+async function add_role_has_permissions_api() {
+
+    const rolesData = [];
+
+    const groupedByRole = permissionsList.reduce((acc, { role, permission, status }) => {
+        if (status) {
+            if (!acc[role]) acc[role] = [];
+            acc[role].push(permission);
+        }
+        return acc;
+    }, {});
+
+    Object.entries(groupedByRole).forEach(([role, permissions]) => {
+        rolesData.push({
+            role: role,
+            permissions: permissions.join(", ")
+        });
+    });
+
+    console.log("Generated Roles Data:", rolesData);
 
     const access_token = sessionStorage.getItem("access_token");
 
-    const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-
-    data.append("workspace_slug_id", workspace_slug_id);
-
-
     try {
         // Perform the API call
-        const response = await fetch(api_url, {
+        const response = await fetch(add_role_has_permissions_url, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
 
             },
-            // body: JSON.stringify(data),
-            body: data,
+            body: JSON.stringify(rolesData),
+            // body: data,
         });
         
 
@@ -31,18 +44,10 @@ async function add_api(api_url, data, redirect_url) {
             console.log(data)
             show_toast("success", `${data.message}`);
 
-            // Redirect or show a success message (for domain only)
-            if(api_url === add_domain_url) {
-                // sessionStorage.setItem("domain_slug_id", data.domain.slug_id);
-                // alert(data.domain.slug_id)
-                progress_bar_page_url += `?workspace_slug_id=${workspace_slug_id}&domain_slug_id=${data.domain.slug_id}`;
-                window.location.href = progress_bar_page_url
-            }
-
             // Redirect or show a success message
             if (response.ok) {
                 setTimeout(() => {
-                    window.location.href = redirect_url;
+                    location.reload();  
                 }, 1000);
             }
 

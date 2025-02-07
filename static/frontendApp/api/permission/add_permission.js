@@ -8,10 +8,6 @@ function add_permission_api() {
     // Collect form data using the name attributes
     const name = permission_form.querySelector('[name="name"]').value;
 
-    // Prepare the data object
-    // const data = {
-    //     name: name,
-    // };
     const data = new FormData();
     data.append("name", name);
 
@@ -53,7 +49,6 @@ function add_permission_api() {
         if (data_obj && data_obj.permissions && data_obj.permissions.length > 0) {
             name.value = data_obj.permissions[0].name;
         } else {
-            // name.value = ''; 
             window.location.href = error_page;
         }
         

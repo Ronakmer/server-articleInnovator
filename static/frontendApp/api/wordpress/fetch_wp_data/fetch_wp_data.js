@@ -6,14 +6,14 @@
 // fetch_wp_data  api
 async function fetch_wp_data_api() {
     try {
-        alert(fetch_wp_data_url)
-
+        const temp_url = new URLSearchParams(window.location.search);
+        const domain_slug_id = temp_url.get('domain_slug_id');
+        
         const access_token = sessionStorage.getItem("access_token");
         
         const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-        // const workspace_slug_id = '77b4ad49-db8a-4434-aad5-c2351c953cc7';
 
-        const domain_slug_id = sessionStorage.getItem("domain_slug_id");
+        // const domain_slug_id = sessionStorage.getItem("domain_slug_id");
 
         const query_params = new URLSearchParams({});
 

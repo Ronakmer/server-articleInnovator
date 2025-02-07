@@ -11,9 +11,6 @@ async function user_get_avatar_image_api() {
         
         const query_params = new URLSearchParams();
 
-        // if (workspace_slug_id) {
-        //     query_params.append("workspace_slug_id", workspace_slug_id);
-        // }
         if (query_params) {
             query_params.append("avatar_type", 'profile');
         }
