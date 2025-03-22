@@ -1,8 +1,11 @@
 
 var page_url = 'https://127.0.0.1:8000/';
+// var page_url = 'https://192.168.1.5:8000/';
 
+var login_page_url = `${page_url}`;
 
 var dashboard_page_url = `${page_url}dashboard/`;
+// var profile_page_url = `${page_url}profile/`;
 var otp_page_url = `${page_url}otp/`;
 var new_password_page_url = `${page_url}new-password/`;
 var error_page = `${page_url}error/`;
@@ -64,11 +67,16 @@ var add_prompt_page_url = `${page_url}prompt/add/`;
 var update_prompt_page_url = `${page_url}prompt/update/`;
 var delete_prompt_page_url = `${page_url}prompt/delete/`;
 
-
 var list_user_detail_page_url = `${page_url}users/`;
 var add_user_detail_page_url = `${page_url}user/add/`;
 var update_user_detail_page_url = `${page_url}user/update/`;
 var delete_user_detail_page_url = `${page_url}user/delete/`;
+var detail_user_page_url = `${page_url}user/`;
+
+var list_admin_detail_page_url = `${page_url}admins/`;
+var add_admin_detail_page_url = `${page_url}admin/add/`;
+var update_admin_detail_page_url = `${page_url}admin/update/`;
+var delete_admin_detail_page_url = `${page_url}admin/delete/`;
 
 var list_domain_page_url = `${page_url}domains/`;
 var add_domain_page_url = `${page_url}domain/add/`;
@@ -85,6 +93,11 @@ var list_ai_configuration_page_url = `${page_url}ai-configurations/`;
 var add_ai_configuration_page_url = `${page_url}ai-configuration/add/`;
 var update_ai_configuration_page_url = `${page_url}ai-configuration/update/`;
 var delete_ai_configuration_page_url = `${page_url}ai-configuration/delete/`;
+
+var list_image_kit_configuration_page_url = `${page_url}image-kit-configurations/`;
+var add_image_kit_configuration_page_url = `${page_url}image-kit-configuration/add/`;
+var update_image_kit_configuration_page_url = `${page_url}image-kit-configuration/update/`;
+var delete_image_kit_configuration_page_url = `${page_url}image-kit-configuration/delete/`;
 
 
 var list_motivation_page_url = `${page_url}motivations/`;
@@ -111,3 +124,6 @@ var delete_image_template_category_page_url = `${page_url}image-template-categor
 var progress_bar_page_url = `${page_url}fetch/wp-data/`;
 
 var list_role_has_permissions_page = `${page_url}role-has-permissions/`;
+
+var list_notification_page = `${page_url}notifications/`;
+var list_activity_logs_page = `${page_url}activity-logs/`;

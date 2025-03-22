@@ -1,95 +1,79 @@
+
+
+
 async function detail_domain_chart(domain_console_data, domain_analytics_data, domain_article_data, slug_id) {
+    try {
+        // 1. Resolve all promises in parallel for better performance
+        const [consoleData, analyticsData, articleData] = await Promise.all([
+            domain_console_data,
+            domain_analytics_data,
+            domain_article_data
+        ]);
 
-    const domain_console_data_obj = await domain_console_data; // Await the promise
-    const domain_analytics_data_obj = await domain_analytics_data; // Await the promise
-    const domain_article_data_obj = await domain_article_data; // Await the promise
+        // 2. Update DOM elements with a helper function to reduce repetition
+        updateDomElement('total_impressions', consoleData?.metrics_data?.aggregates?.total_impressions);
+        updateDomElement('total_click', consoleData?.metrics_data?.aggregates?.total_clicks);
+        updateDomElement('total_ctr', consoleData?.metrics_data?.aggregates?.total_ctr);
+        updateDomElement('total_position', consoleData?.metrics_data?.aggregates?.total_position);
 
-    // domain_console total data 
-    const total_impressionss = document.getElementById(`total_impressions`);
-    const total_click = document.getElementById(`total_click`);
-    const total_ctr = document.getElementById(`total_ctr`);
-    const total_position = document.getElementById(`total_position`);
+        updateDomElement('total_traffic', analyticsData?.metrics_data?.aggregates?.total_traffics);
+        updateDomElement('total_new_user', analyticsData?.metrics_data?.aggregates?.total_new_users);
+        updateDomElement('total_average_time', analyticsData?.metrics_data?.aggregates?.total_average_time);
+        
+        updateDomElement('total_article', articleData?.metrics_data?.total_articles ?? 'N/A');
 
-    total_impressionss.innerText = domain_console_data_obj.metrics_data.aggregates.total_impressions || '';
-    total_click.innerText = domain_console_data_obj.metrics_data.aggregates.total_clicks || '';
-    total_ctr.innerText = domain_console_data_obj.metrics_data.aggregates.total_ctr || '';
-    total_position.innerText = domain_console_data_obj.metrics_data.aggregates.total_position || '';
-    
-    // domain_analytics total data 
-    const total_traffic = document.getElementById(`total_traffic`);
-    const total_new_user = document.getElementById(`total_new_user`);
-    const total_average_time = document.getElementById(`total_average_time`);
+        // 3. Extract chart data with defensive programming
+        const metricsByDate = consoleData?.metrics_data?.metrics_by_date || {};
+        const dates = Object.keys(metricsByDate.clicks || {});
+        const formattedDates = dates.map(date => new Date(date).toLocaleDateString('en-GB'));
 
-    total_traffic.innerText = domain_analytics_data_obj.metrics_data.aggregates.total_traffics || '';
-    total_new_user.innerText = domain_analytics_data_obj.metrics_data.aggregates.total_new_users || '';
-    total_average_time.innerText = domain_analytics_data_obj.metrics_data.aggregates.total_average_time || '';
-    
-    //article_data
-    const total_article = document.getElementById(`total_article`);
-    total_article.innerText = domain_article_data_obj.metrics_data.total_articles || '';
+        // 4. Create chart series array with helper function
+        const chartSeries = [
+            createSeries('Clicks', metricsByDate.clicks, '#FF6384'),
+            createSeries('Impressions', metricsByDate.impressions, '#36A2EB'),
+            createSeries('Traffics', analyticsData?.metrics_data?.traffics_by_date, '#4BC0C0'),
+            createSeries('New Users', analyticsData?.metrics_data?.new_users_by_date, '#9966FF'),
+            createSeries('CTR', metricsByDate.ctr, '#FFCE56'),
+            createSeries('Position', metricsByDate.position, '#36A2EB'),
+            createSeries('Average Time', analyticsData?.metrics_data?.average_time_by_date, '#FF9F40'),
+            createSeries('Article', articleData?.metrics_data?.article_by_date_dict, '#AF9444')
+        ];
 
+        // 5. Configure and render chart
+        const chart = new ApexCharts(
+            document.querySelector("#detail_domain_chart"), 
+            createChartOptions(chartSeries, formattedDates)
+        );
+        
+        chart.render();
+        
+    } catch (error) {
+        console.error('Error rendering domain chart:', error);
+        // Optionally display error message to user
+        document.querySelector("#detail_domain_chart").innerHTML = 
+            '<div class="alert alert-danger">Failed to load chart data</div>';
+    }
+}
 
-    // Extract data from domain_console_data
-    const consoleClicks = Object.values(domain_console_data_obj.metrics_data.metrics_by_date.clicks);
-    const consoleImpressions = Object.values(domain_console_data_obj.metrics_data.metrics_by_date.impressions);
-    const consoleCtr = Object.values(domain_console_data_obj.metrics_data.metrics_by_date.ctr);
-    const consolePosition = Object.values(domain_console_data_obj.metrics_data.metrics_by_date.position);
-    const consoleDates = Object.keys(domain_console_data_obj.metrics_data.metrics_by_date.clicks);
-    
-    // Extract data from domain_analytics_data
-    const traffics = Object.values(domain_analytics_data_obj.metrics_data.traffics_by_date);
-    const newUsers = Object.values(domain_analytics_data_obj.metrics_data.new_users_by_date);
-    const averageTime = Object.values(domain_analytics_data_obj.metrics_data.average_time_by_date);
-    
-    const articleData = Object.values(domain_article_data_obj.metrics_data.article_by_date_dict);
+// Helper functions to improve code organization and reduce repetition
+function updateDomElement(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.innerText = value ?? 'N/A';
+    }
+}
 
-    // Format dates for x-axis
-    const formattedDates = consoleDates.map(date => new Date(date).toLocaleDateString('en-GB'));
+function createSeries(name, dataObj, color) {
+    return {
+        name,
+        data: Object.values(dataObj || {}),
+        color
+    };
+}
 
-    // Chart options
-    const chartOptions = {
-        series: [
-            {
-                name: 'Clicks',
-                data: consoleClicks,
-                color: '#FF6384'
-            },
-            {
-                name: 'Impressions',
-                data: consoleImpressions,
-                color: '#36A2EB'
-            },
-            {
-                name: 'Traffics',
-                data: traffics,
-                color: '#4BC0C0'
-            },
-            {
-                name: 'New Users',
-                data: newUsers,
-                color: '#9966FF'
-            },
-            {
-                name: 'CTR',
-                data: consoleCtr,
-                color: '#FFCE56'
-            },
-            {
-                name: 'Position',
-                data: consolePosition,
-                color: '#36A2EB'
-            },
-            {
-                name: 'Average Time',
-                data: averageTime,
-                color: '#FF9F40'
-            },
-            {
-                name: 'Article',
-                data: articleData,
-                color: '#AF9444'
-            }
-        ],
+function createChartOptions(series, categories) {
+    return {
+        series,
         chart: {
             height: 400,
             type: 'line',
@@ -105,11 +89,9 @@ async function detail_domain_chart(domain_console_data, domain_analytics_data, d
             row: {
                 colors: ['#f3f3f3', 'transparent'],
                 opacity: 0.5
-            },
+            }
         },
-        xaxis: {
-            categories: formattedDates,
-        },
+        xaxis: { categories },
         yaxis: {
             min: 0,
             tickAmount: 5
@@ -118,17 +100,7 @@ async function detail_domain_chart(domain_console_data, domain_analytics_data, d
             position: 'top',
             horizontalAlign: 'left',
             offsetY: 0,
-            itemMargin: {
-                horizontal: 10
-            }
+            itemMargin: { horizontal: 10 }
         }
     };
-
-    // Render the chart
-    const chart = new ApexCharts(document.querySelector("#detail_domain_chart"), chartOptions);
-    chart.render();
 }
-
-
-
-

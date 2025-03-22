@@ -12,11 +12,12 @@ from apiApp.views.base.s3.article_josn_method.show_file_from_s3.show_file_from_s
 from apiApp.views.decorator.workspace_decorator import workspace_permission_required
 from apiApp.views.decorator.domain_decorator import domain_permission_required
 from django.db.models import Q
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 # show article
 @api_view(['GET'])
-@workspace_permission_required
+# @workspace_permission_required
 @domain_permission_required
 def list_article(request):
     try:
@@ -27,6 +28,7 @@ def list_article(request):
         status = request.GET.get('status', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
+        order_by = request.GET.get('order_by', '-created_date')
 
         
         # Initialize filters
@@ -42,11 +44,12 @@ def list_article(request):
 
         if request_user.is_superuser:
             try:
-                obj = article.objects.filter(filters).order_by('-created_date') 
+                obj = article.objects.filter(filters).order_by(order_by) 
                 print(obj,'obj0')    
             except article.DoesNotExist:
                 return JsonResponse({
                     "error": "article not found.",
+                    "success": False,
                 }, status=404)  
 
         if not request_user.is_superuser:
@@ -55,20 +58,24 @@ def list_article(request):
                 user_obj = user_detail.objects.get(user_id=request_user.id) 
             except user_detail.DoesNotExist:
                 return JsonResponse({
-                    "error": "user not found."
+                    "error": "user not found.",
+                    "success": False,
                 }, status=404)
 
             if user_obj.role_id.name == 'admin':
                 try:
-                    obj = article.objects.filter(filters).distinct().order_by('-created_date')
+                    obj = article.objects.filter(filters).distinct().order_by(order_by)
                 except article.DoesNotExist:
                     return JsonResponse({
                         "error": "article not found.",
+                        "success": False,
                     }, status=404)   
                 
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
-    
+        
+        
+        # Apply pagination
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
+
         serialized_data = article_serializer(obj, many=True)
         
         # s3_url = 's3://article-innovator-article-josn-files/ronak-wolf.botxbyte.com/87676037-9254-40d8-bd0a-dbb7cdf8687d/article_content.json'
@@ -78,26 +85,29 @@ def list_article(request):
         print(response,'response')
 
         return JsonResponse({
-            "redirect": "",
-            "articles":serialized_data.data,
-            "total_count": total_count,
-            
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
         }, status=200)
 
     except Exception as e:
         print("This error is list_article --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
 
 # add article
 @api_view(['POST'])
-@workspace_permission_required
+# @workspace_permission_required
 @domain_permission_required
 def add_article(request):
     try:
-        
         request_user = request.user
         
         temp_article_type = request.data.get('temp_article_type')
@@ -143,14 +153,16 @@ def add_article(request):
             
             if not (article_type_slug_id and author_slug_id and domain_slug_id and category_slug_id and tag_slug_id and workspace_slug_id):
                 return JsonResponse({
-                    "error": "article_type, domain, author, category, tag, workspace slug required fields."
+                    "error": "article_type, domain, author, category, tag, workspace slug required fields.",
+                    "success": False,
                 }, status=400)
                 
         if temp_article_type == 'ai':
             
             if not ( prompt_slug_id and domain_slug_id and workspace_slug_id):
                 return JsonResponse({
-                    "error": "prompt, domain, workspace slug required fields."
+                    "error": "prompt, domain, workspace slug required fields.",
+                    "success": False,
                 }, status=400)
         
         try:
@@ -170,19 +182,20 @@ def add_article(request):
                     # Check if the prompt is associated with the given article type
                     if prompt_obj.article_type_id != article_type_obj:
                         return JsonResponse({
-                            "error": "The selected prompt is not associated with the given article type."
+                            "error": "The selected prompt is not associated with the given article type.",
+                            "success": False,
                         }, status=400)
                     
         except domain.DoesNotExist:
-            return JsonResponse({"error": "domain not found."}, status=404)
+            return JsonResponse({"error": "domain not found.","success": False}, status=404)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "workspace not found."}, status=404)
+            return JsonResponse({"error": "workspace not found.","success": False}, status=404)
         except article_type.DoesNotExist:
-            return JsonResponse({"error": "article type not found."}, status=404)
+            return JsonResponse({"error": "article type not found.","success": False}, status=404)
         except prompt.DoesNotExist:
-            return JsonResponse({"error": "prompt not found."}, status=404)
+            return JsonResponse({"error": "prompt not found.","success": False}, status=404)
         except wp_author.DoesNotExist:
-            return JsonResponse({"error": "author not found."}, status=404)
+            return JsonResponse({"error": "author not found.","success": False}, status=404)
         # except wp_tag.DoesNotExist:
         #     return JsonResponse({"error": "tag not found."}, status=404)
         # except wp_category.DoesNotExist:
@@ -242,7 +255,7 @@ def add_article(request):
         response_data = response.json()
         wp_post_id = response_data.get('post_id')
 
-        if 200 <= response.status_code < 300:
+        if response.status_code in (200, 201):
             article_obj = article()
             article_obj.wp_title = wp_title
             article_obj.keyword = keyword
@@ -299,18 +312,19 @@ def add_article(request):
                 article_obj.save()
             except Exception as e:
                 print("This error is add_article in call this create_article_folder_and_file_s3  --->: ", e)
-                return JsonResponse({"error": "Internal server error."}, status=500)
+                return JsonResponse({"error": "Internal server error.","success": False}, status=500)
                
             return JsonResponse({
                 "message": "Data added successfully.",
+                "success": True,
                 # "article": serialized_data.data,
             }, status=200)
         else:
-            return JsonResponse({"error": f"WordPress API error: {response.status_code} - {response.text}"}, status=500)
+            return JsonResponse({"error": f"WordPress API error: {response.status_code} - {response.text}","success": False}, status=500)
 
     except Exception as e:
         print("This error is add_article --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
@@ -319,8 +333,8 @@ def add_article(request):
     
     
 # update article
-@api_view(['PUT'])
-@workspace_permission_required
+@api_view(['PATCH'])
+# @workspace_permission_required
 @domain_permission_required
 def update_article(request, slug_id):
     try:
@@ -376,14 +390,16 @@ def update_article(request, slug_id):
             
             if not (article_type_slug_id and author_slug_id and domain_slug_id and category_slug_id and tag_slug_id and workspace_slug_id):
                 return JsonResponse({
-                    "error": "article_type, domain, author, category, tag, workspace slug required fields."
+                    "error": "article_type, domain, author, category, tag, workspace slug required fields.",
+                    "success": False,
                 }, status=400)
                 
         if temp_article_type == 'ai':
             
             if not ( prompt_slug_id and domain_slug_id and workspace_slug_id):
                 return JsonResponse({
-                    "error": "prompt, domain, workspace slug required fields."
+                    "error": "prompt, domain, workspace slug required fields.",
+                    "success": False,
                 }, status=400)
                 
         # if not (article_type_slug_id and prompt_slug_id and author_slug_id and domain_slug_id and category_slug_id and tag_slug_id and workspace_slug_id):
@@ -413,19 +429,20 @@ def update_article(request, slug_id):
                     # Check if the prompt is associated with the given article type
                     if prompt_obj.article_type_id != article_type_obj:
                         return JsonResponse({
-                            "error": "The selected prompt is not associated with the given article type."
+                            "error": "The selected prompt is not associated with the given article type.",
+                            "success": False,
                         }, status=400)
                     
         except domain.DoesNotExist:
-            return JsonResponse({"error": "domain not found."}, status=404)
+            return JsonResponse({"error": "domain not found.","success": False}, status=404)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "workspace not found."}, status=404)
+            return JsonResponse({"error": "workspace not found.","success": False}, status=404)
         except article_type.DoesNotExist:
-            return JsonResponse({"error": "article type not found."}, status=404)
+            return JsonResponse({"error": "article type not found.","success": False}, status=404)
         except prompt.DoesNotExist:
-            return JsonResponse({"error": "prompt not found."}, status=404)
+            return JsonResponse({"error": "prompt not found.","success": False}, status=404)
         except wp_author.DoesNotExist:
-            return JsonResponse({"error": "author not found."}, status=404)
+            return JsonResponse({"error": "author not found.","success": False}, status=404)
         # except wp_tag.DoesNotExist:
         #     return JsonResponse({"error": "tag not found."}, status=404)
         # except wp_category.DoesNotExist:
@@ -477,7 +494,8 @@ def update_article(request, slug_id):
 
         response = requests.post(api_url, headers=headers, json=data)
 
-        if 200 <= response.status_code < 300:
+        if response.status_code in (200, 201):
+
             obj.wp_title = wp_title
             obj.keyword = keyword
             obj.wp_slug = wp_slug
@@ -529,19 +547,20 @@ def update_article(request, slug_id):
                 obj.save()
             except Exception as e:
                 print("This error is update_article in call this create_article_folder_and_file_s3  --->: ", e)
-                return JsonResponse({"error": "Internal server error."}, status=500)
+                return JsonResponse({"error": "Internal server error.","success": False}, status=500)
                
         else:
-            return JsonResponse({"error": f"WordPress API error: {response.status_code} - {response.text}"}, status=500)
+            return JsonResponse({"error": f"WordPress API error: {response.status_code} - {response.text}","success": False}, status=500)
       
         return JsonResponse({
             "message": "Data updated successfully.",
+            "success": True,
             # "article": serialized_data.data,
         }, status=200)
     
     except Exception as e:
         print("This error is update_article --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
@@ -549,7 +568,7 @@ def update_article(request, slug_id):
 
 # delete article
 @api_view(['DELETE'])
-@workspace_permission_required
+# @workspace_permission_required
 @domain_permission_required
 def delete_article(request, slug_id):
     try:
@@ -558,6 +577,7 @@ def delete_article(request, slug_id):
         except article.DoesNotExist:
             return JsonResponse({
                 "error": "article not found.",
+                "success": False,
             }, status=404) 
             
         print(obj.wp_content)
@@ -565,12 +585,14 @@ def delete_article(request, slug_id):
         workspace_slug_id = request.GET.get("workspace_slug_id")  
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "workspace slug id is required."
+                "error": "workspace slug id is required.",
+                "success": False,
             }, status=400)
             
         if (obj.workspace_id.slug_id != workspace_slug_id):
             return JsonResponse({
-                "error": "You Don't have permission."
+                "error": "You Don't have permission.",
+                "success": False,
             }, status=404)
      
         #  s3 delete call  
@@ -581,10 +603,11 @@ def delete_article(request, slug_id):
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_article --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

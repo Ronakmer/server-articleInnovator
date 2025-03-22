@@ -1,0 +1,243 @@
+{% load static %}
+
+<!-- Top Bar START -->
+<div id="palleon-top-bar">
+    <!-- Logo -->
+    <div class="palleon-logo" style="padding:3px 20px">
+        <img class="logo-desktop" src="{% static 'imageGen/assets/botxbyte-logo-white.svg' %}" style="height:45px" />
+        <img class="logo-mobile" src="{% static 'imageGen/assets/logo-small.png' %}" />
+    </div>
+
+    
+    <!-- Menu -->
+    <div class="palleon-top-bar-menu">
+
+        <!-- workpa -->
+
+        <style>
+            .workspace-container {
+                background-color: #303030;
+                padding: 0.1rem 0.75rem;
+                border-radius: 1rem;
+                width: 200px;
+                position: relative;
+            }
+        
+            .workspace-header {
+                display: flex;
+                align-items: center;
+                gap: 0.1rem;
+                cursor: pointer;
+            }
+        
+            .avatar-container {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                background-color: rgba(102, 88, 234, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        
+            .avatar-img {
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                margin-right: 0.25rem;
+            }
+        
+            .workspace-info {
+                font-family: 'Poppins', sans-serif;
+            }
+        
+            .label {
+                font-weight: 600;
+                font-size: 0.75rem;
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 0px;
+            }
+        
+            .workspace-name {
+                font-weight: 500;
+                font-size: 0.75rem;
+                color: white;
+            }
+        
+            .popup {
+                display: none;
+                position: absolute;
+                right: 0;
+                top: calc(100% + 0.5rem);
+                width: 14rem;
+                background: black;
+                border-radius: 1rem;
+                box-shadow: 0 4px 6px rgba(102, 88, 234, 0.2);
+                border: 1px solid rgba(102, 88, 234, 0.2);
+                z-index: 10;
+            }
+        
+            .popup-content {
+                padding: 0.75rem;
+            }
+        
+            /* New styles for workspace list items */
+            .workspace-list-item {
+                display: flex;
+                align-items: center;
+                padding: 0.5rem;
+                gap: 0.5rem;
+                cursor: pointer;
+                border-radius: 0.5rem;
+                transition: background-color 0.2s;
+            }
+        
+            .workspace-list-item:hover {
+                background-color: rgba(102, 88, 234, 0.1);
+            }
+        
+            .workspace-list-item img {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+            }
+        
+            .workspace-list-item .item-info {
+                flex: 1;
+            }
+        
+            .workspace-list-item .item-name {
+                font-size: 0.75rem;
+                font-weight: 500;
+                color: white;
+                margin: 0;
+            }
+        
+            .workspace-list-item .item-description {
+                font-size: 0.7rem;
+                color: rgba(255, 255, 255, 0.7);
+                margin: 0;
+            }
+        
+            .add-workspace-btn {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding: 0.375rem 0.75rem;
+                margin-top: 0.5rem;
+                font-size: 0.75rem;
+                font-weight: 500;
+                color: white;
+                background-color: #6658ea;
+                border: 1px solid #6658ea;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+        
+            .add-workspace-btn:hover {
+                background-color: #5346d9;
+            }
+        
+            .add-workspace-btn svg {
+                margin-right: 0.5rem;
+                width: 16px;
+                height: 16px;
+            }
+        
+            .workspace-container.active .popup {
+                display: block;
+            }
+        
+            .workspace-header svg path {
+                stroke: white;
+            }
+        </style>
+
+        
+        <div class="workspace-container" id="workspaceContainer">
+            <div class="workspace-header" onclick="togglePopup()">
+                <div class="avatar-container">
+                    <img id="workspace_logo" src="" alt="user avatar icon" class="avatar-img">
+                </div>
+                <div class="workspace-info">
+                    <p class="label">Workspace</p>
+                    <p id="workspace_name" class="workspace-name">My Workspace</p>
+                </div>
+                <div>
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.3327 10C18.3327 14.6 14.5993 18.3334 9.99935 18.3334C5.39935 18.3334 2.59102 13.7 2.59102 13.7M2.59102 13.7H6.35768M2.59102 13.7V17.8667M1.66602 10C1.66602 5.40002 5.36602 1.66669 9.99935 1.66669C15.5577 1.66669 18.3327 6.30002 18.3327 6.30002M18.3327 6.30002V2.13335M18.3327 6.30002H14.6327" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        
+            <div class="popup">
+                <div class="popup-content">
+                    <div id="workspace_list">
+
+                    </div>
+                    <button class="add-workspace-btn">
+                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
+                        </svg>
+                        Add Workspace
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            function togglePopup() {
+                const container = document.getElementById('workspaceContainer');
+                container.classList.toggle('active');
+            }
+        
+            document.addEventListener('click', function(event) {
+                const container = document.getElementById('workspaceContainer');
+                const isClickInside = container.contains(event.target);
+                
+                if (!isClickInside && container.classList.contains('active')) {
+                    container.classList.remove('active');
+                }
+            });
+        </script>
+        
+        
+        <!-- History -->
+        <div>
+            File Name:
+            <input id="palleon-json-save-name" class="palleon-form-field palleon-file-name" type="text" value="" autocomplete="off" data-default="">
+        </div>
+        <div class="palleon-undo">
+            <button id="palleon-undo" type="button" class="palleon-btn-simple tooltip" data-title="Undo" autocomplete="off" disabled><span class="material-icons">undo</span></button>
+        </div>
+        <div class="palleon-redo">
+            <button id="palleon-redo" type="button" class="palleon-btn-simple tooltip" data-title="Redo" autocomplete="off" disabled><span class="material-icons">redo</span></button>
+        </div>
+        <div class="palleon-history">
+            <button id="palleon-history" type="button" class="palleon-btn-simple palleon-modal-open tooltip" data-title="History" autocomplete="off" data-target="#modal-history" disabled><span class="material-icons">history</span></button>
+        </div>
+        <!-- New -->
+        <div class="palleon-new">
+            <button id="palleon-new" type="button" class="palleon-btn primary palleon-modal-open" autocomplete="off" data-target="#modal-add-new"><span class="material-icons">add_circle</span><span class="palleon-btn-text">New</span></button>
+        </div>
+        <!-- Save -->
+        <div class="palleon-save">
+            <button id="palleon-json-save" type="button" class="palleon-btn primary"><span class="material-icons">save</span>Save As Template</button>
+        </div>
+        <!-- User Menu -->
+        <div class="palleon-user-menu">
+            <div id="palleon-user-menu" class="palleon-dropdown-wrap">
+                <img alt="avatar" src="{% static 'imageGen/assets/avatar.png' %}" /><span class="material-icons">arrow_drop_down</span>
+                <div class="menu-menu-container">
+                    <ul id="palleon-be-menu" class="palleon-dropdown">
+                        <li><a href="https://palleon.website/js-version/">Home</a></li>
+                        <li><a href="https://palleon.website/js-version/documentation/index.html">Documentation</a></li>
+                        <li><a href="https://codecanyon.net/item/palleon-javascript-image-editor/43256130">Buy Now!</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Top Bar END -->

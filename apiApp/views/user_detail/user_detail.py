@@ -8,6 +8,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from apiApp.views.decorator.workspace_decorator import workspace_permission_required
 from django.db.models import Q
 from apiApp.views.base.dynamic_avatar_image_process.dynamic_avatar_image_process import dynamic_avatar_image_process
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 @api_view(['GET'])
@@ -22,7 +23,8 @@ def list_user_detail(request):
         status = request.GET.get('status', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
-        
+        order_by = request.GET.get('order_by', '-created_date')
+        workspace_slug_id = request.GET.get('workspace_slug_id', None)
 
         # Initialize filters
         filters = Q()
@@ -40,37 +42,54 @@ def list_user_detail(request):
             role_obj = role.objects.get(name='user')
         except role.DoesNotExist:
             return JsonResponse({
-                "error": f"role data does not exist."
-            }, status=400)
+                "error": f"role data does not exist.",
+                "success": False,
+            }, status=404)
+            
+        if workspace_slug_id:
+            try:
+                workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
+                filters &= Q(workspace_id=workspace_obj.id)
+            except workspace.DoesNotExist:
+                return JsonResponse({
+                    "error": "workspace not found",
+                    "success": False,
+                }, status=404)
+
 
         # Filter user details
         try:
             if request_user.is_superuser:
-                obj = user_detail.objects.filter(filters, role_id=role_obj)
-            else:
-                obj = user_detail.objects.filter(role_id=role_obj, created_by=request_user).order_by('-created_date')
+                obj = user_detail.objects.filter(filters, role_id=role_obj).order_by(order_by)
+            if request.is_admin:
+                obj = user_detail.objects.filter(filters, role_id=role_obj).order_by(order_by)
         
         except user_detail.DoesNotExist:
             return JsonResponse({
-                "error": f"user data does not exist."
-            }, status=400)
+                "error": f"user data does not exist.",
+                "success": False,
+            }, status=404)
 
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
         
         # Serialize the data
         serialized_data = user_detail_serializer(obj, many=True)
 
         return JsonResponse({
-            "redirect": "",
-            "user_details": serialized_data.data,
-            "total_count":total_count,
+            "data": serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
         }, status=200)
 
     except Exception as e:
         print("This error is list_user_detail --->: ", e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 # add user detail
@@ -96,30 +115,33 @@ def add_user_detail(request):
         
         if User.objects.filter(username=email).exists():
             return JsonResponse({
-                "error": "User with this email already exists."
-            }, status=400)
+                "error": "User with this email already exists.",
+                "success": False,
+            }, status=409)
     
     
         # Check if either the profile_image file or the avatar_image_path is provided
         if not profile_image and not avatar_image_path:
             return JsonResponse({
-                "error": "Please provide either a profile image or an avatar image path."
+                "error": "Please provide either a profile image or an avatar image path.",
+                "success": False,
             }, status=400)
 
         # Optionally handle cases where both are provided
         if profile_image and avatar_image_path:
             return JsonResponse({
-                "error": "Please provide only one of profile image or avatar image path, not both."
+                "error": "Please provide only one of profile image or avatar image path, not both.",
+                "success": False,
             }, status=400)
             
         if avatar_image_path:
             if not avatar_image_path.startswith('avatar/profile_'):
-                return JsonResponse({"error": "Invalid image path."}, status=400)
+                return JsonResponse({"error": "Invalid image path.","success": False}, status=400)
         
         #  set dynamic avatar image
         profile_image = dynamic_avatar_image_process(profile_image, avatar_image_path)
         if not profile_image:
-            return JsonResponse({"error": "profile image processing failed so give me correct image."}, status=400)
+            return JsonResponse({"error": "profile image processing failed so give me correct image.","success": False}, status=400)
 
         
         user_id_obj = User()
@@ -146,18 +168,19 @@ def add_user_detail(request):
 
         return JsonResponse({
             "message": "Data added successfully.",
-            "user_detail": serialized_user_data,
+            "data": serialized_user_data,
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is add_user_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
     
     
 
 
 # update uservdetail
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @workspace_permission_required
 def update_user_detail(request, slug_id):
     try:
@@ -175,28 +198,27 @@ def update_user_detail(request, slug_id):
         except user_detail.DoesNotExist:
             return JsonResponse({
                 "error": "user detail not found.",
+                "success": False,
             }, status=404) 
             
         if not user_obj.user_id.email == email:
             if User.objects.filter(username=email).exists():
                 return JsonResponse({
-                    "error": "User with this email already exists."
-                }, status=400)
+                    "error": "User with this email already exists.",
+                    "success": False,
+                }, status=409)
         
-        # if not logo and not avatar_image_path:
-        #     return JsonResponse({
-        #         "error": "Please provide either a logo or an avatar image path."
-        #     }, status=400)
 
         # Optionally handle cases where both are provided
         if logo and avatar_image_path:
             return JsonResponse({
-                "error": "Please provide only one of logo or avatar image path, not both."
+                "error": "Please provide only one of logo or avatar image path, not both.",
+                "success": False,
             }, status=400)
             
         if avatar_image_path:
             if not avatar_image_path.startswith('avatar/profile_'):
-                return JsonResponse({"error": "Invalid image path."}, status=400)
+                return JsonResponse({"error": "Invalid image path.","success": False}, status=400)
         
         logo = logo or user_obj.profile_image
         avatar_image_path = avatar_image_path or user_obj.profile_image
@@ -205,7 +227,7 @@ def update_user_detail(request, slug_id):
         #  set dynamic avatar image
         logo = dynamic_avatar_image_process(logo, avatar_image_path)
         if not logo:
-            return JsonResponse({"error": "logo processing failed so give me correct image."}, status=400)
+            return JsonResponse({"error": "logo processing failed so give me correct image.","success": False}, status=400)
 
     
 
@@ -230,12 +252,13 @@ def update_user_detail(request, slug_id):
 
         return JsonResponse({
             "message": "Data updated successfully.",
-            "user_detail": serialized_user_data,
+            "data": serialized_user_data,
+            "success": True,
         }, status=200)
         
     except Exception as e:
         print("This error is update_user_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
@@ -250,12 +273,13 @@ def delete_user_detail(request, slug_id):
         except user_detail.DoesNotExist:
             return JsonResponse({
                 "error": "user detail not found.",
+                "success": False,
             }, status=404) 
         
         workspace_slug_id = request.GET.get('workspace_slug_id')
 
         if not (workspace_slug_id):
-            return JsonResponse({"error": "workspace slug required fields."}, status=400)
+            return JsonResponse({"error": "workspace slug required fields.","success": False}, status=400)
 
         # if (obj.workspace_id.slug_id != workspace_slug_id):
         #     return JsonResponse({
@@ -263,7 +287,8 @@ def delete_user_detail(request, slug_id):
         #     }, status=404)
         if not obj.workspace_id.filter(slug_id=workspace_slug_id).exists():
             return JsonResponse({
-                "error": "You don't have permission."
+                "error": "You don't have permission.",
+                "success": False,
             }, status=403)
             
         
@@ -273,11 +298,12 @@ def delete_user_detail(request, slug_id):
 
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_user_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 

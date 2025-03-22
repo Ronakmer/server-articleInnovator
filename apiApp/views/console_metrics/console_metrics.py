@@ -10,6 +10,8 @@ from rest_framework import status
 from django.db.models import Q
 
 from apiApp.views.console_metrics.console_metrics_data import console_metrics_data 
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
+
 
 # show console_metrics
 @api_view(['GET'])
@@ -22,6 +24,7 @@ def list_console_metrics(request):
         slug_id = request.GET.get('slug_id', None)
         domain_slug_id = request.GET.get('domain_slug_id', None)
         search = request.GET.get('search', '')
+        order_by = request.GET.get('order_by', '-created_date')
         
 
         # Initialize filters
@@ -42,13 +45,15 @@ def list_console_metrics(request):
             except domain.DoesNotExist:
                 return JsonResponse({
                     "error": "domain not found.",
+                    "success": False,
                 }, status=404) 
 
         try:
-            obj = console_metrics.objects.filter(filters).order_by('-created_date')
+            obj = console_metrics.objects.filter(filters).order_by(order_by)
         except console_metrics.DoesNotExist:
             return JsonResponse({
                 "error": "console_metrics not found.",
+                "success": False,
             }, status=404) 
 
         if domain_slug_id:
@@ -62,19 +67,23 @@ def list_console_metrics(request):
 
 
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
+
         
         serialized_data = console_metrics_serializer(obj, many=True)
         
-        return JsonResponse({
-            "redirect": "",
+        return JsonResponse({ 
             "console_metrics":serialized_data.data,
-            "total_count": total_count,
             "console_metrics_data_obj": console_metrics_data_obj,
-            
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },            
         }, status=200)
 
     except Exception as e:
         print("This error is list_console_metrics --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)

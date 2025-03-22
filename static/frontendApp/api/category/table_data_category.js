@@ -6,13 +6,13 @@
 
 
 // Function to render dynamic 
-function table_data_category(tbody_name, response_data, delete_function_name, status_function_name, update_page_url) {
+function table_data_category(tbody_name, response_data, delete_function_name, status_function_name, update_page_url, current_page, limit) {
 
     const tbody = document.getElementById(tbody_name); 
 
     tbody.innerHTML = ''; 
 
-    response_data.categories.forEach((obj, index) => {
+    response_data.data.forEach((obj, index) => {
         const tr = document.createElement('tr');
         tr.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
 
@@ -28,10 +28,10 @@ function table_data_category(tbody_name, response_data, delete_function_name, st
                 ${obj.description}
             </td>
             
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 hidden" data-permission="update_category, delete_category">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <button onclick="set_update_category_data('${obj.slug_id}', '${obj.name}', '${obj.slug}', '${obj.description}', '${obj.wp_cat_id}')" class="mr-2">
+                    <button class="mr-2 hidden" data-permission="update_category" onclick="set_update_category_data('${obj.slug_id}', '${obj.name}', '${obj.slug}', '${obj.description}', '${obj.wp_cat_id}')" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -47,7 +47,7 @@ function table_data_category(tbody_name, response_data, delete_function_name, st
                         </svg>
                     </button>
                     <!-- delete -->
-                    <button  class="mr-2" onclick="${delete_function_name}('${obj.slug_id}')">
+                    <button  class="mr-2 hidden" data-permission="delete_category"  onclick="${delete_function_name}('${obj.slug_id}')">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -73,6 +73,7 @@ function table_data_category(tbody_name, response_data, delete_function_name, st
         `;
         tbody.appendChild(tr);
     });
+handle_permissions();
 }
 
 

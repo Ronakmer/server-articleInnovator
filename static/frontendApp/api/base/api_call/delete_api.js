@@ -4,9 +4,9 @@
 async function delete_api(api_url, slug_id, domain_slug_id=NaN) {
     try {
 
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
         
-        const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+        const workspace_slug_id = localStorage.getItem("workspace_slug_id");
         const query_params = new URLSearchParams();
 
         if (workspace_slug_id) {

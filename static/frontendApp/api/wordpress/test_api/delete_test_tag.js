@@ -3,7 +3,7 @@
     
 // Add Test tag
 async function delete_test_tag(test_tag_id) {
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     data.test_tag_id = test_tag_id;
 

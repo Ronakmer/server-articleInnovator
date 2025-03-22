@@ -18,20 +18,34 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
     const main_div_id = document.getElementById(tbody_name); 
 
     main_div_id.innerHTML = ''; 
-    const start_date = '2024-11-25';  // Replace with dynamic date if needed
-    const end_date = '2025-01-25';    // Replace with dynamic date if needed
+    // const start_date = '2024-11-25';  // Replace with dynamic date if needed
+    // const end_date = '2025-01-25';    // Replace with dynamic date if needed
 
 
-    response_data.domains.forEach((obj, index) => {
-        const domain_console_data = domain_console_graph_api(domain_console_metrics_url, obj.slug_id, start_date, end_date);
-        const domain_analytics_data = domain_analytics_graph_api(domain_analytics_metrics_url, obj.slug_id, start_date, end_date);
-        const domain_article_data = domain_article_graph_api(domain_article_metrics_url, obj.slug_id, start_date, end_date);
+    // Get the current date
+    const end_date = new Date();
+
+    // Get the date 7 days ago
+    const start_date = new Date();
+    start_date.setDate(end_date.getDate() - 7);
+
+    // Format dates as 'YYYY-MM-DD'
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    const start_date_str = formatDate(start_date);
+    const end_date_str = formatDate(end_date);
+
+
+    response_data.data.forEach((obj, index) => {
+        const domain_console_data = domain_console_graph_api(domain_console_metrics_url, obj.slug_id, start_date_str, end_date_str);
+        const domain_analytics_data = domain_analytics_graph_api(domain_analytics_metrics_url, obj.slug_id, start_date_str, end_date_str);
+        const domain_article_data = domain_article_graph_api(domain_article_metrics_url, obj.slug_id, start_date_str, end_date_str);
 
         console.log(domain_article_data,'domain_article_data')
 
         domain_impressions_chart(domain_console_data, obj.slug_id)
         domain_traffic_chart(domain_analytics_data, obj.slug_id)
-        // domain_article_chart(domain_article_data, obj.slug_id)
+        domain_article_chart(domain_article_data, obj.slug_id)
 
         // manager image loop
         const managerUserDetails = obj.manager_id_data || [];  // Fallback to an empty array if not available
@@ -201,7 +215,7 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
                                 <div class=" text-black font-semibold">
                                     Published
                                 </div>
-                                <div class="text-gray-600 text-xs" id="total_scheduled_${obj.slug_id}">
+                                <div class="text-gray-600 text-xs" id="total_publish_${obj.slug_id}">
                                 </div>
                             </div>
                         </div>
@@ -230,9 +244,9 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
                             class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
                             <div class="flex-1 max-md:flex-auto">
                                 <div class=" text-black font-semibold">
-                                    Schduled
+                                    Scheduled
                                 </div>
-                                <div class="text-gray-600 text-xs" id="total_schduled_${obj.slug_id}">
+                                <div class="text-gray-600 text-xs" id="total_scheduled_${obj.slug_id}">
                                 </div>
                             </div>
                         </div>
@@ -367,9 +381,9 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
                         <div
                             class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
                             <!-- Add Article Button -->
-                            <div class="flex font-poppins">
+                            <div class="flex font-poppins hidden" data-permission="update_domain, update_domain">
                                <!-- update -->
-                                <a href="${update_page_url}${obj.slug_id}" class="mr-2">
+                                <a href="${update_page_url}${obj.slug_id}" class="mr-2 hidden" data-permission="update_domain" >
                                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -385,7 +399,7 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
                                     </svg>
                                 </a>
                                 <!-- view -->
-                                <a href="${detail_domain_page_url}${obj.slug_id}" class="mr-2">
+                                <a href="${detail_domain_page_url}${obj.slug_id}" class="mr-2 hidden" data-permission="detail_domain">
                                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -398,7 +412,7 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
                                     </svg>                        
                                 </a>
                                 <!-- delete -->
-                                <a href="#" class="mr-2" onclick="${delete_function_name}('${obj.slug_id}')">
+                                <a href="#" class="mr-2 hidden" data-permission="delete_domain" onclick="${delete_function_name}('${obj.slug_id}')">
                                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -500,6 +514,8 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
         main_div_id.appendChild(div);
         
     });
+handle_permissions();
+
 }
 
 

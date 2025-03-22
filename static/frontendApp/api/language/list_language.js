@@ -9,7 +9,9 @@ function render_data_to_table(response_data, current_page, limit){
 
 // list language api
 async function list_language_api() {
-  
+
+    const selected_sort = document.querySelector('input[name="order_by"]:checked').value;
+    console.log("Selected Sort:", selected_sort); // Debugging purpose
 
 
     let current_page = 1; // Initialize current page
@@ -20,6 +22,7 @@ async function list_language_api() {
 
     const filters = {
         search: searchInput ? searchInput.value : '',
+        order_by:selected_sort,
 
     };
 

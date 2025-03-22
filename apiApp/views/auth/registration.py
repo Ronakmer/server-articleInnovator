@@ -3,15 +3,15 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
 import random, math
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 import json
 from apiApp.models import invitation_code_detail, role, user_detail
 from rest_framework.decorators import api_view
-from apiApp.views.auth.forgot_password import generate_otp
 from django.core.cache import cache
 from datetime import datetime
 from apiApp.serializers import user_detail_serializer
 from django.views.decorators.csrf import csrf_exempt
+from apiApp.views.base.generate_otp.generate_otp import generate_otp
 
 
 
@@ -26,6 +26,7 @@ def check_invitation_code(request):
         except invitation_code_detail.DoesNotExist:
             return JsonResponse({
                 "error": "invitation code detail not found.",
+                "success": False,
             }, status=404)   
 
         used = invitation_code_details_obj.used
@@ -33,14 +34,14 @@ def check_invitation_code(request):
         if used == False:
             message = 'Registration Now'
         return JsonResponse({
-            "redirect": "",
+            "success": True,
             "used":used,
             "message":message
         }, status=200)
 
     except Exception as e:
         print("This error is check_invitation_code --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -53,11 +54,7 @@ def admin_registration(request):
         email = request.data.get('email')
         password = request.data.get('password')
         invitation_code = request.data.get('invitation_code')
-        # role_id = request.data.get('role_id')
-        role_id = 'admin'
 
-        print(full_name,'full_name')
-    
         if not (full_name and email and password):
             return JsonResponse({"error": "All fields (full_name, email, password) are required."}, status=400)
   
@@ -73,7 +70,7 @@ def admin_registration(request):
         used = invitation_code_details_obj.used
         
         if used == True:
-            return JsonResponse({"message": "The invitation code has already been used."}, status=200)
+            return JsonResponse({"message": "The invitation code has already been used."}, status=409)
 
         try:
             # Send OTP to user via email
@@ -93,7 +90,6 @@ def admin_registration(request):
             "full_name": full_name,
             "email": email,
             "password": password,
-            "role_id": role_id,
             "invitation_code": invitation_code,
             "otp": create_otp,
         }, timeout=300) 
@@ -118,20 +114,18 @@ def registration_check_otp(request):
         if not (email and user_otp):
             return JsonResponse({"error": "All fields (email, otp) are required."}, status=400)
         
-        
         if not admin_data:
-            return JsonResponse({"error": "Data expired or not found. Restart the registration process."}, status=400)
+            return JsonResponse({"error": "Data expired or not found. Restart the registration process."}, status=410)
 
         if admin_data['otp'] != user_otp:
-            return JsonResponse({"error": "Invalid OTP. Please try again."}, status=400)
+            return JsonResponse({"error": "Invalid OTP. Please try again."}, status=401)
         if admin_data['email'] != email:
-            return JsonResponse({"error": "Invalid email. Please try again."}, status=400)
+            return JsonResponse({"error": "Invalid email. Please try again."}, status=401)
 
         # Registration logic (e.g., saving data to the database)
         full_name = admin_data["full_name"]
         email = admin_data["email"]
         password = admin_data["password"]
-        role_id = admin_data["role_id"]
         invitation_code = admin_data["invitation_code"]
 
         current_date = datetime.now()
@@ -146,7 +140,7 @@ def registration_check_otp(request):
         used = invitation_code_details_obj.used
         
         if used == True:
-            return JsonResponse({"message": "The invitation code has already been used."}, status=200)
+            return JsonResponse({"message": "The invitation code has already been used."}, status=409)
 
         # Create new user and save details
         user_id_obj = User()
@@ -161,7 +155,7 @@ def registration_check_otp(request):
         domain_limitation = invitation_code_details_obj.domain_limitation
         workspace_limitation = invitation_code_details_obj.workspace_limitation
         
-        role_id_obj = role.objects.get(name=role_id)
+        role_id_obj = role.objects.get(name='admin')
 
         admin_obj = user_detail()
         admin_obj.user_id = user_id_obj
@@ -182,7 +176,6 @@ def registration_check_otp(request):
         serialized_data = user_detail_serializer(admin_obj).data
 
         return JsonResponse({
-            "redirect": "",
             "message": "user registration successfully.",
             "user_detail":serialized_data
         }, status=200)
@@ -191,3 +184,4 @@ def registration_check_otp(request):
     except Exception as e:
         print("This error is registration_check_otp --->: ",e)
         return JsonResponse({"error": "Internal Server error."}, status=500)
+    

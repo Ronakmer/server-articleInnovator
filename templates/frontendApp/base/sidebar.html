@@ -1,11 +1,6 @@
 
 {% load static%}
 
-{% comment %} {% if super_user == True %} {% endcomment %}
-  <!-- Sidebar -->
-
-  
-{% comment %} {% else %} {% endcomment %}
 
 
 <aside x-cloak x-transition:enter="transition transform duration-300"
@@ -105,8 +100,8 @@
           MENU
       </h5>
       <ul class="py-2 overflow-hidden flex flex-col gap-1">
-          <li>
-              <a href=""
+          <li data-permission="dashboard" class="hidden" >
+              <a href="{% url 'dashboard_page' %}"
                   class="flex items-center gap-3 text-gray-600 text-sm font-medium py-2   px-3 rounded-lg group transition-all duration-300 hover:text-gray-900 hover:bg-gray-50 "
                   :class="{'justify-center': !isSidebarOpen}">
                   <span>
@@ -126,9 +121,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Dashboard</span>
               </a>
           </li>
-          {% comment %} {% if super_user == True or 'show_users' in permission_str.split %} {% endcomment %}
 
-          <li>
+          <li data-permission="list_user_detail" class="hidden">
               <a href="{% url 'list_user_detail_page' %}"
                   class="group flex items-center gap-3 text-gray-600  text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -153,67 +147,86 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Team</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_admin_details' in permission_str.split %} {% endcomment %}
+ 
+          <li data-permission="list_workspace" class="hidden">
+            <a href="{% url 'list_workspace_page' %}"
+                class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
+                :class="{'justify-center': !isSidebarOpen}">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M14.8243 18.95H5.17435C2.89102 18.95 1.04102 17.0916 1.04102 14.8083V8.6333C1.04102 7.49997 1.74102 6.07497 2.64102 5.37497L7.13268 1.87497C8.48268 0.82497 10.641 0.77497 12.041 1.7583L17.191 5.36664C18.1827 6.0583 18.9577 7.54164 18.9577 8.74997V14.8166C18.9577 17.0916 17.1077 18.95 14.8243 18.95ZM7.89935 2.8583L3.40768 6.3583C2.81602 6.82497 2.29102 7.8833 2.29102 8.6333V14.8083C2.29102 16.4 3.58268 17.7 5.17435 17.7H14.8243C16.416 17.7 17.7077 16.4083 17.7077 14.8166V8.74997C17.7077 7.94997 17.1327 6.84164 16.4743 6.39164L11.3243 2.7833C10.3743 2.11664 8.80768 2.14997 7.89935 2.8583Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M11.25 15.625H8.75C7.025 15.625 5.625 14.225 5.625 12.5V10C5.625 8.275 7.025 6.875 8.75 6.875H11.25C12.975 6.875 14.375 8.275 14.375 10V12.5C14.375 14.225 12.975 15.625 11.25 15.625ZM8.75 8.125C7.71667 8.125 6.875 8.96667 6.875 10V12.5C6.875 13.5333 7.71667 14.375 8.75 14.375H11.25C12.2833 14.375 13.125 13.5333 13.125 12.5V10C13.125 8.96667 12.2833 8.125 11.25 8.125H8.75Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M10 15.625C9.65833 15.625 9.375 15.3417 9.375 15V7.5C9.375 7.15833 9.65833 6.875 10 6.875C10.3417 6.875 10.625 7.15833 10.625 7.5V15C10.625 15.3417 10.3417 15.625 10 15.625Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M13.75 11.875H6.25C5.90833 11.875 5.625 11.5917 5.625 11.25C5.625 10.9083 5.90833 10.625 6.25 10.625H13.75C14.0917 10.625 14.375 10.9083 14.375 11.25C14.375 11.5917 14.0917 11.875 13.75 11.875Z"
+                            fill="#6B7280" />
+                    </svg>
 
-          <li>
-              <a href=""
-                  class="group flex items-center gap-3 text-gray-600  text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
-                  :class="{'justify-center': !isSidebarOpen}">
-                  <span>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                              d="M7.63216 9.68335C7.60716 9.68335 7.5905 9.68335 7.5655 9.68335C7.52383 9.67502 7.46549 9.67502 7.41549 9.68335C4.99883 9.60835 3.17383 7.70835 3.17383 5.36669C3.17383 2.98335 5.11549 1.04169 7.49883 1.04169C9.88216 1.04169 11.8238 2.98335 11.8238 5.36669C11.8155 7.70835 9.98216 9.60835 7.65716 9.68335C7.64883 9.68335 7.64049 9.68335 7.63216 9.68335ZM7.49883 2.29169C5.80716 2.29169 4.42383 3.67502 4.42383 5.36669C4.42383 7.03335 5.72383 8.37502 7.38216 8.43335C7.43216 8.42502 7.5405 8.42502 7.64883 8.43335C9.28216 8.35835 10.5655 7.01669 10.5738 5.36669C10.5738 3.67502 9.1905 2.29169 7.49883 2.29169Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M13.782 9.79165C13.757 9.79165 13.732 9.79165 13.707 9.78331C13.3653 9.81665 13.0153 9.57498 12.982 9.23331C12.9487 8.89165 13.157 8.58331 13.4987 8.54165C13.5987 8.53331 13.707 8.53331 13.7987 8.53331C15.0153 8.46665 15.9653 7.46665 15.9653 6.24165C15.9653 4.97498 14.9403 3.94998 13.6737 3.94998C13.332 3.95831 13.0487 3.67498 13.0487 3.33331C13.0487 2.99165 13.332 2.70831 13.6737 2.70831C15.6237 2.70831 17.2153 4.29998 17.2153 6.24998C17.2153 8.16665 15.7153 9.71665 13.807 9.79165C13.7987 9.79165 13.7903 9.79165 13.782 9.79165Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M7.64036 18.7916C6.00703 18.7916 4.36536 18.375 3.1237 17.5416C1.96536 16.775 1.33203 15.725 1.33203 14.5833C1.33203 13.4416 1.96536 12.3833 3.1237 11.6083C5.6237 9.94998 9.6737 9.94998 12.157 11.6083C13.307 12.375 13.9487 13.425 13.9487 14.5666C13.9487 15.7083 13.3154 16.7666 12.157 17.5416C10.907 18.375 9.2737 18.7916 7.64036 18.7916ZM3.81536 12.6583C3.01536 13.1916 2.58203 13.875 2.58203 14.5916C2.58203 15.3 3.0237 15.9833 3.81536 16.5083C5.89036 17.9 9.39036 17.9 11.4654 16.5083C12.2654 15.975 12.6987 15.2916 12.6987 14.575C12.6987 13.8666 12.257 13.1833 11.4654 12.6583C9.39036 11.275 5.89036 11.275 3.81536 12.6583Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M15.2825 17.2917C14.9908 17.2917 14.7325 17.0917 14.6742 16.7917C14.6075 16.45 14.8242 16.125 15.1575 16.05C15.6825 15.9417 16.1658 15.7333 16.5408 15.4417C17.0158 15.0833 17.2742 14.6333 17.2742 14.1583C17.2742 13.6833 17.0158 13.2333 16.5492 12.8833C16.1825 12.6 15.7242 12.4 15.1825 12.275C14.8492 12.2 14.6325 11.8667 14.7075 11.525C14.7825 11.1917 15.1158 10.975 15.4575 11.05C16.1742 11.2083 16.7992 11.4917 17.3075 11.8833C18.0825 12.4667 18.5242 13.2917 18.5242 14.1583C18.5242 15.025 18.0742 15.85 17.2992 16.4417C16.7825 16.8417 16.1325 17.1333 15.4158 17.275C15.3658 17.2917 15.3242 17.2917 15.2825 17.2917Z"
-                              fill="#6B7280" />
-                      </svg>
+                </span>
+                <span :class="{ 'lg:hidden': !isSidebarOpen }">Workspace</span>
+            </a>
+        </li>
 
-                  </span>
-                  <span :class="{ 'lg:hidden': !isSidebarOpen }">Admin</span>
-              </a>
-          </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_domain' in permission_str.split %} {% endcomment %}
-          <li>
-              <a href="{% url 'list_domain_page' %}"
-                  class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
-                  :class="{'justify-center': !isSidebarOpen}">
-                  <span>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                              d="M9.99935 18.9584C5.05768 18.9584 1.04102 14.9417 1.04102 10C1.04102 5.05835 5.05768 1.04169 9.99935 1.04169C14.941 1.04169 18.9577 5.05835 18.9577 10C18.9577 14.9417 14.941 18.9584 9.99935 18.9584ZM9.99935 2.29169C5.74935 2.29169 2.29102 5.75002 2.29102 10C2.29102 14.25 5.74935 17.7084 9.99935 17.7084C14.2493 17.7084 17.7077 14.25 17.7077 10C17.7077 5.75002 14.2493 2.29169 9.99935 2.29169Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M7.49922 18.125H6.66589C6.32422 18.125 6.04089 17.8417 6.04089 17.5C6.04089 17.1583 6.30755 16.8833 6.64922 16.875C5.34089 12.4083 5.34089 7.59167 6.64922 3.125C6.30755 3.11667 6.04089 2.84167 6.04089 2.5C6.04089 2.15833 6.32422 1.875 6.66589 1.875H7.49922C7.69922 1.875 7.89089 1.975 8.00755 2.13333C8.12422 2.3 8.15755 2.50833 8.09089 2.7C6.52422 7.40833 6.52422 12.5917 8.09089 17.3083C8.15755 17.5 8.12422 17.7083 8.00755 17.875C7.89089 18.025 7.69922 18.125 7.49922 18.125Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M12.5 18.125C12.4333 18.125 12.3667 18.1167 12.3 18.0917C11.975 17.9833 11.7917 17.625 11.9083 17.3C13.475 12.5917 13.475 7.40832 11.9083 2.69165C11.8 2.36665 11.975 2.00832 12.3 1.89999C12.6333 1.79165 12.9833 1.96665 13.0917 2.29165C14.75 7.25832 14.75 12.725 13.0917 17.6833C13.0083 17.9583 12.7583 18.125 12.5 18.125Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M10 14.3333C7.675 14.3333 5.35833 14.0083 3.125 13.35C3.11667 13.6833 2.84167 13.9583 2.5 13.9583C2.15833 13.9583 1.875 13.675 1.875 13.3333V12.5C1.875 12.3 1.975 12.1083 2.13333 11.9916C2.3 11.875 2.50833 11.8416 2.7 11.9083C7.40833 13.475 12.6 13.475 17.3083 11.9083C17.5 11.8416 17.7083 11.875 17.875 11.9916C18.0417 12.1083 18.1333 12.3 18.1333 12.5V13.3333C18.1333 13.675 17.85 13.9583 17.5083 13.9583C17.1667 13.9583 16.8917 13.6916 16.8833 13.35C14.6417 14.0083 12.325 14.3333 10 14.3333Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M17.4992 8.12497C17.4325 8.12497 17.3658 8.11663 17.2992 8.09163C12.5908 6.52497 7.39917 6.52497 2.69084 8.09163C2.3575 8.19997 2.0075 8.02497 1.89917 7.69997C1.79917 7.36663 1.97417 7.01663 2.29917 6.9083C7.26584 5.24997 12.7325 5.24997 17.6908 6.9083C18.0158 7.01663 18.1992 7.37497 18.0825 7.69997C18.0075 7.9583 17.7575 8.12497 17.4992 8.12497Z"
-                              fill="#6B7280" />
-                      </svg>
+        <li data-permission="list_prompt" class="hidden">
+            <a href="{% url 'list_prompt_page' %}"
+                class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
+                :class="{'justify-center': !isSidebarOpen}">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.4993 18.9584H7.49935C2.97435 18.9584 1.04102 17.025 1.04102 12.5V7.50002C1.04102 2.97502 2.97435 1.04169 7.49935 1.04169H12.4993C17.0243 1.04169 18.9577 2.97502 18.9577 7.50002V12.5C18.9577 17.025 17.0243 18.9584 12.4993 18.9584ZM7.49935 2.29169C3.65768 2.29169 2.29102 3.65835 2.29102 7.50002V12.5C2.29102 16.3417 3.65768 17.7084 7.49935 17.7084H12.4993C16.341 17.7084 17.7077 16.3417 17.7077 12.5V7.50002C17.7077 3.65835 16.341 2.29169 12.4993 2.29169H7.49935Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M8.00065 13.15C7.84232 13.15 7.68398 13.0917 7.55898 12.9667L5.48398 10.8917C4.99232 10.4 4.99232 9.60833 5.48398 9.11666L7.55898 7.04166C7.80065 6.8 8.20065 6.8 8.44232 7.04166C8.68398 7.28333 8.68398 7.68333 8.44232 7.925L6.36732 10L8.44232 12.0833C8.68398 12.325 8.68398 12.725 8.44232 12.9667C8.31732 13.0833 8.15898 13.15 8.00065 13.15Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M11.9999 13.15C11.8415 13.15 11.6832 13.0917 11.5582 12.9667C11.3165 12.725 11.3165 12.325 11.5582 12.0834L13.6332 10L11.5582 7.9167C11.3165 7.67503 11.3165 7.27503 11.5582 7.03336C11.7999 6.7917 12.1999 6.7917 12.4415 7.03336L14.5165 9.10836C15.0082 9.60003 15.0082 10.3917 14.5165 10.8834L12.4415 12.9584C12.3249 13.0834 12.1582 13.15 11.9999 13.15Z"
+                            fill="#6B7280" />
+                    </svg>
 
-                  </span>
-                  <span :class="{ 'lg:hidden': !isSidebarOpen }">Domain</span>
-              </a>
-          </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_article' in permission_str.split %} {% endcomment %}
-          <li>
+                </span>
+                <span :class="{ 'lg:hidden': !isSidebarOpen }">Prompt</span>
+            </a>
+        </li>
+
+        <li data-permission="list_domain" class="hidden">
+            <a href="{% url 'list_domain_page' %}"
+                class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
+                :class="{'justify-center': !isSidebarOpen}">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9.99935 18.9584C5.05768 18.9584 1.04102 14.9417 1.04102 10C1.04102 5.05835 5.05768 1.04169 9.99935 1.04169C14.941 1.04169 18.9577 5.05835 18.9577 10C18.9577 14.9417 14.941 18.9584 9.99935 18.9584ZM9.99935 2.29169C5.74935 2.29169 2.29102 5.75002 2.29102 10C2.29102 14.25 5.74935 17.7084 9.99935 17.7084C14.2493 17.7084 17.7077 14.25 17.7077 10C17.7077 5.75002 14.2493 2.29169 9.99935 2.29169Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M7.49922 18.125H6.66589C6.32422 18.125 6.04089 17.8417 6.04089 17.5C6.04089 17.1583 6.30755 16.8833 6.64922 16.875C5.34089 12.4083 5.34089 7.59167 6.64922 3.125C6.30755 3.11667 6.04089 2.84167 6.04089 2.5C6.04089 2.15833 6.32422 1.875 6.66589 1.875H7.49922C7.69922 1.875 7.89089 1.975 8.00755 2.13333C8.12422 2.3 8.15755 2.50833 8.09089 2.7C6.52422 7.40833 6.52422 12.5917 8.09089 17.3083C8.15755 17.5 8.12422 17.7083 8.00755 17.875C7.89089 18.025 7.69922 18.125 7.49922 18.125Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M12.5 18.125C12.4333 18.125 12.3667 18.1167 12.3 18.0917C11.975 17.9833 11.7917 17.625 11.9083 17.3C13.475 12.5917 13.475 7.40832 11.9083 2.69165C11.8 2.36665 11.975 2.00832 12.3 1.89999C12.6333 1.79165 12.9833 1.96665 13.0917 2.29165C14.75 7.25832 14.75 12.725 13.0917 17.6833C13.0083 17.9583 12.7583 18.125 12.5 18.125Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M10 14.3333C7.675 14.3333 5.35833 14.0083 3.125 13.35C3.11667 13.6833 2.84167 13.9583 2.5 13.9583C2.15833 13.9583 1.875 13.675 1.875 13.3333V12.5C1.875 12.3 1.975 12.1083 2.13333 11.9916C2.3 11.875 2.50833 11.8416 2.7 11.9083C7.40833 13.475 12.6 13.475 17.3083 11.9083C17.5 11.8416 17.7083 11.875 17.875 11.9916C18.0417 12.1083 18.1333 12.3 18.1333 12.5V13.3333C18.1333 13.675 17.85 13.9583 17.5083 13.9583C17.1667 13.9583 16.8917 13.6916 16.8833 13.35C14.6417 14.0083 12.325 14.3333 10 14.3333Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M17.4992 8.12497C17.4325 8.12497 17.3658 8.11663 17.2992 8.09163C12.5908 6.52497 7.39917 6.52497 2.69084 8.09163C2.3575 8.19997 2.0075 8.02497 1.89917 7.69997C1.79917 7.36663 1.97417 7.01663 2.29917 6.9083C7.26584 5.24997 12.7325 5.24997 17.6908 6.9083C18.0158 7.01663 18.1992 7.37497 18.0825 7.69997C18.0075 7.9583 17.7575 8.12497 17.4992 8.12497Z"
+                            fill="#6B7280" />
+                    </svg>
+
+                </span>
+                <span :class="{ 'lg:hidden': !isSidebarOpen }">Domain</span>
+            </a>
+        </li>
+
+          <li data-permission="list_article" class="hidden">
               <a href="{% url 'list_article_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -238,64 +251,13 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Article</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_prompt' in permission_str.split %} {% endcomment %}
 
-          <li>
-              <a href="{% url 'list_prompt_page' %}"
-                  class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
-                  :class="{'justify-center': !isSidebarOpen}">
-                  <span>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                              d="M12.4993 18.9584H7.49935C2.97435 18.9584 1.04102 17.025 1.04102 12.5V7.50002C1.04102 2.97502 2.97435 1.04169 7.49935 1.04169H12.4993C17.0243 1.04169 18.9577 2.97502 18.9577 7.50002V12.5C18.9577 17.025 17.0243 18.9584 12.4993 18.9584ZM7.49935 2.29169C3.65768 2.29169 2.29102 3.65835 2.29102 7.50002V12.5C2.29102 16.3417 3.65768 17.7084 7.49935 17.7084H12.4993C16.341 17.7084 17.7077 16.3417 17.7077 12.5V7.50002C17.7077 3.65835 16.341 2.29169 12.4993 2.29169H7.49935Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M8.00065 13.15C7.84232 13.15 7.68398 13.0917 7.55898 12.9667L5.48398 10.8917C4.99232 10.4 4.99232 9.60833 5.48398 9.11666L7.55898 7.04166C7.80065 6.8 8.20065 6.8 8.44232 7.04166C8.68398 7.28333 8.68398 7.68333 8.44232 7.925L6.36732 10L8.44232 12.0833C8.68398 12.325 8.68398 12.725 8.44232 12.9667C8.31732 13.0833 8.15898 13.15 8.00065 13.15Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M11.9999 13.15C11.8415 13.15 11.6832 13.0917 11.5582 12.9667C11.3165 12.725 11.3165 12.325 11.5582 12.0834L13.6332 10L11.5582 7.9167C11.3165 7.67503 11.3165 7.27503 11.5582 7.03336C11.7999 6.7917 12.1999 6.7917 12.4415 7.03336L14.5165 9.10836C15.0082 9.60003 15.0082 10.3917 14.5165 10.8834L12.4415 12.9584C12.3249 13.0834 12.1582 13.15 11.9999 13.15Z"
-                              fill="#6B7280" />
-                      </svg>
+        <h5 class="py-1.5 pl-3  font-medium text-gray-400 uppercase"
+          :class="{'pl-0 text-center': !isSidebarOpen}">
+          configuration 
+        </h5>
 
-                  </span>
-                  <span :class="{ 'lg:hidden': !isSidebarOpen }">Prompt</span>
-              </a>
-          </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_workspace' in permission_str.split %} {% endcomment %}
-
-          <li>
-              <a href="{% url 'list_workspace_page' %}"
-                  class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
-                  :class="{'justify-center': !isSidebarOpen}">
-                  <span>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                              d="M14.8243 18.95H5.17435C2.89102 18.95 1.04102 17.0916 1.04102 14.8083V8.6333C1.04102 7.49997 1.74102 6.07497 2.64102 5.37497L7.13268 1.87497C8.48268 0.82497 10.641 0.77497 12.041 1.7583L17.191 5.36664C18.1827 6.0583 18.9577 7.54164 18.9577 8.74997V14.8166C18.9577 17.0916 17.1077 18.95 14.8243 18.95ZM7.89935 2.8583L3.40768 6.3583C2.81602 6.82497 2.29102 7.8833 2.29102 8.6333V14.8083C2.29102 16.4 3.58268 17.7 5.17435 17.7H14.8243C16.416 17.7 17.7077 16.4083 17.7077 14.8166V8.74997C17.7077 7.94997 17.1327 6.84164 16.4743 6.39164L11.3243 2.7833C10.3743 2.11664 8.80768 2.14997 7.89935 2.8583Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M11.25 15.625H8.75C7.025 15.625 5.625 14.225 5.625 12.5V10C5.625 8.275 7.025 6.875 8.75 6.875H11.25C12.975 6.875 14.375 8.275 14.375 10V12.5C14.375 14.225 12.975 15.625 11.25 15.625ZM8.75 8.125C7.71667 8.125 6.875 8.96667 6.875 10V12.5C6.875 13.5333 7.71667 14.375 8.75 14.375H11.25C12.2833 14.375 13.125 13.5333 13.125 12.5V10C13.125 8.96667 12.2833 8.125 11.25 8.125H8.75Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M10 15.625C9.65833 15.625 9.375 15.3417 9.375 15V7.5C9.375 7.15833 9.65833 6.875 10 6.875C10.3417 6.875 10.625 7.15833 10.625 7.5V15C10.625 15.3417 10.3417 15.625 10 15.625Z"
-                              fill="#6B7280" />
-                          <path
-                              d="M13.75 11.875H6.25C5.90833 11.875 5.625 11.5917 5.625 11.25C5.625 10.9083 5.90833 10.625 6.25 10.625H13.75C14.0917 10.625 14.375 10.9083 14.375 11.25C14.375 11.5917 14.0917 11.875 13.75 11.875Z"
-                              fill="#6B7280" />
-                      </svg>
-
-                  </span>
-                  <span :class="{ 'lg:hidden': !isSidebarOpen }">Workspace</span>
-              </a>
-          </li>
-          {% comment %} {% endif %} {% endcomment %}
-          
-          {% comment %} {% if super_user == True or 'show_ai_configuration' in permission_str.split %} {% endcomment %}
-
-          <li>
+          <li data-permission="list_ai_configuration" class="hidden">
               <a href="{% url 'list_ai_configuration_page' %}"
                   class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -350,11 +312,99 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">AI Configuration</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
 
-           {% comment %} {% if super_user == True or 'add_role' in permission_str.split %} {% endcomment %}
+          <li data-permission="list_image_kit_configuration" class="hidden">
+              <a href="{% url 'list_image_kit_configuration_page' %}"
+                  class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
+                  :class="{'justify-center': !isSidebarOpen}">
+                  <span>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                              d="M12.0007 17.2917H8.00065C4.34232 17.2917 2.70898 15.6584 2.70898 12V8.00004C2.70898 4.34171 4.34232 2.70837 8.00065 2.70837H12.0007C15.659 2.70837 17.2923 4.34171 17.2923 8.00004V12C17.2923 15.6584 15.659 17.2917 12.0007 17.2917ZM8.00065 3.95837C5.01732 3.95837 3.95898 5.01671 3.95898 8.00004V12C3.95898 14.9834 5.01732 16.0417 8.00065 16.0417H12.0007C14.984 16.0417 16.0423 14.9834 16.0423 12V8.00004C16.0423 5.01671 14.984 3.95837 12.0007 3.95837H8.00065Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M11.2507 14.7917H8.75065C6.33398 14.7917 5.20898 13.6667 5.20898 11.25V8.75004C5.20898 6.33337 6.33398 5.20837 8.75065 5.20837H11.2507C13.6673 5.20837 14.7923 6.33337 14.7923 8.75004V11.25C14.7923 13.6667 13.6673 14.7917 11.2507 14.7917ZM8.75065 6.45837C7.01732 6.45837 6.45898 7.01671 6.45898 8.75004V11.25C6.45898 12.9834 7.01732 13.5417 8.75065 13.5417H11.2507C12.984 13.5417 13.5423 12.9834 13.5423 11.25V8.75004C13.5423 7.01671 12.984 6.45837 11.2507 6.45837H8.75065Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M6.67383 3.95829C6.32383 3.95829 6.04883 3.67496 6.04883 3.33329V1.66663C6.04883 1.32496 6.33216 1.04163 6.67383 1.04163C7.01549 1.04163 7.29883 1.32496 7.29883 1.66663V3.33329C7.29883 3.67496 7.01549 3.95829 6.67383 3.95829Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M10 3.95829C9.65833 3.95829 9.375 3.67496 9.375 3.33329V1.66663C9.375 1.32496 9.65833 1.04163 10 1.04163C10.3417 1.04163 10.625 1.32496 10.625 1.66663V3.33329C10.625 3.67496 10.3417 3.95829 10 3.95829Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M13.334 3.95829C12.9923 3.95829 12.709 3.67496 12.709 3.33329V1.66663C12.709 1.32496 12.9923 1.04163 13.334 1.04163C13.6757 1.04163 13.959 1.32496 13.959 1.66663V3.33329C13.959 3.67496 13.6757 3.95829 13.334 3.95829Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M18.3327 7.29163H16.666C16.3243 7.29163 16.041 7.00829 16.041 6.66663C16.041 6.32496 16.3243 6.04163 16.666 6.04163H18.3327C18.6743 6.04163 18.9577 6.32496 18.9577 6.66663C18.9577 7.00829 18.6827 7.29163 18.3327 7.29163Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M18.3327 10.625H16.666C16.3243 10.625 16.041 10.3417 16.041 10C16.041 9.65833 16.3243 9.375 16.666 9.375H18.3327C18.6743 9.375 18.9577 9.65833 18.9577 10C18.9577 10.3417 18.6827 10.625 18.3327 10.625Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M18.3327 13.9584H16.666C16.3243 13.9584 16.041 13.675 16.041 13.3334C16.041 12.9917 16.3243 12.7084 16.666 12.7084H18.3327C18.6743 12.7084 18.9577 12.9917 18.9577 13.3334C18.9577 13.675 18.6827 13.9584 18.3327 13.9584Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M13.334 18.9583C12.9923 18.9583 12.709 18.675 12.709 18.3333V16.6666C12.709 16.325 12.9923 16.0416 13.334 16.0416C13.6757 16.0416 13.959 16.325 13.959 16.6666V18.3333C13.959 18.675 13.6757 18.9583 13.334 18.9583Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M10.0078 18.9583C9.66615 18.9583 9.38281 18.675 9.38281 18.3333V16.6666C9.38281 16.325 9.66615 16.0416 10.0078 16.0416C10.3495 16.0416 10.6328 16.325 10.6328 16.6666V18.3333C10.6328 18.675 10.3495 18.9583 10.0078 18.9583Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M6.67383 18.9583C6.33216 18.9583 6.04883 18.675 6.04883 18.3333V16.6666C6.04883 16.325 6.33216 16.0416 6.67383 16.0416C7.01549 16.0416 7.29883 16.325 7.29883 16.6666V18.3333C7.29883 18.675 7.01549 18.9583 6.67383 18.9583Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M3.33268 7.29163H1.66602C1.32435 7.29163 1.04102 7.01663 1.04102 6.66663C1.04102 6.31663 1.32435 6.04163 1.66602 6.04163H3.33268C3.67435 6.04163 3.95768 6.32496 3.95768 6.66663C3.95768 7.00829 3.68268 7.29163 3.33268 7.29163Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M3.33268 10.625H1.66602C1.32435 10.625 1.04102 10.3417 1.04102 10C1.04102 9.65833 1.32435 9.375 1.66602 9.375H3.33268C3.67435 9.375 3.95768 9.65833 3.95768 10C3.95768 10.3417 3.68268 10.625 3.33268 10.625Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M3.33268 13.9584H1.66602C1.32435 13.9584 1.04102 13.675 1.04102 13.3334C1.04102 12.9917 1.32435 12.7084 1.66602 12.7084H3.33268C3.67435 12.7084 3.95768 12.9917 3.95768 13.3334C3.95768 13.675 3.68268 13.9584 3.33268 13.9584Z"
+                              fill="#6B7280" />
+                      </svg>
 
-           <li>
+                  </span>
+                  <span :class="{ 'lg:hidden': !isSidebarOpen }">Image Kit Configuration</span>
+              </a>
+          </li>
+
+        {% if request.user.is_superuser %}
+
+        <h5 class="py-1.5 pl-3  font-medium text-gray-400 uppercase"
+          :class="{'pl-0 text-center': !isSidebarOpen}">
+          super admin
+        </h5>
+        {% endif %}
+
+
+          <li data-permission="list_admin_detail" class="hidden">
+            <a href="{% url 'list_admin_detail_page' %}"
+                class="group flex items-center gap-3 text-gray-600  text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
+                :class="{'justify-center': !isSidebarOpen}">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7.63216 9.68335C7.60716 9.68335 7.5905 9.68335 7.5655 9.68335C7.52383 9.67502 7.46549 9.67502 7.41549 9.68335C4.99883 9.60835 3.17383 7.70835 3.17383 5.36669C3.17383 2.98335 5.11549 1.04169 7.49883 1.04169C9.88216 1.04169 11.8238 2.98335 11.8238 5.36669C11.8155 7.70835 9.98216 9.60835 7.65716 9.68335C7.64883 9.68335 7.64049 9.68335 7.63216 9.68335ZM7.49883 2.29169C5.80716 2.29169 4.42383 3.67502 4.42383 5.36669C4.42383 7.03335 5.72383 8.37502 7.38216 8.43335C7.43216 8.42502 7.5405 8.42502 7.64883 8.43335C9.28216 8.35835 10.5655 7.01669 10.5738 5.36669C10.5738 3.67502 9.1905 2.29169 7.49883 2.29169Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M13.782 9.79165C13.757 9.79165 13.732 9.79165 13.707 9.78331C13.3653 9.81665 13.0153 9.57498 12.982 9.23331C12.9487 8.89165 13.157 8.58331 13.4987 8.54165C13.5987 8.53331 13.707 8.53331 13.7987 8.53331C15.0153 8.46665 15.9653 7.46665 15.9653 6.24165C15.9653 4.97498 14.9403 3.94998 13.6737 3.94998C13.332 3.95831 13.0487 3.67498 13.0487 3.33331C13.0487 2.99165 13.332 2.70831 13.6737 2.70831C15.6237 2.70831 17.2153 4.29998 17.2153 6.24998C17.2153 8.16665 15.7153 9.71665 13.807 9.79165C13.7987 9.79165 13.7903 9.79165 13.782 9.79165Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M7.64036 18.7916C6.00703 18.7916 4.36536 18.375 3.1237 17.5416C1.96536 16.775 1.33203 15.725 1.33203 14.5833C1.33203 13.4416 1.96536 12.3833 3.1237 11.6083C5.6237 9.94998 9.6737 9.94998 12.157 11.6083C13.307 12.375 13.9487 13.425 13.9487 14.5666C13.9487 15.7083 13.3154 16.7666 12.157 17.5416C10.907 18.375 9.2737 18.7916 7.64036 18.7916ZM3.81536 12.6583C3.01536 13.1916 2.58203 13.875 2.58203 14.5916C2.58203 15.3 3.0237 15.9833 3.81536 16.5083C5.89036 17.9 9.39036 17.9 11.4654 16.5083C12.2654 15.975 12.6987 15.2916 12.6987 14.575C12.6987 13.8666 12.257 13.1833 11.4654 12.6583C9.39036 11.275 5.89036 11.275 3.81536 12.6583Z"
+                            fill="#6B7280" />
+                        <path
+                            d="M15.2825 17.2917C14.9908 17.2917 14.7325 17.0917 14.6742 16.7917C14.6075 16.45 14.8242 16.125 15.1575 16.05C15.6825 15.9417 16.1658 15.7333 16.5408 15.4417C17.0158 15.0833 17.2742 14.6333 17.2742 14.1583C17.2742 13.6833 17.0158 13.2333 16.5492 12.8833C16.1825 12.6 15.7242 12.4 15.1825 12.275C14.8492 12.2 14.6325 11.8667 14.7075 11.525C14.7825 11.1917 15.1158 10.975 15.4575 11.05C16.1742 11.2083 16.7992 11.4917 17.3075 11.8833C18.0825 12.4667 18.5242 13.2917 18.5242 14.1583C18.5242 15.025 18.0742 15.85 17.2992 16.4417C16.7825 16.8417 16.1325 17.1333 15.4158 17.275C15.3658 17.2917 15.3242 17.2917 15.2825 17.2917Z"
+                            fill="#6B7280" />
+                    </svg>
+
+                </span>
+                <span :class="{ 'lg:hidden': !isSidebarOpen }">Admin</span>
+            </a>
+        </li>
+
+           <li data-permission="list_role" class="hidden">
             <a href="{% url 'list_role_page' %}"
                 class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                 :class="{'justify-center': !isSidebarOpen}">
@@ -386,10 +436,8 @@
                 <span :class="{ 'lg:hidden': !isSidebarOpen }">Roles</span>
             </a>
         </li>
-        {% comment %} {% endif %} {% endcomment %}
-           {% comment %} {% if super_user == True or 'add_role' in permission_str.split %} {% endcomment %}
 
-           <li>
+           <li data-permission="list_permission" class="hidden">
             <a href="{% url 'list_permission_page' %}"
                 class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                 :class="{'justify-center': !isSidebarOpen}">
@@ -421,11 +469,8 @@
                 <span :class="{ 'lg:hidden': !isSidebarOpen }">Permissions</span>
             </a>
         </li>
-        {% comment %} {% endif %} {% endcomment %}
 
-          {% comment %} {% if super_user == True or 'add_role' in permission_str.split %} {% endcomment %}
-
-          <li>
+          <li data-permission="list_role_has_permissions" class="hidden">
               <a href="{% url 'list_role_has_permissions_page' %}"
                   class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -457,10 +502,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Roles & Permission</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
 
-          {% comment %} {% if super_user == True or 'show_prompt_type_field' in permission_str.split %} {% endcomment %}
-          <li>
+          <li data-permission="list_article_type_field" class="hidden">
               <a href="{% url 'list_article_type_field_page' %}"
                   class="group flex items-center gap-3 text-gray-600 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -483,10 +526,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Article Type Field</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          
-          {% comment %} {% comment %} {% if super_user == True or 'show_article_type' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_article_type" class="hidden">
               <a href="{% url 'list_article_type_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -511,9 +552,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Article Type</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %} 
-          {% comment %} {% if super_user == True or 'show_color_details' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_color_detail" class="hidden">
               <a href="{% url 'list_color_detail_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -538,9 +578,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Color Details</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_language' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_language" class="hidden">
               <a href="{% url 'list_language_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -565,9 +604,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Language Details</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_country' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_country" class="hidden">
               <a href="{% url 'list_country_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -592,9 +630,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Country Details</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_header_motivation' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_motivation" class="hidden">
               <a href="{% url 'list_motivation_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -619,8 +656,7 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Motivation</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_keyword' in permission_str.split %} {% endcomment %}
+
           <li>
               <a href=""
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
@@ -646,8 +682,7 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Keyword</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_competitor' in permission_str.split %} {% endcomment %}
+
           <li>
               <a href=""
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
@@ -673,8 +708,7 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Competitor</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_competitor_selector_category' in permission_str.split %} {% endcomment %}
+
           <li>
               <a href=""
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
@@ -700,9 +734,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Competitor Selector Category</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_invitation_code_details' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_invitation_code_detail" class="hidden" >
               <a href="{% url 'list_invitation_code_detail_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -727,9 +760,8 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Invitation Code</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_dynamic_avatar_image' in permission_str.split %} {% endcomment %}
-          <li>
+
+          <li data-permission="list_dynamic_avatar_image" class="hidden">
               <a href="{% url 'list_dynamic_avatar_image_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -754,9 +786,12 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Dynamic Avatar Image</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_dynamic_avatar_image' in permission_str.split %} {% endcomment %}
-          <li>
+
+        <h5 class="py-1.5 pl-3  font-medium text-gray-400 uppercase"
+          :class="{'pl-0 text-center': !isSidebarOpen}">
+          image gen
+        </h5>
+          <li data-permission="list_image_tag" class="hidden">
               <a href="{% url 'list_image_tag_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
@@ -781,10 +816,9 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Image Tag</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
-          {% comment %} {% if super_user == True or 'show_dynamic_avatar_image' in permission_str.split %} {% endcomment %}
-          <li>
-              <a href="{% url 'list_image_template_category_page' %}"
+
+          <li data-permission="list_image_template_category" class="hidden">
+              <a href="{% url 'list_image_template_category_page' %}"  
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
                   <span>
@@ -808,7 +842,32 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Image Template Category</span>
               </a>
           </li>
-          {% comment %} {% endif %} {% endcomment %}
+
+          <li data-permission="list_image_tag_template_category_template_mapping" class="hidden">
+              <a href="{% url 'list_image_tag_template_category_template_mapping_page' %}" target="_blank" 
+                  class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
+                  :class="{'justify-center': !isSidebarOpen}">
+                  <span>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                              d="M9.99935 18.4C9.74935 18.4 9.49935 18.3417 9.29101 18.225C7.73268 17.375 4.99102 16.475 3.27435 16.25L3.03268 16.2167C1.94102 16.0833 1.04102 15.0583 1.04102 13.95V3.88332C1.04102 3.22499 1.29935 2.62499 1.77435 2.19165C2.24935 1.75832 2.86602 1.54999 3.51602 1.60832C5.34935 1.74999 8.11602 2.66665 9.68268 3.64999L9.88268 3.76665C9.94102 3.79999 10.066 3.79999 10.116 3.77499L10.2493 3.69165C11.816 2.70832 14.5827 1.77499 16.4243 1.61665C16.441 1.61665 16.5077 1.61665 16.5243 1.61665C17.1327 1.55832 17.7577 1.77499 18.2243 2.20832C18.6993 2.64165 18.9577 3.24165 18.9577 3.89999V13.9583C18.9577 15.075 18.0577 16.0917 16.9577 16.225L16.6827 16.2583C14.966 16.4833 12.216 17.3917 10.691 18.2333C10.491 18.35 10.2493 18.4 9.99935 18.4ZM3.31602 2.84999C3.04935 2.84999 2.80768 2.94165 2.61602 3.11665C2.40768 3.30832 2.29102 3.58332 2.29102 3.88332V13.95C2.29102 14.4417 2.71602 14.9167 3.19102 14.9833L3.44102 15.0167C5.31602 15.2667 8.19102 16.2083 9.85768 17.1167C9.93268 17.15 10.041 17.1583 10.0827 17.1417C11.7493 16.2167 14.641 15.2667 16.5243 15.0167L16.8077 14.9833C17.2827 14.925 17.7077 14.4417 17.7077 13.95V3.89165C17.7077 3.58332 17.591 3.31665 17.3827 3.11665C17.166 2.92499 16.891 2.83332 16.5827 2.84999C16.566 2.84999 16.4993 2.84999 16.4827 2.84999C14.891 2.99165 12.3243 3.84999 10.9243 4.72499L10.791 4.81665C10.3327 5.09999 9.68268 5.09999 9.24102 4.82499L9.04102 4.70832C7.61602 3.83332 5.04935 2.98332 3.41602 2.84999C3.38268 2.84999 3.34935 2.84999 3.31602 2.84999Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M10 17.7C9.65833 17.7 9.375 17.4167 9.375 17.075V4.57501C9.375 4.23335 9.65833 3.95001 10 3.95001C10.3417 3.95001 10.625 4.23335 10.625 4.57501V17.075C10.625 17.425 10.3417 17.7 10 17.7Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M6.45898 7.70001H4.58398C4.24232 7.70001 3.95898 7.41668 3.95898 7.07501C3.95898 6.73335 4.24232 6.45001 4.58398 6.45001H6.45898C6.80065 6.45001 7.08398 6.73335 7.08398 7.07501C7.08398 7.41668 6.80065 7.70001 6.45898 7.70001Z"
+                              fill="#6B7280" />
+                          <path
+                              d="M7.08398 10.2H4.58398C4.24232 10.2 3.95898 9.91668 3.95898 9.57501C3.95898 9.23335 4.24232 8.95001 4.58398 8.95001H7.08398C7.42565 8.95001 7.70898 9.23335 7.70898 9.57501C7.70898 9.91668 7.42565 10.2 7.08398 10.2Z"
+                              fill="#6B7280" />
+                      </svg>
+
+                  </span>
+                  <span :class="{ 'lg:hidden': !isSidebarOpen }">Image Gen</span>
+              </a>
+          </li>
 
           <!-- Sidebar Links... -->
       </ul>
@@ -817,21 +876,7 @@
   <div class="flex-shrink-0 ">
 
       <ul class="py-2 px-4 overflow-hidden flex flex-col gap-1 border-t border-solid border-gray-200 ">
-
           <li>
-            {% comment %} <a href="" onclick="" class="group py-2 px-2 flex items-center gap-1.5 font-medium text-sm text-gray-500 border border-solid border-gray-300 bg-gray-50 rounded-lg transition-all duration-300 hover:bg-gray-100 hover:border-gray-400 hover:text-gray-900">
-                console_metrics      
-            </a>
-            <a href="" onclick="" class="group py-2 px-2 flex items-center gap-1.5 font-medium text-sm text-gray-500 border border-solid border-gray-300 bg-gray-50 rounded-lg transition-all duration-300 hover:bg-gray-100 hover:border-gray-400 hover:text-gray-900">
-                analytics_metrics      
-            </a>
-            <a href="" onclick="" class="group py-2 px-2 flex items-center gap-1.5 font-medium text-sm text-gray-500 border border-solid border-gray-300 bg-gray-50 rounded-lg transition-all duration-300 hover:bg-gray-100 hover:border-gray-400 hover:text-gray-900">
-                add_wp_article      
-            </a>
-            <a href="" onclick="" class="group py-2 px-2 flex items-center gap-1.5 font-medium text-sm text-gray-500 border border-solid border-gray-300 bg-gray-50 rounded-lg transition-all duration-300 hover:bg-gray-100 hover:border-gray-400 hover:text-gray-900">
-                article      
-            </a> {% endcomment %}
-
               <a href="#"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">

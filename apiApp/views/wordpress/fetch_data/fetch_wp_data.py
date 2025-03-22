@@ -22,10 +22,10 @@ def fetch_wp_data(request):
 
 
         if not domain_slug_id:
-            return JsonResponse({"error": "Domain ID is required."}, status=400)
+            return JsonResponse({"error": "Domain ID is required.","success": False}, status=400)
         
         if not workspace_slug_id:
-            return JsonResponse({"error": "workspace ID is required."}, status=400)
+            return JsonResponse({"error": "workspace ID is required.","success": False}, status=400)
 
 
         try:
@@ -33,6 +33,7 @@ def fetch_wp_data(request):
         except domain.DoesNotExist:
             return JsonResponse({
                 "error": "Invalid domain.",
+                "success": False,
             }, status=404) 
 
         try:
@@ -40,10 +41,10 @@ def fetch_wp_data(request):
         except workspace.DoesNotExist:
             return JsonResponse({
                 "error": "Invalid workspace.",
+                "success": False,
             }, status=404)  
 
 
-        
         obj_data={
             "domain_obj":domain_obj,
             "workspace_obj":workspace_obj,
@@ -76,11 +77,11 @@ def fetch_wp_data(request):
 
 
         # Return a response indicating the task has started
-        return JsonResponse({"message": "Data fetching has started."}, status=200)
+        return JsonResponse({"message": "Data fetching has started.","success": True}, status=200)
 
     except Exception as e:
         print("This error is fetch_wp_data --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 

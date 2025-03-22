@@ -9,7 +9,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
 
     tbody.innerHTML = ''; 
 
-    response_data.articles.forEach((obj, index) => {
+    response_data.data.forEach((obj, index) => {
         const div_id = document.createElement('div_id');
         // div_id.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
 
@@ -264,9 +264,9 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                     </a>
                                                 </div>
                                                 
-                                                <div class="flex font-poppins">
+                                                <div class="flex font-poppins hidden" data-permission="update_article, delete_article">
                                                 <!-- update -->
-                                                    <a href="${update_page_url}${obj.slug_id}" id="editButton" class="mr-2">
+                                                    <a href="${update_page_url}${obj.slug_id}" id="editButton" data-permission="update_admin_detail" class="hidden mr-2">
                                                         <svg width="32" height="32" viewBox="0 0 32 32"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <rect width="32" height="32" rx="16"
@@ -301,7 +301,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
 
                                                     </a>
                                                     <!-- delete -->
-                                                    <button id="deleteButton" type="button" onclick="${delete_function_name}('${obj.slug_id}')">
+                                                    <button id="deleteButton" type="button" class="hidden" data-permission="delete_article" onclick="${delete_function_name}('${obj.slug_id}')">
                                                         <svg width="32" height="32" viewBox="0 0 32 32"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <rect width="32" height="32" rx="16"

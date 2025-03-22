@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from apiApp.serializers import article_type_field_serializer
 from apiApp.models import article_type_field
 from django.db.models import Q
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 
@@ -18,8 +19,7 @@ def list_article_type_field(request):
         status = request.GET.get('status', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
-
-
+        order_by = request.GET.get('order_by', '-created_date')
 
         # Initialize filters
         filters = Q()
@@ -31,30 +31,34 @@ def list_article_type_field(request):
             filters &= Q(slug_id=slug_id)
         if search:
             filters &= Q(name__icontains=search) 
-
             
         try:
-            obj = article_type_field.objects.filter(filters).order_by('-created_date')
+            obj = article_type_field.objects.filter(filters).order_by(order_by)
         except article_type_field.DoesNotExist:
             return JsonResponse({
-                "error": "article type field not found"
+                "error": "article type field not found",
+                "success": False,
             }, status=404)
 
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
 
         serialized_data = article_type_field_serializer(obj, many=True)
         
         return JsonResponse({
-            "redirect": "",
-            "article_type_fields":serialized_data.data,
-            "total_count":total_count,
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
         }, status=200)
 
     except Exception as e:
         print("This error is list_article_type_field --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -69,22 +73,24 @@ def add_article_type_field(request):
             
             return JsonResponse({
                 "message": "Data added successfully.",
-                "article_type_field": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_article_type_field --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
 # update article type field
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_article_type_field(request, slug_id):
     try:
 
@@ -93,26 +99,29 @@ def update_article_type_field(request, slug_id):
         except article_type_field.DoesNotExist:
             return JsonResponse({
                 "error": "article type field not found.",
+                "success": False,
             }, status=404)   
 
-        serialized_data = article_type_field_serializer(instance=obj, data=request.data)        
+        serialized_data = article_type_field_serializer(instance=obj, data=request.data, partial=True)        
         
         if serialized_data.is_valid():
             serialized_data.save()
             
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "article_type_field": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
-                "errors": serialized_data.errors, 
+                "errors": serialized_data.errors,
+                "success": False, 
             }, status=400)
 
     except Exception as e:
         print("This error is update_article_type_field --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 # delete article type field
@@ -124,14 +133,16 @@ def delete_article_type_field(request, slug_id):
         except article_type_field.DoesNotExist:
             return JsonResponse({
                 "error": "article type field not found.",
+                "success": False,
             }, status=404) 
                 
         obj.delete()
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_article_type_field --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)

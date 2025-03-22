@@ -5,7 +5,7 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
 
 
-<div class="px-4 sm:px-4 py-6 w-full h-[calc(100vh-0px)] ">
+<div class="px-4 sm:px-4 py-1 w-full h-[calc(100vh-0px)] ">
   
 
     <form method="POST" id="add_article_form" name="manual_article_form" action="" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4">
@@ -81,7 +81,7 @@
                                     placeholder="Slug"
                                     value="">
                                 <!-- Slug Input (full width in flex) -->
-                                <input type="text" name="wp_slug" id="wp_slug"
+                                <input type="hidden" name="wp_slug" id="wp_slug"
                                     value="">
 
                             </div>
@@ -282,9 +282,6 @@
                                 <input type="hidden" name="author_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
                                 placeholder="">
 
-                            {% comment %} <div id="author-dropdown"
-                                class="z-10 absolute border-gray-200 hidden bg-white shadow-lg mt-1 border rounded-lg w-full max-h-60 overflow-y-auto !appearance-none">
-                            </div> {% endcomment %}
                         </div>
                     </div>
                     <div class="bg-white p-4 pt-0 rounded-lg">
@@ -324,19 +321,6 @@
                                 + Add
                             </button>
                         </div>
-                                                
-                        {% comment %} <div class="relative tag-search">
-                            <div class="flex flex-wrap gap-2 mb-2 pt-2" id="selected-tags"></div>
-                            <input type="text" id="tag-input" placeholder="Search tags"
-                                class="px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-300">
-
-                            <input type="hidden" id="" name="tag_id">
-
-                            <div id="tag-dropdown"
-                                class="z-10 absolute border-gray-200 hidden bg-white shadow-lg mt-1 border rounded-lg w-full max-h-60 overflow-y-auto !appearance-none">
-                            </div>
-                        </div> {% endcomment %}
-  
                         
                         <div class="tag-search relative">
                             <div class="flex flex-wrap gap-2 mb-2 pt-2 " id="selected-tag"></div>
@@ -407,6 +391,14 @@
                                                     Choose File
                                                 </div>
                                             </label>
+                                            <span class="text-center text-gray-400 font-normal text-sm"
+                                            id="choose-file-text">OR</span>
+                                            <label class="mt-4">        
+                                                <button type="button" class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
+                                                    Genreate Image
+                                                </button>
+                                            </label>
+                                                
                                         </div>
                                     </div>
         
@@ -443,38 +435,6 @@
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/article_dropdowns.js' %}"></script>
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/domain_slug_value.js' %}"></script>
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/add_manual_article.js' %}"></script>
-
-
-{% comment %} 
-
-
-<script>
-$(document).ready(function() {
-    // Handle the click event of the "Generate Slug" button
-    $('#submit_btn').click(function() {
-        let slug_data = [
-            $('#category_permalink').val(),
-            $('#year_permalink').val(),
-            $('#month_permalink').val(),
-            $('#day_permalink').val(),
-            $('#hour_permalink').val(),
-            $('#minute_permalink').val(),
-            $('#second_permalink').val(),
-            $('#author_permalink').val(),
-            $('#wp_slug_data').val()
-        ].filter(Boolean).join('/'); // Filter out empty values and join with '/'
-        console.log(slug_data, 'slug_data'); // Debugging output
-
-        const wp_slug_id = document.querySelector('[name="wp_slug"]');
-        wp_slug_id.value = slug_data;
-
-
-    });
-});
-</script>
-
- {% endcomment %}
-
 
 
 

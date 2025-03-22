@@ -7,7 +7,7 @@ let avatar_image_id = '';
 async function get_avatar_image_api() {
     try {
 
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
         
         const query_params = new URLSearchParams();
 
@@ -57,54 +57,6 @@ get_avatar_image_api()
 
 
 
-
-
-
-// function set_avatar_image_data(data) {
-//     // Get the container where the images will be inserted
-//     const container = document.getElementById('avatar-images-container');
-
-//     // Clear any existing content in the container
-//     container.innerHTML = '';
-
-//     // Iterate over the dynamic_avatar_images array and create the HTML elements
-//     data.dynamic_avatar_images.forEach((obj, index) => {
-//         const div = document.createElement('div');
-//         div.classList.add('p-2', 'w-full', 'rounded-lg');
-//         div.id = `dynamic_avatar_image_div_${index + 1}`;
-
-//         const img = document.createElement('img');
-//         img.classList.add('rounded-lg', 'w-full', 'h-16', 'object-cover', 'avatar-image');
-//         img.alt = 'Featured Image';
-
-//         if (obj.avatar_image) {
-//             img.src = obj.avatar_image;
-//             img.setAttribute('data-image-path', obj.avatar_image);
-//         } else {
-//             img.src = ''; // Placeholder or default image
-//         }
-
-//         // Add a click event listener to change background color and log slug_id
-//         img.addEventListener('click', function() {
-//             // Reset background color for all images
-//             const allImages = document.querySelectorAll('.avatar-image');
-//             allImages.forEach(image => {
-//                 image.style.backgroundColor = ''; // Reset background color
-//             });
-
-//             // Set background color for the clicked image
-//             div.classList.add('bg-indigo-600');
-
-//             // dynamic_avatar_image_div_1
-//             // Log the slug_id of the clicked image
-//             console.log(`Clicked image slug_id: ${obj.slug_id}`);
-//             avatar_image_id = obj.avatar_image;
-//         });
-
-//         div.appendChild(img);
-//         container.appendChild(div);
-//     });
-// }
 
 
 

@@ -4,7 +4,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     manager_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const teamMembers = response.user_details || [];  // Ensure data is loaded
+        const teamMembers = response.data || [];  // Ensure data is loaded
          
         let manager_ids = [];
         const managerInput = document.querySelector('input[name="manager_id"]'); // Reference to the hidden input
@@ -141,30 +141,55 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
         
+        // setTimeout(() => {
+        //     // update time set data
+        //     if (typeof set_manager_ids === 'string') {
+        //         if (set_manager_ids.includes(',')) {
+        //             // If it's a comma-separated list, split it into an array
+        //             set_manager_ids = set_manager_ids.split(',').map(item => item.trim());
+        //         } else {
+        //             // If it's just a single ID, convert it into an array
+        //             set_manager_ids = [set_manager_ids.trim()];
+        //         }
+        //     }
+        //     // update time set data
+        //     if (Array.isArray(set_manager_ids)) {
+        //         set_manager_ids.forEach(managerId => {
+        //             console.log(`manager ID: ${managerId}`);
+        //             document.getElementById(`set_manager_${managerId}`).click();
+        //             // managerElement.click();
+
+        //         });
+        //     } else {
+        //         console.error('set_manager is not an array:', set_manager_ids);
+        //     }
+        // }, 500);
+
+
+        // update time 
         setTimeout(() => {
-            // alert(set_manager_ids)
-            // update time set data
             if (typeof set_manager_ids === 'string') {
-                if (set_manager_ids.includes(',')) {
-                    // If it's a comma-separated list, split it into an array
-                    set_manager_ids = set_manager_ids.split(',').map(item => item.trim());
-                } else {
-                    // If it's just a single ID, convert it into an array
-                    set_manager_ids = [set_manager_ids.trim()];
-                }
+                set_manager_ids = set_manager_ids.includes(',')
+                    ? set_manager_ids.split(',').map(item => item.trim())
+                    : [set_manager_ids.trim()];
             }
-            // update time set data
+        
             if (Array.isArray(set_manager_ids)) {
                 set_manager_ids.forEach(managerId => {
-                    console.log(`manager ID: ${managerId}`);
-                    document.getElementById(`set_manager_${managerId}`).click();
-                    // managerElement.click();
-
+                    const managerElement = document.getElementById(`set_manager_${managerId}`);
+                    
+                    if (managerElement) {
+                        console.log(`Clicking manager ID: ${managerId}`);
+                        managerElement.click();
+                    } else {
+                        console.warn(`Element with ID set_manager_${managerId} not found.`);
+                    }
                 });
             } else {
-                console.error('set_manager is not an array:', set_manager_ids);
+                console.error('set_manager_ids is not an array:', set_manager_ids);
             }
         }, 500);
+        
 
 
         // Add keydown event listener for backspace functionality
@@ -215,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     writer_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const teamMembers = response.user_details || [];  // Ensure data is loaded
+        const teamMembers = response.data || [];  // Ensure data is loaded
          
 
 
@@ -354,30 +379,56 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        setTimeout(() => {
+        // setTimeout(() => {
         
-            // update time set data
+        //     // update time set data
+        //     if (typeof set_writer_ids === 'string') {
+        //         if (set_writer_ids.includes(',')) {
+        //             // If it's a comma-separated list, split it into an array
+        //             set_writer_ids = set_writer_ids.split(',').map(item => item.trim());
+        //         } else {
+        //             // If it's just a single ID, convert it into an array
+        //             set_writer_ids = [set_writer_ids.trim()];
+        //         }
+        //     }
+        //     // update time set data
+        //     if (Array.isArray(set_writer_ids)) {
+        //         set_writer_ids.forEach(writerId => {
+        //             console.log(`writer ID: ${writerId}`);
+        //             document.getElementById(`set_writer_${writerId}`).click();
+
+        //         });
+        //     } else {
+        //         console.error('set_writer is not an array:', set_writer_ids);
+        //     }
+
+
+        // }, 500);
+        
+
+        // update time
+        setTimeout(() => {
+            // Ensure set_writer_ids is always an array
             if (typeof set_writer_ids === 'string') {
-                if (set_writer_ids.includes(',')) {
-                    // If it's a comma-separated list, split it into an array
-                    set_writer_ids = set_writer_ids.split(',').map(item => item.trim());
-                } else {
-                    // If it's just a single ID, convert it into an array
-                    set_writer_ids = [set_writer_ids.trim()];
-                }
+                set_writer_ids = set_writer_ids.includes(',')
+                    ? set_writer_ids.split(',').map(item => item.trim())
+                    : [set_writer_ids.trim()];
             }
-            // update time set data
+        
             if (Array.isArray(set_writer_ids)) {
                 set_writer_ids.forEach(writerId => {
-                    console.log(`writer ID: ${writerId}`);
-                    document.getElementById(`set_writer_${writerId}`).click();
-
+                    const writerElement = document.getElementById(`set_writer_${writerId}`);
+        
+                    if (writerElement) {
+                        console.log(`Clicking writer ID: ${writerId}`);
+                        writerElement.click();
+                    } else {
+                        console.warn(`Element with ID set_writer_${writerId} not found.`);
+                    }
                 });
             } else {
-                console.error('set_writer is not an array:', set_writer_ids);
+                console.error('set_writer_ids is not an array:', set_writer_ids);
             }
-
-
         }, 500);
         
 

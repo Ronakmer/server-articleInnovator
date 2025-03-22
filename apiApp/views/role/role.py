@@ -4,7 +4,8 @@ from rest_framework.decorators import api_view
 from apiApp.serializers import role_serializer
 from apiApp.models import role
 from django.db.models import Q
-
+from loguru import logger
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 # show role
@@ -17,7 +18,8 @@ def list_role(request):
         status = request.GET.get('status', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
-
+        order_by = request.GET.get('order_by', '-created_date')
+        
         # Initialize filters
         filters = Q()
 
@@ -28,33 +30,38 @@ def list_role(request):
             filters &= Q(slug_id=slug_id)
         if search:
             filters &= Q(name__icontains=search) 
-            # filters &= Q(name__icontains=search) | Q(status__icontains=search)
-
 
         try:
-            obj = role.objects.filter(filters).order_by('-created_date')
+            obj = role.objects.filter(filters).order_by(order_by)
         except role.DoesNotExist:
             return JsonResponse({
                 "error": "role not found.",
+                "success": False,
             }, status=404) 
 
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
 
 
-        # obj = role.objects.all()
         serialized_data = role_serializer(obj, many=True)
-        
+
+        logger.info("This is an info log message", extra={"notify": True, "status_code": 200, "workspace_slug_id": '77b4ad49-db8a-4434-aad5-c2351c953cc7', "url":request.path, "request_user": request.user, "domain_slug_id":'ec676a34-eb18-4610-b1b8-99ba7d26d87a', "user_status":True })
+
         return JsonResponse({
-            "redirect": "",
-            "roles":serialized_data.data,
-            "total_count": total_count,
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
+            
         }, status=200)
 
     except Exception as e:
         print("This error is list_role --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -69,22 +76,24 @@ def add_role(request):
             
             return JsonResponse({
                 "message": "Data added successfully.",
-                "role": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_role --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
 # update role
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_role(request, slug_id):
     try:
 
@@ -93,26 +102,29 @@ def update_role(request, slug_id):
         except role.DoesNotExist:
             return JsonResponse({
                 "error": "role not found.",
+                "success": False,
             }, status=404)   
 
-        serialized_data = role_serializer(instance=obj, data=request.data)        
+        serialized_data = role_serializer(instance=obj, data=request.data, partial=True)        
         
         if serialized_data.is_valid():
             serialized_data.save()
             
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "role": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is update_role --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 # delete role
@@ -124,16 +136,18 @@ def delete_role(request, slug_id):
         except role.DoesNotExist:
             return JsonResponse({
                 "error": "role not found.",
+                "success": False,
             }, status=404) 
                 
         obj.delete()
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_role --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

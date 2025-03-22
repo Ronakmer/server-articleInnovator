@@ -6,8 +6,9 @@ from django.core.files.base import ContentFile
 
 def dynamic_avatar_image_process(logo, avatar_image_path):
     
-    # If the logo is already provided, return it
+    print(logo, avatar_image_path,'0ronakl')
     if logo:
+        print(logo,'ronakx')
         return logo
 
     # Ensure logo is provided either via form upload or via avatar_image_path
@@ -15,9 +16,7 @@ def dynamic_avatar_image_process(logo, avatar_image_path):
         print(avatar_image_path,'avatar_image_paths0.')
         if avatar_image_path.startswith("/media/"):
             avatar_image_path = avatar_image_path.replace('/media/', '', 1)
-        
-        print(avatar_image_path, '02')
-        
+                
         # Construct the full path to the avatar image
         avatar_image_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, avatar_image_path))
         print(avatar_image_path, 'avatar_image_path')

@@ -13,9 +13,16 @@ function table_data_author(tbody_name, response_data, delete_function_name, stat
 
     tbody.innerHTML = ''; 
 
-    response_data.authors.forEach((obj, index) => {
+    const all_data = JSON.stringify(response_data.authors)
 
-        const author_data = JSON.stringify(response_data.authors);
+    let escapedData = '';
+    if(all_data){
+        escapedData = all_data.replace(/"/g, '&quot;');
+    }
+
+    response_data.data.forEach((obj, index) => {
+
+        // const author_data = JSON.stringify(response_data.authors);
 
         const tr = document.createElement('tr');
         tr.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
@@ -38,10 +45,10 @@ function table_data_author(tbody_name, response_data, delete_function_name, stat
                 ${obj.bio}
             </td>
             
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 hidden" data-permission="update_author, delete_author">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <button onclick="set_update_author_data('${obj.slug_id}', '${obj.username}', '${obj.first_name}', '${obj.last_name}', '${obj.email}', '${obj.bio}','${obj.password}','${obj.wp_author_id}')" class="mr-2">
+                    <button class="mr-2 hidden" data-permission="update_author"  onclick="set_update_author_data('${obj.slug_id}', '${obj.username}', '${obj.first_name}', '${obj.last_name}', '${obj.email}', '${obj.bio}','${obj.password}','${obj.wp_author_id}')" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -57,7 +64,7 @@ function table_data_author(tbody_name, response_data, delete_function_name, stat
                         </svg>
                     </button>
                     <!-- delete -->
-                    <button class="mr-2" onclick="${delete_function_name}('${obj.slug_id}', '${author_data}')">
+                    <button class="mr-2 hidden" data-permission="delete_author"  onclick="${delete_function_name}('${obj.slug_id}', '${escapedData}')">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -83,7 +90,9 @@ function table_data_author(tbody_name, response_data, delete_function_name, stat
         `;
         tbody.appendChild(tr);
     });
+    handle_permissions();
 }
+
 
 
 

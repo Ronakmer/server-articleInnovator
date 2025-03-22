@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     workspace_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const workspace_data = response.workspaces || [];  // Ensure data is loaded
+        const workspace_data = response.data || [];  // Ensure data is loaded
         console.log(workspace_data, '0w');
 
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     
     article_type_data.then((response) => {
-        const article_type_data = response.article_types || [];  // Ensure data is loaded
+        const article_type_data = response.data || [];  // Ensure data is loaded
         console.log(article_type_data)
         const selectElement = document.querySelector('[name="article_type_data"]');
 

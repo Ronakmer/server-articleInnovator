@@ -10,15 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.core.cache import cache
 
+from apiApp.views.base.generate_otp.generate_otp import generate_otp
 # Create your views here.
 
-
-def generate_otp() :
-    digits = "0123456789"
-    OTP = ""
-    for i in range(4) :
-        OTP += digits[math.floor(random.random() * 10)]
-    return OTP
 
 
     
@@ -44,8 +38,8 @@ def send_otp(request):
             "stored_user_email": user.email,
         }, timeout=900) 
         
-        otp_data = cache.get(f"otp_merronak14@gmail.com")
-        print(otp_data)
+        # otp_data = cache.get(f"otp_merronak14@gmail.com")
+        # print(otp_data)
 
         send_mail(
             subject='OTP Request',
@@ -53,12 +47,11 @@ def send_otp(request):
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
         )
-
-        return JsonResponse({"message": "OTP sent successfully", "user_email": user.email, "redirect": "check_otp"}, status=200)
+        return JsonResponse({"message": "OTP sent successfully", "user_email": user.email, "redirect": "check_otp","success": True}, status=200)
 
     except Exception as e:
         print("This error is send_otp --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -73,7 +66,7 @@ def check_otp(request):
         otp_data = cache.get(f"otp_{user_email}")
         print(otp_data)
         if not otp_data:
-            return JsonResponse({"error": "Data expired or not found."}, status=400)
+            return JsonResponse({"error": "Data expired or not found.","success": False}, status=410)
 
         stored_otp = otp_data["stored_otp"]
         stored_user_email = otp_data["stored_user_email"]
@@ -81,17 +74,17 @@ def check_otp(request):
         if otp and user_email:
             if stored_otp == otp:
                 if stored_user_email == user_email:
-                    return JsonResponse({"message": "OTP verified successfully", "id": user_email, "redirect": "set_new_password"}, status=200)
+                    return JsonResponse({"message": "OTP verified successfully", "id": user_email, "redirect": "set_new_password","success": True}, status=200)
                 else:
-                    return JsonResponse({"error": "User ID is invalid."}, status=400)
+                    return JsonResponse({"error": "User ID is invalid.","success": False}, status=400)
             else:
-                return JsonResponse({"error": "OTP is incorrect."}, status=400)
+                return JsonResponse({"error": "OTP is incorrect.","success": False}, status=400)
         else:
-            return JsonResponse({"error": "All fields are required."}, status=400)
+            return JsonResponse({"error": "All fields are required.","success": False}, status=400)
 
     except Exception as e:
         print("This error is check_otp --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -107,13 +100,13 @@ def set_new_password(request):
         otp_data = cache.get(f"otp_{user_email}")
         
         if not otp_data:
-            return JsonResponse({"error": "Data expired or not found."}, status=400)
+            return JsonResponse({"error": "Data expired or not found.","success": False}, status=410)
 
         stored_otp = otp_data["stored_otp"]
         stored_user_email = otp_data["stored_user_email"]
 
         if user_email != stored_user_email or otp != stored_otp:
-            return JsonResponse({"error": "Invalid OTP or email address."}, status=400)
+            return JsonResponse({"error": "Invalid OTP or email address.","success": False}, status=400)
 
         if new_password and confirm_password and user_email:
             if new_password == confirm_password:
@@ -121,16 +114,16 @@ def set_new_password(request):
                     user = User.objects.get(email = user_email)
                     user.set_password(new_password)
                     user.save()
-                    return JsonResponse({"message": "Password changed successfully", "redirect": "login"}, status=200)
+                    return JsonResponse({"message": "Password changed successfully", "redirect": "login","success": True}, status=200)
                 except User.DoesNotExist:
-                    return JsonResponse({"error": "User does not exist."}, status=400)
+                    return JsonResponse({"error": "User does not exist.","success": False}, status=400)
             else:
-                return JsonResponse({"error": "Passwords do not match."}, status=400)
+                return JsonResponse({"error": "Passwords do not match.","success": False}, status=400)
         else:
-            return JsonResponse({"error": "All fields are required."}, status=400)
+            return JsonResponse({"error": "All fields are required.","success": False}, status=400)
     except Exception as e:
         print("This error is set_new_password --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 

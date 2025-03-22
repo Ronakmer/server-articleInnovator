@@ -1,5 +1,10 @@
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".active-tab").click();
+});
+
+
 function show_table(event, tableId, api_name) {
 
     // call table api 

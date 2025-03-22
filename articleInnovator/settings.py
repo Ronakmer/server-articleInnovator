@@ -26,14 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-4+hrr&l009p%xz&y220#1e5#z0*j#=f!t5m#cl74wzrhlwj2!s"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
-if DEBUG:
-    ALLOWED_HOSTS = [
-        'localhost',
-    ]
 
 # Application definition
 
@@ -52,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware", 
     "django.middleware.common.CommonMiddleware",
@@ -59,8 +56,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "apiApp.middleware.AccessControlMiddleware",  # custom middleware
+    "apiApp.middleware.access_control.AccessControlMiddleware",  # custom access middleware for apiApp
+    "apiApp.middleware.rate_limit.RateLimitMiddleware",  # custom rate limit middleware
+    "frontendApp.middleware.access_control.AccessControlMiddleware",  # custom access middleware for frontendApp
+    
 ]
+
 
 ROOT_URLCONF = "articleInnovator.urls"
 
@@ -152,7 +153,8 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-############### additional settings ###############
+
+############### start additional settings ###############
 
 #  static path
 STATICFILES_DIRS = [
@@ -179,6 +181,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Using the database backend
 SESSION_COOKIE_SECURE = False  # Set to True in production if using HTTPS
+# SESSION_COOKIE_SECURE = True  # Set to True in production if using HTTPS
 
 
 SIMPLE_JWT = {
@@ -192,19 +195,12 @@ SIMPLE_JWT = {
 
 
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
-
-#  Iframe
-X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Using the database backend
-SESSION_COOKIE_SECURE = False  # Set to True in production if using HTTPS
     
 
     
@@ -296,20 +292,20 @@ CACHES = {
 
 # ip host
 
-# ALLOWED_HOSTS = ['http://192.168.1.3:8000', 'localhost', '192.168.1.3', '192.168.1.3','*']
+ALLOWED_HOSTS = ['http://192.168.1.3:8000', 'localhost', '192.168.1.3', '192.168.1.3','*']
 
-# # CORS_ALLOWED_ORIGINS = [
-# #         'http://siteyouwantto.allow.com',
-# #         'http://anothersite.allow.com',
-# #     ]
-
-# CSRF_TRUSTED_ORIGINS = [
+# CORS_ALLOWED_ORIGINS = [
 #         'http://siteyouwantto.allow.com',
+#         'http://anothersite.allow.com',
 #     ]
+
+CSRF_TRUSTED_ORIGINS = [
+        'http://siteyouwantto.allow.com',
+    ]
 
 
 
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-
+############### end additional settings ###############

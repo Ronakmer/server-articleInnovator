@@ -8,7 +8,7 @@
 // domain_console_graph_api 
 async function domain_console_graph_api(api_url, domain_slug_id, start_date, end_date) {
     try {
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
 
         const query_params = new URLSearchParams({});
         if (domain_slug_id) {
@@ -63,7 +63,7 @@ async function domain_console_graph_api(api_url, domain_slug_id, start_date, end
 // domain_analytics_graph_api
 async function domain_analytics_graph_api(api_url, domain_slug_id, start_date, end_date) {
     try {
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
 
         const query_params = new URLSearchParams({});
         if (domain_slug_id) {
@@ -113,7 +113,7 @@ async function domain_analytics_graph_api(api_url, domain_slug_id, start_date, e
 // domain_article_graph_api
 async function domain_article_graph_api(api_url, domain_slug_id, start_date, end_date) {
     try {
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
 
         const query_params = new URLSearchParams({});
         if (domain_slug_id) {

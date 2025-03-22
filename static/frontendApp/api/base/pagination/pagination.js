@@ -10,7 +10,7 @@ function render_pagination( total_count, limit, current_page, api_url, table_nam
 
     // Pagination container
     const container = document.createElement('div');
-    container.className = 'flex items-center justify-between bg-white py-4';
+    container.className = 'flex w-full items-center justify-between bg-white py-4';
 
     // Left-aligned text for showing results
     const results_info = document.createElement('div');

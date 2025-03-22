@@ -73,22 +73,29 @@ function initializeTabs() {
         tab.addEventListener('click', () => handleTabSelection(tab));
     });
 
-    setTimeout(() => {
-        // update time 'api_provider' exists
-        const apiProviderInput = document.getElementById('api_provider');
-        if (apiProviderInput) {
-            const preselectedProvider = apiProviderInput.value;
-            if (preselectedProvider) {
-                const preselectedTab = Array.from(tabs).find((tab) => {
-                    return tab.querySelector('span')?.textContent.trim() === preselectedProvider;
-                });
-                if (preselectedTab) {
-                    handleTabSelection(preselectedTab);
-                }
-            }
-        }
-    }, 500);
+    
 
+    setTimeout(() => {
+        const apiProviderInput = document.getElementById('api_provider');
+        let preselectedProvider = apiProviderInput ? apiProviderInput.value : '';
+
+        // Find the preselected tab
+        let preselectedTab = Array.from(tabs).find((tab) => {
+            return tab.querySelector('span')?.textContent.trim() === preselectedProvider;
+        });
+
+        // If no preselected provider, default to "Azure"
+        if (!preselectedTab) {
+            preselectedTab = Array.from(tabs).find(tab => 
+                tab.querySelector('span')?.textContent.trim() === 'Azure'
+            );
+        }
+
+        // Apply selection to the default or preselected tab
+        if (preselectedTab) {
+            handleTabSelection(preselectedTab);
+        }
+    }, 100);
 }
 
 // Ensure the script runs after DOM is fully loaded

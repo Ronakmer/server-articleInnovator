@@ -58,12 +58,12 @@ function add_article_type_field_api() {
         const required = article_type_field_form.querySelector('[name="required"]');
 
         
-        if (data_obj && data_obj.article_type_fields && data_obj.article_type_fields.length > 0) {
-            name.value = data_obj.article_type_fields[0].name;
-            label.value = data_obj.article_type_fields[0].label;
-            placeholder.value = data_obj.article_type_fields[0].placeholder;
-            field_type.value = data_obj.article_type_fields[0].field_type;
-            required.checked  = data_obj.article_type_fields[0].required;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
+            label.value = data_obj.data[0].label;
+            placeholder.value = data_obj.data[0].placeholder;
+            field_type.value = data_obj.data[0].field_type;
+            required.checked  = data_obj.data[0].required;
         } else {
             window.location.href = error_page;
         }

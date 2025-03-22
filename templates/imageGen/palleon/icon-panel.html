@@ -1,0 +1,20 @@
+<!-- Icon Panel START -->
+<div id="palleon-icon-panel">
+    <div id="palleon-icon-panel-inner">
+        {% include 'imageGen/palleon/icon-panel/image.html' %}
+        {% with templates=templates tags=tags %}
+            {% include 'imageGen/palleon/icon-panel/adjust.html' %}
+        {% endwith %}
+        {% include 'imageGen/palleon/icon-panel/frames.html' %}
+        {% include 'imageGen/palleon/icon-panel/text.html' %}
+        {% include 'imageGen/palleon/icon-panel/shapes.html' %}
+        {% include 'imageGen/palleon/icon-panel/elements.html' %}
+        {% include 'imageGen/palleon/icon-panel/icons.html' %}
+        {% include 'imageGen/palleon/icon-panel/qr-code.html' %}
+        {% include 'imageGen/palleon/icon-panel/drawing.html' %}
+        {% include 'imageGen/palleon/icon-panel/settings.html' %}
+    </div>
+</div>
+<!-- Toggle Left -->
+<div id="palleon-toggle-left"><span class="material-icons">chevron_left</span></div>
+<!-- Icon Panel END -->

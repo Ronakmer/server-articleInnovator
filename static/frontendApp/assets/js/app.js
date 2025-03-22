@@ -898,11 +898,21 @@ var options = {
   },
 };
 
-var chart = new ApexCharts(
-  document.querySelector("#stack-bar-chart"),
-  options
-);
-chart.render();
+// var chart = new ApexCharts(
+//   document.querySelector("#stack-bar-chart"),
+//   options
+// );
+// chart.render();
+
+var stack_bar_chart = document.querySelector("#stack-bar-chart")
+if(stack_bar_chart){
+  var chart = new ApexCharts(
+    options
+  );
+  chart.render();
+  
+}
+
 
 //payroll page charts
 

@@ -1,0 +1,312 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">User Detail</h3>
+        <p class="text-xs text-gray-500">Manage your User Details.</p>
+
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+
+       
+
+            <!-- Add Article Button -->
+            <a href="{% url 'add_user_detail_page' %}" data-permission="add_user_detail"
+                class="flex items-center gap-1.5 hidden px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                fdprocessedid="fwfkzn">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                        stroke-linecap="round"></path>
+                </svg>
+                New User Detail
+            </a>
+
+    </div>
+</div>
+
+
+<!-- end field data  -->
+
+
+<div class="flex space-x-6">
+    <div class="w-1/3 mr-2">
+        <div class="rounded-xl mt-4 p-3  border border-solid border-gray-200 overflow-auto">
+            
+            <div class="relative rounded-xl mt-4 p-4 border border-solid border-gray-200 bg-gray-100 overflow-auto">
+                <a href="{% url 'user_profile_page' %}" data-permission="user_profile"
+                    class="absolute top-2 right-2 text-gray-200 hidden font-medium">
+                   
+                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
+                        <path
+                            d="M14.9533 20.2467C14.8533 20.2467 14.76 20.22 14.6733 20.16C14.5333 20.0667 14.4533 19.9133 14.4533 19.7467C14.4533 19.6467 14.4467 19.54 14.4333 19.4333C14.3733 18.96 14.16 18.5467 13.8 18.1867C13.44 17.8267 12.9933 17.6 12.5133 17.54C12.4333 17.5333 12.32 17.5267 12.2133 17.5333C12.04 17.5467 11.88 17.4733 11.78 17.3333C11.68 17.2 11.6533 17.02 11.7067 16.86C11.8067 16.5867 11.9533 16.34 12.1267 16.14L13.1533 14.8467C14.92 12.64 18.5 9.98667 21.12 8.93333C21.6733 8.72 22.2667 8.84667 22.6733 9.24667C23.0933 9.66667 23.22 10.2667 23 10.8133C21.9467 13.44 19.3 17.0133 17.0933 18.78L15.78 19.8333C15.5333 20.0133 15.3333 20.1267 15.1333 20.2067C15.08 20.2333 15.0133 20.2467 14.9533 20.2467ZM13.0267 16.6267C13.5867 16.7733 14.0867 17.0667 14.5067 17.4867C14.9267 17.9 15.2067 18.38 15.3467 18.9133L16.4733 18.0067C18.5667 16.3333 21.08 12.94 22.0733 10.4467C22.1733 10.2 22.0333 10.0267 21.9667 9.96667C21.92 9.92 21.7467 9.77333 21.48 9.87333C19 10.8733 15.6067 13.3867 13.9267 15.48L13.0267 16.6267Z"
+                            fill="#292D32"></path>
+                        <path
+                            d="M10.7206 23.1665C10.2206 23.1665 9.74056 22.9665 9.38056 22.6065C8.96723 22.1932 8.76723 21.6199 8.8339 21.0332L9.0139 19.3932C9.18723 17.7665 10.5206 16.5599 12.1739 16.5265C12.3006 16.5199 12.4672 16.5265 12.6206 16.5399C13.3472 16.6332 13.9939 16.9599 14.5139 17.4799C15.0272 17.9932 15.3339 18.6065 15.4272 19.2932C15.4472 19.4399 15.4606 19.5999 15.4606 19.7399C15.4606 20.6199 15.1206 21.4399 14.5072 22.0599C13.9939 22.5665 13.3339 22.8799 12.5872 22.9732L10.9406 23.1532C10.8672 23.1599 10.7939 23.1665 10.7206 23.1665ZM12.3006 17.5332C12.2739 17.5332 12.2406 17.5332 12.2139 17.5332C11.2072 17.5532 10.1406 18.2399 10.0072 19.5065L9.82723 21.1465C9.7939 21.4265 9.8939 21.6999 10.0872 21.8999C10.2806 22.0932 10.5539 22.1932 10.8272 22.1599L12.4672 21.9799C12.9806 21.9132 13.4406 21.6999 13.7872 21.3532C14.2139 20.9265 14.4539 20.3532 14.4539 19.7399C14.4539 19.6399 14.4472 19.5332 14.4339 19.4265C14.3739 18.9532 14.1606 18.5399 13.8006 18.1799C13.4406 17.8199 12.9939 17.5932 12.5139 17.5332C12.4606 17.5332 12.3806 17.5332 12.3006 17.5332Z"
+                            fill="#292D32"></path>
+                        <path
+                            d="M17.4933 18.1467C17.22 18.1467 16.9933 17.92 16.9933 17.6467C16.9933 16.18 15.8 14.9933 14.34 14.9933C14.0667 14.9933 13.84 14.7667 13.84 14.4933C13.84 14.22 14.06 13.9933 14.3333 13.9933C16.3467 13.9933 17.9867 15.6333 17.9867 17.6467C17.9933 17.9267 17.7667 18.1467 17.4933 18.1467Z"
+                            fill="#292D32"></path>
+                    </svg>
+                </a>
+                <div class="flex items-center w-1/2 max-md:w-full">
+                    <img src="" alt="Profile Picture" class="w-16 h-16 rounded-full mr-2" id="user_image">
+                    <div class="text-gray-600">
+                        <span class="block font-medium text-gray-900" id="user_full_name"></span>
+                        <span id="user_email"></span>
+                    </div>
+                </div>
+            </div>
+            
+
+            <hr class="mt-3">
+
+            <div class="grid grid-cols-2 gap-2 mt-3">
+                <button class="bg-yellow-100 h-10 text-yellow-700 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center justify-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    Suspend user
+                </button>
+                <button class="bg-red-100 h-10 text-red-700 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center justify-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                    Ban user
+                </button>
+            </div>  
+
+            
+        </div>
+        <div class=" flex justify-between text-sm rounded-xl mt-4 p-4 border border-solid border-gray-200 overflow-auto">
+            <div class="">
+                <p class="font-medium text-gray-500">Per Day Article</p>
+                <p class="text-2xl font-bold text-gray-800">38</p>
+            </div> 
+            <div>
+                <p class="font-medium text-gray-500">Article Screen Time</p>
+                <p class="text-2xl font-bold text-gray-800">28</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mt-4 p-4">
+                <div class="max-w-4xl mx-auto p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900">Workspace List</h3>
+                     
+                        <button data-permission="add_workspace_to_user" class="flex items-center hidden gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                            onclick="workspace_openModal()" type="button">
+                            Assign
+                        </button> 
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    #
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Name
+                                </th>
+                                <th scope="col" data-permission="revoke_workspace_from_user" class="px-6 py-3 text-left hidden text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Revoke
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="user_workspace" class="bg-white divide-y divide-gray-200">
+                          
+
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+
+    <div class="w-2/3">
+        <div class="bg-white mt-4 border border-gray-200 rounded-xl p-3">
+            <div class="flex justify-between items-center">
+                <div class="flex space-x-6">
+                    <!-- Tab buttons -->
+                    <button class="font-medium p-4 text-indigo-600 border-b-2 border-indigo-600 pb-2 tab-button active" data-target="article-activity">Article Activity</button>
+                    <button class="font-medium p-4 text-gray-500 hover:text-gray-700 tab-button" data-target="log-activity">Log Activity</button>
+                    <button class="font-medium p-4 text-gray-500 hover:text-gray-700 tab-button" data-target="domain">Domain</button>
+                </div>      
+            </div>
+            
+            <hr>
+
+            <!-- Tab content -->
+            <div id="article-activity" class="tab-content mt-3">
+                <div class="flex flex-col   lg:flex-row items-center justify-between gap-4  border-b border-gray-200">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3">Article Activity</h3>
+                    </div>
+                    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+                        <!-- Search Box -->
+                        <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                                    fill="none">
+                                    <path
+                                        d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                                        stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round"></path>
+                                </svg>
+                            </div>
+                            <input type="search" id="default-search"
+                                class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                placeholder="Search here . . .">
+                        </div>
+                        
+                        <div class="flex items-center justify-between  bg-white py-4">
+                            <div class="flex flex-1 justify-between sm:hidden">
+                                <a href="#"
+                                    class="relative inline-flex items-center rounded-lg  border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+                                <a href="#"
+                                    class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+                            </div>
+                            <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-end">
+                                <div class="hidden">
+                                    <p class="text-sm text-gray-700">
+                                        Showing
+                                        <span class="font-medium">1</span>
+                                        to
+                                        <span class="font-medium">10</span>
+                                        of
+                                        <span class="font-medium">97</span>
+                                        results
+                                    </p>
+                                </div>
+                                <div>
+                                    <nav class="isolate inline-flex space-x-1 rounded-md " aria-label="Pagination">
+                                        <a href="#"
+                                            class="relative inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                            <span class="sr-only">Previous</span>
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </a>
+                                        <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+                                        <a href="#" aria-current="page"
+                                            class="relative z-10 inline-flex  items-center bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">1</a>
+                                        <a href="#"
+                                            class="relative inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">2</a>
+                                        <a href="#"
+                                            class="relative inline-flex items-center rounded-lg rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                            <span class="sr-only">Next</span>
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>
+                <!-- Article Activity Content -->
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-sm font-medium text-gray-500 bg-gray-50">
+                            <th class="py-3 px-4">Message</th>
+                            <th class="py-3 px-4">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr class="border-t border-gray-100">
+                            <td class="py-3 px-4">Article Updated</td>
+                            <td class="py-3 px-4 text-gray-500">2024-08-20 11:08:43</td>
+                        </tr>
+                        <tr class="border-t border-gray-100">
+                            <td class="py-3 px-4">Article Updated</td>
+                            <td class="py-3 px-4 text-gray-500">2024-08-20 11:08:43</td>
+                        </tr>
+                        <tr class="border-t border-gray-100">
+                            <td class="py-3 px-4">Article Updated</td>
+                            <td class="py-3 px-4 text-gray-500">2024-08-20 11:08:43</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="log-activity" class="tab-content hidden mt-3">
+                <h3 class="text-xl font-semibold mb-4">Log Activity</h3>
+                <!-- Log Activity Content -->
+                <p>Log details will go here.</p>
+            </div>
+            <div id="domain" class="tab-content hidden mt-3">
+                <div class="flex flex-col   lg:flex-row items-center justify-between gap-4 ">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3">Domain</h3>
+                    </div>
+                    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+                        <!-- Search Box -->
+                        
+                        
+                        <div class="flex items-center justify-between  bg-white py-4">
+                            <button data-permission="add_domain_to_user" class="flex items-center hidden gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                                onclick="domain_openModal()"  type="button">
+                                Domain Assign
+                            </button>
+                           
+                        </div>
+                        
+                    </div>
+                </div>
+                
+               
+                <!-- Article Activity Content -->
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-sm font-medium text-gray-500 bg-gray-50">
+                            <th class="py-3 px-4">#</th>
+                            <th class="py-3 px-4">Domain</th>
+                            <th class="py-3 px-4">Workspace</th>
+                            <th class="py-3 px-4">Role</th>
+                            <th class="py-3 px-4 hidden" data-permission="revoke_domain_from_user" >Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm" id="user_domain">
+                
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- user_detail api -->
+{% include 'frontendApp/user_detail/add_user_workspace_modal.html' %}
+<script src="{% static 'frontendApp/api/user_detail/workspace_modal.js' %}"></script>
+
+{% include 'frontendApp/user_detail/add_user_domain_modal.html' %}
+<script src="{% static 'frontendApp/api/user_detail/domain_modal.js' %}"></script>
+
+
+
+<script src="{% static 'frontendApp/api/user_detail/user_detail_dropdowns.js' %}"></script>
+
+<script src="{% static 'frontendApp/api/user_detail/detail_tab.js' %}"></script>
+<script src="{% static 'frontendApp/api/user_detail/user_workspace_data.js' %}"></script>
+<script src="{% static 'frontendApp/api/user_detail/user_domain_data.js' %}"></script>
+<script src="{% static 'frontendApp/api/user_detail/user_workspace_revoke.js' %}"></script>
+<script src="{% static 'frontendApp/api/user_detail/user_domain_revoke.js' %}"></script>
+
+
+
+{% endblock body %}

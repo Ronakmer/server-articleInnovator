@@ -4,6 +4,7 @@ from django.utils import timezone
 import uuid
 from datetime import datetime
 import random, os
+from django.core.validators import FileExtensionValidator
 
 # Create your models here.
 
@@ -111,12 +112,7 @@ class dynamic_avatar_image(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
-            
-        # # Dynamically change the image name before saving
-        # if self.avatar_type:
-        #     ext = os.path.splitext(self.avatar_image.name)[1]
-        #     self.avatar_image.name = f"{self.avatar_type}_{self.slug_id}{ext}"
-
+        
         if self.pk:
             # Fetch the previous avatar_image to compare
             original_instance = dynamic_avatar_image.objects.get(pk=self.pk)
@@ -135,7 +131,7 @@ class dynamic_avatar_image(models.Model):
 
     def __str__(self):
         return self.avatar_type
-    
+
 
 #  workspace 
 class workspace(models.Model):
@@ -184,11 +180,42 @@ class ai_configuration(models.Model):
         return f"{self.api_type} - {self.email}"
 
 
+
+#  image kit Configuration
+class image_kit_configuration(models.Model):
+    workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
+    public_key = models.CharField(max_length=200, default="", blank=True)
+    private_key = models.CharField(max_length=200, default="", blank=True)
+    url_endpoint = models.CharField(max_length=200, default="", blank=True)
+    status = models.BooleanField(default=True)
+    default_section = models.BooleanField(default=False)
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+
+        # Ensure only one default_section=True per workspace
+        if self.default_section:
+            image_kit_configuration.objects.filter(workspace_id=self.workspace_id, default_section=True).update(default_section=False)
+
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{self.workspace_id.name}"
+
+
+
 #  user detail
 class user_detail(models.Model):
     user_id=models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
     role_id=models.ForeignKey(to=role,on_delete=models.CASCADE, null=True, blank=True)
-    workspace_id=models.ManyToManyField(workspace, related_name='user_details', null=True, blank=True)
+    workspace_id=models.ManyToManyField(workspace, related_name='user_details', blank=True)
     article_limitation=models.IntegerField(default=1000, null=True, blank=True)
     domain_limitation=models.IntegerField(default=10, null=True, blank=True)
     workspace_limitation=models.IntegerField(default=10, null=True, blank=True)
@@ -213,7 +240,7 @@ class user_detail(models.Model):
 
 #  api key
 class user_api_key(models.Model):
-    user_detail_id = models.ForeignKey(to=user_detail,on_delete=models.CASCADE, null=True, blank=True, unique=True)
+    user_detail_id = models.ForeignKey(to=user_detail,on_delete=models.CASCADE, null=True, blank=True)
     api_key = models.CharField(max_length=200,default="", blank=True)
     slug_id = models.CharField(max_length=100,default="", blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -383,15 +410,18 @@ class country(models.Model):
 
 #  motivation
 class motivation(models.Model):
+    # workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
+    workspace_id = models.ManyToManyField(workspace, blank=True)
+    
     quote = models.CharField(max_length=200, default="")
     quote_author = models.CharField(max_length=200, default="")
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default=True)
-    workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -505,8 +535,8 @@ class article(models.Model):
     article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
     wp_author_id = models.ForeignKey(to=wp_author, on_delete=models.CASCADE, null=True, blank=True)
-    wp_category_id = models.ManyToManyField(wp_category, null=True, blank=True)  
-    wp_tag_id = models.ManyToManyField(wp_tag, null=True, blank=True)  
+    wp_category_id = models.ManyToManyField(wp_category, blank=True)  
+    wp_tag_id = models.ManyToManyField(wp_tag, blank=True)  
     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE, null=True, blank=True)    
     wp_title = models.CharField(max_length=200, default="",  blank=True)
     wp_post_id = models.CharField(max_length=200, default="",  blank=True)
@@ -677,6 +707,7 @@ class domain_install_log_percentage(models.Model):
     domain_install_log_id = models.ForeignKey(to=domain_install_log, on_delete=models.CASCADE, null=True, blank=True)
     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
     log_percentage = models.FloatField(null=True, blank=True)
+    status = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -965,10 +996,61 @@ class keyword(models.Model):
 
     def _str_(self):
         return self.keyword_value
-        
-        
-        
 
+
+
+#  notification 
+class notification(models.Model):
+    user_id = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    domain_id = models.ForeignKey(to=domain,on_delete=models.CASCADE, null=True, blank=True)
+    workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
+    send_time=models.DateTimeField(default=timezone.now, null=True, blank=True)
+    seen_time=models.DateTimeField(null=True, blank=True)
+    message=models.CharField(max_length=5000,default="", blank=True)
+    read = models.BooleanField(default=False, null=True, blank=True)
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date=models.DateTimeField(default=timezone.now)
+
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return self.message
+
+
+#  activity log
+class activity_log(models.Model):
+    user_id = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
+    domain_id = models.ForeignKey(to=domain,on_delete=models.CASCADE, null=True, blank=True)
+    level = models.CharField(max_length=100)
+    message = models.TextField()
+    url = models.CharField(max_length=100)
+    module = models.CharField(max_length=100)
+    module_name = models.CharField(max_length=100)
+    status_code = models.CharField(max_length=100)
+    function = models.CharField(max_length=100)
+    user_role = models.CharField(max_length=100)
+    line = models.IntegerField()
+    user_status = models.BooleanField(default=False)
+    time = models.DateTimeField(auto_now_add=True)
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date=models.DateTimeField(default=timezone.now)
+
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+        super().save(*args, **kwargs)
+
+ 
+    def __str__(self):
+        return f"{self.level} - {self.message[:50]}"
+    
 
 
 
@@ -1025,6 +1107,8 @@ class image_template(models.Model):
         ('suspend', 'Suspend'),
     ]
 
+    image_tag_id = models.ManyToManyField(image_tag, blank=True)
+    image_template_category_id = models.ManyToManyField(image_template_category, blank=True)
     workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255, default="")
     template_json = models.TextField()

@@ -8,12 +8,13 @@ from apiApp.models import prompt, workspace, article_type, user_detail, domain
 from apiApp.views.decorator.workspace_decorator import workspace_permission_required
 from apiApp.views.decorator.domain_decorator import domain_permission_required
 from django.db.models import Q
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 
 # show prompt
 @api_view(['GET'])
-@workspace_permission_required
+# @workspace_permission_required
 @domain_permission_required
 def list_prompt(request):
     try:
@@ -29,8 +30,8 @@ def list_prompt(request):
         category = request.GET.get('category', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
+        order_by = request.GET.get('order_by', '-created_date')
         
-
         # Initialize filters
         filters = Q()
         if slug_id:
@@ -45,6 +46,7 @@ def list_prompt(request):
             except workspace.DoesNotExist:
                 return JsonResponse({
                     "error": "workspace not found.",
+                    "success": False,
                 }, status=404)  
             
         if article_category:
@@ -52,68 +54,66 @@ def list_prompt(request):
                 article_category = article_type.objects.get(article_category=article_category)
                 filters &= Q(article_category=article_category)
             except article_type.DoesNotExist:
-                return JsonResponse({"error": "article category not found."}, status=404)
+                return JsonResponse({"error": "article category not found.","success": False}, status=404)
         if category:
             try:
                 category = article_type.objects.get(category=category)
                 filters &= Q(category=category)
             except article_type.DoesNotExist:
-                return JsonResponse({"error": "category not found."}, status=404)
+                return JsonResponse({"error": "category not found.","success": False}, status=404)
 
         if article_type_slug_id:
             try:
                 article_type_obj = article_type.objects.get(slug_id=article_type_slug_id)
                 filters &= Q(article_type_id=article_type_obj)
             except article_type.DoesNotExist:
-                return JsonResponse({"error": "Article type not found."}, status=404)
+                return JsonResponse({"error": "Article type not found.","success": False}, status=404)
         
         if request_user.is_superuser:
             try:
-                obj = prompt.objects.filter(filters).order_by('-created_date')
+                obj = prompt.objects.filter(filters).order_by(order_by)
             except prompt.DoesNotExist:
                 return JsonResponse({
                     "error": "prompt not found.",
+                    "success": False,
                 }, status=404) 
-        else:
-            try:
-                user_obj = user_detail.objects.get(user_id=request_user.id) 
-            except user_detail.DoesNotExist:
-                return JsonResponse({
-                    "error": "user not found."
-                }, status=404)
-
-            if user_obj.role_id.name == 'admin':
+        
+        if request.is_admin:
                 try:
-                    obj = prompt.objects.filter(filters, created_by=request_user).distinct().order_by('-created_date')
+                    obj = prompt.objects.filter(filters).distinct().order_by(order_by)
                 except prompt.DoesNotExist:
                     return JsonResponse({
                         "error": "prompt not found.",
+                        "success": False,
                     }, status=404)   
             
 
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
-
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
         
         serialized_data = prompt_serializer(obj, many=True)
         
         return JsonResponse({
-            "redirect": "",
-            "prompts":serialized_data.data,
-            "total_count":total_count,
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
             
         }, status=200)
 
     except Exception as e:
         print("This error is list_prompt --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
 # add prompt
 @api_view(['POST'])
-@workspace_permission_required
+# @workspace_permission_required
 @domain_permission_required
 def add_prompt(request):
     try:
@@ -124,21 +124,23 @@ def add_prompt(request):
         
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "Workspace slug id are required ."
+                "error": "Workspace slug id are required .",
+                "success": False,
             }, status=404)
             
         if not article_type_slug_id:
             return JsonResponse({
-                "error": "Article Type slug id are required."
+                "error": "Article Type slug id are required.",
+                "success": False,
             }, status=404)
 
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
             article_type_obj = article_type.objects.get(slug_id=article_type_slug_id)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "Workspace not found."}, status=404)
+            return JsonResponse({"error": "Workspace not found.","success": False}, status=404)
         except article_type.DoesNotExist:
-            return JsonResponse({"error": "Article Type not found."}, status=404)
+            return JsonResponse({"error": "Article Type not found.","success": False}, status=404)
 
         
         print(workspace_obj.id, article_type_obj.id)
@@ -156,23 +158,25 @@ def add_prompt(request):
             
             return JsonResponse({
                 "message": "Data added successfully.",
-                "prompt": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_prompt --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
 # update prompt
-@api_view(['PUT'])
-@workspace_permission_required
+@api_view(['PATCH'])
+# @workspace_permission_required
 @domain_permission_required
 def update_prompt(request, slug_id):
     try:
@@ -182,6 +186,7 @@ def update_prompt(request, slug_id):
         except prompt.DoesNotExist:
             return JsonResponse({
                 "error": "prompt not found.",
+                "success": False,
             }, status=404)   
         
         workspace_slug_id = request.data.get('workspace_slug_id')
@@ -189,60 +194,64 @@ def update_prompt(request, slug_id):
         
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "Workspace slug id are required ."
-            }, status=404)
+                "error": "Workspace slug id are required .",
+                "success": False,
+            }, status=400)
             
-        if not article_type_slug_id:
-            return JsonResponse({
-                "error": "Article Type slug id are required."
-            }, status=404)
 
         if (obj.workspace_id.slug_id != workspace_slug_id):
             return JsonResponse({
-                "error": "You Don't have permission."
-            }, status=404)
+                "error": "You Don't have permission.",
+                "success": False,
+            }, status=403)
             
+        article_type_obj = None
+        
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
-            article_type_obj = article_type.objects.get(slug_id=article_type_slug_id)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "Workspace not found."}, status=404)
-        except article_type.DoesNotExist:
-            return JsonResponse({"error": "Article Type not found."}, status=404)
+            return JsonResponse({"error": "Workspace not found.","success": False}, status=404)
+        
+        if article_type_slug_id:
+            try:
+                article_type_obj = article_type.objects.get(slug_id=article_type_slug_id)
+            except article_type.DoesNotExist:
+                return JsonResponse({"error": "Article Type not found.","success": False}, status=404)
 
 
         # Include data in the request data for the serializer
         data = request.data.copy()
         data['workspace_id'] = workspace_obj.id
-        data['article_type_id'] = article_type_obj.id
         data['created_by'] = obj.created_by.id
-        # if 'created_by' in data:
-        #     del data['created_by']
+        if article_type_obj:
+            data['article_type_id'] = article_type_obj.id
 
-        serialized_data = prompt_serializer(instance=obj, data=data)        
+        serialized_data = prompt_serializer(instance=obj, data=data, partial=True)        
         
         if serialized_data.is_valid():
             serialized_data.save()
             
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "prompt": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is update_prompt --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
 # delete prompt
 @api_view(['DELETE'])
-@workspace_permission_required
+# @workspace_permission_required
 @domain_permission_required
 def delete_prompt(request, slug_id):
     try:
@@ -252,6 +261,7 @@ def delete_prompt(request, slug_id):
         except prompt.DoesNotExist:
             return JsonResponse({
                 "error": "prompt not found.",
+                "success": False,
             }, status=404) 
    
         workspace_slug_id = request.GET.get("workspace_slug_id")
@@ -259,23 +269,26 @@ def delete_prompt(request, slug_id):
         if not request_user.is_superuser:
             if not workspace_slug_id:
                 return JsonResponse({
-                    "error": "workspace slug id is required."
+                    "error": "workspace slug id is required.",
+                    "success": False,
                 }, status=400)
                 
             if (obj.workspace_id.slug_id != workspace_slug_id):
                 return JsonResponse({
-                    "error": "You Don't have permission."
-                }, status=404)
+                    "error": "You Don't have permission.",
+                    "success": False,
+                }, status=403)
 
         obj.delete()
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_prompt --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 

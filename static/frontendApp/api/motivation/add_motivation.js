@@ -1,5 +1,6 @@
 
-
+let set_workspace_ids = [];
+ 
 function add_motivation_api() {
 
     // Get the form element
@@ -10,8 +11,7 @@ function add_motivation_api() {
     const quote_author = motivation_form.querySelector('[name="quote_author"]').value;
     const start_date = motivation_form.querySelector('[name="start_date"]').value;
     const end_date = motivation_form.querySelector('[name="end_date"]').value;
-    const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
-
+    const workspace_slug_id = motivation_form.querySelector('[name="workspace_id"]').value;
 
     const data = new FormData();
     data.append("quote", quote);
@@ -57,11 +57,13 @@ function add_motivation_api() {
         const start_date = motivation_form.querySelector('[name="start_date"]');
         const end_date = motivation_form.querySelector('[name="end_date"]');
 
-        if (data_obj && data_obj.motivations && data_obj.motivations.length > 0) {
-            quote.value = data_obj.motivations[0].quote;
-            quote_author.value = data_obj.motivations[0].quote_author;
-            start_date.value = data_obj.motivations[0].start_date;
-            end_date.value = data_obj.motivations[0].end_date;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            quote.value = data_obj.data[0].quote;
+            quote_author.value = data_obj.data[0].quote_author;
+            start_date.value = data_obj.data[0].start_date;
+            end_date.value = data_obj.data[0].end_date;
+            set_workspace_ids = data_obj.data[0].workspace_id_data.map(field => field.slug_id).join(', ')
+
         } else {
             window.location.href = error_page;
         }
@@ -70,3 +72,10 @@ function add_motivation_api() {
 })()
      
 
+
+
+function get_workspace_data(){
+
+    workspace_data = get_data_api(list_workspace_url)
+}
+get_workspace_data()

@@ -7,7 +7,7 @@ function add_image_tag_api() {
 
     // Collect form data using the name attributes
     const name = image_tag_form.querySelector('[name="name"]').value;
-    const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+    const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
     const data = new FormData();
     data.append("name", name);
@@ -47,8 +47,8 @@ function add_image_tag_api() {
         // Collect form data using the name attributes
         const name = image_tag_form.querySelector('[name="name"]');
 
-        if (data_obj && data_obj.image_tags && data_obj.image_tags.length > 0) {
-            name.value = data_obj.image_tags[0].name;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
         } else {
             window.location.href = error_page;
         }

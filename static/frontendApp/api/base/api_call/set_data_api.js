@@ -4,9 +4,9 @@
 // set data api
 async function set_data_api(api_url, slug_id) {
     try {
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
 
-        const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+        const workspace_slug_id = localStorage.getItem("workspace_slug_id");
         
         const query_params = new URLSearchParams();
 

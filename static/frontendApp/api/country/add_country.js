@@ -49,8 +49,8 @@ async function add_country_api() {
         // Collect form data using the name attributes
         const name = country_form.querySelector('[name="name"]');
         
-        if (data_obj && data_obj.countries && data_obj.countries.length > 0) {
-            name.value = data_obj.countries[0].name;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
         } else {
             window.location.href = error_page;
         }

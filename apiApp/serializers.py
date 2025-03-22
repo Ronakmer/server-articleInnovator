@@ -13,7 +13,8 @@ from apiApp.models import (
     competitor_article_url, competitor_article_url_mapping,
     competitor_extraction, competitor_extraction_mapping,
     competitor_seo_extraction_mapping, user_api_key, keyword,
-    console_metrics, 
+    console_metrics, image_kit_configuration, activity_log, notification,
+    
 )
 
 
@@ -32,7 +33,7 @@ class invitation_code_detail_serializer(serializers.ModelSerializer):
 
     class Meta:
         model = invitation_code_detail
-        fields = '__all__'
+        exclude = ['id', 'created_date', 'updated_date']
 
 
 class role_serializer(serializers.ModelSerializer):
@@ -90,6 +91,17 @@ class ai_configuration_serializer(serializers.ModelSerializer):
     
     class Meta:
         model = ai_configuration
+        exclude = ['id', 'created_date', 'updated_date']
+
+class image_kit_configuration_serializer(serializers.ModelSerializer):
+    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    
+    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True) 
+    created_by_data = user_serializer(source='created_by', read_only=True)  
+    
+    class Meta:
+        model = image_kit_configuration
         exclude = ['id', 'created_date', 'updated_date']
         
 
@@ -180,9 +192,11 @@ class country_serializer(serializers.ModelSerializer):
 
         
 class motivation_serializer(serializers.ModelSerializer):
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), many=True, write_only=True)
+    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+    workspace_id_data = workspace_serializer(source='workspace_id', many=True, read_only=True)  
+    created_by_data = user_serializer(source='created_by', read_only=True)  
 
     class Meta:
         model = motivation
@@ -211,7 +225,7 @@ class article_type_serializer(serializers.ModelSerializer):
 class prompt_serializer(serializers.ModelSerializer):
     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    article_type_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True)
+    article_type_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True, required=False)
 
     workspace_id_data = workspace_serializer(source='workspace_id', read_only=True) 
     created_by_data = user_serializer(source='created_by', read_only=True)  
@@ -251,9 +265,13 @@ class image_template_category_serializer(serializers.ModelSerializer):
         
 class image_template_serializer(serializers.ModelSerializer):
     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+    image_tag_id = serializers.PrimaryKeyRelatedField(queryset=image_tag.objects.all(), write_only=True, many=True, required=False)
+    image_template_category_id = serializers.PrimaryKeyRelatedField(queryset=image_template_category.objects.all(), write_only=True, many=True, required=False)
     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
     
     workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)     
+    image_tag_id_data = image_tag_serializer(source='image_tag_id', read_only=True, many=True)     
+    image_template_category_id_data = image_template_category_serializer(source='image_template_category_id', read_only=True, many=True)     
     created_by_data = user_serializer(source='created_by', read_only=True)  
 
     class Meta:
@@ -492,3 +510,35 @@ class console_metrics_serializer(serializers.ModelSerializer):
     class Meta:
         model = console_metrics
         exclude = ['id', 'created_date', 'updated_date']  
+        
+        
+        
+
+class activity_log_serializer(serializers.ModelSerializer):
+    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
+
+    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True) 
+    user_id_data = user_serializer(source='user_id', read_only=True)  
+    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
+
+    class Meta:
+        model = activity_log
+        exclude = ['id', 'created_date']
+
+
+
+class notification_serializer(serializers.ModelSerializer):
+    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
+
+    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True) 
+    user_id_data = user_serializer(source='user_id', read_only=True)  
+    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
+
+    class Meta:
+        model = notification
+        exclude = ['id', 'created_date']
+        

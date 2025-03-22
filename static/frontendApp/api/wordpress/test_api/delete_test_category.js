@@ -3,7 +3,7 @@
     
 // Add Test category
 async function delete_test_category(test_category_id) {
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     data.test_category_id = test_category_id;
 

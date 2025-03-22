@@ -14,9 +14,10 @@ def generate_invitation_code(request):
         
         return JsonResponse({
             "message": "Generate invitation code successfully.",
-            "invitation_code": random_uuid,
+            "data": random_uuid,
+            "success": True,
         }, status=200)
        
     except Exception as e:
         print("This error is generate_invitation_code --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)

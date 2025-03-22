@@ -55,11 +55,11 @@ function add_invitation_code_detail_api() {
         const domain_limitation = invitation_code_detail_form.querySelector('[name="domain_limitation"]');
         const workspace_limitation = invitation_code_detail_form.querySelector('[name="workspace_limitation"]');
     
-        if (data_obj && data_obj.invitation_code_details && data_obj.invitation_code_details.length > 0) {
-            invitation_code.value = data_obj.invitation_code_details[0].invitation_code;
-            article_limitation.value = data_obj.invitation_code_details[0].article_limitation;
-            domain_limitation.value = data_obj.invitation_code_details[0].domain_limitation;
-            workspace_limitation.value = data_obj.invitation_code_details[0].workspace_limitation;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            invitation_code.value = data_obj.data[0].invitation_code;
+            article_limitation.value = data_obj.data[0].article_limitation;
+            domain_limitation.value = data_obj.data[0].domain_limitation;
+            workspace_limitation.value = data_obj.data[0].workspace_limitation;
         } else {
             window.location.href = error_page;
         }

@@ -4,14 +4,11 @@
 
 // set_domain_dropdown
 function set_domain_dropdown(domain_data){
-    console.log(domain_data,'***')
     domain_data.then((response) => {
-        const domain_data = response.domains || [];  // Ensure data is loaded
+        const domain_data = response.data || [];  // Ensure data is loaded
         console.log(domain_data)
         const selectElement = document.querySelector('[name="ai_domain_data"]');
-        if(!selectElement){
-            alert(0)
-        }
+        
         // Clear existing options
         selectElement.innerHTML = '';
 
@@ -57,9 +54,8 @@ function set_domain_dropdown(domain_data){
 
 // set_prompt_dropdown
 function set_prompt_dropdown(prompt_data){
-    console.log(prompt_data,'2030')
     prompt_data.then((response) => {
-        const prompt_data = response.prompts || [];  // Ensure data is loaded
+        const prompt_data = response.data || [];  // Ensure data is loaded
         console.log(prompt_data)
         const selectElement = document.querySelector('[name="prompt_data"]');
 

@@ -9,11 +9,11 @@ async function fetch_wp_data_api() {
         const temp_url = new URLSearchParams(window.location.search);
         const domain_slug_id = temp_url.get('domain_slug_id');
         
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
         
-        const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+        const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
-        // const domain_slug_id = sessionStorage.getItem("domain_slug_id");
+        // const domain_slug_id = localStorage.getItem("domain_slug_id");
 
         const query_params = new URLSearchParams({});
 
@@ -55,3 +55,5 @@ async function fetch_wp_data_api() {
 }
 
 fetch_wp_data_api()
+
+

@@ -8,13 +8,13 @@ async function domain_slug_value(){
 
             const temp_id = set_manual_domain_slug_id.value.trim();
 
-            const access_token = sessionStorage.getItem("access_token");
+            const access_token = localStorage.getItem("access_token");
             if (!access_token) {
                 console.error("Access token not found. Please log in again.");
                 return;
             }
             
-            // const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+            // const workspace_slug_id = localStorage.getItem("workspace_slug_id");
             const workspace_slug_id = "77b4ad49-db8a-4434-aad5-c2351c953cc7"; // Hardcoded workspace ID
 
             const query_params = new URLSearchParams();
@@ -35,9 +35,9 @@ async function domain_slug_value(){
             if (response.ok) {
                 const data = await response.json();
                 // console.log("API Response:", data);
-                console.log("API Response:", data.domains[0].permalinks);
-                const slug_data = data.domains[0].permalinks
-                const slug_id = data.domains[0].slug_id
+                console.log("API Response:", data.data[0].permalinks);
+                const slug_data = data.data[0].permalinks
+                const slug_id = data.data[0].slug_id
 
                 set_slug_data(slug_data)
                 get_author_data(slug_id)

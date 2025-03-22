@@ -7,8 +7,6 @@ function render_data_to_table(response_data, current_page, limit){
 
 // list author api
 async function list_author_api() {
-  
-
 
     let current_page = 1; // Initialize current page
     const limit = 10; // Number of items per page
@@ -16,9 +14,9 @@ async function list_author_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
         search: searchInput ? searchInput.value : '',
+        // order_by:selected_sort,
 
     };
     const current_page_url = window.location.href;

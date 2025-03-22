@@ -1,0 +1,30 @@
+.modal {
+    display: none; /* Hide by default */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    position: fixed; /* Fixed position */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
+    background: rgba(0, 0, 0, 0.5); /* Dark background */
+    z-index: 1000; /* Ensure it's above other content */
+}
+.modal.active {
+    display: flex; /* Show modal when active */
+}
+.modal-content {
+    background: white; /* Modal background */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Inner padding */
+    width: 90%; /* Set width as desired */
+    max-width: 500px; /* Maximum width */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add shadow */
+    transform: translateY(-50px); /* Start slightly off-screen */
+    opacity: 0; /* Start invisible */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Transition effects */
+}
+.modal.active .modal-content {
+    transform: translateY(0); /* Move to position */
+    opacity: 1; /* Fade in */
+}

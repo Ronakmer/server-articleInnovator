@@ -42,9 +42,9 @@ function add_domain_api() {
             await update_api(update_domain_url, data, slug_id, list_domain_page_url);
         } else {
 
-            const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+            const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
-            const domain_slug_id = sessionStorage.getItem("domain_slug_id");
+            const domain_slug_id = localStorage.getItem("domain_slug_id");
             
             // progress_bar_page_url += `?workspace_slug_id=${workspace_slug_id}&domain_slug_id=${domain_slug_id}`;
             await add_api(add_domain_url, data, '');
@@ -78,15 +78,15 @@ function add_domain_api() {
         document.getElementById('step2').style.display = 'block';
 
 
-        if (data_obj && data_obj.domains && data_obj.domains.length > 0) {
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
 
-            name.value = data_obj.domains[0].name;
-            permalinks.value = data_obj.domains[0].permalinks;
-            wp_username = data_obj.domains[0].wordpress_username;
-            wp_password = data_obj.domains[0].wordpress_application_password;
+            name.value = data_obj.data[0].name;
+            permalinks.value = data_obj.data[0].permalinks;
+            wp_username = data_obj.data[0].wordpress_username;
+            wp_password = data_obj.data[0].wordpress_application_password;
 
-            set_manager_ids = data_obj.domains[0].manager_id_data.map(manager => manager.slug_id);
-            set_writer_ids = data_obj.domains[0].writer_id_data.map(writer => writer.slug_id);
+            set_manager_ids = data_obj.data[0].manager_id_data.map(manager => manager.slug_id);
+            set_writer_ids = data_obj.data[0].writer_id_data.map(writer => writer.slug_id);
 
             
 

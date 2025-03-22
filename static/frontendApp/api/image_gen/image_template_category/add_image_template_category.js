@@ -7,7 +7,7 @@ function add_image_template_category_api() {
 
     // Collect form data using the name attributes
     const name = image_template_category_form.querySelector('[name="name"]').value;
-    const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+    const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
     const data = new FormData();
     data.append("name", name);
@@ -47,8 +47,8 @@ function add_image_template_category_api() {
         // Collect form data using the name attributes
         const name = image_template_category_form.querySelector('[name="name"]');
 
-        if (data_obj && data_obj.image_template_categories && data_obj.image_template_categories.length > 0) {
-            name.value = data_obj.image_template_categories[0].name;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
         } else {
             window.location.href = error_page;
         }

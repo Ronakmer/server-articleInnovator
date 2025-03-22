@@ -3,7 +3,7 @@
     
 // Add Test category
 async function add_test_category() {
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     try{
         const response = await fetch(add_test_category_url, {

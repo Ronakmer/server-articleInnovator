@@ -13,3 +13,4 @@ boto3
 imagekitio
 djangorestframework-simplejwt
 gunicorn
+pebble

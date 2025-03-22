@@ -143,20 +143,20 @@ def fetch_analytics_metrics_data(request):
         workspace_slug_id = request.data.get('workspace_slug_id')
 
         if not domain_slug_id:
-            return JsonResponse({"error": "Domain slug ID is required."}, status=400)
+            return JsonResponse({"error": "Domain slug ID is required.","success": False}, status=400)
 
         if not workspace_slug_id:
-            return JsonResponse({"error": "Workspace slug ID is required."}, status=400)
+            return JsonResponse({"error": "Workspace slug ID is required.","success": False}, status=400)
 
         try:
             domain_obj = domain.objects.get(slug_id=domain_slug_id)
         except domain.DoesNotExist:
-            return JsonResponse({"error": "Invalid domain."}, status=404)
+            return JsonResponse({"error": "Invalid domain.","success": False}, status=404)
 
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "Invalid workspace."}, status=404)
+            return JsonResponse({"error": "Invalid workspace.","success": False}, status=404)
 
         obj_data={
             "domain_obj":domain_obj,
@@ -165,13 +165,13 @@ def fetch_analytics_metrics_data(request):
         
         result = process_analytics_metrics(obj_data)
         if "Failed" in result:
-            return JsonResponse({"error": result}, status=500)
+            return JsonResponse({"error": result,"success": False}, status=500)
         
-        return JsonResponse({'message': result}, status=200)
+        return JsonResponse({'message': result,"success": True}, status=200)
 
             
     except Exception as e:
         print("This error is fetch_analytics_metrics_data --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

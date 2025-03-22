@@ -5,7 +5,7 @@
 async function get_article_type_field_data(api_url) {
     try {
 
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
         
 
         const response = await fetch(api_url, {
@@ -20,7 +20,7 @@ async function get_article_type_field_data(api_url) {
             // Handle successful response
             const data = await response.json();
             console.log('00000:', data);
-            const fields = data.fields; // Extract fields from response
+            const fields = data.data_field; // Extract fields from response
 
             generateDynamicFields(fields)
 

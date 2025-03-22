@@ -33,8 +33,8 @@ async function forgot_api() {
 
             // Set email and expiration time in sessionStorage
             const expirationTime = Date.now() + 15 * 60 * 1000; // 15 minutes from now
-            sessionStorage.setItem("email", email);
-            sessionStorage.setItem("email_expiration", expirationTime);
+            localStorage.setItem("email", email);
+            localStorage.setItem("email_expiration", expirationTime);
 
             // Redirect or show a success message
             if (response.ok) {
@@ -78,7 +78,7 @@ async function otp_api() {
         forgot_form.querySelector('[id="otp-4"]').value
     ].join(''); // Concatenate OTP values
         
-    const user_email = sessionStorage.getItem("email");
+    const user_email = localStorage.getItem("email");
 
 
     // Prepare the data object
@@ -104,8 +104,8 @@ async function otp_api() {
 
             // Set otp and expiration time in sessionStorage
             const expirationTime = Date.now() + 15 * 60 * 1000; // 15 minutes from now
-            sessionStorage.setItem("otp", otp);
-            sessionStorage.setItem("email_expiration", expirationTime);
+            localStorage.setItem("otp", otp);
+            localStorage.setItem("email_expiration", expirationTime);
             
 
             // Show success toast
@@ -139,7 +139,7 @@ async function otp_api() {
 //  resend otp api
 async function resend_otp_api() {
 
-    const user_email = sessionStorage.getItem("email");
+    const user_email = localStorage.getItem("email");
 
     
     // Prepare the data object
@@ -193,8 +193,8 @@ async function new_password_api() {
     const new_password = new_password_form.querySelector('[name="new_password"]').value;
     const confirm_password = new_password_form.querySelector('[name="confirm_password"]').value;
     
-    const otp = sessionStorage.getItem("otp");
-    const user_email = sessionStorage.getItem("email");
+    const otp = localStorage.getItem("otp");
+    const user_email = localStorage.getItem("email");
 
 
     

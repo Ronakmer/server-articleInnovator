@@ -50,7 +50,6 @@ if (siteUrl) {
 }
 
 
-console.log('domain_name:', domain_name);
 const domain_name_element = document.querySelector('[name="domain_name"]');
 if(domain_name_element){
     domain_name_element.value = domain_name;

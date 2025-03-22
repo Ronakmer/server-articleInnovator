@@ -15,6 +15,8 @@ function render_data_to_table(response_data, current_page, limit){
 async function list_prompt_api() {
   
 
+    const selected_sort = document.querySelector('input[name="order_by"]:checked').value;
+    console.log("Selected Sort:", selected_sort); // Debugging purpose
 
     let current_page = 1; // Initialize current page
     const limit = 10; // Number of items per page
@@ -24,6 +26,7 @@ async function list_prompt_api() {
 
     const filters = {
         search: searchInput ? searchInput.value : '',
+        order_by:selected_sort,
 
     };
 

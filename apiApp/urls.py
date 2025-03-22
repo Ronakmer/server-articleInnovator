@@ -5,7 +5,8 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 
 ######### file import  #########
-from apiApp.views.auth.login_logout import admin_login, admin_logout
+from apiApp.views.auth.login import admin_login
+from apiApp.views.auth.logout import admin_logout
 from apiApp.views.auth.registration import check_invitation_code, admin_registration, registration_check_otp
 from apiApp.views.auth.forgot_password import send_otp, check_otp, set_new_password
 from apiApp.views.invitation_code_detail.invitation_code_detail import list_invitation_code_detail, add_invitation_code_detail, update_invitation_code_detail, delete_invitation_code_detail
@@ -17,12 +18,14 @@ from apiApp.views.workspace.workspace import list_workspace, add_workspace, upda
 # from apiApp.views.set_workspace.set_workspace import set_workspace
 from apiApp.views.ai_configuration.ai_configuration import list_ai_configuration, add_ai_configuration, update_ai_configuration, delete_ai_configuration 
 from apiApp.views.ai_configuration.verify_ai_configuration import verify_ai_configuration 
+from apiApp.views.image_kit_configuration.image_kit_configuration import list_image_kit_configuration, add_image_kit_configuration, update_image_kit_configuration, delete_image_kit_configuration 
+from apiApp.views.image_kit_configuration.verify_image_kit_configuration import verify_image_kit_configuration 
 from apiApp.views.user_detail.user_detail import list_user_detail, add_user_detail, update_user_detail, delete_user_detail
 from apiApp.views.user_detail.user_detail_action import revoke_workspace_from_user, add_workspace_to_user
 from apiApp.views.admin_detail.admin_detail import list_admin_detail, add_admin_detail, update_admin_detail, delete_admin_detail
 from apiApp.views.role_has_permissions.role_has_permissions import list_role_has_permissions, add_role_has_permissions, update_role_has_permissions
 from apiApp.views.domain.domain import list_domain, add_domain, update_domain, delete_domain
-from apiApp.views.domain.domain_action import revoke_domain_from_user, add_domain_to_user
+from apiApp.views.domain.domain_action import revoke_domain_from_user, add_domain_to_user, list_revoke_domain_from_user
 from apiApp.views.wordpress.test_api.test_tag import add_test_tag, delete_test_tag
 from apiApp.views.wordpress.test_api.test_category import add_test_category, delete_test_category
 from apiApp.views.wordpress.test_api.test_article import add_test_article, delete_test_article
@@ -33,6 +36,7 @@ from apiApp.views.color_detail.color_detail import list_color_detail, add_color_
 from apiApp.views.language.language import list_language, add_language, update_language, delete_language
 from apiApp.views.country.country import list_country, add_country, update_country, delete_country
 from apiApp.views.motivation.motivation import list_motivation, add_motivation, update_motivation, delete_motivation
+from apiApp.views.motivation.process_motivation import process_motivation
 from apiApp.views.article_type_field.article_type_field import list_article_type_field, add_article_type_field, update_article_type_field, delete_article_type_field
 from apiApp.views.article_type.article_type import list_article_type, add_article_type, update_article_type, delete_article_type, get_article_type_fields
 from apiApp.views.prompt.prompt import list_prompt, add_prompt, update_prompt, delete_prompt
@@ -43,6 +47,7 @@ from apiApp.views.wordpress.fetch_data.fetch_article_data import fetch_article_d
 from apiApp.views.wordpress.fetch_data.fetch_console_metrics_data import fetch_console_metrics_data
 from apiApp.views.wordpress.fetch_data.fetch_analytics_metrics_data import fetch_analytics_metrics_data
 from apiApp.views.wordpress.fetch_data.fetch_wp_data import fetch_wp_data
+from apiApp.views.wordpress.perma_links.perma_links import list_perma_links, update_perma_links
 from apiApp.views.article.article import list_article, add_article, update_article, delete_article
 from apiApp.views.competitor.competitor import list_competitor, add_competitor, update_competitor, delete_competitor
 from apiApp.views.competitor_domain_mapping.competitor_domain_mapping import list_competitor_domain_mapping, add_competitor_domain_mapping, update_competitor_domain_mapping, delete_competitor_domain_mapping
@@ -56,17 +61,23 @@ from apiApp.views.competitor_seo_extraction_mapping.competitor_seo_extraction_ma
 from apiApp.views.user_api_key.user_api_key import list_user_api_key, add_user_api_key, update_user_api_key, delete_user_api_key
 from apiApp.views.user_api_key.generate_user_api_key import generate_user_api_key
 from apiApp.views.keyword.keyword import list_keyword, add_keyword, update_keyword, delete_keyword
-from apiApp.views.user_profile.user_profile import list_user_profile
+from apiApp.views.user_profile.user_profile import list_user_profile, update_user_profile
 from apiApp.views.base.graph_data.domain_console_metrics.domain_console_metrics import domain_console_metrics
 from apiApp.views.base.graph_data.domain_analytics_metrics.domain_analytics_metrics import domain_analytics_metrics
 from apiApp.views.base.graph_data.domain_article_metrics.domain_article_metrics import domain_article_metrics
 from apiApp.views.console_metrics.console_metrics import list_console_metrics
+from apiApp.views.progres_data.progres_data import progres_data
+from apiApp.views.image_gen.generate_template.generate_template import generate_template
+from apiApp.views.activity_log.activity_log import list_activity_log
+from apiApp.views.notification.notification import list_notification, delete_notification, process_notification
+from apiApp.views.fetch_user_workspaces.fetch_user_workspaces import fetch_user_workspaces
 
 ######### image gen  #########
 from apiApp.views.image_gen.image_tag.image_tag import list_image_tag, add_image_tag, update_image_tag, delete_image_tag
 from apiApp.views.image_gen.image_template_category.image_template_category import list_image_template_category, add_image_template_category, update_image_template_category, delete_image_template_category
-from apiApp.views.image_gen.image_template.image_template import list_image_template, add_image_template, update_image_template, delete_image_template
+from apiApp.views.image_gen.image_template.image_template import list_image_template, get_superadmin_templates, add_image_template, update_image_template, delete_image_template
 from apiApp.views.image_gen.image_tag_template_category_template_mapping.image_tag_template_category_template_mapping import list_image_tag_template_category_template_mapping, add_image_tag_template_category_template_mapping, update_image_tag_template_category_template_mapping, delete_image_tag_template_category_template_mapping
+from apiApp.views.image_gen.generate_single_image.generate_single_image import generate_single_image
 
     
 ######### jwt Token  #########
@@ -86,7 +97,7 @@ permissions_list = [
     {"name": "send_otp", "route": "send-otp/", "description": "Send otp Mails", "status": "True", "group": "login"},
     {"name": "check_otp", "route": "check-otp/", "description": "Check otp Mails", "status": "True", "group": "login"},
     {"name": "set_new_password", "route": "new-password/", "description": "Set New Password Page", "status": "True", "group": "login"},
-    # {"name": "list_dashboard", "route": "dashboard/", "description": "dashboard Page", "status": "True", "group": "login"},
+    {"name": "fetch_user_workspaces", "route": "fetch-workspaces/", "description": "fetch-workspaces", "status": "True", "group": "login"},
 
     #  registration
     {"name": "check_invitation_code", "route": "check-invitation-code/", "description": "check-invitation-code Page", "status": "True", "group": "registration"},
@@ -149,7 +160,7 @@ permissions_list = [
     
     #  user revoke and add in workspce
     {"name": "revoke_workspace_from_user", "route": "user/revoke/workspace/<slug:slug_id>", "description": "revoke user", "status": "True", "group": "user"},
-    {"name": "add_workspace_to_user", "route": "user/add/workspace/<slug:slug_id>", "description": "revoke user", "status": "True", "group": "user"},
+    {"name": "add_workspace_to_user", "route": "user/add/workspace/", "description": "revoke user", "status": "True", "group": "user"},
     
     # admin detail
     {"name": "list_admin_detail", "route": "admins/", "description": "all admin", "status": "True", "group": "admin"},
@@ -165,7 +176,8 @@ permissions_list = [
 
     #  user revoke and add in domain
     {"name": "revoke_domain_from_user", "route": "user/revoke/domain/<slug:slug_id>", "description": "revoke user", "status": "True", "group": "domain"},
-    {"name": "add_domain_to_user", "route": "user/add/domain/<slug:slug_id>", "description": "revoke user", "status": "True", "group": "domain"},
+    {"name": "add_domain_to_user", "route": "user/add/domain/", "description": "revoke user", "status": "True", "group": "domain"},
+    {"name": "list_revoke_domain_from_user", "route": "user/domains/<slug:slug_id>", "description": "revoke user", "status": "True", "group": "domain"},
 
 
     # test wordpress api Article 
@@ -221,6 +233,7 @@ permissions_list = [
     {"name": "add_motivation", "route": "motivation/add/", "description": "add motivation", "status": "True", "group": "motivation"},
     {"name": "update_motivation", "route": "motivation/update/<slug:slug_id>", "description": "update motivation", "status": "True", "group": "motivation"},
     {"name": "delete_motivation", "route": "motivation/delete/<slug:slug_id>", "description": "delete motivation", "status": "True", "group": "motivation"},
+    {"name": "process_motivation", "route": "process-motivation/", "description": "process motivation", "status": "True", "group": "motivation"},
     
     # article type field
     {"name": "list_article_type_field", "route": "article-type-fields/", "description": "all article-type-field", "status": "True", "group": "article-type-field"},
@@ -255,6 +268,18 @@ permissions_list = [
     {"name": "fetch_analytics_metrics_data", "route": "fetch/analytics-metrics/", "description": "fetch-analytics-metrics", "status": "True", "group": "fetch-analytics-metrics"},
     # fetch wp data for progressbar page 
     {"name": "fetch_wp_data", "route": "fetch/data/", "description": "fetch-data", "status": "True", "group": "fetch-data"},
+    # list activity log 
+    {"name": "list_activity_log", "route": "activity-logs/", "description": "activity-log", "status": "True", "group": "activity-log"},
+  
+    # perma_links
+    {"name": "list_perma_links", "route": "perma-links/", "description": "perma-links", "status": "True", "group": "perma-links"},
+    {"name": "update_perma_links", "route": "perma-links/update/", "description": "perma-links", "status": "True", "group": "perma-links"},
+  
+    # list notification 
+    {"name": "list_notification", "route": "notifications/", "description": "notification", "status": "True", "group": "notification"},
+    {"name": "process_notification", "route": "process-notification/", "description": "process notification", "status": "True", "group": "notification"},
+    {"name": "delete_notification", "route": "notification/delete/<slug:slug_id>", "description": "delete notification", "status": "True", "group": "notification"},
+    
     
     # article
     {"name": "list_article", "route": "articles/", "description": "all article", "status": "True", "group": "article"},
@@ -332,6 +357,7 @@ permissions_list = [
     
     # user profile
     {"name": "list_user_profile", "route": "user/profile/", "description": "user-profile", "status": "True", "group": "user-profile"},
+    {"name": "update_user_profile", "route": "user/profile/update/", "description": "user-profile-update", "status": "True", "group": "user-profile"},
 
     # graph 
     {"name": "domain_console_metrics", "route": "domain/console-metrics-graph/", "description": "console-metrics-graph", "status": "True", "group": "console-metrics-graph"},
@@ -340,10 +366,27 @@ permissions_list = [
     
     # console metrics
     {"name": "list_console_metrics", "route": "console-metrics/", "description": "console_metrics", "status": "True", "group": "console_metrics"},
+    
+    # progres_data
+    {"name": "progres_data", "route": "progres-data/", "description": "progres_data", "status": "True", "group": "progres_data"},
+    
 
+
+    # image kit configuration
+    {"name": "list_image_kit_configuration", "route": "image-kit-configurations/", "description": "all image-kit-configuration", "status": "True", "group": "image-kit-configuration"},
+    {"name": "add_image_kit_configuration", "route": "image-kit-configuration/add/", "description": "add image-kit-configuration", "status": "True", "group": "image-kit-configuration"},
+    {"name": "update_image_kit_configuration", "route": "image-kit-configuration/update/<slug:slug_id>", "description": "update image-kit-configuration", "status": "True", "group": "image-kit-configuration"},
+    {"name": "delete_image_kit_configuration", "route": "image-kit-configuration/delete/<slug:slug_id>", "description": "delete image-kit-configuration", "status": "True", "group": "image-kit-configuration"},
+
+    # verify ai configuration
+    {"name": "verify_image_kit_configuration", "route": "image-kit-configuration/verify/", "description": "verify image-kit-configuration", "status": "True", "group": "image-kit-configuration"},
 
 
     ######### image gen  #########
+
+
+    # generate_template
+    {"name": "generate_template", "route": "generate-template/", "description": "generate template", "status": "True", "group": "generate template"},
 
     # image tag
     {"name": "list_image_tag", "route": "image-tags/", "description": "all image-tag", "status": "True", "group": "image-tag"},
@@ -359,6 +402,7 @@ permissions_list = [
     
     # image template
     {"name": "list_image_template", "route": "image-templates/", "description": "all image-template", "status": "True", "group": "image-template"},
+    {"name": "get_superadmin_templates", "route": "image-templates/base/", "description": "all base image-template", "status": "True", "group": "image-template"},
     {"name": "add_image_template", "route": "image-template/add/", "description": "add image-template", "status": "True", "group": "image-template"},
     {"name": "update_image_template", "route": "image-template/update/<slug:slug_id>", "description": "update image-template", "status": "True", "group": "image-template"},
     {"name": "delete_image_template", "route": "image-template/delete/<slug:slug_id>", "description": "delete image-template", "status": "True", "group": "image-template"},
@@ -369,7 +413,13 @@ permissions_list = [
     {"name": "update_image_tag_template_category_template_mapping", "route": "image-tag-template-category-template-mapping/update/<slug:slug_id>", "description": "update image-tag-template-category-template-mapping", "status": "True", "group": "image-tag-template-category-template-mapping"},
     {"name": "delete_image_tag_template_category_template_mapping", "route": "image-tag-template-category-template-mapping/delete/<slug:slug_id>", "description": "delete image-tag-template-category-template-mapping", "status": "True", "group": "image-tag-template-category-template-mapping"},
 
+    {"name": "generate_single_image", "route": "generate-single-image/add/", "description": "add generate-single-image", "status": "True", "group": "generate-single-image"},
 ]
+
+
+# path('home/',show_home, name="show_home"),
+
+
 
 
 
@@ -404,10 +454,3 @@ for perm in permissions_list:
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-# {
-#     "workspace_slug_id": "ba30e84e-86b1-455c-94c8-1b14d9df2230",
-#     "article_type_slug_id": "f53ace2d-4d78-4250-8aec-f69f373195ea",
-#     "name": "demo",
-#     "prompt_data": "{\"1\": {\"text\": \"demo prompt\", \"textarea\": \"demo prompt\"}}"
-# }

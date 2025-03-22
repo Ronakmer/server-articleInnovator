@@ -16,8 +16,6 @@ def domain_article_metrics(request):
         domain_slug_id = request.GET.get('domain_slug_id', '')
         start_date = request.GET.get('start_date', '')
         end_date = request.GET.get('end_date', '')
-        # search = request.GET.get('search', '')
-
 
         if not domain_slug_id or not start_date or not end_date:
             return JsonResponse({'error': 'Missing required parameters.'}, status=400)

@@ -5,7 +5,7 @@
 async function generate_invitation_code_detail_api() {
     try {
 
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
 
 
         const response = await fetch(generate_invitation_code_detail_url, {

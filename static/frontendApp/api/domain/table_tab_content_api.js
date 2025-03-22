@@ -4,7 +4,7 @@
 // table_tab_content_api
 async function table_tab_content_api() {
     try {
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
         
         const current_page_url = window.location.href;
         const domain_slug_id = current_page_url.split('/').pop();

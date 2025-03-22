@@ -13,11 +13,13 @@ from apiApp.models import (
     competitor_sitemap_url_mapping, competitor_article_url,
     competitor_article_url_mapping, competitor_extraction, 
     competitor_extraction_mapping, competitor_seo_extraction_mapping, 
-    user_api_key, keyword
+    user_api_key, keyword, image_kit_configuration, notification,
+    activity_log,
 )
 # Register your models here.
 
 admin.site.register(invitation_code_detail)
+admin.site.register(image_kit_configuration)
 admin.site.register(role)
 admin.site.register(permission)
 admin.site.register(dynamic_avatar_image)
@@ -57,3 +59,5 @@ admin.site.register(competitor_extraction_mapping)
 admin.site.register(competitor_seo_extraction_mapping)
 admin.site.register(user_api_key)
 admin.site.register(keyword)
+admin.site.register(notification)
+admin.site.register(activity_log)

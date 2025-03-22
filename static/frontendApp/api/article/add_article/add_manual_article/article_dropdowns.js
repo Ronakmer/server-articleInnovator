@@ -3,9 +3,9 @@ let temp_domain_slug_id = '';
 
 // set_domain_dropdown
 function set_domain_dropdown(domain_data){
-    console.log(domain_data,'***')
     domain_data.then((response) => {
-        const domain_data = response.domains || [];  // Ensure data is loaded
+
+        const domain_data = response.data || [];  // Ensure data is loaded
         console.log(domain_data)
         const selectElement = document.querySelector('[name="manual_domain_data"]');
         if(!selectElement){
@@ -55,7 +55,7 @@ function set_domain_dropdown(domain_data){
 // set_author_dropdown
 function set_author_dropdown(author_data){
     author_data.then((response) => {
-        const author_data = response.authors || [];  // Ensure data is loaded
+        const author_data = response.data || [];  // Ensure data is loaded
         console.log(author_data)
         const selectElement = document.querySelector('[name="author_data"]');
 
@@ -106,9 +106,7 @@ function set_category_dropdown(category_data) {
     
     category_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const categories = response.categories || [];  // Ensure data is loaded
-        console.log(categories, '0w');
-
+        const categories = response.data || [];  // Ensure data is loaded
         
         const input = document.getElementById('category-input');
         const dropdown = document.getElementById('category-dropdown');
@@ -260,7 +258,7 @@ function set_tag_dropdown(tag_data) {
     
     tag_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const categories = response.tags || [];  // Ensure data is loaded
+        const categories = response.data || [];  // Ensure data is loaded
         console.log(categories, '0w');
         
         const input = document.getElementById('tag-input');

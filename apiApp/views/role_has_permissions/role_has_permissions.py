@@ -3,10 +3,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from apiApp.serializers import role_serializer, permission_serializer
 from apiApp.models import role, permission, role_has_permissions
-
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 import json
+
+
 
 @api_view(['GET'])
 def list_role_has_permissions(request):
@@ -56,92 +57,17 @@ def list_role_has_permissions(request):
             'grouped_permissions': grouped_permissions
         }
 
-        return JsonResponse({'status': 'success', 'data': response_data}, status=200)
+        return JsonResponse({'status': 'success', 'data': response_data,"success": True}, status=200)
 
     except Exception as e:
         print(f"Error in list_role_has_permissions: {e}")
-        return JsonResponse({'status': 'error'}, status=500)
+        return JsonResponse({'status': 'error',"success": False}, status=500)
 
 
 
 
 
-
-@api_view(['POST'])
-def add_role_has_permissions(request):
-    try:
-        # Print request data for debugging purposes
-        print("Request data:", request.data)
-
-        # Ensure that the data is a list of roles (it could be a list or a string)
-        roles_data = request.data.get('roles') if isinstance(request.data, dict) else request.data
-
-        # If roles_data is a string, try to parse it
-        if isinstance(roles_data, str):
-            roles_data = json.loads(roles_data)  # Parse the string to a list of dicts
-        elif not isinstance(roles_data, list):
-            return JsonResponse({"error": "Roles data should be a list."}, status=400)
-
-        # Ensure roles_data is not empty
-        if not roles_data:
-            return JsonResponse({"error": "Roles data is required."}, status=400)
-
-        _ = role_has_permissions.objects.all().delete()
-
-        # Iterate over each role and its permissions
-        for role_data in roles_data:
-            if isinstance(role_data, dict):  # Ensure role_data is a dictionary
-                role_name = role_data.get('role')
-                permissions_data = role_data.get('permissions')
-
-                # Ensure permissions_data is not empty
-                if not role_name:
-                    return JsonResponse({"error": "Role name is missing."}, status=400)
-                if not permissions_data:
-                    return JsonResponse({"error": f"Permissions data is missing for role '{role_name}'."}, status=400)
-
-                # Split permissions string and clean up any empty or invalid data
-                permissions_ids = permissions_data.split(',')
-                permissions_ids = [perm_id.strip() for perm_id in permissions_ids if perm_id.strip()]
-
-                if not permissions_ids:
-                    return JsonResponse({"error": f"No valid permission IDs provided for role '{role_name}'."}, status=400)
-
-                # Fetch the role instance by its name (case-insensitive)
-                role_instance = role.objects.filter(name=role_name.lower()).first()
-
-                if not role_instance:
-                    return JsonResponse({"error": f"Role '{role_name}' not found."}, status=404)
-
-
-                # Fetch the permissions based on the permission IDs
-                permission_objects = permission.objects.filter(slug_id__in=permissions_ids)
-
-                if not permission_objects:
-                    return JsonResponse({"error": f"No valid permissions found for role '{role_name}'."}, status=404)
-
-                # Now, add the new associations
-                for perm in permission_objects:
-                    role_has_permissions.objects.create(role_id=role_instance, permission_id=perm)
-
-            else:
-                return JsonResponse({"error": "Each role data should be a dictionary."}, status=400)
-
-        return JsonResponse({"message": "Roles and permissions added successfully."}, status=200)
-
-    except Exception as e:
-        print(f"Error in add_role_has_permissions: {e}")
-        return JsonResponse({"error": "Internal server error."}, status=500)
-
-
-
-
-
-
-
-
-
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_role_has_permissions(request):
     try:
         # Extract role and permissions data from the request
@@ -150,20 +76,20 @@ def update_role_has_permissions(request):
 
         # Ensure permissions_data is not empty
         if not permissions_data:
-            return JsonResponse({"status": "error", "error": "Permissions data is required."}, status=400)
+            return JsonResponse({"status": "error", "error": "Permissions data is required.","success": False}, status=400)
 
         # Split permissions string and clean up any empty or invalid data
         permissions_ids = permissions_data.split(',')
         permissions_ids = [perm_id.strip() for perm_id in permissions_ids if perm_id.strip()]
 
         if not permissions_ids:
-            return JsonResponse({"status": "error", "error": "No valid permission IDs provided."}, status=400)
+            return JsonResponse({"status": "error", "error": "No valid permission IDs provided.","success": False}, status=400)
 
         # Fetch the role instance
         role_instance = role.objects.filter(name=role_name).first()
 
         if not role_instance:
-            return JsonResponse({"status": "error", "error": f"Role not found."}, status=404)
+            return JsonResponse({"status": "error", "error": f"Role not found.","success": False}, status=404)
 
         # Fetch the permissions based on the slug IDs
         permission_objects = permission.objects.filter(slug_id__in=permissions_ids)
@@ -175,9 +101,116 @@ def update_role_has_permissions(request):
         for perm in permission_objects:
             role_has_permissions.objects.create(role_id=role_instance, permission_id=perm)
 
-        return JsonResponse({"status": "success", "error": "Role and permissions added successfully."}, status=200)
+        return JsonResponse({"status": "success", "error": "Role and permissions added successfully.","success": True}, status=200)
 
     except Exception as e:
         print(f"Error in update_role_has_permissions: {e}")
-        return JsonResponse({"status": "error", "error": "Internal server error."}, status=500)
+        return JsonResponse({"status": "error", "error": "Internal server error.","success": False}, status=500)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+@api_view(['POST'])
+def add_role_has_permissions(request):
+    try:
+        # Get the data from request
+        data = request.data
+        print("Received data:", data)
+        
+        # Validate the data
+        if not isinstance(data, list):
+            return JsonResponse({"error": "Request data should be a list of role-permission mappings.","success": False}, status=400)
+        
+        if not data:
+            return JsonResponse({"error": "Role-permission data is required.","success": False}, status=400)
+        
+        # Track changes for response
+        created = 0
+        updated = 0
+        deleted = 0
+        
+        for item in data:
+            print("Processing item:", item)
+            
+            # Validate each item in the list
+            if not isinstance(item, dict):
+                return JsonResponse({"error": "Each item should be a dictionary.","success": False}, status=400)
+            
+            role_name = item.get('role')
+            permissions_str = item.get('permissions')
+            
+            print(f"Role: {role_name}")
+            print(f"Permissions string: {permissions_str}")
+            
+            # Validate required fields
+            if not role_name:
+                return JsonResponse({"error": "Role name is missing in one of the items.","success": False}, status=400)
+            if not permissions_str:
+                return JsonResponse({"error": "Permissions are missing in one of the items.","success": False}, status=400)
+            
+            # Get the role instance
+            role_instance = role.objects.filter(name=role_name.lower()).first()
+            if not role_instance:
+                return JsonResponse({"error": f"Role '{role_name}' not found.","success": False}, status=404)
+            
+            # Split the permissions string and clean up
+            permission_ids = [p.strip() for p in permissions_str.split(',')]
+            print(f"Permission IDs after splitting: {permission_ids}")
+            
+            # Get existing permissions for this role
+            existing_mappings = role_has_permissions.objects.filter(role_id=role_instance)
+            existing_permission_ids = [str(mapping.permission_id.slug_id) for mapping in existing_mappings]
+            print(f"Existing permission IDs: {existing_permission_ids}")
+            
+            # Determine permissions to add and remove
+            to_add = [pid for pid in permission_ids if pid and pid not in existing_permission_ids]
+            to_remove = [pid for pid in existing_permission_ids if pid not in permission_ids]
+            
+            print(f"Permissions to add: {to_add}")
+            print(f"Permissions to remove: {to_remove}")
+            
+            # Add new permissions
+            for pid in to_add:
+                permission_instance = permission.objects.filter(slug_id=pid).first()
+                if permission_instance:
+                    role_has_permissions.objects.create(
+                        role_id=role_instance,
+                        permission_id=permission_instance
+                    )
+                    created += 1
+                    print(f"Added permission {pid} to role {role_name}")
+                else:
+                    print(f"Warning: Permission {pid} not found, skipping")
+            
+            # Remove old permissions
+            for pid in to_remove:
+                deleted_count = role_has_permissions.objects.filter(
+                    role_id=role_instance,
+                    permission_id__slug_id=pid
+                ).delete()[0]
+                deleted += deleted_count
+                print(f"Removed {deleted_count} permission(s) with ID {pid} from role {role_name}")
+        
+        return JsonResponse({
+            "message": "Role permissions processed successfully.",
+            "created": created,
+            "updated": updated,
+            "deleted": deleted,
+            "success": True,
+        }, status=200)
+    
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error in add_role_has_permissions: {str(e)}")
+        return JsonResponse({"error": "Internal server error","success": False}, status=500)

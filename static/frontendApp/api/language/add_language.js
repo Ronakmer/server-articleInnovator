@@ -45,8 +45,8 @@ function add_language_api() {
         // Collect form data using the name attributes
         const name = language_form.querySelector('[name="name"]');
 
-        if (data_obj && data_obj.languages && data_obj.languages.length > 0) {
-            name.value = data_obj.languages[0].name;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
         } else {
             window.location.href = error_page;
         }

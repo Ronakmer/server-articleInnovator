@@ -75,13 +75,13 @@ function add_article_type_api() {
         const article_type_image = article_type_form.querySelector('[name="article_type_image"]');
     
         
-        if (data_obj && data_obj.article_types && data_obj.article_types.length > 0) {
-            article_category.value = data_obj.article_types[0].article_category;
-            category.value = data_obj.article_types[0].category;
-            title.value  = data_obj.article_types[0].title;
-            description.value  = data_obj.article_types[0].description;            
-            set_color_slug_id = data_obj.article_types[0].color_detail_id_data.slug_id
-            set_article_type_field_slug_id = data_obj.article_types[0].article_type_field_id_data.map(field => field.slug_id).join(', ')
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            article_category.value = data_obj.data[0].article_category;
+            category.value = data_obj.data[0].category;
+            title.value  = data_obj.data[0].title;
+            description.value  = data_obj.data[0].description;            
+            set_color_slug_id = data_obj.data[0].color_detail_id_data.slug_id
+            set_article_type_field_slug_id = data_obj.data[0].article_type_field_id_data.map(field => field.slug_id).join(', ')
             
         } else {
             // name.value = ''; 

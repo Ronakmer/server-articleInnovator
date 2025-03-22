@@ -63,14 +63,14 @@ function add_ai_configuration_api() {
         const api_url = ai_configuration_form.querySelector('[name="api_url"]');
         const email = ai_configuration_form.querySelector('[name="email"]');
     
-        if (data_obj && data_obj.ai_configurations && data_obj.ai_configurations.length > 0) {
-            api_provider.value = data_obj.ai_configurations[0].api_provider;
-            api_type.value = data_obj.ai_configurations[0].api_type;
-            api_version.value = data_obj.ai_configurations[0].api_version;
-            api_key.value = data_obj.ai_configurations[0].api_key;
-            api_model.value = data_obj.ai_configurations[0].api_model;
-            api_url.value = data_obj.ai_configurations[0].api_url;
-            email.value = data_obj.ai_configurations[0].email;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            api_provider.value = data_obj.data[0].api_provider;
+            api_type.value = data_obj.data[0].api_type;
+            api_version.value = data_obj.data[0].api_version;
+            api_key.value = data_obj.data[0].api_key;
+            api_model.value = data_obj.data[0].api_model;
+            api_url.value = data_obj.data[0].api_url;
+            email.value = data_obj.data[0].email;
         } else {
             // name.value = ''; 
             window.location.href = error_page;

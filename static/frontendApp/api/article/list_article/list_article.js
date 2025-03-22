@@ -3,7 +3,6 @@
 
 function render_data_to_table(response_data, current_page, limit){
     
-    // table_data_permission('permission_tbody', response_data, 'delete_permission_api', 'status_permission_api', update_permission_page_url, current_page, limit)
     table_data_article('article_tbody', response_data, 'delete_article_api', 'status_article_api', update_article_page_url, current_page, limit)
 
 }
@@ -14,6 +13,8 @@ function render_data_to_table(response_data, current_page, limit){
 // list article api
 async function list_article_api() {
   
+    const selected_sort = document.querySelector('input[name="order_by"]:checked').value;
+    console.log("Selected Sort:", selected_sort); // Debugging purpose
 
 
     let current_page = 1; // Initialize current page
@@ -22,25 +23,33 @@ async function list_article_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
-        // status: document.getElementById('status-filter').value,
-        // search: document.getElementById('search-input').value,
         search: searchInput ? searchInput.value : '',
-
+        order_by:selected_sort,
+        
     };
     const current_page_url = window.location.href;
     const domain_slug_id = current_page_url.split('/').pop();
 
-
-
-    // const api_url = `${list_article_url}&domain_slug_id=${domain_slug_id}`
-
     const response_data = await list_api(list_article_url, 'article_tbody', offset, limit, filters, 'delete_article_api', 'status_article_api', '', current_page, 'articles', domain_slug_id, render_data_to_table);
     console.log(response_data,'0')
     
-    // table_data_article('article_tbody', response_data, 'delete_article_api', 'status_article_api', update_article_page_url, current_page, limit)
+
+
+    // remove extra session 
+    const sessionKeys = [
+        "current_step",
+        "step_expiry",
+        "article_type_category",
+        "article_type_title", 
+        "current_url",
+        "article_type_slug_id"
+    ];
     
+    // Clear each session key
+    sessionKeys.forEach(key => localStorage.removeItem(key));
+
+
 }
 
 list_article_api()

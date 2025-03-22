@@ -6,6 +6,7 @@ from apiApp.models import invitation_code_detail
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 # show invitation code details
@@ -19,8 +20,8 @@ def list_invitation_code_detail(request):
         email = request.GET.get('email', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
+        order_by = request.GET.get('order_by', '-created_date')
         
-
         # Initialize filters
         filters = Q()
         
@@ -39,31 +40,39 @@ def list_invitation_code_detail(request):
                 
             except User.DoesNotExist:
                 return JsonResponse({
-                    "error": "email not found "
+                    "error": "email not found ",
+                    "success": False,
                 }, status=404)
 
         try:
-            obj = invitation_code_detail.objects.filter(filters).order_by('-created_date')
+            obj = invitation_code_detail.objects.filter(filters).order_by(order_by)
         except invitation_code_detail.DoesNotExist:
             return JsonResponse({
                 "error": "invitation code detail not found.",
+                "success": False,
             }, status=404)   
 
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+
+        # Apply pagination
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
 
         # Serialize the data
         serialized_data = invitation_code_detail_serializer(obj, many=True)
         
         return JsonResponse({
-            "redirect": "",
-            "invitation_code_details":serialized_data.data,
-            "total_count": total_count,
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
         }, status=200)
 
     except Exception as e:
         print("This error is list_invitation_code_detail --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -80,7 +89,8 @@ def add_invitation_code_detail(request):
                 email_obj = User.objects.get(email=email)
             except User.DoesNotExist:
                 return JsonResponse({
-                    "error": "email not found "
+                    "error": "email not found ",
+                    "success": False,
                 }, status=404)
 
         # Include `color_detail_id` in the request data for the serializer
@@ -97,26 +107,29 @@ def add_invitation_code_detail(request):
                 
                 return JsonResponse({
                     "message": "Data added successfully.",
-                    "invitation_code_detail": serialized_data.data,
+                    "data": serialized_data.data,
+                    "success": True,
                 }, status=200)
             except:
                 return JsonResponse({
                     "error": "invitation code already exists. Please use a unique code.",
-                }, status=400)
+                    "success": False,
+                }, status=409)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_invitation_code_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
 # update invitation code details
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_invitation_code_detail(request, slug_id):
     try:
 
@@ -125,6 +138,7 @@ def update_invitation_code_detail(request, slug_id):
         except invitation_code_detail.DoesNotExist:
             return JsonResponse({
                 "error": "invitation code detail not found.",
+                "success": False,
             }, status=404)   
                 
         email = request.data.get("email")  
@@ -134,37 +148,35 @@ def update_invitation_code_detail(request, slug_id):
                 email_obj = User.objects.get(email=email)
             except User.DoesNotExist:
                 return JsonResponse({
-                    "error": "email not found "
+                    "error": "email not found ",
+                    "success": False,
                 }, status=404)
 
-
-        # Remove 'created_by' from the update request data as it should not be updated
         data = request.data.copy()
         data['created_by'] = obj.created_by.id
         if email:
             data['email'] = email_obj.id
 
-        # if 'created_by' in data:
-        #     del data['created_by']
-
-        serialized_data = invitation_code_detail_serializer(instance=obj, data=data)        
+        serialized_data = invitation_code_detail_serializer(instance=obj, data=data, partial=True)        
         
         if serialized_data.is_valid():
             serialized_data.save()
             
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "invitation_code_detail": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is update_invitation_code_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
@@ -177,19 +189,18 @@ def delete_invitation_code_detail(request, slug_id):
         except invitation_code_detail.DoesNotExist:
             return JsonResponse({
                 "error": "invitation code detail not found.",
+                "success": False,
             }, status=404) 
                 
         obj.delete()
         
-        # obj = invitation_code_detail.objects.all()
-        # serialized_data = invitation_code_detail_serializer(obj, many=True)
-
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_invitation_code_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

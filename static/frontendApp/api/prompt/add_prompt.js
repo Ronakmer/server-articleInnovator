@@ -63,14 +63,14 @@ function add_prompt_api() {
         const prompt_data = prompt_form.querySelector('[name="prompt_data"]');
     
 
-        if (data_obj && data_obj.prompts && data_obj.prompts.length > 0) {
-            name.value = data_obj.prompts[0].name;
-            prompt_data.value = JSON.stringify(data_obj.prompts[0].prompt_data);
-            // article_type_slug_id.value = data_obj.prompts[0].article_type_slug_id;
-            // workspace_slug_id.value = data_obj.prompts[0].workspace_slug_id;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
+            prompt_data.value = JSON.stringify(data_obj.data[0].prompt_data);
+            // article_type_slug_id.value = data_obj.data[0].article_type_slug_id;
+            // workspace_slug_id.value = data_obj.data[0].workspace_slug_id;
 
-            set_article_type_id = data_obj.prompts[0].article_type_id_data.slug_id;
-            set_workspace_id = data_obj.prompts[0].workspace_id_data.slug_id;
+            set_article_type_id = data_obj.data[0].article_type_id_data.slug_id;
+            set_workspace_id = data_obj.data[0].workspace_id_data.slug_id;
 
             
         } else {

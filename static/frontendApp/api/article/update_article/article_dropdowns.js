@@ -5,7 +5,7 @@ let temp_domain_slug_id = '';
 function set_domain_dropdown(domain_data){
 
     domain_data.then((response) => {
-        const domain_data = response.domains || [];  // Ensure data is loaded
+        const domain_data = response.data || [];  // Ensure data is loaded
         console.log(domain_data)
         const selectElement = document.querySelector('[name="manual_domain_data"]');
         if(!selectElement){
@@ -74,7 +74,7 @@ function set_domain_dropdown(domain_data){
 // set_author_dropdown
 function set_author_dropdown(author_data){
     author_data.then((response) => {
-        const author_data = response.authors || [];  // Ensure data is loaded
+        const author_data = response.data || [];  // Ensure data is loaded
         console.log(author_data)
         const selectElement = document.querySelector('[name="author_data"]');
 
@@ -141,16 +141,8 @@ function set_category_dropdown(category_data) {
     
     category_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const categories = response.categories || [];  // Ensure data is loaded
-        console.log(categories, '0w');
+        const categories = response.data || [];  // Ensure data is loaded
 
-        // const categories = [
-        //     { slug_id: 1, name: 'text', count: 15 },
-        //     { slug_id: 2, name: 'textarea', count: 10 },
-        //     { slug_id: 3, name: 'text', count: 8 },
-        //     { slug_id: 4, name: 'Category 4', count: 12 },
-        //     { slug_id: 5, name: 'Category 5', count: 20 },
-        // ];
         
         const input = document.getElementById('category-input');
         const dropdown = document.getElementById('category-dropdown');
@@ -317,16 +309,7 @@ function set_tag_dropdown(tag_data, set_tag_id) {
     
     tag_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const categories = response.tags || [];  // Ensure data is loaded
-        console.log(categories, '0w');
-
-        // const categories = [
-        //     { slug_id: 1, name: 'text', count: 15 },
-        //     { slug_id: 2, name: 'textarea', count: 10 },
-        //     { slug_id: 3, name: 'text', count: 8 },
-        //     { slug_id: 4, name: 'Category 4', count: 12 },
-        //     { slug_id: 5, name: 'Category 5', count: 20 },
-        // ];
+        const categories = response.data || [];  // Ensure data is loaded
         
         const input = document.getElementById('tag-input');
         const dropdown = document.getElementById('tag-dropdown');

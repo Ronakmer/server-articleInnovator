@@ -13,7 +13,7 @@ function table_data_user_detail(tbody_name, response_data, delete_function_name,
 
     tbody.innerHTML = ''; 
 
-    response_data.user_details.forEach((obj, index) => {
+    response_data.data.forEach((obj, index) => {
         const tr = document.createElement('tr');
         tr.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
 
@@ -30,7 +30,7 @@ function table_data_user_detail(tbody_name, response_data, delete_function_name,
                 </div>
             </td>
 
-            <td class="py-3.5 pl-4 whitespace-nowrap">
+            <td class="py-3.5 pl-4 whitespace-nowrap hidden" data-permission="update_user_detail" >
                 <div class="flipswitch">
                     <input 
                         id="fs${obj.slug_id}" 
@@ -46,10 +46,10 @@ function table_data_user_detail(tbody_name, response_data, delete_function_name,
                     </label>
                 </div>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 hidden" data-permission="update_user_detail, delete_user_detail">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <a href="${update_page_url}${obj.slug_id}" class="mr-2">
+                    <a href="${update_page_url}${obj.slug_id}" class="mr-2 hidden" data-permission="update_user_detail" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -65,7 +65,7 @@ function table_data_user_detail(tbody_name, response_data, delete_function_name,
                         </svg>
                     </a>
                     <!-- view -->
-                    <a href="#" class="mr-2">
+                    <a href="${detail_user_page_url}${obj.slug_id}" class="mr-2 hidden" data-permission="detail_user" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -78,7 +78,7 @@ function table_data_user_detail(tbody_name, response_data, delete_function_name,
                         </svg>                        
                     </a>
                     <!-- delete -->
-                    <a href="#" class="mr-2" onclick="${delete_function_name}('${obj.slug_id}')">
+                    <a href="#" class="mr-2 hidden" data-permission="delete_user_detail"  onclick="${delete_function_name}('${obj.slug_id}')">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -104,6 +104,8 @@ function table_data_user_detail(tbody_name, response_data, delete_function_name,
         `;
         tbody.appendChild(tr);
     });
+handle_permissions();
+
 }
 
 

@@ -3,11 +3,17 @@
 // add api 
 async function add_api(api_url, data, redirect_url) {
 
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
-    const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
 
-    data.append("workspace_slug_id", workspace_slug_id);
+    const workspace_slug_id = localStorage.getItem("workspace_slug_id");
+
+    if (!data.has("workspace_slug_id")) {
+        // data.append("workspace_slug_id", workspace_slug_id);   
+        if(workspace_slug_id){
+            data.append("workspace_slug_id", workspace_slug_id);
+        }
+    }
 
 
     try {
@@ -33,9 +39,7 @@ async function add_api(api_url, data, redirect_url) {
 
             // Redirect or show a success message (for domain only)
             if(api_url === add_domain_url) {
-                // sessionStorage.setItem("domain_slug_id", data.domain.slug_id);
-                // alert(data.domain.slug_id)
-                progress_bar_page_url += `?workspace_slug_id=${workspace_slug_id}&domain_slug_id=${data.domain.slug_id}`;
+                progress_bar_page_url += `?workspace_slug_id=${workspace_slug_id}&domain_slug_id=${data.data.slug_id}`;
                 window.location.href = progress_bar_page_url
             }
 

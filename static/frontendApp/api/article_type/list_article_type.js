@@ -9,6 +9,8 @@ function render_data_to_table(response_data, current_page, limit){
 // list article_type api
 async function list_article_type_api() {
   
+    const selected_sort = document.querySelector('input[name="order_by"]:checked').value;
+    console.log("Selected Sort:", selected_sort); // Debugging purpose
 
 
     let current_page = 1; // Initialize current page
@@ -17,9 +19,9 @@ async function list_article_type_api() {
 
     const searchInput = document.getElementById('search-input');
 
-    // const filters = {};
     const filters = {
         search: searchInput ? searchInput.value : '',
+        order_by:selected_sort,
 
     };
 

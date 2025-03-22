@@ -15,8 +15,9 @@ def generate_user_api_key(request):
         return JsonResponse({
             "message": "Generate api key successfully.",
             "invitation_code": random_uuid,
+            "success": True,
         }, status=200)
        
     except Exception as e:
         print("This error is generate_api_key --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)

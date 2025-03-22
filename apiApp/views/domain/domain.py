@@ -5,7 +5,8 @@ from apiApp.serializers import domain_serializer
 from apiApp.models import domain, user_detail, workspace
 from apiApp.views.decorator.workspace_decorator import workspace_permission_required
 from django.db.models import Q
-
+from apiApp.views.wordpress.perma_links.perma_links import get_perma_links, update_perma_links
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 # show domain
@@ -24,13 +25,14 @@ def list_domain(request):
         writer = request.GET.get('writer', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
+        order_by = request.GET.get('order_by', '-created_date')
+
 
         # Initialize filters
         filters = Q()
         
         # Apply filters based on provided parameters
-        if status:
-            filters &= Q(status=status)
+
         if manager:
             filters &= Q(manager_id=manager)
         if writer:
@@ -45,59 +47,62 @@ def list_domain(request):
                 workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
             except workspace.DoesNotExist:
                 return JsonResponse({
-                    "error": "workspace not found "
+                    "error": "workspace not found ",
+                    "success": False,
                 }, status=404)
 
 
         if request_user.is_superuser:
             try:
-                obj = domain.objects.filter(filters).order_by('-created_date') 
+                obj = domain.objects.filter(filters, workspace_id=workspace_obj).order_by(order_by) 
  
             except domain.DoesNotExist:
                 return JsonResponse({
                     "error": "domain not found.",
+                    "success": False,
                 }, status=404)  
 
         if not request_user.is_superuser:
         
-            try:
-                user_obj = user_detail.objects.get(user_id=request_user.id) 
-            except user_detail.DoesNotExist:
-                return JsonResponse({
-                    "error": "user not found."
-                }, status=404)
-
-            if user_obj.role_id.name == 'admin':
+            if request.is_admin:
                 try:
-                    obj = domain.objects.filter(filters, workspace_id=workspace_obj).distinct().order_by('-created_date')
+                    obj = domain.objects.filter(filters, workspace_id=workspace_obj).distinct().order_by(order_by)
                 except domain.DoesNotExist:
                     return JsonResponse({
                         "error": "domain not found.",
+                        "success": False,
                     }, status=404)   
             else:
                 try:
-                    obj = domain.objects.filter(Q(manager_id__user_id=request_user) | Q(writer_id__user_id=request_user),workspace_id=workspace_obj).distinct().order_by('-created_date')
+                    obj = domain.objects.filter(Q(manager_id__user_id=request_user) | Q(writer_id__user_id=request_user),workspace_id=workspace_obj).distinct().order_by(order_by)
                 except domain.DoesNotExist:
                     return JsonResponse({
                         "error": "domain not found.",
+                        "success": False,
                     }, status=404)   
 
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
+
 
         serialized_data = domain_serializer(obj, many=True)
         
         return JsonResponse({
-            "redirect": "",
-            "domains":serialized_data.data,
-            "total_count": total_count,
+             
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
             
         }, status=200)
 
     except Exception as e:
         print("This error is list_domain --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -117,22 +122,23 @@ def add_domain(request):
                 if domain_count_obj >= domain_limit:
                     return JsonResponse({
                         "error": "Domain limit exceeded. Please upgrade your limit.",
-                    }, status=403)
+                        "success": False,
+                    }, status=409)
                     
             except user_detail.DoesNotExist:
-                return JsonResponse({"error": "User details not found."}, status=404)
+                return JsonResponse({"error": "User details not found.","success": False}, status=404)
         
         workspace_slug_id = request.data.get('workspace_slug_id')
         
         if not (workspace_slug_id):
-            return JsonResponse({"error": "workspace slug required fields."}, status=400)
+            return JsonResponse({"error": "workspace slug required fields.","success": False}, status=400)
     
         print(workspace_slug_id,'workspace_slug_id')
         
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "workspace not found "}, status=404)
+            return JsonResponse({"error": "workspace not found ","success": False}, status=404)
 
         manager_objs = ''
         manager_slug_ids = request.data.get('manager_slug_id')  
@@ -144,10 +150,10 @@ def add_domain(request):
                 manager_objs_list = [data for data in manager_objs_list]
                 manager_objs = user_detail.objects.filter(slug_id__in=manager_objs_list,workspace_id=workspace_obj)
                 if len(manager_objs) != len(manager_objs_list):
-                    return JsonResponse({"error": "manager do not belong to the specified workspace."}, status=400)
+                    return JsonResponse({"error": "manager do not belong to the specified workspace.","success": False}, status=400)
 
             except user_detail.DoesNotExist:
-                return JsonResponse({"error": "manager not found "}, status=404)
+                return JsonResponse({"error": "manager not found ","success": False}, status=404)
 
         writer_objs = ''
         writer_slug_ids = request.data.get('writer_slug_id') 
@@ -157,15 +163,44 @@ def add_domain(request):
                 writer_objs_list = [data for data in writer_objs_list]
                 writer_objs = user_detail.objects.filter(slug_id__in=writer_objs_list,workspace_id=workspace_obj)
                 if len(manager_objs) != len(manager_objs_list):
-                    return JsonResponse({"error": "writer do not belong to the specified workspace."}, status=400)
+                    return JsonResponse({"error": "writer do not belong to the specified workspace.","success": False}, status=400)
                 
             except user_detail.DoesNotExist:
-                return JsonResponse({"error": "writer not found "}, status=404)
+                return JsonResponse({"error": "writer not found ","success": False}, status=404)
 
 
+        wordpress_username = request.data.get('wordpress_username')        
+        wordpress_application_password = request.data.get('wordpress_application_password')        
+        domain_name = request.data.get('name')        
+        permalinks = request.data.get('permalinks')        
+
+
+        data={
+            "name":domain_name,
+            "wordpress_username":wordpress_username,
+            "wordpress_application_password":wordpress_application_password,
+            "new_perma_links":permalinks,
+        }
+
+        perma_links_response = get_perma_links(data)
+
+        current_structure = perma_links_response.get('current_structure')
+
+        print(current_structure,'current_structure')
+        print(permalinks,'permalinks')
+
+        new_structure = current_structure
+
+        if permalinks != current_structure:
+            update_response = update_perma_links(data)
+            new_structure = update_response.get('new_structure')
+        
+        print(new_structure,'new_structure')
+             
         data = request.data.copy()
         data["created_by"] = request_user.id  
         data["workspace_id"] = workspace_obj.id  
+        data["permalinks"] = new_structure  
 
 
         # Serialize and validate the data
@@ -183,21 +218,23 @@ def add_domain(request):
                 
             return JsonResponse({
                 "message": "Data added successfully.",
-                "domain": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_domain --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 # update domain
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @workspace_permission_required
 def update_domain(request, slug_id):
     try:
@@ -208,22 +245,24 @@ def update_domain(request, slug_id):
         except domain.DoesNotExist:
             return JsonResponse({
                 "error": "domain not found.",
+                "success": False,
             }, status=404)   
 
         workspace_slug_id = request.data.get('workspace_slug_id')
 
         if not (workspace_slug_id):
-            return JsonResponse({"error": "workspace slug required fields."}, status=400)
+            return JsonResponse({"error": "workspace slug required fields.","success": False}, status=400)
         
         if (obj.workspace_id.slug_id != workspace_slug_id):
             return JsonResponse({
-                "error": "You Don't have permission."
-            }, status=404)
+                "error": "You Don't have permission.",
+                "success": False,
+            }, status=403)
                     
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
         except workspace.DoesNotExist:
-            return JsonResponse({"error": "workspace not found "}, status=404)
+            return JsonResponse({"error": "workspace not found ","success": False}, status=404)
 
         manager_objs = None
         manager_slug_ids = request.data.get('manager_slug_id')  
@@ -233,10 +272,10 @@ def update_domain(request, slug_id):
                 manager_objs_list = [data for data in manager_objs_list]
                 manager_objs = user_detail.objects.filter(slug_id__in=manager_objs_list,workspace_id=workspace_obj)
                 if len(manager_objs) != len(manager_objs_list):
-                    return JsonResponse({"error": "manager do not belong to the specified workspace."}, status=400)
+                    return JsonResponse({"error": "manager do not belong to the specified workspace.","success": False}, status=400)
 
             except user_detail.DoesNotExist:
-                return JsonResponse({"error": "manager not found "}, status=404)
+                return JsonResponse({"error": "manager not found ","success": False}, status=404)
             
         writer_objs = None
         writer_slug_ids = request.data.get('writer_slug_id') 
@@ -246,7 +285,7 @@ def update_domain(request, slug_id):
                 writer_objs_list = [data for data in writer_objs_list]
                 writer_objs = user_detail.objects.filter(slug_id__in=writer_objs_list,workspace_id=workspace_obj)
                 if len(manager_objs) != len(manager_objs_list):
-                    return JsonResponse({"error": "writer do not belong to the specified workspace."}, status=400)
+                    return JsonResponse({"error": "writer do not belong to the specified workspace.","success": False}, status=400)
                 
             except user_detail.DoesNotExist:
                 return JsonResponse({"error": "writer not found "}, status=404)
@@ -257,7 +296,7 @@ def update_domain(request, slug_id):
         data["workspace_id"] = workspace_obj.id 
 
         # Serialize and validate the data
-        serialized_data = domain_serializer(instance=obj, data=data) 
+        serialized_data = domain_serializer(instance=obj, data=data, partial=True) 
 
         if serialized_data.is_valid():
             # Save the domain with related fields
@@ -272,17 +311,19 @@ def update_domain(request, slug_id):
                 
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "domain": serialized_data.data,
+                "success": True,
+                "data": serialized_data.data,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is update_domain --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
@@ -296,27 +337,31 @@ def delete_domain(request, slug_id):
         except domain.DoesNotExist:
             return JsonResponse({
                 "error": "domain not found.",
+                "success": False,
             }, status=404) 
 
         workspace_slug_id = request.GET.get("workspace_slug_id")  
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "workspace slug id is required."
+                "error": "workspace slug id is required.",
+                "success": False,
             }, status=400)
             
         if (obj.workspace_id.slug_id != workspace_slug_id):
             return JsonResponse({
-                "error": "You Don't have permission."
-            }, status=404)        
+                "error": "You Don't have permission.",
+                "success": False,
+            }, status=403)        
 
         obj.delete()
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_domain --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

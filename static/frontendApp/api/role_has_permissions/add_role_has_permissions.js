@@ -21,7 +21,7 @@ async function add_role_has_permissions_api() {
 
     console.log("Generated Roles Data:", rolesData);
 
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     try {
         // Perform the API call

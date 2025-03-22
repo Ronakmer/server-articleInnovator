@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     article_type_field_data.then((response) => {
         // Access article_type_fields once the promise is resolved
-        const categories = response.article_type_fields || [];  // Ensure data is loaded
+        const categories = response.data || [];  // Ensure data is loaded
 
         
         const input = document.getElementById('article_type_fields_input');
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     
     color_detail_data.then((response) => {
-        const color_data = response.colors || [];  // Ensure data is loaded
+        const color_data = response.data || [];  // Ensure data is loaded
         console.log(color_data)
         const selectElement = document.querySelector('[name="color_data"]');
 

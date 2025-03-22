@@ -7,9 +7,13 @@ function add_permission_api() {
 
     // Collect form data using the name attributes
     const name = permission_form.querySelector('[name="name"]').value;
+    const description = permission_form.querySelector('[name="description"]').value;
+    const group = permission_form.querySelector('[name="group"]').value;
 
     const data = new FormData();
     data.append("name", name);
+    data.append("description", description);
+    data.append("group", group);
 
 
 
@@ -45,9 +49,13 @@ function add_permission_api() {
 
         // Collect form data using the name attributes
         const name = permission_form.querySelector('[name="name"]');
+        const description = permission_form.querySelector('[name="description"]');
+        const group = permission_form.querySelector('[name="group"]');
 
-        if (data_obj && data_obj.permissions && data_obj.permissions.length > 0) {
-            name.value = data_obj.permissions[0].name;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            name.value = data_obj.data[0].name;
+            description.value = data_obj.data[0].description;
+            group.value = data_obj.data[0].group;
         } else {
             window.location.href = error_page;
         }

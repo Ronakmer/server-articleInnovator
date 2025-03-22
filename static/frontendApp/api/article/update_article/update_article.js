@@ -10,8 +10,8 @@ let set_category_id = '';
 let set_author_id = '';
 
 function temp_set_manual_data() {
-    const temp_article_type_slug_id = sessionStorage.getItem("article_type_slug_id");
-    const temp_article_type_title = sessionStorage.getItem("article_type_title");
+    const temp_article_type_slug_id = localStorage.getItem("article_type_slug_id");
+    const temp_article_type_title = localStorage.getItem("article_type_title");
 
     // Query the element by ID or name, make sure it's an input element
     const set_manual_article_type_slug_id = document.querySelector('[name="manual_article_type_slug_id"]'); 
@@ -44,8 +44,6 @@ function add_ai_article_api() {
     ].filter(Boolean).join('/'); 
     console.log(slug_data, 'slug_data'); 
 
-    // const wp_slug_id = document.querySelector('[name="wp_slug"]');
-    // wp_slug_id.value = slug_data;
 
     
     // Get the form element
@@ -162,30 +160,30 @@ function add_ai_article_api() {
         const wp_featured_image = manual_article_form.querySelector('input[name="wp_featured_image"]');
         
         
-        manual_article_type_slug_id.value = data_obj.articles[0].article_type_id_data.slug_id;
-        manual_article_type_title.textContent = data_obj.articles[0].article_type_id_data.title;
-        wp_title.value = data_obj.articles[0].wp_title;
-        wp_excerpt.value = data_obj.articles[0].wp_excerpt;
-        const temp_wp_content = data_obj.articles[0].wp_content;
+        manual_article_type_slug_id.value = data_obj.data[0].article_type_id_data.slug_id;
+        manual_article_type_title.textContent = data_obj.data[0].article_type_id_data.title;
+        wp_title.value = data_obj.data[0].wp_title;
+        wp_excerpt.value = data_obj.data[0].wp_excerpt;
+        const temp_wp_content = data_obj.data[0].wp_content;
 
         if (temp_wp_content) {
             editor.setData(temp_wp_content);
         }
 
-        // wp_slug.value = data_obj.articles[0].wp_slug;
-        set_domain_id = data_obj.articles[0].domain_id_data.slug_id;
+        // wp_slug.value = data_obj.data[0].wp_slug;
+        set_domain_id = data_obj.data[0].domain_id_data.slug_id;
         
-        const selectedRadio = document.querySelector(`input[name="wp_status_manual"][value="${data_obj.articles[0].wp_status}"]`);
+        const selectedRadio = document.querySelector(`input[name="wp_status_manual"][value="${data_obj.data[0].wp_status}"]`);
         if (selectedRadio) {
             selectedRadio.checked = true;
             selectedRadio.click(); // Trigger the change if needed
         }
 
-        let wp_slug = data_obj.articles[0].wp_slug;
+        let wp_slug = data_obj.data[0].wp_slug;
 
-        set_tag_id = data_obj.articles[0].wp_tag_id_data.map(tag => tag.slug_id);
-        set_category_id = data_obj.articles[0].wp_category_id_data.map(category => category.slug_id);
-        set_author_id = data_obj.articles[0].wp_author_id_data.slug_id;
+        set_tag_id = data_obj.data[0].wp_tag_id_data.map(tag => tag.slug_id);
+        set_category_id = data_obj.data[0].wp_category_id_data.map(category => category.slug_id);
+        set_author_id = data_obj.data[0].wp_author_id_data.slug_id;
         
         get_domain_data(set_domain_id)
         

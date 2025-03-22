@@ -9,7 +9,6 @@ async function add_user_detail_api() {
 
     let temp_avatar_image_id = '';
     if (avatar_image_id){
-
         temp_avatar_image_id = avatar_image_id.replace('/media/', '');
     }
 
@@ -74,12 +73,12 @@ async function add_user_detail_api() {
         const password = user_detail_form.querySelector('[name="password"]');
         const workspace_id = user_detail_form.querySelector('[name="workspace_id"]');
             
-        if (data_obj && data_obj.user_details && data_obj.user_details.length > 0) {
-            full_name.value = data_obj.user_details[0].full_name;
-            email.value = data_obj.user_details[0].user_id.email;
-            password.value = data_obj.user_details[0].password;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            full_name.value = data_obj.data[0].full_name;
+            email.value = data_obj.data[0].user_id.email;
+            password.value = data_obj.data[0].password;
 
-            set_workspace_ids = data_obj.user_details[0].workspace_id.map(field => field.slug_id).join(', ')
+            set_workspace_ids = data_obj.data[0].workspace_id.map(field => field.slug_id).join(', ')
 
         } else {
             window.location.href = error_page;

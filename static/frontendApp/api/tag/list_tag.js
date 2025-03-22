@@ -3,7 +3,6 @@
 
 function render_data_to_table(response_data, current_page, limit){
     
-    // table_data_permission('permission_tbody', response_data, 'delete_permission_api', 'status_permission_api', update_permission_page_url, current_page, limit)
     table_data_tag('tag_tbody', response_data, 'delete_tag_api', 'status_tag_api', '', current_page, limit)
 
 }
@@ -23,6 +22,7 @@ async function list_tag_api() {
 
     const filters = {
         search: searchInput ? searchInput.value : '',
+        // order_by:selected_sort,
 
     };
     const current_page_url = window.location.href;

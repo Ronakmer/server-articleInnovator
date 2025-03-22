@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from apiApp.serializers import image_template_category_serializer
 from apiApp.models import image_template_category, workspace
 from django.db.models import Q
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 
@@ -21,8 +22,7 @@ def list_image_template_category(request):
         workspace_slug_id = request.GET.get('workspace_slug_id', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
-        
-
+        order_by = request.GET.get('order_by', '-created_date')
 
         # Initialize filters
         filters = Q()
@@ -43,39 +43,46 @@ def list_image_template_category(request):
             except workspace.DoesNotExist:
                 return JsonResponse({
                     "error": "workspace not found.",
+                    "success": False,
                 }, status=404)  
             
         try:
             if request_user.is_superuser:
-                obj = image_template_category.objects.filter(filters).order_by('-created_date')
-            else:
+                obj = image_template_category.objects.filter(filters).order_by(order_by)
+            if request.is_admin:
                 if not workspace_slug_id:
                     return JsonResponse({
                         "error": "workspace not found.",
+                        "success": False,
                     }, status=404)
 
-                obj = image_template_category.objects.filter(filters).order_by('-created_date')
+                obj = image_template_category.objects.filter(filters).order_by(order_by)
         except image_template_category.DoesNotExist:
             return JsonResponse({
                 "error": "image category not found.",
+                "success": False,
             }, status=404)
              
         # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
 
         serialized_data = image_template_category_serializer(obj, many=True)
         
         return JsonResponse({
-            "redirect": "",
-            "image_template_categories":serialized_data.data,
-            "total_count": total_count,
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
             
         }, status=200)
 
     except Exception as e:
         print("This error is list_image_template_category --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -89,15 +96,16 @@ def add_image_template_category(request):
 
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "workspace is required fields."
-            }, status=404)
-
+                "error": "workspace is required fields.",
+                "success": False,
+            }, status=400)
 
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
         except workspace.DoesNotExist:
             return JsonResponse({
                 "error": "workspace not found.",
+                "success": False,
             }, status=404)
         
         # Prepare the data for the serializer, replacing slug with the workspace instance's PK
@@ -112,22 +120,24 @@ def add_image_template_category(request):
             
             return JsonResponse({
                 "message": "Data added successfully.",
-                "image_template_category": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_image_template_category --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
 # update image template category
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_image_template_category(request, slug_id):
     try:
 
@@ -136,25 +146,29 @@ def update_image_template_category(request, slug_id):
         except image_template_category.DoesNotExist:
             return JsonResponse({
                 "error": "image template category not found.",
+                "success": False,
             }, status=404)   
         
         workspace_slug_id = request.data.get('workspace_slug_id')
 
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "workspace is required fields."
-            }, status=404)
+                "error": "workspace is required fields.",
+                "success": False,
+            }, status=400)
 
         if (obj.workspace_id.slug_id != workspace_slug_id):
             return JsonResponse({
-                "error": "You Don't have permission."
-            }, status=404)   
+                "error": "You Don't have permission.",
+                "success": False,
+            }, status=403)   
 
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
         except workspace.DoesNotExist:
             return JsonResponse({
                 "error": "workspace not found.",
+                "success": False,
             }, status=404) 
         
 
@@ -162,27 +176,27 @@ def update_image_template_category(request, slug_id):
         data = request.data.copy()
         data["workspace_id"] = workspace_obj.id 
         data['created_by'] = obj.created_by.id
-        # if 'created_by' in data:
-        #     del data['created_by']
 
-        serialized_data = image_template_category_serializer(instance=obj, data=data)        
+        serialized_data = image_template_category_serializer(instance=obj, data=data, partial=True)        
         
         if serialized_data.is_valid():
             serialized_data.save()
             
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "image_template_category": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is update_image_template_category --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
@@ -196,27 +210,31 @@ def delete_image_template_category(request, slug_id):
         except image_template_category.DoesNotExist:
             return JsonResponse({
                 "error": "image template category not found.",
+                "success": False,
             }, status=404) 
 
         workspace_slug_id = request.GET.get("workspace_slug_id")  
         if not workspace_slug_id:
             return JsonResponse({
-                "error": "workspace slug id is required."
+                "error": "workspace slug id is required.",
+                "success": False,
             }, status=400)
             
         if (obj.workspace_id.slug_id != workspace_slug_id):
             return JsonResponse({
-                "error": "You Don't have permission."
-            }, status=404)         
+                "error": "You Don't have permission.",
+                "success": False,
+            }, status=403)         
 
         obj.delete()
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_image_template_category --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

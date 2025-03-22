@@ -3,7 +3,7 @@
     
 // Add Test Article
 async function delete_test_article(test_post_id) {
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     data.test_post_id = test_post_id;
 

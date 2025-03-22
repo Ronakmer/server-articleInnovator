@@ -32,7 +32,7 @@
       </div>
   
       <!-- Add Article Button -->
-      <button onclick=""
+      <button onclick="open_progress_page()"
           class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
           fdprocessedid="fwfkzn">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -53,26 +53,28 @@
       </button>
       <!-- Modal toggle button -->
   
-      <button class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
-          fdprocessedid="fwfkzn" data-modal-target="default-modal" data-modal-toggle="default-modal" >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
-                  stroke-linecap="round"></path>
-          </svg>
-          Add 
-      </button>
-      <button class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
-          fdprocessedid="fwfkzn">
-          <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
-                  fill="white"></path>
-          </svg>
-  
-          Back
-      </button>
+      <a href="{% url 'add_domain_page' %}" data-permission="add_domain"
+        class="flex items-center gap-1.5 px-4 py-2 text-sm hidden font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+        fdprocessedid="fwfkzn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                stroke-linecap="round"></path>
+        </svg>
+        Add
+    </a>
+    <a href="{% url 'list_domain_page' %}"
+        class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+        fdprocessedid="fwfkzn">
+        <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                fill="white" />
+        </svg>
+
+        Back
+    </a>
   
     </div>
   </div>
@@ -524,7 +526,7 @@
                                                 class="px-3 py-2 text-sm text-custom-dark-blue bg-custom-blue/10 border border-gray-300 rounded-lg hover:bg-gray-50">
                                                 Clear all
                                             </button>
-                                            <button id="applyButton" onclick="filter_by_date()"
+                                            <button id="applyButton" type="button" onclick="filter_by_date()"
                                                 class="px-4 py-1 text-sm text-white bg-indigo-600 rounded-lg">Apply
                                             </button>
                                         </div>
@@ -890,12 +892,8 @@
                     </h3>
                 </div>
                 
-
                 <!-- Right Side: Buttons and Search -->
                 <div class="flex flex-wrap items-center justify-end gap-2 max-md:justify-center">
-
-                    
-
                     <!-- Search Box -->
                     <div class="relative  text-gray-500 focus-within:text-gray-900 ">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
@@ -911,11 +909,6 @@
                             class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
                             placeholder="Search keywords . . .">
                     </div>
-
-                    <!-- start Pagignation  -->
-                    
-                    <!-- pagination -->
-                    <div id="pagination" class="flex justify-center mt-4"></div>
 
                     <!-- add button -->
                     <button onclick="openModal('category')"
@@ -961,6 +954,9 @@
                    
                 </tbody>
             </table>
+            <!-- pagination -->
+            {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
+
           </div>
 
            <!-- Tab 5 Table Tag  -->
@@ -991,10 +987,6 @@
                             class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
                             placeholder="Search keywords . . .">
                     </div>
-
-                    <!-- pagination -->
-                    <div id="pagination" class="flex justify-center mt-4"></div>
-
 
                     <!-- add button -->
                     <button onclick="openModal('tag')"
@@ -1040,11 +1032,12 @@
                    
                 </tbody>
                
-
             </table>
-            <!-- Pagination -->
-             
-          </div>
+            
+            
+        </div>
+        <!-- pagination -->
+        {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
 
            <!-- Tab 6 Table Author -->
            <div id="table6" class="tab-content hidden">
@@ -1072,11 +1065,6 @@
                             class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
                             placeholder="Search keywords . . .">
                     </div>
-
-                    <!-- start Pagignation  -->
-                    
-                    <!-- pagination -->
-                    <div id="pagination" class="flex justify-center mt-4"></div>
 
                     <!-- add button -->
                     <button onclick="openModal('author')" 
@@ -1128,6 +1116,11 @@
                    
                 </tbody>
             </table>
+            <!-- start Pagignation  -->
+            
+            <!-- pagination -->
+            {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
+
           </div>
 
            <!-- Tab 3 Table Date -->
@@ -1169,14 +1162,20 @@
         </div>
     </div>
 
+    <div class="p-4">
+        <!-- pagination -->
+        <div id="pagination" class="flex justify-center mt-4"></div>
+    
+    </div>
+
     <!-- end table tabbed code  -->
     
     <!-- tab table  -->
     <script src="{% static 'frontendApp/api/domain/table_tab_content.js' %}"></script>
     <script src="{% static 'frontendApp/api/domain/table_tab_content_api.js' %}"></script>
 
-
 </div>
+
 
 <!--domain modal -->
 {% include 'frontendApp/domain/domain_modal.html' %}
@@ -1199,6 +1198,7 @@
 <script src="{% static 'frontendApp/api/domain/detail_domain_chart.js' %}"></script>
 <script src="{% static 'frontendApp/api/domain/right_said_bar_category_count.js' %}"></script>
 <script src="{% static 'frontendApp/api/domain/detail_domain.js' %}"></script>
+<script src="{% static 'frontendApp/api/domain/open_progress_page.js' %}"></script>
 
 <!-- category api -->
 <script src="{% static 'frontendApp/api/category/list_category.js' %}"></script>

@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from apiApp.serializers import permission_serializer
 from apiApp.models import permission
 from django.db.models import Q
-
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 # show permission
@@ -17,6 +17,8 @@ def list_permission(request):
         status = request.GET.get('status', None)
         slug_id = request.GET.get('slug_id', None)
         search = request.GET.get('search', '')
+        order_by = request.GET.get('order_by', '-created_date')
+        
 
         # Initialize filters
         filters = Q()
@@ -31,29 +33,33 @@ def list_permission(request):
 
 
         try:
-            obj = permission.objects.filter(filters).order_by('-created_date')
+            obj = permission.objects.filter(filters).order_by(order_by)
         except permission.DoesNotExist:
             return JsonResponse({
                 "error": "permission not found.",
+                "success": False,
             }, status=404) 
 
-        # Apply pagination
-        total_count = obj.count()
-        obj = obj[offset:offset + limit]
 
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
 
-        # obj = permission.objects.all()
         serialized_data = permission_serializer(obj, many=True)
         
         return JsonResponse({
-            "redirect": "",
-            "permissions":serialized_data.data,
-            "total_count": total_count,
+             
+            "data":serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
         }, status=200)
 
     except Exception as e:
         print("This error is list_permission --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 
@@ -68,22 +74,24 @@ def add_permission(request):
             
             return JsonResponse({
                 "message": "Data added successfully.",
-                "permission": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is add_permission --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
     
     
 # update permission
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_permission(request, slug_id):
     try:
 
@@ -92,26 +100,29 @@ def update_permission(request, slug_id):
         except permission.DoesNotExist:
             return JsonResponse({
                 "error": "permission not found.",
+                "success": False,
             }, status=404)   
 
-        serialized_data = permission_serializer(instance=obj, data=request.data)        
+        serialized_data = permission_serializer(instance=obj, data=request.data, partial=True)        
         
         if serialized_data.is_valid():
             serialized_data.save()
             
             return JsonResponse({
                 "message": "Data updated successfully.",
-                "permission": serialized_data.data,
+                "data": serialized_data.data,
+                "success": True,
             }, status=200)
         else:
             return JsonResponse({
                 "error": "Invalid data.",
                 "errors": serialized_data.errors, 
+                "success": False,
             }, status=400)
 
     except Exception as e:
         print("This error is update_permission --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 # delete permission
@@ -123,16 +134,18 @@ def delete_permission(request, slug_id):
         except permission.DoesNotExist:
             return JsonResponse({
                 "error": "permission not found.",
+                "success": False,
             }, status=404) 
                 
         obj.delete()
         
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_permission --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 

@@ -1,11 +1,17 @@
 
 var url = 'https://127.0.0.1:8000/api/';
+// var url = 'https://192.168.1.5:8000/api/';
 
+var refresh_token_url = `${url}get-refresh-token/`;
 
 var login_url = `${url}login/`;
+var logout_url = `${url}logout/`;
 var forgot_url = `${url}send-otp/`;
 var otp_url = `${url}check-otp/`;
 var new_password_url = `${url}new-password/`;
+var user_profile_url = `${url}user/profile/`;
+var update_user_profile_url = `${url}user/profile/update/`;
+var fetch_user_workspaces_url = `${url}fetch-workspaces/`;
 
 var list_role_url = `${url}roles/`;
 var add_role_url = `${url}role/add/`;
@@ -70,6 +76,11 @@ var add_user_detail_url = `${url}user/add/`;
 var update_user_detail_url = `${url}user/update/`;
 var delete_user_detail_url = `${url}user/delete/`;
 
+var list_admin_detail_url = `${url}admins/`;
+var add_admin_detail_url = `${url}admin/add/`;
+var update_admin_detail_url = `${url}admin/update/`;
+var delete_admin_detail_url = `${url}admin/delete/`;
+
 
 var add_test_article_url = `${url}test-article/add/`;
 var delete_test_article_url = `${url}test-article/delete/`;
@@ -89,6 +100,7 @@ var list_motivation_url = `${url}motivations/`;
 var add_motivation_url = `${url}motivation/add/`;
 var update_motivation_url = `${url}motivation/update/`;
 var delete_motivation_url = `${url}motivation/delete/`;
+var process_motivation_url = `${url}process-motivation/`;
 
 var list_image_tag_url = `${url}image-tags/`;
 var add_image_tag_url = `${url}image-tag/add/`;
@@ -96,6 +108,7 @@ var update_image_tag_url = `${url}image-tag/update/`;
 var delete_image_tag_url = `${url}image-tag/delete/`;
 
 var list_image_template_url = `${url}image-templates/`;
+var list_base_image_template_url = `${url}image-templates/base/`;
 var add_image_template_url = `${url}image-template/add/`;
 var update_image_template_url = `${url}image-template/update/`;
 var delete_image_template_url = `${url}image-template/delete/`;
@@ -131,7 +144,17 @@ var list_ai_configuration_url = `${url}ai-configurations/`;
 var add_ai_configuration_url = `${url}ai-configuration/add/`;
 var update_ai_configuration_url = `${url}ai-configuration/update/`;
 var delete_ai_configuration_url = `${url}ai-configuration/delete/`;
+var verify_ai_configuration_url = `${url}ai-configuration/verify/`;
 
+var list_image_kit_configuration_url = `${url}image-kit-configurations/`;
+var add_image_kit_configuration_url = `${url}image-kit-configuration/add/`;
+var update_image_kit_configuration_url = `${url}image-kit-configuration/update/`;
+var delete_image_kit_configuration_url = `${url}image-kit-configuration/delete/`;
+var verify_image_kit_configuration_url = `${url}image-kit-configuration/verify/`;
+
+
+
+var generate_template_url = `${url}generate-template/`;
 
 var fetch_wp_data_url = `${url}fetch/data/`;
 
@@ -140,6 +163,7 @@ var domain_analytics_metrics_url = `${url}domain/analytics-metrics-graph/`;
 var domain_article_metrics_url = `${url}domain/article-metrics-graph/`;
 
 var console_metrics_url = `${url}console-metrics/`;
+var progres_data = `${url}progres-data/`;
 
 
 var list_role_has_permissions_url = `${url}role-has-permissions/`;
@@ -149,4 +173,36 @@ var delete_role_has_permissions_url = `${url}role-has-permission/delete/`;
 var check_invitation_code_url = `${url}check-invitation-code/`;
 var admin_registration_url = `${url}registration/`;
 var registration_check_otp = `${url}registration-check-otp/`;
+
+var user_workspace_revoke_url = `${url}user/revoke/workspace/`;
+var user_domain_revoke_url = `${url}user/revoke/domain/`;
+var user_domain_revoke_list_url = `${url}user/domains/`;
+
+var user_workspace_add_url = `${url}user/add/workspace/`;
+var user_domain_add_url = `${url}user/add/domain/`;
+
+var list_activity_log_url = `${url}activity-logs/`;
+
+var list_notification_url = `${url}notifications/`;
+var list_process_notification_url = `${url}process-notification/`;
+var delete_notification_url = `${url}notification/delete/`;
+
+
+var list_perma_links_url = `${url}perma-links/`;
+// var update_perma_links_url = `${url}perma-links/update/`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

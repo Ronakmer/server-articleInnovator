@@ -21,11 +21,16 @@ from frontendApp.views.permission.permission import add_permission_page, list_pe
 from frontendApp.views.workspace.workspace import add_workspace_page, list_workspace_page, update_workspace_page
 from frontendApp.views.motivation.motivation import add_motivation_page, list_motivation_page, update_motivation_page
 from frontendApp.views.prompt.prompt import add_prompt_page, list_prompt_page, update_prompt_page
-from frontendApp.views.user_detail.user_detail import add_user_detail_page, list_user_detail_page, update_user_detail_page
+from frontendApp.views.user_detail.user_detail import add_user_detail_page, list_user_detail_page, update_user_detail_page, detail_user_page
+from frontendApp.views.user_profile.user_profile import user_profile_page
+from frontendApp.views.admin_detail.admin_detail import add_admin_detail_page, list_admin_detail_page, update_admin_detail_page
 from frontendApp.views.domain.domain import add_domain_page, list_domain_page, update_domain_page, detail_domain_page
 from frontendApp.views.article.article import add_article_page, list_article_page, update_article_page
 from frontendApp.views.ai_configuration.ai_configuration import add_ai_configuration_page, list_ai_configuration_page, update_ai_configuration_page
+from frontendApp.views.image_kit_configuration.image_kit_configuration import add_image_kit_configuration_page, list_image_kit_configuration_page, update_image_kit_configuration_page
 from frontendApp.views.role_has_permissions.role_has_permissions import list_role_has_permissions_page
+from frontendApp.views.notification.notification import list_notification_page
+from frontendApp.views.activity_log.activity_log import list_activity_log_page
 from frontendApp.views.error_page.error_page import error_page
 from frontendApp.views.progress_bar.progress_bar import progress_bar_page
 
@@ -33,11 +38,13 @@ from frontendApp.views.progress_bar.progress_bar import progress_bar_page
 from frontendApp.views.image_gen.image_tag.image_tag import add_image_tag_page, list_image_tag_page, update_image_tag_page
 from frontendApp.views.image_gen.image_template_category.image_template_category import add_image_template_category_page, list_image_template_category_page, update_image_template_category_page
 from frontendApp.views.image_gen.image_template.image_template import add_image_template_page, list_image_template_page, update_image_template_page
+from frontendApp.views.image_gen.image_tag_template_category_template_mapping.image_tag_template_category_template_mapping import list_image_tag_template_category_template_mapping_page
 
 
 
 ######### jwt Token  #########
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 
 permissions_list = [
@@ -56,6 +63,9 @@ permissions_list = [
     
     # onboard
     {"name": "onboard_page", "route": "onboard/", "description": "onboard Page", "status": "True", "group": "onboard"},
+    
+    # user_profile_page
+    {"name": "user_profile_page", "route": "profile/", "description": "user profile page Page", "status": "True", "group": "user profile page"},
 
     # #  registration
     # {"name": "check_invitation_code", "route": "check-invitation-code/", "description": "check-invitation-code Page", "status": "True", "group": "registration"},
@@ -127,6 +137,13 @@ permissions_list = [
     {"name": "list_user_detail_page", "route": "users/", "description": "user-detail Page", "status": "True", "group": "user-detail"},
     {"name": "add_user_detail_page", "route": "user/add/", "description": "add user-detail Page", "status": "True", "group": "user-detail"},
     {"name": "update_user_detail_page", "route": "user/update/<slug:slug_id>", "description": "update user-detail Page", "status": "True", "group": "user-detail"},
+    {"name": "detail_user_page", "route": "user/<slug:slug_id>", "description": "detail user-detail Page", "status": "True", "group": "user-detail"},
+    
+    # admin_detail
+    {"name": "list_admin_detail_page", "route": "admins/", "description": "admin-detail Page", "status": "True", "group": "admin-detail"},
+    {"name": "add_admin_detail_page", "route": "admin/add/", "description": "add admin-detail Page", "status": "True", "group": "admin-detail"},
+    {"name": "update_admin_detail_page", "route": "admin/update/<slug:slug_id>", "description": "update admin-detail Page", "status": "True", "group": "admin-detail"},
+    # {"name": "detail_admin_page", "route": "admin/<slug:slug_id>", "description": "detail admin-detail Page", "status": "True", "group": "admin-detail"},
     
     # domain
     {"name": "list_domain_page", "route": "domains/", "description": "domain Page", "status": "True", "group": "domain"},
@@ -141,17 +158,24 @@ permissions_list = [
     
     # error
     {"name": "error_page", "route": "error/", "description": "error Page", "status": "True", "group": "error"},
-    
     # progress_bar_page
     {"name": "progress_bar_page", "route": "fetch/wp-data/", "description": "fetch data Page", "status": "True", "group": "progress_bar_page"},
-
     #  role_has_permissions
     {"name": "list_role_has_permissions_page", "route": "role-has-permissions/", "description": "role_has_permissions Page", "status": "True", "group": "role_has_permissions"},
+    #  notification
+    {"name": "list_notification_page", "route": "notifications/", "description": "notification Page", "status": "True", "group": "notification"},
+    #  activity_log
+    {"name": "list_activity_log_page", "route": "activity-logs/", "description": "activity log Page", "status": "True", "group": "activity log"},
     
     # ai_configuration
     {"name": "list_ai_configuration_page", "route": "ai-configurations/", "description": "ai-configuration Page", "status": "True", "group": "ai-configuration"},
     {"name": "add_ai_configuration_page", "route": "ai-configuration/add/", "description": "add ai-configuration Page", "status": "True", "group": "ai-configuration"},
     {"name": "update_ai_configuration_page", "route": "ai-configuration/update/<slug:slug_id>", "description": "update ai-configuration Page", "status": "True", "group": "ai-configuration"},
+    
+    # image_kit_configuration
+    {"name": "list_image_kit_configuration_page", "route": "image-kit-configurations/", "description": "image-kit-configuration Page", "status": "True", "group": "image-kit-configuration"},
+    {"name": "add_image_kit_configuration_page", "route": "image-kit-configuration/add/", "description": "add image-kit-configuration Page", "status": "True", "group": "image-kit-configuration"},
+    {"name": "update_image_kit_configuration_page", "route": "image-kit-configuration/update/<slug:slug_id>", "description": "update image-kit-configuration Page", "status": "True", "group": "image-kit-configuration"},
 
     
     ######### image gen  #########
@@ -170,27 +194,19 @@ permissions_list = [
     {"name": "list_image_template_category_page", "route": "image-template-categories/", "description": "image-template-category Page", "status": "True", "group": "image-template-category"},
     {"name": "add_image_template_category_page", "route": "image-template-category/add/", "description": "add image-template-category Page", "status": "True", "group": "image-template-category"},
     {"name": "update_image_template_category_page", "route": "image-template-category/update/<slug:slug_id>", "description": "update image-template-category Page", "status": "True", "group": "image-template-category"},
-   
+    
+    # list_image_tag_template_category_template_mapping
+    {"name": "list_image_tag_template_category_template_mapping_page", "route": "list-image-tag-template-category-template-mapping/", "description": "image-tag-template-category-template-mapping Page", "status": "True", "group": "image-tag-template-category-template-mapping"},
+    # {"name": "add_image_template_category_page", "route": "image-template-category/add/", "description": "add image-template-category Page", "status": "True", "group": "image-template-category"},
+    # {"name": "update_image_template_category_page", "route": "image-template-category/update/<slug:slug_id>", "description": "update image-template-category Page", "status": "True", "group": "image-template-category"},
+
 ]
-
-
-
-# urlpatterns = []
-# for perm in permissions_list:
-#     urlpatterns.append(path(route=perm['route'], view=globals().get(perm['name']) , name=perm['name']))  
- 
- 
-# urlpatterns = []
-# for perm in permissions_list:
-#     view_name = perm["name"]
-#     # Use eval() to handle .as_view for class-based views
-#     view = eval(view_name) if ".as_view" in view_name else globals().get(view_name)
-#     urlpatterns.append(path(route=perm["route"], view=view, name=view_name.replace(".as_view", "")))
 
 
 urlpatterns = []
 for perm in permissions_list:
     view_name = perm["name"]
+    # view_name = perm["name"].replace("_page", "")
     # Dynamically get the view class
     view_class = globals().get(view_name)
     
@@ -206,10 +222,3 @@ for perm in permissions_list:
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-# {
-#     "workspace_slug_id": "ba30e84e-86b1-455c-94c8-1b14d9df2230",
-#     "article_type_slug_id": "f53ace2d-4d78-4250-8aec-f69f373195ea",
-#     "name": "demo",
-#     "prompt_data": "{\"1\": {\"text\": \"demo prompt\", \"textarea\": \"demo prompt\"}}"
-# }

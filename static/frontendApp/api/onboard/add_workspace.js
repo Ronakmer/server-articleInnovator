@@ -28,7 +28,7 @@ async function add_workspace_api() {
 
 
     try {
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
 
         // Perform the API call
         const response = await fetch(add_workspace_url, {
@@ -46,9 +46,9 @@ async function add_workspace_api() {
             const data = await response.json();
            
             console.log(data)
-            const temo_slug_id = data.workspace.slug_id
-            alert(temo_slug_id)
-            sessionStorage.setItem("onboard_workspace_slug_id", temo_slug_id);
+            const temo_slug_id = data.workspace.slug_id;
+            
+            localStorage.setItem("onboard_workspace_slug_id", temo_slug_id);
 
             show_toast("success", `${data.message}`);
 

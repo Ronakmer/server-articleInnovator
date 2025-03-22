@@ -5,9 +5,9 @@
 async function list_api(api_url, table_name, offset, limit, filters, delete_function_name, status_function_name, update_page_url, current_page, response_key, domain_slug_id, render_data_to_table=()=>{}) {
     try {
 
-        const access_token = sessionStorage.getItem("access_token");
+        const access_token = localStorage.getItem("access_token");
         
-        const workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+        const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
         const query_params = new URLSearchParams({
             offset,
@@ -34,9 +34,11 @@ async function list_api(api_url, table_name, offset, limit, filters, delete_func
         if (response.ok) {
             // Handle successful response
             const data = await response.json();
-            console.log('Roles fetched successfully:', data);
+            console.log('fetched successfully:', data);
+            console.log('fetched successfully:', data.pagination.total_count);
+            const total_count = data.pagination.total_count;
             
-            render_pagination(data.total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table, domain_slug_id);
+            render_pagination(total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table, domain_slug_id);
             render_data_to_table(data, current_page, limit)
             return data;
                 

@@ -107,16 +107,12 @@
                             fill="#D97757" />
                     </svg>
 
-
                 </div>
                 <div class="text-gray-600 pl-3">
                     <span class="block font-semibold text-gray-900">Claude</span>
                 </div>
             </div>
         </div>
-
-
-
 
     </div>
 </div>
@@ -130,8 +126,6 @@
                 AI Configuration Details</h5>
 
             <form method="POST" action=""  id="ai_configuration_form" name="ai_configuration_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
-
-               
                 
                 <input type="hidden" id="api_provider" value="" name="api_provider">
 
@@ -233,11 +227,11 @@
 
 
                 <div class="flex flex-col md:flex-row items-start gap-3">
-                    {% comment %} <button type="button" onclick="verify_api()"
+                    <button type="button" onclick="verify_api()"
                         class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
 
                         Verify
-                    </button> {% endcomment %}
+                    </button>
 
                     <button type="button" onclick="add_ai_configuration_api()"
                         class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
@@ -258,6 +252,7 @@
 
 <!-- ai_configuration api -->
 <script src="{% static 'frontendApp/api/ai_configuration/ai_configuration.js' %}"></script>
+<script src="{% static 'frontendApp/api/ai_configuration/verify_ai_configuration.js' %}"></script>
 <script src="{% static 'frontendApp/api/ai_configuration/add_ai_configuration.js' %}"></script>
 
 

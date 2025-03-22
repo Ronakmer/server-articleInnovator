@@ -12,7 +12,7 @@ function table_data_tag(tbody_name, response_data, delete_function_name, status_
 
     tbody.innerHTML = ''; 
 
-    response_data.tags.forEach((obj, index) => {
+    response_data.data.forEach((obj, index) => {
         const tr = document.createElement('tr');
         tr.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
 
@@ -28,10 +28,10 @@ function table_data_tag(tbody_name, response_data, delete_function_name, status_
                 ${obj.description}
             </td>
             
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 hidden" data-permission="update_tag, delete_tag">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <button onclick="set_update_tag_data('${obj.slug_id}', '${obj.name}', '${obj.slug}', '${obj.description}', '${obj.wp_tag_id}')" class="mr-2">
+                    <button class="mr-2 hidden" data-permission="update_tag" onclick="set_update_tag_data('${obj.slug_id}', '${obj.name}', '${obj.slug}', '${obj.description}', '${obj.wp_tag_id}')" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -47,7 +47,7 @@ function table_data_tag(tbody_name, response_data, delete_function_name, status_
                         </svg>
                     </button>
                     <!-- delete -->
-                    <button class="mr-2" onclick="${delete_function_name}('${obj.slug_id}')">
+                    <button class="mr-2 hidden" data-permission="delete_tag" onclick="${delete_function_name}('${obj.slug_id}')">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -73,6 +73,8 @@ function table_data_tag(tbody_name, response_data, delete_function_name, status_
         `;
         tbody.appendChild(tr);
     });
+handle_permissions();
+
 }
 
 

@@ -6,8 +6,8 @@
 
 
 function temp_set_manual_data() {
-    const temp_article_type_slug_id = sessionStorage.getItem("article_type_slug_id");
-    const temp_article_type_title = sessionStorage.getItem("article_type_title");
+    const temp_article_type_slug_id = localStorage.getItem("article_type_slug_id");
+    const temp_article_type_title = localStorage.getItem("article_type_title");
 
     // Query the element by ID or name, make sure it's an input element
     const set_manual_article_type_slug_id = document.querySelector('[name="manual_article_type_slug_id"]'); 

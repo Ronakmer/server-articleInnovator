@@ -1,0 +1,134 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static %}
+
+
+{% block body %}
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Admin & List</h3>
+        <p class="text-xs text-gray-500">Manage your admin detail.</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+
+        <!-- Search Box -->
+        <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                    fill="none">
+                    <path
+                        d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                        stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <input type="text" id="search-input" onkeyup="list_admin_detail_api()" 
+                class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                placeholder="Search here . . .">
+        </div>
+        <!-- Sort By Button -->
+        <div x-data="{ open: false }" class="relative inline-block text-left">
+
+            <button @click="open = !open"
+                class="flex gap-2 border border-gray-300 rounded-lg items-center px-3 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.75719 15.375L2.99219 11.6175" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.75781 2.625V15.375" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.2422 2.625L15.0072 6.3825" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.2422 15.375V2.625" stroke="#292D32" stroke-width="1.125"
+                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Sort by
+
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div x-show="open" @click.outside="open = false"
+                class="absolute  font-poppins left-0 mt-1 z-10 w-56 rounded-2xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+               
+                <div class="p-4">
+                    <label
+                        class="flex cursor-pointer items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="radio" class="mr-2" name="order_by" value="-created_date" checked="" onchange="list_admin_detail_api(this)">Create By
+                    </label>
+                    <label
+                        class="flex cursor-pointer items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="radio" class="mr-2" name="order_by" value="full_name" onchange="list_admin_detail_api(this)">A to Z
+                    </label>
+                    <label
+                        class="flex cursor-pointer items-center px-4 py-3 text-sm rounded-xl mb-1 text-gray-700 hover:bg-indigo-600/30">
+                        <input type="radio" class="mr-2" name="order_by" value="-full_name" onchange="list_admin_detail_api(this)">Z to A
+                    </label>
+                </div>
+            </div>
+        </div>
+
+            <!-- Add Article Button -->
+            <a href="{% url 'add_admin_detail_page' %}" data-permission="add_admin_detail"
+                class="flex hidden items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                fdprocessedid="fwfkzn">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 4.5V13.5M13.5 9H4.5" stroke="white" stroke-width="1.3"
+                        stroke-linecap="round"></path>
+                </svg>
+                New Admin Detail
+            </a>
+
+    </div>
+</div>
+
+
+<!-- start table  -->
+<div class="rounded-xl mt-4 border border-solid border-gray-200 overflow-auto">
+    <table class="w-full rounded-xl font-poppins" >
+        <thead>
+            <tr class="bg-gray-50 text-sm">
+
+                <th scope="col"
+                    class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                    #
+                </th>
+                <th scope="col"
+                    class="py-3.5 pl-4 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                    Name
+                </th>
+
+                <th scope="col" data-permission="update_admin_detail"
+                    class="py-3.5 hidden pl-4 w-fit text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                    Status
+                </th>
+
+                <th scope="col" data-permission="update_admin_detail, delete_admin_detail"
+
+                    class="py-3.5 hidden pl-4 w-20 text-left whitespace-nowrap  font-medium text-gray-900 capitalize">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 text-sm font-normal " id="admin_detail_tbody">
+          
+        </tbody>
+    </table>
+</div>
+
+<!-- pagination -->
+<div id="pagination" class="flex justify-center mt-4"></div>
+
+
+<!-- admin_detail api -->
+<script src="{% static 'frontendApp/api/admin_detail/delete_admin_detail.js' %}"></script>
+<script src="{% static 'frontendApp/api/admin_detail/status_admin_detail.js' %}"></script>
+<script src="{% static 'frontendApp/api/admin_detail/list_admin_detail.js' %}"></script>
+<script src="{% static 'frontendApp/api/admin_detail/detail_admin.js' %}"></script>
+<script src="{% static 'frontendApp/api/admin_detail/table_data_admin_detail.js' %}"></script>
+
+
+{% endblock body %}

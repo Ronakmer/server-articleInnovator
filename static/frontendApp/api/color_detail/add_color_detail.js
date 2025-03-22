@@ -49,9 +49,9 @@ function add_color_detail_api() {
         const bg_color = color_detail_form.querySelector('[name="bg_color"]');
         const text_color = color_detail_form.querySelector('[name="text_color"]');
     
-        if (data_obj && data_obj.colors && data_obj.colors.length > 0) {
-            bg_color.value = data_obj.colors[0].bg_color;
-            text_color.value = data_obj.colors[0].text_color;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            bg_color.value = data_obj.data[0].bg_color;
+            text_color.value = data_obj.data[0].text_color;
         } else {
             window.location.href = error_page;
         }

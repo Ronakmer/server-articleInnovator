@@ -1,9 +1,8 @@
 
 
 
-
 function set_workspace() {
-    const all_workspace_slug_id = sessionStorage.getItem("all_workspace_slug_id");
+    const all_workspace_slug_id = localStorage.getItem("all_workspace_slug_id");
     let parsed_workspaces = [];
 
     if (all_workspace_slug_id) {
@@ -21,9 +20,9 @@ function set_workspace() {
 
     // Define the function here so it can be accessed from event listeners
     function set_workspace_to_session(slug_id, name, logo) {
-        const temp_workspace_slug_id = sessionStorage.getItem("workspace_slug_id");
+        const temp_workspace_slug_id = localStorage.getItem("workspace_slug_id");
         
-        sessionStorage.setItem("workspace_slug_id", slug_id);
+        localStorage.setItem("workspace_slug_id", slug_id);
 
         if(temp_workspace_slug_id != slug_id){
             location.reload();
@@ -55,7 +54,7 @@ function set_workspace() {
 
         div_data.appendChild(label);
     });
-    const temp = sessionStorage.getItem('workspace_slug_id');
+    const temp = localStorage.getItem('workspace_slug_id');
 
     const temp_filter = parsed_workspaces.filter(t=>t.slug_id == temp);
     if(temp_filter.length == 0 && parsed_workspaces.length > 0 ){

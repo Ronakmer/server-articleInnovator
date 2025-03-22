@@ -3,7 +3,7 @@
 
 async function check_invitation_code_api(){
     
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     const invitation_code = document.querySelector('[name="invitation_code"]').value;
     const data = new FormData();
@@ -77,7 +77,7 @@ async function admin_registration_api(){
     };
     
     
-    sessionStorage.setItem("registration_email", email);
+    localStorage.setItem("registration_email", email);
 
     try {
         const response = await fetch(admin_registration_url, {
@@ -133,7 +133,7 @@ async function admin_registration_api(){
 // verify_otp
 async function verify_otp_api(){
     
-    const registration_email = sessionStorage.getItem("registration_email");
+    const registration_email = localStorage.getItem("registration_email");
     const verify_form = document.querySelector('#verify_form');
 
     const otp = [

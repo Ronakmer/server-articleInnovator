@@ -1,5 +1,6 @@
 // Function to toggle the selected tag in the input box
 function perma_links(tag) {
+        
     const inputField = document.getElementById('tagInput'); // Get the input field
     const currentValue = inputField.value; // Get the current value of the input
     const tagWithSlashes = `/${tag}/`; // Format the tag
@@ -18,3 +19,4 @@ function perma_links(tag) {
         inputField.value = (currentValue + tagWithSlashes).replaceAll('//','/'); 
     }
 }
+

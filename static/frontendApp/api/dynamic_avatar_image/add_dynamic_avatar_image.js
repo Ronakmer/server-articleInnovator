@@ -50,8 +50,8 @@ async function add_dynamic_avatar_image_api() {
         // Collect form data using the name attributes
         const avatar_type = dynamic_avatar_image_form.querySelector('[name="avatar_type"]');
 
-        if (data_obj && data_obj.dynamic_avatar_images && data_obj.dynamic_avatar_images.length > 0) {
-            avatar_type.value = data_obj.dynamic_avatar_images[0].avatar_type;
+        if (data_obj && data_obj.data && data_obj.data.length > 0) {
+            avatar_type.value = data_obj.data[0].avatar_type;
         } else {
             window.location.href = error_page;
         }

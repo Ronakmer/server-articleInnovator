@@ -28,11 +28,11 @@ def add_test_tag(request):
 
         response = requests.post(api_url, headers=headers, json=data, verify=False)
 
-        return JsonResponse({'status_code': response.status_code, 'domain_name' : domain_name ,'response_text': response.json()})
+        return JsonResponse({'status_code': response.status_code, 'domain_name' : domain_name ,'response_text': response.json(),"success": True})
 
     except Exception as e:
         print("This error is add_test_tag --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
 
 
 @api_view(['POST'])
@@ -51,8 +51,8 @@ def delete_test_tag(request):
         }
         
         response = requests.delete(api_url, headers=headers, verify=False)
-        return JsonResponse({'status_code': response.status_code,'response_text': response.json()})
+        return JsonResponse({'status_code': response.status_code,'response_text': response.json(),"success": True})
 
     except Exception as e:
         print("This error is delete_test_tag --->: ",e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)

@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Q
 from apiApp.views.base.dynamic_avatar_image_process.dynamic_avatar_image_process import dynamic_avatar_image_process
+from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
 
 
@@ -19,7 +20,8 @@ def list_admin_detail(request):
         limit = int(request.GET.get('limit', 100))
         status = request.GET.get('status', None)
         slug_id = request.GET.get('slug_id', None)
-
+        order_by = request.GET.get('order_by', '-created_date')
+        
         # Initialize filters
         filters = Q()
 
@@ -34,33 +36,40 @@ def list_admin_detail(request):
             role_obj = role.objects.get(name='admin')
         except role.DoesNotExist:
             return JsonResponse({
-                "error": f"role data does not exist."
-            }, status=400)
+                "error": f"role data does not exist.",
+                "success": False,
+            }, status=404)
 
         # Filter user details
         try:
-            obj = user_detail.objects.filter(filters, role_id=role_obj)
-            print(obj,'obj')
+            obj = user_detail.objects.filter(filters, role_id=role_obj).order_by(order_by)
         except user_detail.DoesNotExist:
             return JsonResponse({
-                "error": f"admin data does not exist."
-            }, status=400)
+                "error": f"admin data does not exist.",
+                "success": False,
+            }, status=404)
 
 
         # Apply pagination
-        obj = obj[offset:offset + limit]
+        obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
 
         # Serialize the data
         serialized_data = user_detail_serializer(obj, many=True)
 
         return JsonResponse({
-            "redirect": "",
-            "admin_details": serialized_data.data,
+            "data": serialized_data.data,
+            "success": True,
+            "pagination": {
+                "total_count": total_count,
+                "page": page,
+                "page_size": limit,
+                "total_pages": total_pages
+            },
         }, status=200)
 
     except Exception as e:
         print("This error is list_admin_detail --->: ", e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False,}, status=500)
 
 
 
@@ -77,10 +86,7 @@ def add_admin_detail(request):
         article_limitation = request.POST.get('article_limitation')
         domain_limitation = request.POST.get('domain_limitation')
         workspace_limitation = request.POST.get('workspace_limitation')
-            
-        # workspace_name=request.POST.get('workspace_name')
-        # workspace_logo=request.FILES.get('workspace_logo')
-        
+                    
         avatar_image_path = request.data.get("avatar_image_path")
 
         workspace_slugs_str = request.POST.get('workspace_slug_id')
@@ -91,29 +97,25 @@ def add_admin_detail(request):
         try:
             role_id=role.objects.get(name='admin')                            
         except role.DoesNotExist:
-            return JsonResponse({"error": "role detail not found."}, status=404)
+            return JsonResponse({"error": "role detail not found.","success": False}, status=404)
         
         if User.objects.filter(username=email).exists():
             return JsonResponse({
                 "error": "User with this email already exists."
             }, status=400)
             
-        # if workspace.objects.filter(name=workspace_name).exists():
-        #     return JsonResponse({
-        #         "error": "workspace with this name already exists."
-        #     }, status=400)
-            
-            
         # Check if either the profile_image file or the avatar_image_path is provided
         if not profile_image and not avatar_image_path:
             return JsonResponse({
-                "error": "Please provide either a profile image or an avatar image path."
+                "error": "Please provide either a profile image or an avatar image path.",
+                "success": False
             }, status=400)
 
         # Optionally handle cases where both are provided
         if profile_image and avatar_image_path:
             return JsonResponse({
-                "error": "Please provide only one of profile image or avatar image path, not both."
+                "error": "Please provide only one of profile image or avatar image path, not both.",
+                "success": False
             }, status=400)
             
         if avatar_image_path:
@@ -123,7 +125,7 @@ def add_admin_detail(request):
         #  set dynamic avatar image
         profile_image = dynamic_avatar_image_process(profile_image, avatar_image_path)
         if not profile_image:
-            return JsonResponse({"error": "profile image processing failed so give me correct image."}, status=400)
+            return JsonResponse({"error": "profile image processing failed so give me correct image.","success": False}, status=400)
 
 
         user_id_obj = User()
@@ -131,12 +133,6 @@ def add_admin_detail(request):
         user_id_obj.email = email
         user_id_obj.password = make_password(password)
         user_id_obj.save()
-        
-        # workspace_obj = workspace()
-        # workspace_obj.name = workspace_name
-        # workspace_obj.logo = workspace_logo
-        # workspace_obj.created_by = user_id_obj
-        # workspace_obj.save()
         
         admin_obj = user_detail()
         admin_obj.user_id = user_id_obj
@@ -148,8 +144,6 @@ def add_admin_detail(request):
         admin_obj.profile_image = profile_image
         admin_obj.created_by = request_user
         admin_obj.save()
-        # if workspace_obj:
-        #     admin_obj.workspace_id.add(workspace_obj)
         if workspace_slugs:
             valid_workspaces = workspace.objects.filter(slug_id__in=workspace_slugs)
             admin_obj.workspace_id.add(*valid_workspaces)
@@ -159,17 +153,18 @@ def add_admin_detail(request):
 
         return JsonResponse({
             "message": "Data added successfully.",
-            "user_detail": serialized_admin_data,
+            "success": True,
+            "data": serialized_admin_data,
         }, status=200)
 
     except Exception as e:
         print("This error is add_admin_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
     
 
 
 # update admin detail
-@api_view(['PUT'])
+@api_view(['PATCH'])
 def update_admin_detail(request, slug_id):
     try:
         full_name=request.POST.get('full_name')
@@ -183,7 +178,8 @@ def update_admin_detail(request, slug_id):
         
         if User.objects.filter(username=email).exists():
             return JsonResponse({
-                "error": "User with this email already exists."
+                "error": "User with this email already exists.",
+                "success": False,
             }, status=400)
 
 
@@ -192,10 +188,9 @@ def update_admin_detail(request, slug_id):
         except user_detail.DoesNotExist:
             return JsonResponse({
                 "error": "admin detail not found.",
+                "success": False,
             }, status=404) 
 
-        admin_obj.user_id.username = email
-        admin_obj.user_id.email = email
         admin_obj.article_limitation = article_limitation
         admin_obj.domain_limitation = domain_limitation
         admin_obj.workspace_limitation = workspace_limitation
@@ -213,12 +208,13 @@ def update_admin_detail(request, slug_id):
 
         return JsonResponse({
             "message": "Data updated successfully.",
-            "admin_detail": serialized_admin_data,
+            "success": True,
+            "data": serialized_admin_data,
         }, status=200)
         
     except Exception as e:
         print("This error is update_admin_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 
@@ -231,6 +227,7 @@ def delete_admin_detail(request, slug_id):
         except user_detail.DoesNotExist:
             return JsonResponse({
                 "error": "admin detail not found.",
+                "success": False,
             }, status=404) 
 
         if obj.user_id:
@@ -240,11 +237,12 @@ def delete_admin_detail(request, slug_id):
 
         return JsonResponse({
             "message": "Data Deleted successfully.",
+            "success": True,
         }, status=200)
 
     except Exception as e:
         print("This error is delete_admin_detail --->: ", e)
-        return JsonResponse({"error": "Internal server error."}, status=500)
+        return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
 

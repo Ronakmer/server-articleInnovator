@@ -12,6 +12,8 @@ function render_data_to_table(response_data, current_page, limit){
 // list invitation_code_detail api
 async function list_invitation_code_detail_api() {
   
+    const selected_sort = document.querySelector('input[name="order_by"]:checked').value;
+    console.log("Selected Sort:", selected_sort); // Debugging purpose
 
     let current_page = 1; // Initialize current page
     const limit = 10; // Number of items per page
@@ -21,6 +23,7 @@ async function list_invitation_code_detail_api() {
 
     const filters = {
         search: searchInput ? searchInput.value : '',
+        order_by:selected_sort,
 
     };
 

@@ -4,14 +4,20 @@
 // status api 
 async function status_api(api_url, data, slug_id, redirect_url) {
 
-    const access_token = sessionStorage.getItem("access_token");
+    const access_token = localStorage.getItem("access_token");
 
     const temp_api_url = `${api_url}${slug_id}`;
+
+    const workspace_slug_id = localStorage.getItem("workspace_slug_id");
+    if(workspace_slug_id){
+        data["workspace_slug_id"] = workspace_slug_id; 
+    }
 
     try {
         // Perform the API call
         const response = await fetch(temp_api_url, {
-            method: 'PUT',
+            // method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`,
@@ -30,7 +36,7 @@ async function status_api(api_url, data, slug_id, redirect_url) {
             // Redirect or show a success message
             if (response.ok) {
                 setTimeout(() => {
-                    // window.location.href = redirect_url;
+                    // window.location.reload();
                 }, 1000);
             }
 

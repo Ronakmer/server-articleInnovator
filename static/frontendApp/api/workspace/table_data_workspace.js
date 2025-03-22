@@ -11,7 +11,7 @@ function table_data_workspace(tbody_name, response_data, delete_function_name, s
 
     tbody.innerHTML = ''; 
 
-    response_data.workspaces.forEach((obj, index) => {
+    response_data.data.forEach((obj, index) => {
         const tr = document.createElement('tr');
         tr.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
 
@@ -23,7 +23,7 @@ function table_data_workspace(tbody_name, response_data, delete_function_name, s
             <td class="py-3.5 pl-4 whitespace-nowrap font-normal text-gray-900 pb-6">
                 <img src="${obj.logo}" class="mb-4 rounded-lg w-20 h-16 object-cover"  alt="Featured Image">    
             </td>
-            <td class="py-3.5 pl-4 whitespace-nowrap">
+            <td class="py-3.5 pl-4 whitespace-nowrap hidden" data-permission="update_workspace" >
                 <div class="flipswitch">
                     <input 
                         id="fs${obj.slug_id}" 
@@ -39,10 +39,10 @@ function table_data_workspace(tbody_name, response_data, delete_function_name, s
                     </label>
                 </div>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 hidden" data-permission="update_workspace, delete_workspace">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <a href="${update_page_url}${obj.slug_id}" class="mr-2">
+                    <a href="${update_page_url}${obj.slug_id}" class="mr-2 hidden" data-permission="update_workspace" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -58,7 +58,7 @@ function table_data_workspace(tbody_name, response_data, delete_function_name, s
                         </svg>
                     </a>
                     <!-- view -->
-                    <a href="#" class="mr-2">
+                    <button type="button" class="mr-2" onclick='modal_data(${JSON.stringify(obj)}, "Workspace")'>
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -69,9 +69,9 @@ function table_data_workspace(tbody_name, response_data, delete_function_name, s
                             d="M15.9997 22.0135C13.4931 22.0135 11.1264 20.5468 9.49973 18.0002C8.79306 16.9002 8.79306 15.1068 9.49973 14.0001C11.1331 11.4535 13.4997 9.98682 15.9997 9.98682C18.4997 9.98682 20.8664 11.4535 22.4931 14.0001C23.1997 15.1001 23.1997 16.8935 22.4931 18.0002C20.8664 20.5468 18.4997 22.0135 15.9997 22.0135ZM15.9997 10.9868C13.8464 10.9868 11.7864 12.2801 10.3464 14.5402C9.84639 15.3202 9.84639 16.6801 10.3464 17.4601C11.7864 19.7201 13.8464 21.0135 15.9997 21.0135C18.1531 21.0135 20.2131 19.7201 21.6531 17.4601C22.1531 16.6801 22.1531 15.3202 21.6531 14.5402C20.2131 12.2801 18.1531 10.9868 15.9997 10.9868Z"
                             fill="#292D32"></path>
                         </svg>                        
-                    </a>
+                    </button>
                     <!-- delete -->
-                    <a href="#" class="mr-2" onclick="${delete_function_name}('${obj.slug_id}')">
+                    <a href="#" class="mr-2 hidden" data-permission="delete_workspace"  onclick="${delete_function_name}('${obj.slug_id}')">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>
@@ -97,6 +97,8 @@ function table_data_workspace(tbody_name, response_data, delete_function_name, s
         `;
         tbody.appendChild(tr);
     });
+handle_permissions();
+
 }
 
 

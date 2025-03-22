@@ -24,8 +24,8 @@ async function add_ai_configuration_api() {
     data.append("email", email);
     
     try {
-        const access_token = sessionStorage.getItem("access_token");
-        const onboard_workspace_slug_id = sessionStorage.getItem("onboard_workspace_slug_id");
+        const access_token = localStorage.getItem("access_token");
+        const onboard_workspace_slug_id = localStorage.getItem("onboard_workspace_slug_id");
         
         
         if(onboard_workspace_slug_id){

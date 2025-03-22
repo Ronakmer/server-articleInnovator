@@ -29,3 +29,12 @@ def update_user_detail_page(request, slug_id):
         print("This error is update_user_detail_page --->: ",e)
         return render(request, 'error.html' , {'error': 500})
 
+
+
+def detail_user_page(request, slug_id):
+    try:
+        return render(request,'frontendApp/user_detail/detail_user.html')
+    except Exception as e:
+        print("This error is update_user_detail_page --->: ",e)
+        return render(request, 'error.html' , {'error': 500})
+

@@ -104,6 +104,27 @@
                     </div>
 
                 </div>
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="assignments" class="block pb-2 text-sm font-medium text-gray-600">Workspace</label>
+
+                        <div class="custom-select member_custom_select  bg-white rounded-lg  border border-gray-300" id="">
+                            <div class="flex flex-wrap items-center p-2 min-h-[42px]" id="">
+                                <div class="selected-items member_selected_items flex flex-wrap gap-2" id=""></div>
+                                <input type="text" class="flex-grow text-sm outline-none px-2 py-1" name=""
+                                    placeholder="">
+                            </div>
+                            <div id=""
+                                class="custom-select-dropdown member_custom_select_dropdown text-sm mt-1 py-4 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        <!-- for pass data in api -->
+                        <input type="hidden" name="workspace_id" class="flex-grow text-sm outline-none px-2 py-1"
+                          placeholder="">
+
+                    </div>
+
+                </div>
 
                 <div class="flex flex-col md:flex-row items-start gap-3">
                     <button type="button" onclick="add_motivation_api()"
@@ -125,5 +146,6 @@
 <!-- motivation api -->
 <script src="{% static 'frontendApp/api/motivation/add_motivation.js' %}"></script>
 
+<script src="{% static 'frontendApp/api/motivation/motivation_dropdowns.js' %}"></script>
 
 {% endblock body %}

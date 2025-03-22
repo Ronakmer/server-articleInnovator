@@ -1,39 +1,5 @@
 
 
-// const modal = document.getElementById('default-modal');
-// const toggleButton = document.querySelector('[data-modal-toggle]');
-// const closeModalButton = document.querySelector('.close-modal');
-
-// // Function to open the modal
-// function openModal(tab_id) {
-//     modal.classList.add('active');
-    
-//     // Tabs - Button
-//     $("button[data-modal-target='category']").removeClass("text-indigo-600 border-b-2 border-indigo-600 active");
-//     $("button[data-modal-target='tag']").removeClass("text-indigo-600 border-b-2 border-indigo-600 active");
-//     $("button[data-modal-target='author']").removeClass("text-indigo-600 border-b-2 border-indigo-600 active");
-
-//     $("button[data-modal-target='" + tab_id +"']").addClass("text-indigo-600 border-b-2 border-indigo-600 active");
-//     console.log("button[data-modal-target='" + tab_id +"']");
-//     // Content
-//     $("#category").addClass("hidden");
-//     $("#tag").addClass("hidden");        
-//     $("#author").addClass("hidden");
-//     $("#"+tab_id).removeClass("hidden");
-
-// }
-
-// // Function to close the modal
-// function closeModal() {
-//     modal.classList.remove('active');
-// }
-
-// // Toggle modal visibility
-// toggleButton.addEventListener('click', openModal);
-// closeModalButton.addEventListener('click', closeModal);
-
-
-
 
 // Ensure the script runs after the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {

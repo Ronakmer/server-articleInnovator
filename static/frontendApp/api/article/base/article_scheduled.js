@@ -31,5 +31,3 @@ function manual_toggle_date_time_fields() {
 }
 
 
-// console.log(set_article_type_title,'set_article_type_title')
-    

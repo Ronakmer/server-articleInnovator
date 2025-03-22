@@ -95,11 +95,6 @@ def console_metrics_data(queryset):
         country_result_list = list(country_result)
         country_result = json.dumps(country_result_list)
 
-        print(date_result, '0')
-        print(query_result, '1')
-        print(page_result, '2')
-        print(country_result, '3')
-        
         return {
             "date_result": date_result,
             "query_result": query_result,
@@ -110,4 +105,4 @@ def console_metrics_data(queryset):
 
     except Exception as e:
         print("This error is console_metrics_data --->: ", e)
-        return JsonResponse({"error": "Internal Server error."}, status=500)
+        return JsonResponse({"error": "Internal Server error.","success": False}, status=500)
