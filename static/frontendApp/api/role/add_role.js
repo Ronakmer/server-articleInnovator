@@ -1,5 +1,19 @@
 
 
+
+// Listen for Enter key on the form
+document.addEventListener("DOMContentLoaded", () => {
+    const roleForm = document.getElementById("role_form");
+
+    roleForm.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // prevent actual form submission
+            add_role_api(); // trigger your existing function
+        }
+    });
+});
+
+
 function add_role_api() {
 
     // Get the form element

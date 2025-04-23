@@ -23,6 +23,9 @@ def generate_template(request):
         template_name = request.data.get('template_name')
         imagekit_slug_id = request.data.get('imagekit_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
+        
+        print(request.data)
+
 
         try:
             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)

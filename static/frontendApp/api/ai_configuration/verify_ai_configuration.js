@@ -36,11 +36,28 @@ async function verify_api() {
             const data = await response.json();
            
             console.log(data)
-            if(data.message == true){
-                show_toast("success", `API verified successfully`);
-            }else{
-                show_toast("error", `API verification failed`);
+            // if(data.message == true){
+            //     show_toast("success", `API verified successfully`);
+            // }else{
+            //     show_toast("error", `API verification failed`);
+            // }
+
+
+            if (!data.failed_models || data.failed_models.length === 0) {
+                show_toast("success", "API verified successfully");
+                const save_btn = ai_configuration_form.querySelector('[id="save_btn"]');
+                if (save_btn) {
+                    save_btn.classList.remove("hidden");
+                }
+
+            } else {
+                let errorMessage = "API verification failed.";
+                if (data.failed_models && data.failed_models.length > 0) {
+                    errorMessage += ` Failed models: ${data.failed_models.join(", ")}.`;
+                }
+                show_toast("error", errorMessage);
             }
+
 
             // Redirect or show a success message
             if (response.ok) {

@@ -119,26 +119,30 @@
                                         'blockQuote', 'insertTable', 'mediaEmbed', '|',
                                         'undo', 'redo'
                                     ],
-                                    {% comment %} // Setting height directly in CKEditor configuration
+                                    // Setting height directly in CKEditor configuration
                                     editor: {
                                         height: 600  // Set height in pixels
-                                    } {% endcomment %}
+                                    }
                                 })
                                 .then(editor => {
-                                    // Set the custom height using CSS
-                                    editor.ui.view.editable.element.style.height = '600px';
-                                    editor.ui.view.editable.element.style.minHeight = '600px';
+                                    console.log('Editor was initialized', editor);
+                                    
+                                    // You can also log when content changes
+                                    editor.model.document.on('change:data', () => {
+                                        console.log('The content has changed!');
+                                        console.log('Current content:', editor.getData());
+                                        const wp_content = editor.getData();
+                                        console.log('Current content:', wp_content);
+                                        
 
-                                    // Attach an event listener to get content when needed
-                                    document.querySelector('#submit_btn').addEventListener('click', () => {
-                                        const wp_content = editor.getData();  // Get content from CKEditor
-                                        console.log(wp_content); // Print content to console
+                                        //const wp_content = editor.getData();  // Get content from CKEditor
+                                       // console.log(wp_content); // Print content to console
                                         const wp_content_data = document.querySelector('[name="wp_content_data"]');
-                                        wp_content_data = wp_content;
+                                        wp_content_data.value = wp_content;
 
                                     });
-
                                 })
+                              
                 
                                 .catch(error => {
                                     console.error(error);
@@ -239,7 +243,7 @@
                                     </div>
                                     <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
                                         <label>
-                                            <input type="radio" class="status-radio" name="wp_status_manual" value="scheduled" id="ai_scheduled" onclick="manual_toggle_date_time_fields()"> Scheduled
+                                            <input type="radio" class="status-radio" name="wp_status_manual" value="future" id="future" onclick="manual_toggle_date_time_fields()"> Scheduled
                                         </label>
                                     </div>
                                 </div>
@@ -384,7 +388,7 @@
         
                                             <!-- File Input -->
                                             <label class="mt-4">
-                                                <input type="file" id="file-input" accept="image/*" name="wp_featured_image" hidden>
+                                                <input type="file" id="file-input" accept="image/*" name="" hidden onchange="handleFileUpload(event)">
         
                                                 <div
                                                     class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
@@ -394,12 +398,18 @@
                                             <span class="text-center text-gray-400 font-normal text-sm"
                                             id="choose-file-text">OR</span>
                                             <label class="mt-4">        
-                                                <button type="button" class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
+                                                <button id="openImageGenModal" type='button' class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
                                                     Genreate Image
                                                 </button>
+
                                             </label>
                                                 
                                         </div>
+
+                                        <!--for api string iamge-->
+                                        <input type="text" id="image-url"  name="wp_featured_image" >
+
+
                                     </div>
         
                                     <!-- Crop Controls (visible after upload) -->
@@ -427,9 +437,12 @@
 </div>
 
 {% include 'frontendApp/article/add_article/article_modal.html' %}
+{% include 'frontendApp/article/add_article/image_generate_modal.html' %}
 <script src="{% static 'frontendApp/api/article/base/add_wp_data_api.js' %}"></script>
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/add_wp_data.js' %}"></script>
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/article_modal.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/add_article/add_manual_article/image_generate_modal_api.js' %}"></script>
+<script src="{% static 'frontendApp/api/article/add_article/add_manual_article/image_generate_modal_data.js' %}"></script>
 
 
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/article_dropdowns.js' %}"></script>
@@ -437,4 +450,5 @@
 <script src="{% static 'frontendApp/api/article/add_article/add_manual_article/add_manual_article.js' %}"></script>
 
 
+<script src="{% static 'frontendApp/api/article/add_article/add_manual_article/image_generate_modal.js' %}"></script>
 

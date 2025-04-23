@@ -11,7 +11,7 @@ from imagekitio.models.UploadFileRequestOptions import UploadFileRequestOptions
 
 def upload_to_imagekit(image, file_name, slug_id, workspace_name):
     # Set the specific folder path
-    folder_path = f"articleInnovator/imageGen/{workspace_name}"
+    folder_path = f"articleInnovator/template/{workspace_name}"
     
     try:
         print(f'Starting ImageKit upload process to folder: {folder_path}')

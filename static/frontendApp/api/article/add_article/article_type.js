@@ -119,6 +119,8 @@ document.querySelectorAll('button[data-category]').forEach(button => {
 function get_article_type(article_type_category, article_type_title, slug_id){
         
     const current_url = window.location.href;
+
+    
     // store step in session
     localStorage.setItem("article_type_category", article_type_category);
     localStorage.setItem("article_type_title", article_type_title);
@@ -128,6 +130,8 @@ function get_article_type(article_type_category, article_type_title, slug_id){
 
     const add_article_ai = document.getElementById("add_article_ai");
     const add_article_manual = document.getElementById("add_article_manual");
+
+
 
     // set color
     const previouslySelected = document.querySelector('.selected-article');

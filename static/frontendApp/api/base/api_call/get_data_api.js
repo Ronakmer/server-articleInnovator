@@ -1,8 +1,8 @@
 
 
 
-// list api
-async function get_data_api(api_url, domain_slug_id=null) {
+// get api data
+async function get_data_api(api_url, domain_slug_id=null, search=null) {
     try {
 
         const access_token = localStorage.getItem("access_token");
@@ -16,6 +16,9 @@ async function get_data_api(api_url, domain_slug_id=null) {
         }
         if (domain_slug_id) {
             query_params.append("domain_slug_id", domain_slug_id);
+        }
+        if (search) {
+            query_params.append("search", search);
         }
         query_params.append("status", 'True');
 
@@ -33,7 +36,7 @@ async function get_data_api(api_url, domain_slug_id=null) {
             const data = await response.json();
             console.log('fetched successfully:', data);
             
-            return data
+            return data;
                 
             // show_toast("success", "Roles fetched successfully");
         } else {

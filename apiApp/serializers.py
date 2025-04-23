@@ -14,6 +14,7 @@ from apiApp.models import (
     competitor_extraction, competitor_extraction_mapping,
     competitor_seo_extraction_mapping, user_api_key, keyword,
     console_metrics, image_kit_configuration, activity_log, notification,
+    supportive_prompt_type, supportive_prompt, variables
     
 )
 
@@ -221,6 +222,38 @@ class article_type_serializer(serializers.ModelSerializer):
         model = article_type
         exclude = ['id', 'created_date', 'updated_date']
 
+
+class supportive_prompt_type_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = supportive_prompt_type
+        exclude = ['id', 'created_date', 'updated_date']
+
+  
+class variables_serializer(serializers.ModelSerializer): 
+    supportive_prompt_type_id = serializers.PrimaryKeyRelatedField(queryset=supportive_prompt_type.objects.all(), write_only=True, required=False, allow_null=True)
+    article_type_id_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True, required=False, allow_null=True)
+    # workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+
+    supportive_prompt_type_id_data = supportive_prompt_type_serializer(source='supportive_prompt_type_id', read_only=True) 
+    article_type_id_data = article_type_serializer(source='article_type_id', read_only=True) 
+    # workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+
+    class Meta:
+        model = variables
+        exclude = ['id', 'created_date', 'updated_date']
+  
+  
+class supportive_prompt_serializer(serializers.ModelSerializer): 
+    supportive_prompt_type_id = serializers.PrimaryKeyRelatedField(queryset=supportive_prompt_type.objects.all(), write_only=True)
+    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+
+    supportive_prompt_type_id_data = supportive_prompt_type_serializer(source='supportive_prompt_type_id', read_only=True) 
+    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+
+    class Meta:
+        model = supportive_prompt
+        exclude = ['id', 'created_date', 'updated_date']
+
         
 class prompt_serializer(serializers.ModelSerializer):
     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
@@ -309,10 +342,12 @@ class article_serializer(serializers.ModelSerializer):
 
     class Meta:
         model = article
-        exclude = ['id', 'created_date', 'updated_date']
+        exclude = ['id', 'updated_date']
         
         
 class article_info_serializer(serializers.ModelSerializer):
+    # article_id_data = article_serializer(source='article_id', read_only=True) 
+
     class Meta:
         model = article_info
         exclude = ['id', 'created_date', 'updated_date']

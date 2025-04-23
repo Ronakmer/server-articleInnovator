@@ -5,7 +5,6 @@ async function add_api(api_url, data, redirect_url) {
 
     const access_token = localStorage.getItem("access_token");
 
-
     const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
     if (!data.has("workspace_slug_id")) {

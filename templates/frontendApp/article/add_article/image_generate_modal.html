@@ -1,0 +1,291 @@
+
+
+<div class="container mx-auto p-4 ">
+
+    <div id="modal-image-gen"
+        class="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div
+            class="relative top-20 z-[1100] inset-2 mx-auto p-5 sm:p-8 border w-11/12 md:w-3/4 lg:w-10/12 shadow-lg rounded-2xl bg-white">
+            <div class="flex justify-between items-center mb-6">
+                <button id="closeModal"
+                    class="text-gray-500 absolute right-3 top-3 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $('.form-checkbox').on('change', function () {
+                        if ($(this).is(':checked')) {
+                            $(this).closest('.mainbox-cls').addClass('border-2 border-indigo-600 rounded-xl'); // Adds border and color
+                        } else {
+                            $(this).closest('.mainbox-cls').removeClass('border-2 border-indigo-600 rounded-xl'); // Removes border and color
+                        }
+                    });
+                });
+
+            </script>
+            <div class="flex space-x-6">
+
+                <div class="w-1/2">
+
+                    <div class="rounded-xl border border-solid border-gray-200 ">
+                        <!-- <div class="flex gap-2 px-4 pt-4">
+                            <input type="text" placeholder="Write Keyword here"
+                                class="w-full px-4 py-2 bg-gray-50 rounded-md"
+                                fdprocessedid="6krwh5">
+                            <button
+                                class="flex items-center gap-1.5 px-4 py-2 text-sm w-64 font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700"
+                                fdprocessedid="fsiu4h">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8.625 15.75C12.56 15.75 15.75 12.56 15.75 8.625C15.75 4.68997 12.56 1.5 8.625 1.5C4.68997 1.5 1.5 4.68997 1.5 8.625C1.5 12.56 4.68997 15.75 8.625 15.75Z"
+                                        stroke="white" stroke-width="1.125" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                    </path>
+                                    <path d="M16.5 16.5L15 15" stroke="white" stroke-width="1.125"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                Search Image
+                            </button>
+                        </div> -->
+
+
+                        <!-- search Functionality  -->
+                        <div class="relative w-full max-w-2xl mx-auto">
+                            <div class="flex gap-2 px-4 pt-4">
+                                <input type="text" id="searchInput" placeholder="Write Keyword here" value="pizza"
+                                    class="w-full px-4 py-2 bg-gray-50 rounded-md search-keyword">
+                                <button type="button" onclick="find_google_image_api()"
+                                    class="flex items-center gap-1.5 px-4 py-2 text-sm w-64 font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M8.625 15.75C12.56 15.75 15.75 12.56 15.75 8.625C15.75 4.68997 12.56 1.5 8.625 1.5C4.68997 1.5 1.5 4.68997 1.5 8.625C1.5 12.56 4.68997 15.75 8.625 15.75Z"
+                                            stroke="white" stroke-width="1.125"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                        </path>
+                                        <path d="M16.5 16.5L15 15" stroke="white"
+                                            stroke-width="1.125" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </svg>
+                                    Search Image
+                                </button>
+                            </div>
+
+                            <!-- Recent Searches Popup -->
+                            {% comment %} <div id="searchPopup"
+                                class="absolute left-4 z-50 right-4 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 hidden">
+                                <div class="">
+                                    <h3 class="text-sm p-4 font-medium text-gray-900 ">Recent
+                                        Searches</h3>
+                                    <hr>
+                                    <div class="space-y-2 p-4">
+                                        <!-- Search Items -->
+                                        <div
+                                            class="flex items-center justify-between py-2  hover:bg-gray-50 rounded-md cursor-pointer search-item">
+                                            <div class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-gray-400" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span class="text-sm text-gray-600">Keyword 1</span>
+                                            </div>
+                                            <button
+                                                class="text-indigo-600 text-sm hover:text-indigo-700 delete-btn">Delete</button>
+                                        </div>
+
+                                       
+                                    </div>
+                                </div>
+                            </div> {% endcomment %}
+                        </div>
+
+                        {% comment %} <script>
+                            // Get DOM elements
+                            const searchInput = document.getElementById('searchInput');
+                            const searchPopup = document.getElementById('searchPopup');
+                            const searchItems = document.querySelectorAll('.search-item');
+                            const deleteButtons = document.querySelectorAll('.delete-btn');
+
+                            // Show popup on input focus
+                            searchInput.addEventListener('focus', () => {
+                                searchPopup.classList.remove('hidden');
+                            });
+
+                            // Hide popup when clicking outside
+                            document.addEventListener('click', (e) => {
+                                if (!searchInput.contains(e.target) && !searchPopup.contains(e.target)) {
+                                    searchPopup.classList.add('hidden');
+                                }
+                            });
+
+                            // Handle search item clicks
+                            searchItems.forEach(item => {
+                                item.addEventListener('click', (e) => {
+                                    if (!e.target.classList.contains('delete-btn')) {
+                                        const keyword = item.querySelector('span').textContent;
+                                        searchInput.value = keyword;
+                                        searchPopup.classList.add('hidden');
+                                    }
+                                });
+                            });
+
+                            // Handle delete button clicks
+                            deleteButtons.forEach(button => {
+                                button.addEventListener('click', (e) => {
+                                    e.stopPropagation();
+                                    const searchItem = button.closest('.search-item');
+                                    searchItem.remove();
+                                });
+                            });
+                        </script> {% endcomment %}
+
+                        <!-- End search functionality  -->
+                        <div
+                            class="p-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4  h-[400px] sm:h-[450px] overflow-y-auto scrollbar-w-1.5 image-container">
+                            <!-- Repeat this block for each image -->
+                          
+
+
+                        </div>
+
+                        <div class="rounded-xl border border-solid border-gray-200 m-4 p-4">
+                            <div class="overflow-y-auto h-28  scrollbar-w-1.5">
+                                <div id="" class="grid grid-cols-4 gap-3 overflow-auto selected-images-container">
+                                 
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="w-1/4">
+                    <div class="relative rounded-xl  border border-solid border-gray-200 ">
+
+                        <div
+                            class=" justify-between p-4 border-b border-solid border-gray-200 flex gap-2 text-sm ">
+                            <span class="font-bold">Select Templates</span>
+                            <select name="" id="" class="text-sm template-category">
+
+                            </select>
+                            <select name="" id="" class="text-sm template-tag">
+                                
+                            </select>
+                        </div>
+
+
+                        <!-- new code images -->
+                        <div
+                            class="grid grid-cols-1 p-4 gap-4    h-[400px] sm:h-[600px] overflow-y-auto scrollbar-w-1.5 select-template">
+                           
+
+                        </div>
+
+
+
+                        <!-- end new code images  -->
+
+
+
+                        <div
+                            class="backdrop-blur-md absolute bottom-0 w-full px-4 rounded-lg mr-4  py-3">
+
+                            <input type="text" id="searchInput" placeholder="no of images" value="1"
+                            class="w-full px-4 py-2 bg-gray-50 rounded-md border border-indigo-300  no_of_images">
+
+
+                            <button type="button" onclick="generate_single_image_api()"
+                                class="flex justify-center  items-center my-2 w-full align-middle gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                                <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M15.0969 13.1403C15.0605 13.0272 14.9891 12.9286 14.8931 12.8586C14.7971 12.7887 14.6813 12.751 14.5625 12.751C14.4437 12.751 14.3279 12.7887 14.2319 12.8586C14.1359 12.9286 14.0645 13.0272 14.0281 13.1403L13.4938 14.7781L11.8569 15.3105C11.6263 15.3858 11.4688 15.6018 11.4688 15.8454C11.4688 16.089 11.6263 16.305 11.8569 16.3803L13.4938 16.9128L14.0281 18.5505C14.0645 18.6636 14.1359 18.7622 14.2319 18.8322C14.3279 18.9021 14.4437 18.9398 14.5625 18.9398C14.6813 18.9398 14.7971 18.9021 14.8931 18.8322C14.9891 18.7622 15.0605 18.6636 15.0969 18.5505L15.6312 16.9128L17.2681 16.3803C17.4987 16.305 17.6562 16.089 17.6562 15.8454C17.6562 15.6018 17.4987 15.3858 17.2681 15.3105L15.6312 14.7781L15.0969 13.1403ZM0.5 11.3451C0.5 11.756 0.764375 12.1214 1.15531 12.2485L5.28688 13.5912L6.62844 17.7208C6.6905 17.9113 6.81126 18.0773 6.97343 18.1951C7.1356 18.3128 7.33085 18.3762 7.53125 18.3762C7.73165 18.3762 7.9269 18.3128 8.08907 18.1951C8.25124 18.0773 8.372 17.9113 8.43406 17.7208L9.77844 13.5912L13.9072 12.2485C14.0977 12.1864 14.2637 12.0655 14.3814 11.9033C14.4991 11.7411 14.5625 11.5458 14.5625 11.3454C14.5625 10.9342 14.2981 10.5694 13.9072 10.4423L9.77844 9.09963L8.43406 4.97004C8.37214 4.77935 8.25144 4.61317 8.08925 4.49532C7.92707 4.37746 7.73173 4.31398 7.53125 4.31398C7.33077 4.31398 7.13543 4.37746 6.97325 4.49532C6.81106 4.61317 6.69036 4.77935 6.62844 4.97004L5.28688 9.09963L1.15531 10.4423C0.964745 10.5043 0.798701 10.6251 0.680981 10.7873C0.56326 10.9494 0.499906 11.1447 0.5 11.3451ZM7.53125 5.83066L8.79688 9.71979C8.85031 9.89107 8.98531 10.0252 9.15688 10.0809L13.0466 11.3454L9.15688 12.6099C8.98531 12.6656 8.85031 12.7998 8.79688 12.971L7.53125 16.8602L6.26562 12.971C6.23882 12.8865 6.19214 12.8096 6.12951 12.7467C6.06688 12.6839 5.99011 12.637 5.90562 12.6099L2.01594 11.3454L5.90562 10.0809C5.99011 10.0538 6.06688 10.0069 6.12951 9.9441C6.19214 9.88127 6.23882 9.80435 6.26562 9.71979L7.53125 5.83066ZM14.5625 15.1333L14.6497 15.3982C14.7031 15.5695 14.8381 15.7037 15.0097 15.7593L15.2741 15.8454L15.0097 15.9315C14.8381 15.9872 14.7031 16.1213 14.6497 16.2926L14.5625 16.5575L14.4753 16.2926C14.4485 16.208 14.4018 16.1311 14.3392 16.0683C14.2766 16.0055 14.1998 15.9585 14.1153 15.9315L13.8509 15.8454L14.1153 15.7593C14.1998 15.7323 14.2766 15.6854 14.3392 15.6225C14.4018 15.5597 14.4485 15.4828 14.4753 15.3982L14.5625 15.1333ZM14.8156 1.32785C14.7792 1.21475 14.7079 1.11611 14.6118 1.04614C14.5158 0.976174 14.4001 0.938477 14.2812 0.938477C14.1624 0.938477 14.0467 0.976174 13.9507 1.04614C13.8546 1.11611 13.7833 1.21475 13.7469 1.32785L12.9369 3.81438L10.4506 4.62297C10.22 4.69835 10.0625 4.91435 10.0625 5.15791C10.0625 5.40147 10.22 5.61747 10.4506 5.69285L12.9369 6.50144L13.7469 8.98797C13.7833 9.10107 13.8546 9.19971 13.9507 9.26968C14.0467 9.33965 14.1624 9.37734 14.2812 9.37734C14.4001 9.37734 14.5158 9.33965 14.6118 9.26968C14.7079 9.19971 14.7792 9.10107 14.8156 8.98797L15.6256 6.50144L18.1119 5.69285C18.3425 5.61747 18.5 5.40147 18.5 5.15791C18.5 4.91435 18.3425 4.69835 18.1119 4.62297L15.6256 3.81438L14.8156 1.32785ZM14.2812 3.32079L14.6441 4.43482C14.7003 4.60582 14.8325 4.73997 15.0041 4.79566L16.1178 5.15791L15.0041 5.52016C14.8325 5.57585 14.7003 5.71 14.6441 5.881L14.2812 6.99504L13.9184 5.881C13.8911 5.79673 13.8443 5.72011 13.7817 5.65739C13.7192 5.59468 13.6426 5.54766 13.5584 5.52016L12.4447 5.15791L13.5584 4.79566C13.6426 4.76817 13.7192 4.72114 13.7817 4.65843C13.8443 4.59572 13.8911 4.51909 13.9184 4.43482L14.2812 3.32079ZM2.75 4.59541H2.1875C1.87813 4.59541 1.625 4.84741 1.625 5.15791C1.625 5.46841 1.87813 5.72041 2.1875 5.72041H2.75V6.28291C2.75 6.59341 3.00312 6.84541 3.3125 6.84541C3.62188 6.84541 3.875 6.59341 3.875 6.28291V5.72041H4.4375C4.74687 5.72041 5 5.46841 5 5.15791C5 4.84741 4.74687 4.59541 4.4375 4.59541H3.875V4.03291C3.875 3.72241 3.62188 3.47041 3.3125 3.47041C3.00312 3.47041 2.75 3.72241 2.75 4.03291V4.59541Z"
+                                        fill="white" />
+                                </svg>
+
+
+                                Generate Image
+                            </button>
+                            <script>
+
+                            </script>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="w-1/4 ">
+                    <div
+                        class="relative rounded-xl  bg-indigo-50 border border-solid border-gray-200 ">
+
+                        <div
+                            class=" justify-between p-4 border-b border-solid border-gray-200 flex gap-2  ">
+                            <span class="font-bold">Generated Images</span>
+
+
+                        </div>
+
+
+                        <!-- new code images -->
+                        <div
+                            class="grid grid-cols-1 p-4 gap-4    h-[400px] sm:h-[600px] overflow-y-auto scrollbar-w-1.5 generated-images">
+                           
+                        </div>
+
+
+
+                        <!-- end new code images  -->
+
+
+
+                        <div
+                            class="backdrop-blur-md absolute bottom-0 w-full px-4 rounded-lg mr-4  py-3">
+                            <button type="button" onclick="" id="save-image"
+                                class="flex justify-center  items-center my-2 w-full align-middle gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                                <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12.3304 7.61377C15.0304 7.84627 16.1329 9.23377 16.1329 12.2713V12.3688C16.1329 15.7213 14.7904 17.0638 11.4379 17.0638H6.55535C3.20285 17.0638 1.86035 15.7213 1.86035 12.3688V12.2713C1.86035 9.25627 2.94785 7.86877 5.60285 7.62127"
+                                        stroke="white" stroke-width="1.125" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M9 2.43896V12.099" stroke="white" stroke-width="1.125"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M11.5133 10.4263L9.00078 12.9388L6.48828 10.4263"
+                                        stroke="white" stroke-width="1.125" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+
+
+                                Save Image
+                            </button>
+                            <script>
+
+                            </script>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

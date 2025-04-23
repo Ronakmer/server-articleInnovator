@@ -34,6 +34,11 @@ from frontendApp.views.activity_log.activity_log import list_activity_log_page
 from frontendApp.views.error_page.error_page import error_page
 from frontendApp.views.progress_bar.progress_bar import progress_bar_page
 
+
+from frontendApp.views.supportive_prompt_type.supportive_prompt_type import list_supportive_prompt_type_page, add_supportive_prompt_type_page, update_supportive_prompt_type_page
+from frontendApp.views.supportive_prompt.supportive_prompt import list_supportive_prompt_page, add_supportive_prompt_page, update_supportive_prompt_page
+
+
 ######### image gen  #########
 from frontendApp.views.image_gen.image_tag.image_tag import add_image_tag_page, list_image_tag_page, update_image_tag_page
 from frontendApp.views.image_gen.image_template_category.image_template_category import add_image_template_category_page, list_image_template_category_page, update_image_template_category_page
@@ -178,6 +183,19 @@ permissions_list = [
     {"name": "update_image_kit_configuration_page", "route": "image-kit-configuration/update/<slug:slug_id>", "description": "update image-kit-configuration Page", "status": "True", "group": "image-kit-configuration"},
 
     
+    # supportive_prompt_type
+    {"name": "list_supportive_prompt_type_page", "route": "supportive-prompt-types/", "description": "all supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+    {"name": "add_supportive_prompt_type_page", "route": "supportive-prompt-type/add/", "description": "add supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+    {"name": "update_supportive_prompt_type_page", "route": "supportive-prompt-type/update/<slug:slug_id>", "description": "update supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+    {"name": "delete_supportive_prompt_type_page", "route": "supportive-prompt-type/delete/<slug:slug_id>", "description": "delete supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+
+    # supportive_prompt
+    {"name": "list_supportive_prompt_page", "route": "supportive-prompts/", "description": "all supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "add_supportive_prompt_page", "route": "supportive-prompt/add/", "description": "add supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "update_supportive_prompt_page", "route": "supportive-prompt/update/<slug:slug_id>", "description": "update supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "delete_supportive_prompt_page", "route": "supportive-prompt/delete/<slug:slug_id>", "description": "delete supportive-prompt", "status": "True", "group": "supportive-prompt"},
+
+
     ######### image gen  #########
 
     # image_tag

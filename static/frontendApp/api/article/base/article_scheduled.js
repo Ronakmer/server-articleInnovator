@@ -6,8 +6,8 @@ function ai_toggle_date_time_fields() {
 
     console.log(selectedRadio, 'selectedRadio');
 
-    // Toggle date-time fields based on "scheduled" radio button value
-    if (selectedRadio === 'scheduled') {
+    // Toggle date-time fields based on "future" radio button value
+    if (selectedRadio === 'future') {
         date_time_fields.classList.remove('hidden');  // Show fields
     } else {
         date_time_fields.classList.add('hidden');  // Hide fields
@@ -22,8 +22,8 @@ function manual_toggle_date_time_fields() {
 
     console.log(selectedRadio, 'selectedRadio');
 
-    // Toggle date-time fields based on "scheduled" radio button value
-    if (selectedRadio === 'scheduled') {
+    // Toggle date-time fields based on "future" radio button value
+    if (selectedRadio === 'future') {
         date_time_fields.classList.remove('hidden');  // Show fields
     } else {
         date_time_fields.classList.add('hidden');  // Hide fields

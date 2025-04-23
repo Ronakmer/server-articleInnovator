@@ -8,6 +8,7 @@ from django.core.validators import FileExtensionValidator
 
 # Create your models here.
 
+            
 
 #  invitation code details
 class invitation_code_detail(models.Model):
@@ -48,6 +49,7 @@ class role(models.Model):
 
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
     
     def __str__(self):
@@ -68,6 +70,7 @@ class permission(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -112,6 +115,7 @@ class dynamic_avatar_image(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         
         if self.pk:
             # Fetch the previous avatar_image to compare
@@ -147,6 +151,7 @@ class workspace(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
     
     def __str__(self):
@@ -163,6 +168,7 @@ class ai_configuration(models.Model):
     api_url = models.CharField(max_length=200,default="",  blank=True)
     api_key = models.CharField(max_length=200,default="",  blank=True)
     api_model = models.CharField(max_length=200,default="",  blank=True)
+    ai_rate_key_id = models.CharField(max_length=200,default="",  blank=True)
     status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -173,6 +179,7 @@ class ai_configuration(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
 
@@ -198,6 +205,7 @@ class image_kit_configuration(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
 
         # Ensure only one default_section=True per workspace
         if self.default_section:
@@ -231,6 +239,7 @@ class user_detail(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -365,6 +374,7 @@ class color_detail(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -383,6 +393,7 @@ class language(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def _str_(self):
@@ -402,6 +413,7 @@ class country(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def _str_(self):
@@ -427,6 +439,7 @@ class motivation(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
         
     def _str_(self):
@@ -449,6 +462,7 @@ class article_type_field(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
         
     def __str__(self):
@@ -486,19 +500,21 @@ class article_type(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 
-#  prompt
-class prompt(models.Model):
-    article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE, null=True, blank=True)
+#  supportive_prompt_type
+class supportive_prompt_type(models.Model):
     name = models.CharField(max_length=200, default="")
-    prompt_data = models.JSONField(default=dict)  
+    title = models.CharField(max_length=200, default="")
+    description = models.CharField(max_length=1000,default="")
+    example = models.TextField(default="")
+    # supportive_variables = models.TextField(default="")
     status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -509,6 +525,84 @@ class prompt(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
+        super().save(*args, **kwargs)
+
+    def _str_(self):
+        return self.name
+
+
+
+#  variables
+class variables(models.Model):
+    # workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE, null=True, blank=True)
+    supportive_prompt_type_id = models.ForeignKey(to=supportive_prompt_type, on_delete=models.CASCADE, null=True, blank=True)
+    article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, default="")
+    required = models.BooleanField(default=True)
+    value = models.TextField(default="")
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+        super().save(*args, **kwargs)
+
+    def _str_(self):
+        return self.name
+
+
+#  supportive_prompt
+class supportive_prompt(models.Model):
+    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE, null=True, blank=True)
+    supportive_prompt_type_id = models.ForeignKey(to=supportive_prompt_type, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, default="")
+    description = models.CharField(max_length=1000,default="")
+    supportive_prompt_data = models.TextField(default="")
+    ai_model = models.CharField(max_length=200, default="")
+
+    status = models.BooleanField(default=True)
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
+    created_by=models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
+        super().save(*args, **kwargs)
+
+    def _str_(self):
+        return self.name
+
+
+
+
+#  prompt
+class prompt(models.Model):
+    article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
+    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, default="")
+    ai_rate_model = models.CharField(max_length=200, default="")
+    prompt_data = models.JSONField(default=dict)  
+    wordpress_prompt_json_data = models.JSONField(default=dict)  
+    status = models.BooleanField(default=True)
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
+    created_by=models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
+
         super().save(*args, **kwargs)
 
     def _str_(self):
@@ -1075,6 +1169,7 @@ class image_tag(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -1123,6 +1218,7 @@ class image_template(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):

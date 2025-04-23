@@ -25,85 +25,64 @@ from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
 GENERATE_IMAGE_LAMBDA_URL = os.getenv("GENERATE_IMAGE_LAMBDA_URL")
+from django.conf import settings
 
 
-class ImageGenerator:
-      
-    def generate_image(template_file_name):
-        """ Calls the Node.js script to generate an image and returns the output """
+    
+def get_generated_images_json_data(templates, data):
+    urls = json.loads(data["image_urls"])
+    print(urls)
+    no_of_images = int(data["no_of_images"])
+    
+    # Keep all templates
+    valid_templates = templates.copy()
+    
+    # Generate the requested number of images
+    result = []
+    current_url_index = 0  # Starting URL index
+    url_shift = 0  # Track URL shifts for each cycle through all templates
+    
+    for i in range(no_of_images):
+        # Use templates in a circular fashion if needed
+        template_index = i % len(valid_templates)
+        template = json.loads(valid_templates[template_index])
+        # If we've gone through all templates, increment the URL shift for the next cycle
+        if template_index == 0 and i > 0:
+            url_shift += 1
+        # print(template)
+
+        # Extract image objects and sort them by the numeric part of layerImageCategory
+        image_objects = []
+        non_image_objects = []
         
-        print(f"Processing template: {template_file_name}")
-
-        try:
-            # Run Node.js script and capture output
-            result = subprocess.run(
-                ["node", "generate_image.js", template_file_name],
-                capture_output=True,
-                text=True,
-                check=True
-            )
-
-            # Extract output and process
-            output = result.stdout.strip().split()[0] if result.stdout.strip() else None
-
-            print(f"Generated Image: {output}")
-            print('555555555555555555555555555555')
-            return output
-        except subprocess.CalledProcessError as e:
-            print(f"Error running Node.js script: {e}")
-            return None
-
-    def get_generated_images_json_data(templates, data):
-        urls = json.loads(data["image_urls"])
-        print(urls)
-        no_of_images = int(data["no_of_images"])
+        for obj in template["objects"]:
+            if "layerImageCategory" in obj and obj["layerImageCategory"].startswith("image_"):
+                image_objects.append(obj)
+            else:
+                non_image_objects.append(obj)
         
-        # Keep all templates
-        valid_templates = templates.copy()
+        # Sort image objects by the numeric part of the category
+        def get_image_number(obj):
+            try:
+                # Extract number from "image_X"
+                return int(obj["layerImageCategory"].split("_")[1])
+            except (IndexError, ValueError):
+                return float('inf')  # Place objects with invalid numbers at the end
         
-        # Generate the requested number of images
-        result = []
-        current_url_index = 0  # Starting URL index
-        url_shift = 0  # Track URL shifts for each cycle through all templates
+        image_objects.sort(key=get_image_number)
         
-        for i in range(no_of_images):
-            # Use templates in a circular fashion if needed
-            template_index = i % len(valid_templates)
-            template = json.loads(valid_templates[template_index])
-            # If we've gone through all templates, increment the URL shift for the next cycle
-            if template_index == 0 and i > 0:
-                url_shift += 1
-            # print(template)
+        # # Fill in src URLs for image objects with proper circular pattern
+        for idx, obj in enumerate(image_objects):
+            # Apply url_shift to create the circular pattern
+            assigned_url_index = (idx + url_shift) % len(urls)
+            template["objects"][idx]["src"] = urls[assigned_url_index]
+        
 
-            # Extract image objects and sort them by the numeric part of layerImageCategory
-            image_objects = []
-            non_image_objects = []
-            
-            for obj in template["objects"]:
-                if "layerImageCategory" in obj and obj["layerImageCategory"].startswith("image_"):
-                    image_objects.append(obj)
-                else:
-                    non_image_objects.append(obj)
-            
-            # Sort image objects by the numeric part of the category
-            def get_image_number(obj):
-                try:
-                    # Extract number from "image_X"
-                    return int(obj["layerImageCategory"].split("_")[1])
-                except (IndexError, ValueError):
-                    return float('inf')  # Place objects with invalid numbers at the end
-            
-            image_objects.sort(key=get_image_number)
-            
-            # Fill in src URLs for image objects with proper circular pattern
-            for idx, obj in enumerate(image_objects):
-                # Apply url_shift to create the circular pattern
-                assigned_url_index = (idx + url_shift) % len(urls)
-                template["objects"][idx]["src"] = urls[assigned_url_index]
-            
-            result.append(template)
-        
-        return result
+        result.append(template)
+    
+    return result
+
+
 
 
 
@@ -114,7 +93,14 @@ def generate_single_image(request):
         json_data = request.data
         no_of_images = int(json_data.get('no_of_images', 1))  
         workspace_slug_id = json_data.get('workspace_slug_id')
+        search_query = json_data.get('search_query')
 
+        print(search_query,'search_query')
+        
+        file_name =  search_query.strip().replace(" ", "_")
+
+        print(file_name,'file_name')
+        
         # tag_names = json_data.get('tags')
         tag_names = json.loads(json_data.get('tags', '[]')) 
         category_names = json.loads(json_data.get('categories', '[]'))  
@@ -178,10 +164,17 @@ def generate_single_image(request):
                     templates_list.append(template.template_json)
         
         
-        generated_images_json_data = ImageGenerator.get_generated_images_json_data(templates_list, json_data)
+        generated_images_json_data = get_generated_images_json_data(templates_list, json_data)
         
+        workspace_name = workspace_obj.name.strip().replace(" ", "_")
+
+
         # Process each image data in the list
         for image_data in generated_images_json_data:
+            image_data["workspaceName"] = workspace_name
+            image_data["fileName"] = file_name
+            
+            
             if "imageTags" in image_data:
                 # Replace the UUIDs with actual tag names
                 tag_slugs = image_data["imageTags"]
@@ -218,16 +211,16 @@ def generate_single_image(request):
 
 def generate_image(data):
     try:
-        url = GENERATE_IMAGE_LAMBDA_URL
-
         payload = json.dumps({
             "imagekit":data['imageKit'],
             "generated_image_json_data": data,
+            "workspace_name":data['workspaceName'],
+            "file_name":data['fileName'],
         })
         # print(payload,'payload')
         
         headers = {"Content-Type": "application/json"}
-        response = requests.post(url, data=payload, headers=headers)
+        response = requests.post(GENERATE_IMAGE_LAMBDA_URL, data=payload, headers=headers)
 
         if response.status_code == 200:
             print(response.json())

@@ -5,6 +5,7 @@ from apiApp.serializers import article_type_serializer, article_type_field_seria
 from apiApp.models import article_type, article_type_field, color_detail
 from django.db.models import Q
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
+from apiApp.views.variables.variables import add_variables, update_variables
 
 
 
@@ -73,6 +74,9 @@ def add_article_type(request):
     try:
         color_detail_slug_id = request.data.get('color_detail_slug_id') 
         article_type_field_slug_ids = request.data.get('article_type_field_slug_id') 
+        supportive_variables_data = request.data.get('supportive_variables_data') 
+        print(supportive_variables_data,'supportive_variables_data')
+
         if article_type_field_slug_ids:
             article_type_field_slugs = article_type_field_slug_ids.split(",") 
             
@@ -105,6 +109,13 @@ def add_article_type(request):
             
             article_type_obj = serialized_data.save()
             article_type_obj.article_type_field_id.set(article_type_field_objs)
+            _, error = add_variables(supportive_variables_data, article_type_obj.slug_id)
+            
+            if error:
+                return JsonResponse({
+                    "error": error,
+                    "success": False,
+                }, status=400)
                 
             return JsonResponse({
                 "message": "Data added successfully.",
@@ -137,6 +148,7 @@ def update_article_type(request, slug_id):
             }, status=404)   
             
         color_detail_slug_id = request.data.get('color_detail_slug_id') 
+        supportive_variables_data = request.data.get('supportive_variables_data') 
 
         article_type_field_slug_ids = request.data.get('article_type_field_slug_id') 
         if article_type_field_slug_ids:
@@ -170,7 +182,14 @@ def update_article_type(request, slug_id):
         if serialized_data.is_valid():
             article_type_obj = serialized_data.save()
             article_type_obj.article_type_field_id.set(article_type_field_objs)
-            
+            _, error = update_variables(supportive_variables_data, article_type_obj.slug_id)
+
+            if error:
+                return JsonResponse({
+                    "error": error,
+                    "success": False,
+                }, status=400)
+
             return JsonResponse({
                 "message": "Data updated successfully.",
                 "success": False,

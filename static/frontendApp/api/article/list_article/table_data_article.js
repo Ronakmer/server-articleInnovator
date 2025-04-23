@@ -9,14 +9,49 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
 
     tbody.innerHTML = ''; 
 
+    // Get the current date
+    const end_date = new Date();
+
+    // Get the date 7 days ago
+    const start_date = new Date();
+    start_date.setDate(end_date.getDate() - 7);
+
+    // Format dates as 'YYYY-MM-DD'
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    const start_date_str = formatDate(start_date);
+    const end_date_str = formatDate(end_date);
+
+    
     response_data.data.forEach((obj, index) => {
         const div_id = document.createElement('div_id');
-        // div_id.classList.add('transition-all', 'duration-500', 'hover:bg-gray-50');
 
-        // alert(`${delete_function_name}('${obj.slug_id}')`)
+
+        const article_console_data = article_console_graph_api(article_console_metrics_url, obj.wp_slug, start_date_str, end_date_str);
+        const article_analytics_data = article_analytics_graph_api(article_analytics_metrics_url, obj.wp_slug, start_date_str, end_date_str);
+        // const article_article_data = article_article_graph_api(article_article_metrics_url, obj.wp_slug, start_date_str, end_date_str);
+
+        // console.log(article_article_data,'article_article_data')
+
+        // set chart data using fuction
+        article_clicks_chart(article_console_data, obj.slug_id)
+        article_impressions_chart(article_console_data, obj.slug_id)
+        article_traffic_chart(article_analytics_data, obj.slug_id)
+        // article_article_chart(article_article_data, obj.slug_id)
+
+        const visibleTags = obj.wp_tag_id_data.slice(0, 5).map(tag => tag.name).join(", ");
+        const hiddenTags = obj.wp_tag_id_data.slice(5).map(tag => tag.name).join(", ");
+
+        const categoryData = obj.wp_category_id_data.map(item => item.name).join(', ');
+        // alert(categoryData)
+
+        // // get article_info data  
+        // const article_info_obj = await article_info_api(obj.slug_id)
+
+        // console.log(article_info_obj,'-------------------')
+        // console.log(article_info_obj?.data[0]?.total_paragraphs || "N/A",'-------------------')
+        
         div_id.innerHTML = `
-
-
            <div class=" bg-white rounded-lg relative mt-6">
                 <div class="">
                     <div class="grid grid-cols-12 gap-6">
@@ -30,7 +65,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                             <div
                                                 class="absolute right-2 top-2 z-10 bg-emerald-50 rounded-full px-3 py-1.5 font-poppins text-xs">
                                                 ${obj.article_type_id_data?.title || 'N/A'}</div>
-                                            <img src="assets/images/Frame.png" alt="Team & List"
+                                            <img src="${obj.wp_featured_image || 'N/A'}" alt="Team & List"
                                                 class="mb-4 rounded-lg w-full h-[222px] object-cover" />
                                             <div class="flex items-center mb-4 text-gray-600  ">
 
@@ -67,7 +102,12 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                         <path
                                                             d="M10.6665 15.1667H5.33317C2.89983 15.1667 1.49983 13.7667 1.49983 11.3333V5.66667C1.49983 3.23334 2.89983 1.83334 5.33317 1.83334H10.6665C13.0998 1.83334 14.4998 3.23334 14.4998 5.66667V11.3333C14.4998 13.7667 13.0998 15.1667 10.6665 15.1667ZM5.33317 2.83334C3.4265 2.83334 2.49983 3.76 2.49983 5.66667V11.3333C2.49983 13.24 3.4265 14.1667 5.33317 14.1667H10.6665C12.5732 14.1667 13.4998 13.24 13.4998 11.3333V5.66667C13.4998 3.76 12.5732 2.83334 10.6665 2.83334H5.33317Z"
                                                             fill="#292D32" />
-                                                    </svg> &nbsp; July 23, 2023</span>
+                                                    </svg> &nbsp; ${new Date(obj.wp_status === "future" ? obj.wp_schedule_time : obj.created_date).toLocaleDateString("en-US", {
+                                                                year: "numeric",
+                                                                month: "long",
+                                                                day: "numeric"
+                                                            })}
+                                                    </span>
                                                 <span class="text-sm inline-flex ml-4 mr-2"><svg width="16"
                                                         height="16" viewBox="0 0 16 16" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -83,190 +123,122 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                         <path
                                                             d="M5.78602 10.2198C5.50602 10.2198 5.24602 10.1531 5.01935 10.0265C4.46602 9.71313 4.16602 9.09313 4.16602 8.2798V1.62646C4.16602 1.35313 4.39268 1.12646 4.66602 1.12646C4.93935 1.12646 5.16602 1.35313 5.16602 1.62646V8.2798C5.16602 8.71313 5.29268 9.03313 5.51268 9.15313C5.74602 9.28646 6.10602 9.2198 6.49935 8.98646L7.37935 8.4598C7.73935 8.24646 8.25268 8.24646 8.61268 8.4598L9.49268 8.98646C9.89268 9.22646 10.2527 9.28646 10.4793 9.15313C10.6993 9.02646 10.826 8.70646 10.826 8.2798V1.62646C10.826 1.35313 11.0527 1.12646 11.326 1.12646C11.5993 1.12646 11.826 1.35313 11.826 1.62646V8.2798C11.826 9.09313 11.526 9.71313 10.9727 10.0265C10.4193 10.3398 9.69268 10.2731 8.97935 9.84646L8.09935 9.3198C8.05935 9.29313 7.93268 9.29313 7.89268 9.3198L7.01268 9.84646C6.59935 10.0931 6.17268 10.2198 5.78602 10.2198Z"
                                                             fill="#292D32" />
-                                                    </svg> &nbsp; Development</span>
+                                                    </svg> &nbsp; ${categoryData}</span>
 
                                             </div>
 
-                                            <!-- new Author add  -->
-                                            <div
-                                                class="flex items-center w-full mb-4 gap-x-4 max-md:flex-wrap max-md:gap-y-4">
-
-                                                <!-- John Smeeth's Block -->
-                                                <div
-                                                    class="flex items-center bg-gray-50 w-1/2 max-md:w-full rounded-xl border border-solid border-gray-200 p-3 max-md:mr-0">
-                                                    <img src="assets/images/John.svg" alt="Profile Picture"
-                                                        class="w-10 h-10 rounded-full mr-2" />
-                                                    <div class="text-gray-600">
-                                                        <span class="block font-bold text-gray-800 text-xs">${obj.wp_author_id_data.first_name}</span>
-                                                        <span class="text-[10px]">Site Author</span>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Steven Nice's Block -->
-                                                <div
-                                                    class="flex items-center w-1/2 bg-gray-50 max-md:w-full rounded-xl border border-solid border-gray-200 p-3">
-                                                    <img src="assets/images/Steven.png" alt="Profile Picture"
-                                                        class="w-10 h-10 rounded-full mr-2" />
-                                                    <div class="text-gray-600">
-                                                        <span
-                                                            class="block font-bold text-gray-800 text-xs">${obj.domain_id_data.writer_id_data[0].full_name}</span>
-                                                        <span class="text-[10px]">Writer</span>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <!-- End new author add  -->
+                                           
 
                                             <div
                                                 class="flex items-center justify-between w-full max-md:flex-wrap ">
-                                                <div
-                                                    class="flex items-center justify-between gap-1.5 max-md:mb-4">
+                                                <div class="flex items-center justify-between gap-1.5 max-md:mb-4">
 
-                                                    <a href="#">
-                                                        <svg width="30" height="30" viewBox="0 0 30 30"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="30" height="30" rx="15"
-                                                                fill="#919CAA" />
-                                                            <g clip-path="url(#clip0_393_20192)">
-                                                                <path
-                                                                    d="M23 15C23 18.9931 20.0744 22.3028 16.25 22.9028V17.3125H18.1141L18.4688 15H16.25V13.4994C16.25 12.8666 16.56 12.25 17.5538 12.25H18.5625V10.2812C18.5625 10.2812 17.6469 10.125 16.7716 10.125C14.9444 10.125 13.75 11.2325 13.75 13.2375V15H11.7188V17.3125H13.75V22.9028C9.92563 22.3028 7 18.9931 7 15C7 10.5819 10.5819 7 15 7C19.4181 7 23 10.5819 23 15Z"
-                                                                    fill="white" />
-                                                                <path
-                                                                    d="M18.1141 17.3125L18.4688 15H16.25V13.4993C16.25 12.8667 16.5599 12.25 17.5537 12.25H18.5625V10.2812C18.5625 10.2812 17.647 10.125 16.7717 10.125C14.9443 10.125 13.75 11.2325 13.75 13.2375V15H11.7188V17.3125H13.75V22.9028C14.1573 22.9667 14.5747 23 15 23C15.4253 23 15.8427 22.9667 16.25 22.9028V17.3125H18.1141Z"
-                                                                    fill="#919CAA" />
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0_393_20192">
-                                                                    <rect width="16" height="16" fill="white"
-                                                                        transform="translate(7 7)" />
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
+                                                            <a href="#" class="hover:grayscale">
+                                                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="30" height="30" rx="15" fill="#0866FF"></rect>
+                                                                    <g clip-path="url(#clip0_393_20232)">
+                                                                        <path d="M23 15C23 18.9931 20.0744 22.3028 16.25 22.9028V17.3125H18.1141L18.4688 15H16.25V13.4994C16.25 12.8666 16.56 12.25 17.5538 12.25H18.5625V10.2812C18.5625 10.2812 17.6469 10.125 16.7716 10.125C14.9444 10.125 13.75 11.2325 13.75 13.2375V15H11.7188V17.3125H13.75V22.9028C9.92563 22.3028 7 18.9931 7 15C7 10.5819 10.5819 7 15 7C19.4181 7 23 10.5819 23 15Z" fill="white"></path>
+                                                                        <path d="M18.1141 17.3125L18.4688 15H16.25V13.4993C16.25 12.8667 16.5599 12.25 17.5537 12.25H18.5625V10.2812C18.5625 10.2812 17.647 10.125 16.7717 10.125C14.9443 10.125 13.75 11.2325 13.75 13.2375V15H11.7188V17.3125H13.75V22.9028C14.1573 22.9667 14.5747 23 15 23C15.4253 23 15.8427 22.9667 16.25 22.9028V17.3125H18.1141Z" fill="#0866FF"></path>
+                                                                    </g>
+                                                                    <defs>
+                                                                        <clipPath id="clip0_393_20232">
+                                                                            <rect width="16" height="16" fill="white" transform="translate(7 7)"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
 
 
 
-                                                    </a>
-                                                    <a href="#">
-                                                        <svg width="30" height="30" viewBox="0 0 30 30"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="30" height="30" rx="15"
-                                                                fill="#919CAA" />
-                                                            <g clip-path="url(#clip0_393_20192)">
-                                                                <path
-                                                                    d="M23 15C23 18.9931 20.0744 22.3028 16.25 22.9028V17.3125H18.1141L18.4688 15H16.25V13.4994C16.25 12.8666 16.56 12.25 17.5538 12.25H18.5625V10.2812C18.5625 10.2812 17.6469 10.125 16.7716 10.125C14.9444 10.125 13.75 11.2325 13.75 13.2375V15H11.7188V17.3125H13.75V22.9028C9.92563 22.3028 7 18.9931 7 15C7 10.5819 10.5819 7 15 7C19.4181 7 23 10.5819 23 15Z"
-                                                                    fill="white" />
-                                                                <path
-                                                                    d="M18.1141 17.3125L18.4688 15H16.25V13.4993C16.25 12.8667 16.5599 12.25 17.5537 12.25H18.5625V10.2812C18.5625 10.2812 17.647 10.125 16.7717 10.125C14.9443 10.125 13.75 11.2325 13.75 13.2375V15H11.7188V17.3125H13.75V22.9028C14.1573 22.9667 14.5747 23 15 23C15.4253 23 15.8427 22.9667 16.25 22.9028V17.3125H18.1141Z"
-                                                                    fill="#919CAA" />
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0_393_20192">
-                                                                    <rect width="16" height="16" fill="white"
-                                                                        transform="translate(7 7)" />
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
+                                                            </a>
+                                                            <a href="#" class="hover:grayscale">
+                                                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="30" height="30" rx="15" fill="black"></rect>
+                                                                    <g clip-path="url(#clip0_393_20237)">
+                                                                        <path d="M15 7C10.5819 7 7 10.5819 7 15C7 19.4181 10.5819 23 15 23C19.4181 23 23 19.4181 23 15C23 10.5819 19.4181 7 15 7Z" fill="white"></path>
+                                                                        <path d="M15.8753 14.276L19.3 10.295H18.4885L15.5148 13.7516L13.1397 10.295H10.4004L13.9919 15.522L10.4004 19.6967H11.212L14.3523 16.0464L16.8605 19.6967H19.5998L15.8751 14.276H15.8753ZM11.5044 10.906H12.751L18.4888 19.1135H17.2423L11.5044 10.906Z" fill="black"></path>
+                                                                    </g>
+                                                                    <defs>
+                                                                        <clipPath id="clip0_393_20237">
+                                                                            <rect width="16" height="16" fill="white" transform="translate(7 7)"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
 
 
-                                                    </a>
-                                                    <a href="#">
-                                                        <svg width="30" height="30" viewBox="0 0 30 30"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="30" height="30" rx="15"
-                                                                fill="#919CAA" />
-                                                            <g clip-path="url(#clip0_393_20202)">
-                                                                <path
-                                                                    d="M15 7C10.5815 7 7 10.582 7 15C7 19.418 10.5815 23 15 23C19.418 23 23 19.418 23 15C23 10.582 19.4185 7 15 7ZM15.0865 19.298C12.712 19.298 10.7885 17.3745 10.7885 15C10.7885 12.6255 12.712 10.702 15.0865 10.702C16.247 10.702 17.217 11.1295 17.9605 11.822L16.749 13.0335V13.031C16.298 12.601 15.7255 12.381 15.0865 12.381C13.6685 12.381 12.516 13.579 12.516 14.997C12.516 16.415 13.6685 17.616 15.0865 17.616C16.373 17.616 17.249 16.88 17.429 15.87H15.0865V14.1935H19.129C19.1844 14.4911 19.2122 14.7933 19.212 15.096C19.212 17.552 17.568 19.298 15.0865 19.298Z"
-                                                                    fill="white" />
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0_393_20202">
-                                                                    <rect width="16" height="16" fill="white"
-                                                                        transform="translate(7 7)" />
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
+
+                                                            </a>
+                                                            <a href="#" class="hover:grayscale">
+                                                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="30" height="30" rx="15" fill="#4285F4"></rect>
+                                                                    <g clip-path="url(#clip0_393_20242)">
+                                                                        <path d="M15 7C10.5815 7 7 10.582 7 15C7 19.418 10.5815 23 15 23C19.418 23 23 19.418 23 15C23 10.582 19.4185 7 15 7ZM15.0865 19.298C12.712 19.298 10.7885 17.3745 10.7885 15C10.7885 12.6255 12.712 10.702 15.0865 10.702C16.247 10.702 17.217 11.1295 17.9605 11.822L16.749 13.0335V13.031C16.298 12.601 15.7255 12.381 15.0865 12.381C13.6685 12.381 12.516 13.579 12.516 14.997C12.516 16.415 13.6685 17.616 15.0865 17.616C16.373 17.616 17.249 16.88 17.429 15.87H15.0865V14.1935H19.129C19.1844 14.4911 19.2122 14.7933 19.212 15.096C19.212 17.552 17.568 19.298 15.0865 19.298Z" fill="white"></path>
+                                                                    </g>
+                                                                    <defs>
+                                                                        <clipPath id="clip0_393_20242">
+                                                                            <rect width="16" height="16" fill="white" transform="translate(7 7)"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
 
 
-                                                    </a>
-                                                    <a href="#">
-                                                        <svg width="30" height="30" viewBox="0 0 30 30"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="30" height="30" rx="15"
-                                                                fill="#919CAA" />
-                                                            <circle cx="15" cy="15" r="8" fill="white" />
-                                                            <g clip-path="url(#clip0_393_20206)">
-                                                                <path
-                                                                    d="M12.0667 12.55L12.29 11.4271L15.0009 11.9663L17.7118 11.4271L17.9351 12.55L18.3651 12.6355V10.7081H11.6367V12.6355L12.0667 12.55ZM19.5723 13.4215L18.0482 13.1183L18.2289 14.027H18.9005V16.7991L19.5723 13.4215Z"
-                                                                    fill="#919CAA" />
-                                                                <path
-                                                                    d="M13.6289 12.2392L12.7109 12.0566L12.6353 12.4369L13.6289 12.2392ZM17.6833 14.027L17.2913 12.0566L10.4297 13.4215L11.1015 16.7991V14.027H17.6833Z"
-                                                                    fill="#919CAA" />
-                                                                <path
-                                                                    d="M18.3651 14.5625H11.6367V19.292H18.3651V14.5625ZM16.0985 16.6595H17.562V17.1949H16.0985V16.6595ZM17.562 15.5887V16.1241H16.0985V15.5887H17.562ZM14.0015 18.4889C13.1404 18.4889 12.4398 17.7883 12.4398 16.9272C12.4398 16.0662 13.1404 15.3656 14.0015 15.3656C14.4043 15.3656 14.7868 15.5186 15.0784 15.7964L14.7092 16.1841C14.5175 16.0015 14.2662 15.901 14.0015 15.901C13.4356 15.901 12.9753 16.3614 12.9753 16.9272C12.9753 17.4931 13.4356 17.9534 14.0015 17.9534C14.4747 17.9534 14.8742 17.6314 14.9923 17.1949H14.0015V16.6595H15.5631V16.9272C15.5631 17.7883 14.8625 18.4889 14.0015 18.4889ZM16.0985 17.7304H17.562V18.2658H16.0985V17.7304Z"
-                                                                    fill="#919CAA" />
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0_393_20206">
-                                                                    <rect width="9.14286" height="9.14286"
-                                                                        fill="white"
-                                                                        transform="translate(10.4277 10.4286)" />
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
+
+                                                            </a>
+                                                            <a href="#" class="hover:grayscale">
+                                                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="30" height="30" rx="15" fill="#34A853"></rect>
+                                                                    <circle cx="15" cy="15" r="8" fill="white"></circle>
+                                                                    <g clip-path="url(#clip0_393_20246)">
+                                                                        <path d="M12.0667 12.55L12.29 11.4271L15.0009 11.9663L17.7118 11.4271L17.9351 12.55L18.3651 12.6355V10.7081H11.6367V12.6355L12.0667 12.55ZM19.5723 13.4215L18.0482 13.1183L18.2289 14.027H18.9005V16.7991L19.5723 13.4215Z" fill="#34A853"></path>
+                                                                        <path d="M13.6289 12.2392L12.7109 12.0566L12.6353 12.4369L13.6289 12.2392ZM17.6833 14.027L17.2913 12.0566L10.4297 13.4215L11.1015 16.7991V14.027H17.6833Z" fill="#34A853"></path>
+                                                                        <path d="M18.3651 14.5625H11.6367V19.292H18.3651V14.5625ZM16.0985 16.6595H17.562V17.1949H16.0985V16.6595ZM17.562 15.5887V16.1241H16.0985V15.5887H17.562ZM14.0015 18.4889C13.1404 18.4889 12.4398 17.7883 12.4398 16.9272C12.4398 16.0662 13.1404 15.3656 14.0015 15.3656C14.4043 15.3656 14.7868 15.5186 15.0784 15.7964L14.7092 16.1841C14.5175 16.0015 14.2662 15.901 14.0015 15.901C13.4356 15.901 12.9753 16.3614 12.9753 16.9272C12.9753 17.4931 13.4356 17.9534 14.0015 17.9534C14.4747 17.9534 14.8742 17.6314 14.9923 17.1949H14.0015V16.6595H15.5631V16.9272C15.5631 17.7883 14.8625 18.4889 14.0015 18.4889ZM16.0985 17.7304H17.562V18.2658H16.0985V17.7304Z" fill="#34A853"></path>
+                                                                    </g>
+                                                                    <defs>
+                                                                        <clipPath id="clip0_393_20246">
+                                                                            <rect width="9.14286" height="9.14286" fill="white" transform="translate(10.4277 10.4286)"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
 
 
-                                                    </a>
-                                                    <a href="#">
-                                                        <svg width="30" height="30" viewBox="0 0 30 30"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="30" height="30" rx="15"
-                                                                fill="#919CAA" />
-                                                            <circle cx="15" cy="15" r="8" fill="white" />
-                                                            <g clip-path="url(#clip0_393_20214)">
-                                                                <path
-                                                                    d="M11.0848 10.4299H14.7301C15.0907 10.4299 15.3853 10.7227 15.3853 11.0851V18.9166C15.3853 19.2772 15.0925 19.5717 14.7301 19.5717H11.0848C10.7225 19.5699 10.4297 19.2772 10.4297 18.9148V11.0851C10.4297 10.7227 10.7225 10.4299 11.0848 10.4299ZM16.5189 18.5149L17.1865 18.2204C17.3864 18.1311 17.5168 17.9329 17.5168 17.7152V12.2847C17.5168 12.0651 17.3882 11.867 17.1865 11.7795L16.5189 11.485C16.4135 11.4385 16.2904 11.4867 16.2439 11.5921C16.2314 11.6188 16.2261 11.6474 16.2261 11.676V18.3239C16.2261 18.4399 16.3189 18.5328 16.435 18.5328C16.4635 18.5328 16.4939 18.5274 16.5189 18.5149ZM18.3594 12.6971V17.3028C18.3594 17.4188 18.454 17.5116 18.5682 17.5116C18.5986 17.5116 18.6289 17.5045 18.6575 17.492L19.2519 17.2117C19.4447 17.1207 19.5697 16.9261 19.5697 16.7119V13.288C19.5697 13.0737 19.4465 12.8792 19.2519 12.7881L18.6575 12.5079C18.5521 12.4579 18.429 12.5043 18.379 12.6078C18.3665 12.6364 18.3594 12.6667 18.3594 12.6971Z"
-                                                                    fill="#919CAA" />
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0_393_20214">
-                                                                    <rect width="9.14" height="9.14"
-                                                                        fill="white"
-                                                                        transform="translate(10.4297 10.4301)" />
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
+
+                                                            </a>
+                                                            <a href="#" class="hover:grayscale">
+                                                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="30" height="30" rx="15" fill="#7EB4FF"></rect>
+                                                                    <circle cx="15" cy="15" r="8" fill="white"></circle>
+                                                                    <g clip-path="url(#clip0_393_20254)">
+                                                                        <path d="M11.0848 10.4299H14.7301C15.0907 10.4299 15.3853 10.7227 15.3853 11.0851V18.9166C15.3853 19.2772 15.0925 19.5717 14.7301 19.5717H11.0848C10.7225 19.5699 10.4297 19.2772 10.4297 18.9148V11.0851C10.4297 10.7227 10.7225 10.4299 11.0848 10.4299ZM16.5189 18.5149L17.1865 18.2204C17.3864 18.1311 17.5168 17.9329 17.5168 17.7152V12.2847C17.5168 12.0651 17.3882 11.867 17.1865 11.7795L16.5189 11.485C16.4135 11.4385 16.2904 11.4867 16.2439 11.5921C16.2314 11.6188 16.2261 11.6474 16.2261 11.676V18.3239C16.2261 18.4399 16.3189 18.5328 16.435 18.5328C16.4635 18.5328 16.4939 18.5274 16.5189 18.5149ZM18.3594 12.6971V17.3028C18.3594 17.4188 18.454 17.5116 18.5682 17.5116C18.5986 17.5116 18.6289 17.5045 18.6575 17.492L19.2519 17.2117C19.4447 17.1207 19.5697 16.9261 19.5697 16.7119V13.288C19.5697 13.0737 19.4465 12.8792 19.2519 12.7881L18.6575 12.5079C18.5521 12.4579 18.429 12.5043 18.379 12.6078C18.3665 12.6364 18.3594 12.6667 18.3594 12.6971Z" fill="#7EB4FF"></path>
+                                                                    </g>
+                                                                    <defs>
+                                                                        <clipPath id="clip0_393_20254">
+                                                                            <rect width="9.14" height="9.14" fill="white" transform="translate(10.4297 10.4301)"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
+
+                                                            </a>
+                                                            <a href="#" class="hover:grayscale">
+                                                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="30" height="30" rx="15" fill="#F6B200"></rect>
+                                                                    <circle cx="15" cy="15" r="8" fill="white"></circle>
+                                                                    <g clip-path="url(#clip0_393_20260)">
+                                                                        <path d="M18.6916 14.3575C18.6916 14.2729 18.6254 14.1834 18.5445 14.1586L14.1975 12.8272C14.1166 12.8024 14.0794 12.845 14.1149 12.9218L14.9238 14.6781C14.9592 14.7548 15.0512 14.8462 15.1283 14.8811L16.2372 15.3834C16.3143 15.4182 16.3162 15.4789 16.2413 15.5183L11.5093 18.0079C11.4345 18.0473 11.4248 18.0334 11.4879 17.9771L13.306 16.3577C13.3691 16.3015 13.4208 16.1862 13.4208 16.1017L13.4221 11.1924C13.422 11.1079 13.3558 11.0183 13.2749 10.9935L11.4557 10.4365C11.3748 10.4118 11.3086 10.4608 11.3086 10.5454V17.993C11.3086 18.0776 11.3653 18.1865 11.4345 18.235L13.2833 19.5307C13.3525 19.5792 13.4686 19.5835 13.5413 19.5402L18.5596 16.5506C18.6323 16.5073 18.6918 16.4027 18.6918 16.3181L18.6916 14.3575Z" fill="#F6B200"></path>
+                                                                    </g>
+                                                                    <defs>
+                                                                        <clipPath id="clip0_393_20260">
+                                                                            <rect width="9.14" height="9.14" fill="white" transform="translate(10.4297 10.4301)"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                </svg>
 
 
-                                                    </a>
-                                                    <a href="#">
-                                                        <svg width="30" height="30" viewBox="0 0 30 30"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="30" height="30" rx="15"
-                                                                fill="#919CAA" />
-                                                            <circle cx="15" cy="15" r="8" fill="white" />
-                                                            <g clip-path="url(#clip0_393_20220)">
-                                                                <path
-                                                                    d="M18.6916 14.3575C18.6916 14.2729 18.6254 14.1834 18.5445 14.1586L14.1975 12.8272C14.1166 12.8024 14.0794 12.845 14.1149 12.9218L14.9238 14.6781C14.9592 14.7548 15.0512 14.8462 15.1283 14.8811L16.2372 15.3834C16.3143 15.4182 16.3162 15.4789 16.2413 15.5183L11.5093 18.0079C11.4345 18.0473 11.4248 18.0334 11.4879 17.9771L13.306 16.3577C13.3691 16.3015 13.4208 16.1862 13.4208 16.1017L13.4221 11.1924C13.422 11.1079 13.3558 11.0183 13.2749 10.9935L11.4557 10.4365C11.3748 10.4118 11.3086 10.4608 11.3086 10.5454V17.993C11.3086 18.0776 11.3653 18.1865 11.4345 18.235L13.2833 19.5307C13.3525 19.5792 13.4686 19.5835 13.5413 19.5402L18.5596 16.5506C18.6323 16.5073 18.6918 16.4027 18.6918 16.3181L18.6916 14.3575Z"
-                                                                    fill="#919CAA" />
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0_393_20220">
-                                                                    <rect width="9.14" height="9.14"
-                                                                        fill="white"
-                                                                        transform="translate(10.4297 10.4301)" />
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
 
-
-                                                    </a>
-                                                </div>
+                                                            </a>
+                                                        </div>
                                                 
-                                                <div class="flex font-poppins hidden" data-permission="update_article, delete_article">
+                                                <div class="flex font-poppi" data-permission="update_article, delete_article">
                                                 <!-- update -->
-                                                    <a href="${update_page_url}${obj.slug_id}" id="editButton" data-permission="update_admin_detail" class="hidden mr-2">
+                                                    <a href="${update_page_url}${obj.slug_id}" id="editButton" data-permission="update_admin_detail" class=" mr-2">
                                                         <svg width="32" height="32" viewBox="0 0 32 32"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <rect width="32" height="32" rx="16"
@@ -301,7 +273,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
 
                                                     </a>
                                                     <!-- delete -->
-                                                    <button id="deleteButton" type="button" class="hidden" data-permission="delete_article" onclick="${delete_function_name}('${obj.slug_id}')">
+                                                    <button id="deleteButton" type="button" class="" data-permission="delete_article" onclick="${delete_function_name}('${obj.slug_id}')">
                                                         <svg width="32" height="32" viewBox="0 0 32 32"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <rect width="32" height="32" rx="16"
@@ -401,71 +373,36 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                             </div>
 
                                             <!-- new code add  Grade-->
+                                            <!-- new Author add  -->
                                             <div
-                                                class="rounded-xl border p-4 mb-4 border-solid border-gray-200">
+                                                class="flex items-center w-full mb-4 gap-x-4 max-md:flex-wrap max-md:gap-y-4">
 
-
+                                                <!-- John Smeeth's Block -->
                                                 <div
-                                                    class="grid grid-cols-5 gap-4 font-poppins text-sm max-md:text-center  max-md:grid-cols-5 max-md:p-2">
-                                                    <!-- Bid -->
-                                                    <div
-                                                        class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                        <div class="flex-1 max-md:flex-auto">
-                                                            <div class=" text-green-500 font-semibold">
-                                                                Grade 9
-                                                            </div>
-                                                            <div class="text-gray-600 text-xs">Readability Score
-                                                            </div>
-                                                        </div>
+                                                    class="flex items-center bg-gray-50 w-1/2 max-md:w-full rounded-xl border border-solid border-gray-200 p-3 max-md:mr-0">
+                                                    <img src="${page_url}/static/frontendApp/assets/images/ronald.png" alt="Profile Picture"
+                                                        class="w-10 h-10 rounded-full mr-2" />
+                                                    <div class="text-gray-600">
+                                                        <span class="block font-bold text-gray-800 text-xs">${obj.wp_author_id_data.first_name}</span>
+                                                        <span class="text-[10px]">Site Author</span>
                                                     </div>
-                                                    <!-- Provider -->
-                                                    <div
-                                                        class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                        <div class="flex-1 max-md:flex-auto">
-                                                            <div class=" text-green-500 font-semibold">
-                                                                23%
-                                                            </div>
-                                                            <div class="text-gray-600 text-xs">Bounce Rate
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Status -->
-                                                    <div
-                                                        class="flex max-md:flex-col items-center justify-between max-md:justify-center  pr-1 border-r border-solid border-gray-200 ">
-                                                        <div class="flex-1 max-md:flex-auto">
-                                                            <div class=" text-black font-semibold">
-                                                                3m
-                                                            </div>
-                                                            <div class="text-gray-600 text-xs">Tracking Time
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                        <div class="flex-1 max-md:flex-auto">
-                                                            <div class=" text-black font-semibold">
-                                                                25
-                                                            </div>
-                                                            <div class="text-gray-600 text-xs">Entities
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Status -->
-                                                    <div
-                                                        class="flex max-md:flex-col items-center justify-between max-md:justify-center  pr-1">
-                                                        <div class="flex-1 max-md:flex-auto">
-                                                            <div class=" text-black font-semibold">
-                                                                10
-                                                            </div>
-                                                            <div class="text-gray-600 text-xs">Sentimental
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Status -->
+                                                </div>
 
+                                                <!-- Steven Nice's Block -->
+                                                <div
+                                                    class="flex items-center w-1/2 bg-gray-50 max-md:w-full rounded-xl border border-solid border-gray-200 p-3">
+                                                    <img src="${obj.domain_id_data.writer_id_data[0].profile_image}" alt="Profile Picture"
+                                                        class="w-10 h-10 rounded-full mr-2" />
+                                                    <div class="text-gray-600">
+                                                        <span
+                                                            class="block font-bold text-gray-800 text-xs">${obj.domain_id_data.writer_id_data[0].full_name}</span>
+                                                        <span class="text-[10px]">Writer</span>
+                                                    </div>
                                                 </div>
 
                                             </div>
+
+                                            <!-- End new author add  -->
                                             <!-- end new code Grade  -->
                                             <div
                                                 class="flex items-center mb-4 gap-x-4 max-md:flex-wrap max-md:gap-y-4 hidden">
@@ -503,30 +440,19 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                                 Clicks
                                                             </h6>
                                                             <h5
-                                                                class="text-xl font-semibold text-gray-900 leading-8">
-                                                                406</h5>
-                                                            <span
-                                                                class="absolute right-2 top-2 items-center bg-orange-500 text-white text-xs font-medium mr-2 pl-2 pr-2.5 rounded-full py-1 mt-2 flex">
-                                                                <span class="flex mr-1">
-                                                                    <svg width="7" height="7" viewBox="0 0 7 7"
-                                                                        fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path
-                                                                            d="M4.62402 6.10095C4.69941 6.02556 4.74559 5.9208 4.74544 5.80575V5.75511C4.74544 5.52471 4.55892 5.33819 4.32882 5.33848L2.05236 5.33848L5.90324 1.48761C6.06587 1.32497 6.06587 1.06099 5.90324 0.898351C5.7406 0.735716 5.47662 0.735716 5.31398 0.898351L1.4631 4.74923V2.47277C1.4631 2.24237 1.27659 2.05585 1.04648 2.05615H0.995843C0.765444 2.05615 0.578927 2.24266 0.579221 2.47277V5.80575C0.579221 6.03614 0.765739 6.22266 0.995843 6.22237H4.32882C4.44402 6.22237 4.54864 6.17634 4.62402 6.10095Z"
-                                                                            fill="white" />
-                                                                    </svg>
-                                                                </span>
-                                                                12.96%
+                                                                class="text-xl font-semibold text-gray-900 leading-8" id="total_clicks_${obj.slug_id}">
+                                                                </h5>
+                                                             <span id="clicks_percentage_${obj.slug_id}"
+                                                                class="absolute right-2 top-2 items-center bg-orange-500 text-white text-xs font-medium mr-2 pl-2 pr-2.5 rounded-full py-1 mt-2 flex gap-1">
+                                                                <span id="clicks_percentage_icon_${obj.slug_id}" class="flex"></span>
+                                                                <span id="clicks_percentage_value_${obj.slug_id}" class="text-xs"></span>
                                                             </span>
 
-                                                            <div class="w-chart block w-full">
-                                                                <div class="!w-full" id="myChart"></div>
+                                                            
+                                                            <div class="block">
+                                                                <div  class="w-full h-20" id="clicks_chart_${obj.slug_id}"></div>
                                                             </div>
 
-                                                            <!-- <div class="block w-full">
-                                                                <canvas id="myChart"
-                                                                    class="!w-full h-20"></canvas>
-                                                            </div> -->
                                                         </div>
 
                                                     </div>
@@ -535,26 +461,16 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                 <div class="bg-gray-50 p-4 rounded-xl relative  h-[132px]">
                                                     <div class="flex items-center justify-between ">
                                                         <div class="w-full">
-                                                            <h6 class="text-xs font-normal text-gray-500">
-                                                                Traffics</h6>
-                                                            <h5
-                                                                class="text-xl font-semibold text-gray-900 leading-8">
-                                                                500</h5>
-                                                            <span
-                                                                class="absolute right-2 top-2 items-center bg-emerald-500 text-white text-xs font-medium mr-2 pl-2 pr-2.5 rounded-full py-1 mt-2 flex">
-                                                                <span class="flex mr-1">
-                                                                    <svg width="7" height="7" viewBox="0 0 7 7"
-                                                                        fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path
-                                                                            d="M4.62402 6.10095C4.69941 6.02556 4.74559 5.9208 4.74544 5.80575V5.75511C4.74544 5.52471 4.55892 5.33819 4.32882 5.33848L2.05236 5.33848L5.90324 1.48761C6.06587 1.32497 6.06587 1.06099 5.90324 0.898351C5.7406 0.735716 5.47662 0.735716 5.31398 0.898351L1.4631 4.74923V2.47277C1.4631 2.24237 1.27659 2.05585 1.04648 2.05615H0.995843C0.765444 2.05615 0.578927 2.24266 0.579221 2.47277V5.80575C0.579221 6.03614 0.765739 6.22266 0.995843 6.22237H4.32882C4.44402 6.22237 4.54864 6.17634 4.62402 6.10095Z"
-                                                                            fill="white" />
-                                                                    </svg>
-                                                                </span>
-                                                                16.96%
+                                                            <h6 class="text-xs font-normal text-gray-500"> Traffics</h6>
+                                                            <h5 class="text-xl font-semibold text-gray-900 leading-8" id="total_traffic_${obj.slug_id}"></h5>
+                                                           <span id="traffic_percentage_${obj.slug_id}"
+                                                                class="absolute right-2 top-2 items-center bg-emerald-500 text-white text-xs font-medium mr-2 pl-2 pr-2.5 rounded-full py-1 mt-2 flex gap-1">
+                                                                <span id="traffic_percentage_icon_${obj.slug_id}" class="flex"></span>
+                                                                <span id="traffic_percentage_value_${obj.slug_id}" class="text-xs"></span>
                                                             </span>
+
                                                             <div class="block">
-                                                                <div id="Traffics" class="w-full h-20"></div>
+                                                                <div  class="w-full h-20" id="traffic_chart_${obj.slug_id}"></div>
                                                             </div>
                                                         </div>
 
@@ -566,23 +482,19 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                             <h6 class="text-xs font-normal text-gray-500">
                                                                 Impressions</h6>
                                                             <h5
-                                                                class="text-xl font-semibold text-gray-900 leading-8">
-                                                                2709</h5>
-                                                            <span
-                                                                class="absolute right-2 top-2 items-center bg-orange-500 text-white text-xs font-medium mr-2 pl-2 pr-2.5 rounded-full py-1 mt-2 flex">
-                                                                <span class="flex mr-1">
-                                                                    <svg width="7" height="7" viewBox="0 0 7 7"
-                                                                        fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path
-                                                                            d="M4.62402 6.10095C4.69941 6.02556 4.74559 5.9208 4.74544 5.80575V5.75511C4.74544 5.52471 4.55892 5.33819 4.32882 5.33848L2.05236 5.33848L5.90324 1.48761C6.06587 1.32497 6.06587 1.06099 5.90324 0.898351C5.7406 0.735716 5.47662 0.735716 5.31398 0.898351L1.4631 4.74923V2.47277C1.4631 2.24237 1.27659 2.05585 1.04648 2.05615H0.995843C0.765444 2.05615 0.578927 2.24266 0.579221 2.47277V5.80575C0.579221 6.03614 0.765739 6.22266 0.995843 6.22237H4.32882C4.44402 6.22237 4.54864 6.17634 4.62402 6.10095Z"
-                                                                            fill="white" />
-                                                                    </svg>
-                                                                </span>
-                                                                2.8%
+                                                                class="text-xl font-semibold text-gray-900 leading-8" id="total_impressions_${obj.slug_id}">
+                                                                </h5>
+                                                          
+
+
+                                                            <span id="impressions_percentage_${obj.slug_id}"
+                                                                class="absolute right-2 top-2 items-center bg-orange-500 text-white text-xs font-medium mr-2 pl-2 pr-2.5 rounded-full py-1 mt-2 flex gap-1">
+                                                                <span id="impressions_percentage_icon_${obj.slug_id}" class="flex"></span>
+                                                                <span id="impressions_percentage_value_${obj.slug_id}" class="text-xs"></span>
                                                             </span>
+
                                                             <div class="block">
-                                                                <div id="Impressions" class="!w-full"></div>
+                                                                <div  class="!w-full"  id="impressions_chart_${obj.slug_id}"></div>
                                                             </div>
 
                                                         </div>
@@ -628,10 +540,11 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                         d="M8.75 10.375C7.855 10.375 7.125 9.645 7.125 8.75C7.125 7.855 7.855 7.125 8.75 7.125C9.645 7.125 10.375 7.855 10.375 8.75C10.375 9.645 9.645 10.375 8.75 10.375ZM8.75 7.875C8.27 7.875 7.875 8.27 7.875 8.75C7.875 9.23 8.27 9.625 8.75 9.625C9.23 9.625 9.625 9.23 9.625 8.75C9.625 8.27 9.23 7.875 8.75 7.875Z"
                                                         fill="#292D32" />
                                                 </svg>
-                                                <span id="more_tags_${obj.slug_id}" class="hidden"></span>
+                                                ${visibleTags}
+                                                <span id="more_tags_${obj.slug_id}" class="hidden">${hiddenTags}</span>
 
-                                                <a href="#" id="toggle-button" class="relative pl-2">
-                                                    <svg id="plus-icon" width="20" height="20"
+                                                <a href="#" onclick="toggleTags('${obj.slug_id}')"  id="toggle-button" class="relative pl-2">
+                                                    <svg id="plus-icon-${obj.slug_id}" width="20" height="20"
                                                         viewBox="0 0 20 20" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <rect width="20" height="20" rx="10" fill="#F5F5F5" />
@@ -639,7 +552,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                             stroke-width="0.866667" stroke-linecap="round" />
                                                     </svg>
 
-                                                    <svg id="minus-icon" class="hidden" width="20" height="20"
+                                                    <svg id="minus-icon-${obj.slug_id}" class="hidden" width="20" height="20"
                                                         viewBox="0 0 20 20" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <rect width="20" height="20" rx="10" fill="#F5F5F5" />
@@ -657,7 +570,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                             <div
                                                 class="flex max-md:flex-col items-center border-r border-solid border-gray-200">
                                                 <div class="flex-1 max-md:flex-auto">
-                                                    <div class="text-xl font-bold">764</div>
+                                                    <div class="text-xl font-bold" id="word_count_${obj.slug_id}"></div>
                                                     <div class="text-sm text-gray-600">words</div>
                                                 </div>
                                                 <div class="ml-2 pr-2">
@@ -710,7 +623,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                             <div
                                                 class="flex max-md:flex-col items-center border-r border-solid border-gray-200">
                                                 <div class="flex-1 max-md:flex-auto">
-                                                    <div class="text-xl font-bold">2</div>
+                                                    <div class="text-xl font-bold" id="image_count_${obj.slug_id}"></div>
                                                     <div class="text-sm text-gray-600">images</div>
                                                 </div>
                                                 <div class="ml-2 pr-2">
@@ -760,7 +673,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                             <div
                                                 class="flex max-md:flex-col items-center   border-r max-md:border-0 border-solid border-gray-200">
                                                 <div class="flex-1 max-md:flex-auto">
-                                                    <div class="text-xl font-bold">5</div>
+                                                    <div class="text-xl font-bold" id="heading_count_${obj.slug_id}"></div>
                                                     <div class="text-sm text-gray-600">Headings</div>
                                                 </div>
                                                 <div class="ml-2 pr-2">
@@ -976,112 +889,87 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
 
                                         </div>
                                         <!-- end profile tag section  -->
-                                        <div
-                                            class="rounded-xl border mt-4 p-4 mb-4 border-solid border-gray-200">
+                                        <div class="grid grid-cols-2 gap-4">
+                                                <!-- First Additional Metrics Section -->
+                                                <div class="rounded-xl border mt-4 p-4 mb-4 border-solid border-gray-200">
+                                                    <h3 class="text-base font-semibold mb-3 text-gray-800 border-b border-gray-200">Paragraph</h3>
 
-
-                                            <div
-                                                class="grid grid-cols-9 gap-4 font-poppins text-sm max-md:text-center  max-md:grid-cols-3 max-md:p-0">
-                                                <!-- Bid -->
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-green-500 font-semibold">
-                                                            Grade 9
+                                                    <div class="grid grid-cols-4 gap-4 font-poppins text-sm max-md:text-center max-md:grid-cols-2 max-md:p-0">
+                                                        <!-- Readability Score -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200 pr-1">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="total_paragraphs_${obj.slug_id}" ></div>
+                                                                <div class="text-black font-semibold">Total Paragraph</div>
+                                                            </div>
                                                         </div>
-                                                        <div class="text-gray-600 text-xs">Readability Score
+                                                        <!-- Bounce Rate -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200 pr-1">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="long_paragraphs_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Long Paragraph</div>    
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Provider -->
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-green-500 font-semibold">
-                                                            23%
+                                                        <!-- Tracking Time -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center pr-1 border-r border-solid border-gray-200">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="short_paragraphs_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Short Paragraph</div>    
+                                                            </div>
                                                         </div>
-                                                        <div class="text-gray-600 text-xs">Bounce Rate
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Status -->
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center  pr-1 border-r border-solid border-gray-200 ">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            3m
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Tracking Time
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            25
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Entities
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            25
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Entities
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            25
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Entities
+                                                        <!-- Entities -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="medium_paragraphs_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Medium Paragraph</div>    
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            25
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Entities
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            25
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Entities
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Status -->
-                                                <div
-                                                    class="flex max-md:flex-col items-center justify-between max-md:justify-center  pr-1">
-                                                    <div class="flex-1 max-md:flex-auto">
-                                                        <div class=" text-black font-semibold">
-                                                            10
-                                                        </div>
-                                                        <div class="text-gray-600 text-xs">Sentimental
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Status -->
+                                                <!-- Second Additional Metrics Section -->
+                                                <div class="rounded-xl border mt-4 p-4 mb-4 border-solid border-gray-200">
+                                                    <h3 class="text-base font-semibold mb-3 text-gray-800 border-b border-gray-200">Sentences</h3>
 
+                                                    <div class="grid grid-cols-5 gap-4 font-poppins text-sm max-md:text-center max-md:grid-cols-2 max-md:p-0">
+                                                        <!-- Keywords -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200 pr-1">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="total_sentences_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Total Sentences</div>    
+                                                            </div>
+                                                        </div>
+                                                        <!-- SEO Score -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200 pr-1">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="long_sentences_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Long Sentences</div>    
+                                                            </div>
+                                                        </div>
+                                                        <!-- Readability -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200 pr-1">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="short_sentences_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Short Sentences</div>    
+                                                            </div>
+                                                        </div>
+                                                        <!-- Passive Voice -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center border-r border-solid border-gray-200 pr-1">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="medium_sentences_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Medium Sentences</div>    
+                                                            </div>
+                                                        </div>
+                                                        <!-- Sentiment -->
+                                                        <div class="flex max-md:flex-col items-center justify-between max-md:justify-center">
+                                                            <div class="flex-1 max-md:flex-auto">
+                                                                <div class="text-gray-600 text-lg" id="passive_sentences_${obj.slug_id}"></div>
+                                                                <div class="text-black font-semibold">Passive Sentences</div>    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                        </div>
                                         <!-- serp table section  -->
                                         <div class="rounded-xl border border-solid border-gray-200 ">
                                             <!-- Logo and Tabs -->
@@ -1926,24 +1814,24 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
         `;
         tbody.appendChild(div_id);
             
-        tagsData = obj.wp_tag_id_data;
+        // tagsData = obj.wp_tag_id_data;
                     
-        // Get the container for the tags
-        const tagList = document.getElementById(`tag_list_${obj.slug_id}`);
-        const moreTags = document.getElementById(`more_tags_${obj.slug_id}`);
+        // // Get the container for the tags
+        // const tagList = document.getElementById(`tag_list_${obj.slug_id}`);
+        // const moreTags = document.getElementById(`more_tags_${obj.slug_id}`);
 
-        // Prepare an array of tag names
-        const tagNames = tagsData.map(tag => tag.name);
+        // // Prepare an array of tag names
+        // const tagNames = tagsData.map(tag => tag.name);
 
-        // Show the first 5 tags in the tag-list, and the rest in the more-tags section
-        tagNames.forEach((name, index) => {
-            if (index < 5) {
-                tagList.innerHTML += `<span class="tag">${name}</span>`;
-            } else {
-                moreTags.classList.remove('hidden');
-                moreTags.innerHTML += `<span class="tag">${name}</span>`;
-            }
-        });
+        // // Show the first 5 tags in the tag-list, and the rest in the more-tags section
+        // tagNames.forEach((name, index) => {
+        //     if (index < 5) {
+        //         tagList.innerHTML += `<span class="tag">${name}</span>`;
+        //     } else {
+        //         moreTags.classList.remove('hidden');
+        //         moreTags.innerHTML += `<span class="tag">${name}</span>`;
+        //     }
+        // });
 
 
 
@@ -1954,21 +1842,53 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
 
 
 
+function toggleTags(slugId) {
+    const moreTags = document.getElementById(`more_tags_${slugId}`);
+    const plusIcon = document.getElementById(`plus-icon-${slugId}`);
+    const minusIcon = document.getElementById(`minus-icon-${slugId}`);
 
-function expand_data(slug) {
+    if (moreTags.classList.contains('hidden')) {
+        moreTags.classList.remove('hidden');
+        plusIcon.classList.add('hidden');
+        minusIcon.classList.remove('hidden');
+    } else {
+        moreTags.classList.add('hidden');
+        plusIcon.classList.remove('hidden');
+        minusIcon.classList.add('hidden');
+    }
+}
+
+
+
+
+async function expand_data(slug) {
 
     const contentSection = document.querySelector(`#article_info_${slug}`);
     const buttonText = document.querySelector(`#button_text_${slug}`);
     const expandIcon = document.querySelector(`#expand_icon_${slug}`);
     
+    // // get article_info data 
+    // const article_info_obj = await article_info_api(slug)
+
+    // set_article_info_data(article_info_obj, slug)
+
+
     if (contentSection.classList.contains('hidden')) {
         contentSection.classList.remove('hidden');
         buttonText.textContent = 'Collapse';
         expandIcon.classList.remove('rotate-180');
+
+        // get article_info data 
+        const article_info_obj = await article_info_api(slug)
+
+        set_article_info_data(article_info_obj, slug)
+
     } else {
         contentSection.classList.add('hidden');
         buttonText.textContent = 'Expand';
         expandIcon.classList.add('rotate-180');
+        
+
     }
 }
 
@@ -2003,3 +1923,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
                    
+
+
+
+
+
+

@@ -161,6 +161,8 @@ var fetch_wp_data_url = `${url}fetch/data/`;
 var domain_console_metrics_url = `${url}domain/console-metrics-graph/`;
 var domain_analytics_metrics_url = `${url}domain/analytics-metrics-graph/`;
 var domain_article_metrics_url = `${url}domain/article-metrics-graph/`;
+var article_console_metrics_url = `${url}article/console-metrics-graph/`;
+var article_analytics_metrics_url = `${url}article/analytics-metrics-graph/`;
 
 var console_metrics_url = `${url}console-metrics/`;
 var progres_data = `${url}progres-data/`;
@@ -189,13 +191,29 @@ var delete_notification_url = `${url}notification/delete/`;
 
 
 var list_perma_links_url = `${url}perma-links/`;
-// var update_perma_links_url = `${url}perma-links/update/`;
+
+
+var find_google_image_url = `https://api.valueserp.com/search`;
+
+var generate_single_image_url = `${url}generate-single-image/add/`;
+
+
+var list_supportive_prompt_type_url = `${url}supportive-prompt-types/`;
+var add_supportive_prompt_type_url = `${url}supportive-prompt-type/add/`;
+var update_supportive_prompt_type_url = `${url}supportive-prompt-type/update/`;
+var delete_supportive_prompt_type_url = `${url}supportive-prompt-type/delete/`;
+
+var list_supportive_prompt_url = `${url}supportive-prompts/`;
+var add_supportive_prompt_url = `${url}supportive-prompt/add/`;
+var update_supportive_prompt_url = `${url}supportive-prompt/update/`;
+var delete_supportive_prompt_url = `${url}supportive-prompt/delete/`;
 
 
 
+var list_article_info_url = `${url}info/articles/`;
 
 
-
+var list_variables_url = `${url}variables/`;
 
 
 

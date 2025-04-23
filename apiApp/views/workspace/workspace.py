@@ -8,6 +8,11 @@ from django.db.models import Q
 from apiApp.views.base.dynamic_avatar_image_process.dynamic_avatar_image_process import dynamic_avatar_image_process
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
+from apiApp.views.ai_rate_limiter_api.register_workspace_api.register_workspace_api import register_workspace_api
+from apiApp.views.ai_rate_limiter_api.delete_workspace_api.delete_workspace_api import delete_workspace_api
+
+
+
 
 @api_view(['GET'])
 # @workspace_permission_required
@@ -121,7 +126,6 @@ def add_workspace(request):
         data["created_by"] = request_user.id 
         data["logo"] = logo
 
-
         serialized_data = workspace_serializer(data=data)
 
         if serialized_data.is_valid():
@@ -129,11 +133,17 @@ def add_workspace(request):
                 # serialized_data.save()
                 workspace_obj = serialized_data.save()
 
+
+                print(workspace_obj.slug_id,'sssssssssssssssssssssssssssssssssss')
+                # Call register_workspace API
+                result, error = register_workspace_api(workspace_obj.slug_id)
+                print(result,'result-workspace')
+
+
                 if not request.user.is_superuser:
                     user_obj = user_detail.objects.get(user_id=request_user.id)
                     user_obj.workspace_id.add(workspace_obj)
                     user_obj.save()
-
 
                 return JsonResponse({
                     "message": "Data added successfully.",
@@ -238,7 +248,16 @@ def delete_workspace(request, slug_id):
                 "error": "workspace detail not found.",
                 "success": False,
             }, status=404) 
-                
+            
+        delete_response, delete_error = delete_workspace_api(slug_id)
+            
+        if delete_error or not delete_response or delete_response.get('status') != 'success':
+            return JsonResponse({
+                "error": f"Failed to delete workspace via API. {delete_error or delete_response}",
+                "success": False,
+            }, status=400)
+    
+        
         obj.delete()
         
         return JsonResponse({

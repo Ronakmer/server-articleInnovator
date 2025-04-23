@@ -70,7 +70,7 @@ function add_ai_article_api() {
 
     let formatted_date_time = ''
     
-    if(wp_status_manual == 'scheduled'){
+    if(wp_status_manual == 'future'){
 
         const manual_date = document.querySelector("#manual_date_time_fields input[type='date']");
         const manual_time = document.querySelector("#manual_date_time_fields input[type='time']");
@@ -97,7 +97,7 @@ function add_ai_article_api() {
     data.append("author_slug_id", author_slug_id);
     data.append("category_slug_id", category_slug_id);
     data.append("tag_slug_id", tag_slug_id);
-    data.append("temp_article_type", 'manual');
+    data.append("article_type_category", 'manual');
     
 
     if(formatted_date_time){

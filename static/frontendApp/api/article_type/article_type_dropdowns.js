@@ -1,5 +1,13 @@
 
 
+
+
+
+
+
+
+
+
 // article_type_field
 document.addEventListener('DOMContentLoaded', function () {
     

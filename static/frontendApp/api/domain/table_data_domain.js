@@ -43,6 +43,7 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
 
         console.log(domain_article_data,'domain_article_data')
 
+        // set chart data using fuction
         domain_impressions_chart(domain_console_data, obj.slug_id)
         domain_traffic_chart(domain_analytics_data, obj.slug_id)
         domain_article_chart(domain_article_data, obj.slug_id)

@@ -31,6 +31,8 @@
     </div>
 </div>
 
+<form method="POST" action=""  id="prompt_form" name="prompt_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+
 <!-- start field data  -->
 <div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
     <div class="col-span-12 lg:col-span-4">
@@ -38,7 +40,6 @@
             <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
                 Prompt Details</h5>
 
-            <form method="POST" action=""  id="prompt_form" name="prompt_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
 
                 <div class="flex flex-col md:flex-row items-start gap-3">
                     <div class="block w-full ">
@@ -78,7 +79,7 @@
                     </div>
 
                 </div>
-                <div class="flex flex-col md:flex-row items-start gap-3">
+                {% comment %} <div class="flex flex-col md:flex-row items-start gap-3">
                     <div class="block w-full ">
                         <label for="countries"
                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Workspace
@@ -101,7 +102,67 @@
                     </div>
                     
             
+                </div> {% endcomment %}
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full " id="workspace-div">
+
+                        <label for="assignments" class="block pb-2 text-sm font-medium text-gray-600">Workspace</label>
+
+                        <div class="custom-select member_custom_select  bg-white rounded-lg  border border-gray-300" id="">
+                            <div class="flex flex-wrap items-center p-2 min-h-[42px]" id="">
+                                <div class="selected-items member_selected_items flex flex-wrap gap-2" id=""></div>
+                                <input type="text" class="flex-grow text-sm outline-none px-2 py-1" name=""
+                                    placeholder="">
+                            </div>
+                            <div id=""
+                                class="custom-select-dropdown member_custom_select_dropdown text-sm mt-1 py-4 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        <!-- for pass data in api -->
+                        <input type="hidden" name="workspace_id" class="flex-grow text-sm outline-none px-2 py-1"
+                        placeholder="">
+
+                    </div>
                 </div>
+
+
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                    
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">AI Configuration Model
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg>
+                        </label>
+
+                        <div class="api_model_search relative">
+                            <input type="text" id="api_models_input" placeholder="Search"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            <div class="flex flex-wrap gap-2 pt-2" id="selected_api_models"></div>
+                            <div id="api_model_dropdown"
+                                class="hidden absolute z-10  mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        <!-- for pass data in api -->
+                        <input type="hidden" name="api_model" class="flex-grow text-sm outline-none px-2 py-1"
+                        placeholder="">   
+
+                        
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start gap-3 mb-3">
+                    <div class="block w-full" id="variables_btn">
+
+                    
+                    </div>
+                </div>
+                
 
                 <div class="flex flex-col md:flex-row items-start gap-3">
                     <div id="dynamic_fields_container" name="dynamic_fields_container" class="block w-full ">
@@ -121,19 +182,155 @@
                     </button>
                 </div>
 
-            </form>
+
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-8">
+        <div class="p-4 border border-gray-200 rounded-2xl ">
+            <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                wordpress Prompt Details</h5>
+
+                <div id="supportive_prompt_id" class="">
+                </div>
+
+                {% comment %} <!-- for pass data in api -->
+                <input type="text" name="wp_prompt_category_id" class="flex-grow text-sm outline-none px-2 py-1"
+                placeholder="">
+                <input type="text" name="wp_prompt_tag_id" class="flex-grow text-sm outline-none px-2 py-1"
+                placeholder="">
+                <input type="text" name="wp_prompt_author_id" class="flex-grow text-sm outline-none px-2 py-1"
+                placeholder="">
+                <input type="text" name="wp_prompt_internal_links_id" class="flex-grow text-sm outline-none px-2 py-1"
+                placeholder="">
+                <input type="text" name="wp_prompt_external_links_id" class="flex-grow text-sm outline-none px-2 py-1"
+                placeholder=""> {% endcomment %}
+
+
+                
+                {% comment %} <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Prompt Category
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+
+                            <select id="type" name="wp_prompt_category_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                            </select>
+
+                            <!-- for pass data in api -->
+                            <input type="hidden" name="wp_prompt_category_id" class="flex-grow text-sm outline-none px-2 py-1"
+                            placeholder="">
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Prompt Tag
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+
+                            <select id="type" name="wp_prompt_tag_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                            </select>
+
+                            <!-- for pass data in api -->
+                            <input type="hidden" name="wp_prompt_tag_id" class="flex-grow text-sm outline-none px-2 py-1"
+                            placeholder="">
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Prompt Author
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+
+                            <select id="type" name="wp_prompt_author_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                            </select>
+
+                            <!-- for pass data in api -->
+                            <input type="hidden" name="wp_prompt_author_id" class="flex-grow text-sm outline-none px-2 py-1"
+                            placeholder="">
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row items-start gap-3">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Prompt Internal Links
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+
+                            <select id="type" name="wp_prompt_internal_links_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                            </select>
+
+                            <!-- for pass data in api -->
+                            <input type="hidden" name="wp_prompt_internal_links_id" class="flex-grow text-sm outline-none px-2 py-1"
+                            placeholder="">
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row items-start gap-4">
+                    <div class="block w-full ">
+                        <label for="countries"
+                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Prompt External Links
+                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                    fill="#EF4444"></path>
+                            </svg></label>
+
+                            <select id="type" name="wp_prompt_external_links_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                            </select>
+
+                            <!-- for pass data in api -->
+                            <input type="hidden" name="wp_prompt_external_links_id" class="flex-grow text-sm outline-none px-2 py-1"
+                            placeholder="">
+                    </div>
+
+                </div> {% endcomment %}
 
         </div>
     </div>
 
 </div>
 
+
+</form>
+
+
 <!-- end field data  -->
 
 <!-- prompt api -->
+<script src="{% static 'frontendApp/api/prompt/supportive_prompt_dropdowns.js' %}"></script>
 <script src="{% static 'frontendApp/api/prompt/add_prompt.js' %}"></script>
 <script src="{% static 'frontendApp/api/prompt/prompt_dropdowns.js' %}"></script>
 <script src="{% static 'frontendApp/api/prompt/get_article_type_field_data.js' %}"></script>
+<script src="{% static 'frontendApp/api/prompt/get_variables_data.js' %}"></script>
 
 
 {% endblock body %}

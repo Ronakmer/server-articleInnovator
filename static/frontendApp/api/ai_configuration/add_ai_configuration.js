@@ -1,5 +1,8 @@
 
 
+let set_workspace_ids = [];
+
+
 function add_ai_configuration_api() {
 
     // Get the form element
@@ -13,6 +16,12 @@ function add_ai_configuration_api() {
     const api_model = ai_configuration_form.querySelector('[name="api_model"]').value;
     const api_url = ai_configuration_form.querySelector('[name="api_url"]').value;
     const email = ai_configuration_form.querySelector('[name="email"]').value;
+    
+    let workspace_slug_id = '';
+    workspace_element = ai_configuration_form.querySelector('[name="workspace_id"]');
+    if(workspace_element){
+        workspace_slug_id = workspace_element.value;
+    }
 
     const data = new FormData();
     data.append("api_provider", api_provider);
@@ -22,6 +31,8 @@ function add_ai_configuration_api() {
     data.append("api_model", api_model);
     data.append("api_url", api_url);
     data.append("email", email);
+    data.append("workspace_slug_id", workspace_slug_id);
+
 
 
 
@@ -63,6 +74,15 @@ function add_ai_configuration_api() {
         const api_url = ai_configuration_form.querySelector('[name="api_url"]');
         const email = ai_configuration_form.querySelector('[name="email"]');
     
+        const workspace_div = ai_configuration_form.querySelector('[id="workspace-div"]');
+        const new_modal_btn = ai_configuration_form.querySelector('[id="new_modal_btn"]');
+
+        workspace_div?.remove();
+        if (new_modal_btn) {
+            new_modal_btn.style.display = "none"; 
+        }
+        
+
         if (data_obj && data_obj.data && data_obj.data.length > 0) {
             api_provider.value = data_obj.data[0].api_provider;
             api_type.value = data_obj.data[0].api_type;
@@ -71,6 +91,8 @@ function add_ai_configuration_api() {
             api_model.value = data_obj.data[0].api_model;
             api_url.value = data_obj.data[0].api_url;
             email.value = data_obj.data[0].email;
+            // set_workspace_ids = data_obj.data[0].workspace_id.map(field => field.slug_id).join(', ')
+            // alert(data_obj.data[0].api_model)
         } else {
             // name.value = ''; 
             window.location.href = error_page;
@@ -80,3 +102,11 @@ function add_ai_configuration_api() {
 })()
      
 
+
+
+
+function get_workspace_data(){
+
+    workspace_data = get_data_api(list_workspace_url)
+}
+get_workspace_data()

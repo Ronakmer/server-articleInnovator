@@ -64,6 +64,8 @@ from apiApp.views.keyword.keyword import list_keyword, add_keyword, update_keywo
 from apiApp.views.user_profile.user_profile import list_user_profile, update_user_profile
 from apiApp.views.base.graph_data.domain_console_metrics.domain_console_metrics import domain_console_metrics
 from apiApp.views.base.graph_data.domain_analytics_metrics.domain_analytics_metrics import domain_analytics_metrics
+from apiApp.views.base.graph_data.article_console_metrics.article_console_metrics import article_console_metrics
+from apiApp.views.base.graph_data.article_analytics_metrics.article_analytics_metrics import article_analytics_metrics
 from apiApp.views.base.graph_data.domain_article_metrics.domain_article_metrics import domain_article_metrics
 from apiApp.views.console_metrics.console_metrics import list_console_metrics
 from apiApp.views.progres_data.progres_data import progres_data
@@ -71,6 +73,12 @@ from apiApp.views.image_gen.generate_template.generate_template import generate_
 from apiApp.views.activity_log.activity_log import list_activity_log
 from apiApp.views.notification.notification import list_notification, delete_notification, process_notification
 from apiApp.views.fetch_user_workspaces.fetch_user_workspaces import fetch_user_workspaces
+from apiApp.views.article_info.article_info import list_article_info
+
+from apiApp.views.supportive_prompt_type.supportive_prompt_type import list_supportive_prompt_type, add_supportive_prompt_type, update_supportive_prompt_type, delete_supportive_prompt_type
+from apiApp.views.supportive_prompt.supportive_prompt import list_supportive_prompt, add_supportive_prompt, update_supportive_prompt, delete_supportive_prompt
+from apiApp.views.variables.variables import list_variables
+
 
 ######### image gen  #########
 from apiApp.views.image_gen.image_tag.image_tag import list_image_tag, add_image_tag, update_image_tag, delete_image_tag
@@ -287,6 +295,9 @@ permissions_list = [
     {"name": "update_article", "route": "article/update/<slug:slug_id>", "description": "update article", "status": "True", "group": "article"},
     {"name": "delete_article", "route": "article/delete/<slug:slug_id>", "description": "delete article", "status": "True", "group": "article"},
     
+    # list_article_info
+    {"name": "list_article_info", "route": "info/articles/", "description": "info article", "status": "True", "group": "article"},
+    
     # competitor
     {"name": "list_competitor", "route": "competitors/", "description": "all competitor", "status": "True", "group": "competitor"},
     {"name": "add_competitor", "route": "competitor/add/", "description": "add competitor", "status": "True", "group": "competitor"},
@@ -360,9 +371,11 @@ permissions_list = [
     {"name": "update_user_profile", "route": "user/profile/update/", "description": "user-profile-update", "status": "True", "group": "user-profile"},
 
     # graph 
-    {"name": "domain_console_metrics", "route": "domain/console-metrics-graph/", "description": "console-metrics-graph", "status": "True", "group": "console-metrics-graph"},
-    {"name": "domain_analytics_metrics", "route": "domain/analytics-metrics-graph/", "description": "analytics-metrics-graph", "status": "True", "group": "analytics-metrics-graph"},
+    {"name": "domain_console_metrics", "route": "domain/console-metrics-graph/", "description": "domain-console-metrics-graph", "status": "True", "group": "console-metrics-graph"},
+    {"name": "domain_analytics_metrics", "route": "domain/analytics-metrics-graph/", "description": "domain-analytics-metrics-graph", "status": "True", "group": "analytics-metrics-graph"},
     {"name": "domain_article_metrics", "route": "domain/article-metrics-graph/", "description": "article-metrics-graph", "status": "True", "group": "article-metrics-graph"},
+    {"name": "article_console_metrics", "route": "article/console-metrics-graph/", "description": " article-console-metrics-graph", "status": "True", "group": "console-metrics-graph"},
+    {"name": "article_analytics_metrics", "route": "article/analytics-metrics-graph/", "description": "article-analytics-metrics-graph", "status": "True", "group": "analytics-metrics-graph"},
     
     # console metrics
     {"name": "list_console_metrics", "route": "console-metrics/", "description": "console_metrics", "status": "True", "group": "console_metrics"},
@@ -380,6 +393,24 @@ permissions_list = [
 
     # verify ai configuration
     {"name": "verify_image_kit_configuration", "route": "image-kit-configuration/verify/", "description": "verify image-kit-configuration", "status": "True", "group": "image-kit-configuration"},
+    
+    
+    # supportive_prompt_type
+    {"name": "list_supportive_prompt_type", "route": "supportive-prompt-types/", "description": "all supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+    {"name": "add_supportive_prompt_type", "route": "supportive-prompt-type/add/", "description": "add supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+    {"name": "update_supportive_prompt_type", "route": "supportive-prompt-type/update/<slug:slug_id>", "description": "update supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+    {"name": "delete_supportive_prompt_type", "route": "supportive-prompt-type/delete/<slug:slug_id>", "description": "delete supportive-prompt-type", "status": "True", "group": "supportive-prompt-type"},
+
+    # supportive prompt
+    {"name": "list_supportive_prompt", "route": "supportive-prompts/", "description": "all supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "add_supportive_prompt", "route": "supportive-prompt/add/", "description": "add supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "update_supportive_prompt", "route": "supportive-prompt/update/<slug:slug_id>", "description": "update supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "delete_supportive_prompt", "route": "supportive-prompt/delete/<slug:slug_id>", "description": "delete supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    
+    #  variables
+    {"name": "list_variables", "route": "variables/", "description": "all variables", "status": "True", "group": "variables"},
+    # {"name": "add_variables", "route": "wp-supportive-variables/add/", "description": "add wp-supportive-variables", "status": "True", "group": "wp-supportive-variables"},
+    # {"name": "update_variables", "route": "wp-supportive-variables/update/<slug:slug_id>", "description": "update wp-supportive-variables", "status": "True", "group": "wp-supportive-variables"},
 
 
     ######### image gen  #########

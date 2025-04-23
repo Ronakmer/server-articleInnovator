@@ -24,6 +24,7 @@ def list_image_template(request):
         search = request.GET.get('search', '')
         order_by = request.GET.get('order_by', '-created_date')
         
+        print(search,'searchxx')
 
         # Initialize filters
         filters = Q()

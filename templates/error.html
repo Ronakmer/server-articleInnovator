@@ -1,0 +1,14 @@
+
+
+
+
+
+{% if error == 404 %}
+    404
+{% elif error == 500 %}
+    500 - Internal Server Error
+{% elif error == 403 %}
+    403 - Forbidden
+{% else %}
+    An unknown error occurred.
+{% endif %}
