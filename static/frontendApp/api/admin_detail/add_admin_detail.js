@@ -13,7 +13,7 @@ async function add_admin_detail_api() {
 
     // Collect form data using the name attributes
     const full_name = admin_detail_form.querySelector('[name="full_name"]').value;
-    // const email = admin_detail_form.querySelector('[name="email"]').value;
+    const email = admin_detail_form.querySelector('[name="email"]').value;
     const password = admin_detail_form.querySelector('[name="password"]').value;
     const article_limitation = admin_detail_form.querySelector('[name="article_limitation"]').value;
     const domain_limitation = admin_detail_form.querySelector('[name="domain_limitation"]').value;
@@ -23,7 +23,7 @@ async function add_admin_detail_api() {
 
     const data = new FormData();
     data.append("full_name", full_name);
-    // data.append("email", email);
+    data.append("email", email);
     data.append("password", password);
     data.append("article_limitation", article_limitation);
     data.append("domain_limitation", domain_limitation);

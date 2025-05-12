@@ -10,19 +10,26 @@
 
 
 function temp_set_manual_data() {
-    const temp_article_type_slug_id = localStorage.getItem("article_type_slug_id");
-    const temp_article_type_title = localStorage.getItem("article_type_title");
+    // const temp_article_type_slug_id = localStorage.getItem("article_type_slug_id");
+    // const temp_article_type_title = localStorage.getItem("article_type_title");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const stored_article_type_slug_id = urlParams.get("article_type_slug_id");
 
     // Query the element by ID or name, make sure it's an input element
-    const set_manual_article_type_slug_id = document.querySelector('[name="manual_article_type_slug_id"]'); 
+    // const set_manual_article_type_slug_id = document.querySelector('[name="manual_article_type_slug_id"]'); 
     const set_manual_article_type_title = document.querySelector('[name="manual_article_type_title"]'); 
 
-    if(temp_article_type_slug_id){
+    const stored_article_type_title = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.title;
+    // alert(stored_article_type_title)
+
+
+    if(stored_article_type_title){
 
         // Check if the element exists before accessing its value
-        set_manual_article_type_slug_id.value = temp_article_type_slug_id;  
-        set_manual_article_type_title.textContent = temp_article_type_title;  
-    }
+        // set_manual_article_type_slug_id.value = temp_article_type_slug_id;  
+        set_manual_article_type_title.textContent = stored_article_type_title;  
+    } 
    
 }
 
@@ -30,7 +37,7 @@ function temp_set_manual_data() {
 
 
 
-function add_ai_article_api() {
+function add_manual_article_api() {
 
     let slug_data = [
         $('#category_permalink').val(),
@@ -62,7 +69,7 @@ function add_ai_article_api() {
     const wp_content_data = manual_article_form.querySelector('[name="wp_content_data"]').value;
 
     const wp_excerpt = manual_article_form.querySelector('[name="wp_excerpt"]').value;
-    const manual_article_type_slug_id = manual_article_form.querySelector('[name="manual_article_type_slug_id"]').value;
+    // const manual_article_type_slug_id = manual_article_form.querySelector('[name="manual_article_type_slug_id"]').value;
     const author_slug_id = manual_article_form.querySelector('input[name="author_slug_id"]').value;
     const category_slug_id = manual_article_form.querySelector('input[name="category_slug_id"]').value;
     const tag_slug_id = manual_article_form.querySelector('input[name="tag_slug_id"]').value;
@@ -87,6 +94,12 @@ function add_ai_article_api() {
         }
         
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const manual_article_type_slug_id = urlParams.get("article_type_slug_id");
+    
+
+
 
     // const bas64_image = image_to_sting(wp_featured_image)
     // alert(bas64_image)
@@ -125,7 +138,6 @@ function add_ai_article_api() {
     data.append("category_slug_id", category_slug_id);
     data.append("tag_slug_id", tag_slug_id);
     data.append("wp_featured_image", wp_featured_image);
-    data.append("article_type_category", 'manual');
     
 
     if(formatted_date_time){

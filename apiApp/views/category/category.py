@@ -94,6 +94,7 @@ def add_category(request):
         description = request.data.get('description')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
+        request_user = request.user
         
             
         if not (name and slug and description and domain_slug_id and workspace_slug_id):
@@ -158,6 +159,7 @@ def add_category(request):
             category_obj.domain_id = domain_id
             category_obj.wp_cat_id = cat_id
             category_obj.workspace_id = workspace_id
+            category_obj.created_by = request_user.id 
             category_obj.save()
                 
             serialized_category_data = wp_category_serializer(category_obj).data

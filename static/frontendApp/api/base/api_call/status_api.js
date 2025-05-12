@@ -26,9 +26,13 @@ async function status_api(api_url, data, slug_id, redirect_url) {
             body: JSON.stringify(data),
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+        
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
            
             console.log(data)
             show_toast("success", `${data.message}`);
@@ -42,7 +46,7 @@ async function status_api(api_url, data, slug_id, redirect_url) {
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
 
             console.log(error_data)
             // Show api error

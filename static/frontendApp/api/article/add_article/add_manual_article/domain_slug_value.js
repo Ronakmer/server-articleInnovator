@@ -31,8 +31,12 @@ async function domain_slug_value(){
                 },
             });
 
+            const responseData = await response.json();
+
+            check_authentication_error(responseData)
+    
             if (response.ok) {
-                const data = await response.json();
+                const data = responseData;
                 // console.log("API Response:", data);
                 console.log("API Response:", data.data[0].permalinks);
                 const slug_data = data.data[0].permalinks
@@ -44,7 +48,7 @@ async function domain_slug_value(){
                 get_tag_data(slug_id)
                 
             }else {
-                const error_data = await response.json();
+                const error_data = responseData;
                 console.error('Failed to fetch roles:', error_data);
     
                 const errorMessage = error_data.error || "Something went wrong";

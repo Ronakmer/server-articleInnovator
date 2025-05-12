@@ -157,7 +157,7 @@ def update_motivation(request, slug_id):
                 "success": False,
             }, status=404)
             
-        if not request_user.is_superadmin:    
+        if request.is_admin:    
             if not set(workspace_objs).intersection(set(obj.workspace_id.all())):
                 return JsonResponse({"error": "You don't have permission.","success": False}, status=403)
 
@@ -205,7 +205,7 @@ def delete_motivation(request, slug_id):
 
         # Check if the user has permission (i.e., workspace_slug_id exists in obj.workspace_id)
         workspace_objs = obj.workspace_id.all()
-        if not request_user.is_superadmin:
+        if request.is_admin:
             if not any(ws.slug_id == workspace_slug_id for ws in workspace_objs):
                 return JsonResponse({"error": "You don't have permission.","success": False}, status=403)
 

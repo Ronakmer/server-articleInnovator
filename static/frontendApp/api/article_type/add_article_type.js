@@ -5,6 +5,25 @@ let set_color_slug_id = '';
 let set_article_type_field_slug_id = '';
 
 
+
+function filter_article_type_form() {
+    const selectedValue = document.getElementById("type").value;
+
+    const articleTypeField = document.getElementById("article_type_field");
+    const rabbitmqWorker = document.getElementById("rabbitmq_worker");
+    const supportiveVariables = document.getElementById("supportive_variables");
+    const categorySection = document.getElementById("category_section");
+
+    const shouldHide = selectedValue === "manual";
+
+    // Toggle visibility
+    articleTypeField.style.display = shouldHide ? 'none' : 'block';
+    rabbitmqWorker.style.display = shouldHide ? 'none' : 'block';
+    supportiveVariables.style.display = shouldHide ? 'none' : 'block';
+    categorySection.style.display = shouldHide ? 'none' : 'block';
+}
+
+
 function add_article_type_api() {
 
     // Get the form element
@@ -17,22 +36,30 @@ function add_article_type_api() {
     const color_detail_slug_id = article_type_form.querySelector('[name="color"]').value;
     const title = article_type_form.querySelector('[name="title"]').value;
     const description = article_type_form.querySelector('[name="description"]').value;
+    const rabbitmq_worker = article_type_form.querySelector('[name="rabbitmq_worker"]').value;
     const article_type_image = article_type_form.querySelector('[name="article_type_image"]');
 
-    console.log(category,'120')
-    
     const supportive_variables_data = create_variables_json()
 
     const data = new FormData();
-    
-    data.append("article_category", article_category);
-    data.append("category", category);
-    data.append("article_type_field_slug_id", article_type_field_slug_id);
-    data.append("color_detail_slug_id", color_detail_slug_id);
-    data.append("title", title);
-    data.append("description", description);
-    data.append("supportive_variables_data", supportive_variables_data);
-
+    // If the category is 'manual', append only necessary data
+    if(article_category === 'manual'){
+        alert(0);  // For debugging purposes, you can remove this after testing
+        data.append("article_category", article_category);
+        data.append("color_detail_slug_id", color_detail_slug_id);
+        data.append("description", description);
+        data.append("title", title);
+    } else {
+        // If not 'manual', append all data
+        data.append("article_category", article_category);
+        data.append("category", category);
+        data.append("article_type_field_slug_id", article_type_field_slug_id);
+        data.append("color_detail_slug_id", color_detail_slug_id);
+        data.append("title", title);
+        data.append("description", description);
+        data.append("rabbitmq_worker", rabbitmq_worker);
+        data.append("supportive_variables_data", supportive_variables_data);
+    }
 
     if (article_type_image && article_type_image.files && article_type_image.files[0]) {
         data.append('article_type_image', article_type_image.files[0]);
@@ -83,6 +110,7 @@ function add_article_type_api() {
         const color_slug_id = article_type_form.querySelector('[name="color"]');
         const title = article_type_form.querySelector('[name="title"]');
         const description = article_type_form.querySelector('[name="description"]');
+        const rabbitmq_worker = article_type_form.querySelector('[name="rabbitmq_worker"]');
         const article_type_image = article_type_form.querySelector('[name="article_type_image"]');
     
         
@@ -91,11 +119,12 @@ function add_article_type_api() {
             category.value = data_obj.data[0].category;
             title.value  = data_obj.data[0].title;
             description.value  = data_obj.data[0].description;            
+            rabbitmq_worker.value  = data_obj.data[0].rabbitmq_worker;            
             set_color_slug_id = data_obj.data[0].color_detail_id_data.slug_id
             set_article_type_field_slug_id = data_obj.data[0].article_type_field_id_data.map(field => field.slug_id).join(', ')
             
             await populateSupportiveVariables(variables_data_obj);
-
+            filter_article_type_form();
 
         } else {
             // name.value = ''; 

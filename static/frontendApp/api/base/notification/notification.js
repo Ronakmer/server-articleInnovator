@@ -23,17 +23,22 @@ async function notification_api() {
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('fetched successfully:', data);
 
             // const obj = data.notifications;
             set_notification_data(data)
             
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -123,10 +128,14 @@ async function read_as_mark(){
             body: data,
         });
         
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
            
             console.log(data)
             show_toast("success", `${data.message}`);
@@ -140,7 +149,7 @@ async function read_as_mark(){
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
 
             console.log(error_data)
             // Show api error

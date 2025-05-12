@@ -35,11 +35,14 @@ async function verify_api() {
             },
             body: data,
         });
-        
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
            
             console.log(data)
             if (response.ok) {
@@ -53,7 +56,7 @@ async function verify_api() {
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
 
             console.log(error_data)
             // Show api error

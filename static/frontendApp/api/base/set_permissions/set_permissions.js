@@ -22,7 +22,7 @@ function handle_permissions() {
 
 
 // Ensure this function runs after the page loads
-document.addEventListener("DOMContentLoaded", handle_permissions);
+// document.addEventListener("DOMContentLoaded", handle_permissions);
 
 
 

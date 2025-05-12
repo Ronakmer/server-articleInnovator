@@ -24,16 +24,20 @@ async function get_avatar_image_api() {
             },
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = await responseData;
             console.log('list_dynamic_avatar_image_url:', data);
             
             set_avatar_image_data(data)
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = await responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";

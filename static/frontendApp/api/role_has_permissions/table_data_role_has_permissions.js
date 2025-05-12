@@ -18,13 +18,17 @@ async function role_has_permissions_list_api() {
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
-            const data = await response.json();
+            const data = responseData;
             console.log('Roles with permissions:', data);
             renderTable(data); // Render table after fetching
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
             show_toast("error", `Error: ${error_data.error || "Something went wrong"}`);
         }
@@ -61,7 +65,7 @@ function renderTable(responseData) {
     // Start building the HTML structure with dynamic role headers
     let html = `
         <div class="grid grid-cols-[1fr_repeat(${roles.length},80px)] items-center bg-white border-b py-3 px-4">
-            <div class="font-medium text-gray-900">Permissions</div>
+            <div class="font-medium text-gray-900 fix">Permissions</div>
             ${roleHeaders}
         </div>
     `;
@@ -69,14 +73,14 @@ function renderTable(responseData) {
     // Loop through grouped permissions and render each group with checkboxes for roles
     Object.entries(grouped_permissions).forEach(([groupName, permissions]) => {
         html += `
-            <div class="bg-gray-50 px-4 py-3">
+            <div class="bg-gray-50 px-4 py-3 ">
                 <h3 class="text-sm font-medium text-gray-800">${formatPermissionName(groupName)}</h3>
             </div>
         `;
 
         permissions.forEach(({ slug_id, name }) => {
             const permissionRow = `
-                <div class="grid grid-cols-[1fr_repeat(${roles.length},80px)] items-center bg-white px-4 py-2 border-b last:border-b-0">
+                <div class="grid grid-cols-[1fr_repeat(${roles.length},80px)] items-center bg-white px-4 py-2 border-b last:border-b-0 ">
                     <div class="text-sm text-gray-600">${formatPermissionName(name)}</div>
                     ${roles.map(role => {
                         const isChecked = hasPermission(roles, role.name, slug_id) ? "checked" : "";

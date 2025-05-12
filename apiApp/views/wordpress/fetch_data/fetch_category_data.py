@@ -99,10 +99,10 @@ def process_category(obj_data):
             category_obj.name = category.get('name')
             category_obj.slug = category.get('slug')
             category_obj.description = category.get('description')
-
             category_obj.domain_id = domain_obj
             category_obj.workspace_id = workspace_obj
             category_obj.wp_cat_id = category.get('id')
+            category_obj.derived_by = 'wordpress'
             category_obj.save() 
             
             install_log_obj = domain_install_log()

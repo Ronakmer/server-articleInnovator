@@ -118,6 +118,23 @@ def update_supportive_prompt_type(request, slug_id):
                 "error": "wp prompt type not found.",
                 "success": False,
             }, status=404)   
+            
+        status = request.data.get("status")
+        if status is not None and status != "":
+            serialized_data = supportive_prompt_type_serializer(instance=obj, data=request.data, partial=True)
+            if serialized_data.is_valid():
+                serialized_data.save()
+                return JsonResponse({
+                    "message": "Status updated successfully.",
+                    "success": True,
+                    "data": serialized_data.data,
+                }, status=200)
+            else:
+                return JsonResponse({
+                    "error": "Invalid data.",
+                    "errors": serialized_data.errors,
+                    "success": False,
+                }, status=400)
 
         serialized_data = supportive_prompt_type_serializer(instance=obj, data=request.data, partial=True)        
         

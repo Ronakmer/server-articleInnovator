@@ -95,6 +95,7 @@ def add_author(request):
         author_email = request.data.get('email')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
+        request_user = request.user
             
         if not (author_username and author_password and author_email and domain_slug_id and workspace_slug_id):
             return JsonResponse({"error": "author username, password, email, domain and  workspce slug id is required fields.","success": False}, status=400)
@@ -165,6 +166,7 @@ def add_author(request):
             author_obj.wp_author_id = author_id
             author_obj.workspace_id = workspace_obj
             author_obj.bio = bio
+            author_obj.created_by = request_user.id 
             author_obj.save()
                 
             serialized_author_data = wp_author_serializer(author_obj).data

@@ -14,7 +14,8 @@ from apiApp.models import (
     competitor_extraction, competitor_extraction_mapping,
     competitor_seo_extraction_mapping, user_api_key, keyword,
     console_metrics, image_kit_configuration, activity_log, notification,
-    supportive_prompt_type, supportive_prompt, variables
+    supportive_prompt_type, supportive_prompt, variables, rabbitmq_queue,
+    configuration_settings,
     
 )
 
@@ -210,8 +211,8 @@ class article_type_field_serializer(serializers.ModelSerializer):
         exclude = ['id', 'created_date', 'updated_date']
         
 class article_type_serializer(serializers.ModelSerializer): 
-    article_type_field_id = serializers.PrimaryKeyRelatedField(queryset=article_type_field.objects.all(), write_only=True, many=True)
-    color_detail_id = serializers.PrimaryKeyRelatedField(queryset=color_detail.objects.all(), write_only=True)
+    article_type_field_id = serializers.PrimaryKeyRelatedField(queryset=article_type_field.objects.all(), write_only=True, many=True,required=False,allow_null=True)
+    color_detail_id = serializers.PrimaryKeyRelatedField(queryset=color_detail.objects.all(), write_only=True,required=False,allow_null=True)
     
     
     article_type_field_id_data = article_type_field_serializer(source='article_type_field_id', read_only=True, many=True) 
@@ -221,6 +222,23 @@ class article_type_serializer(serializers.ModelSerializer):
     class Meta:
         model = article_type
         exclude = ['id', 'created_date', 'updated_date']
+
+
+
+
+
+  
+class rabbitmq_queue_serializer(serializers.ModelSerializer): 
+    article_type_id_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True, required=False, allow_null=True)
+    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True,required=False,allow_null=True)
+
+    article_type_id_data = article_type_serializer(source='article_type_id', read_only=True) 
+    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+
+    class Meta:
+        model = rabbitmq_queue
+        exclude = ['id', 'created_date', 'updated_date']
+  
 
 
 class supportive_prompt_type_serializer(serializers.ModelSerializer):
@@ -320,15 +338,40 @@ class image_tag_template_category_template_mapping_serializer(serializers.ModelS
         
         
 class article_serializer(serializers.ModelSerializer):
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    article_type_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True)
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    prompt_id = serializers.PrimaryKeyRelatedField(queryset=prompt.objects.all(), write_only=True)
-    wp_author_id = serializers.PrimaryKeyRelatedField(queryset=wp_author.objects.all(), write_only=True)
-    wp_category_id = serializers.PrimaryKeyRelatedField(queryset=wp_category.objects.all(), write_only=True, many=True)
-    wp_tag_id = serializers.PrimaryKeyRelatedField(queryset=wp_tag.objects.all(), write_only=True, many=True)
+    # workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+    # created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    # article_type_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True)
+    # domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
+    # prompt_id = serializers.PrimaryKeyRelatedField(queryset=prompt.objects.all(), write_only=True,allow_null=True,required=False)
+    # wp_author_id = serializers.PrimaryKeyRelatedField(queryset=wp_author.objects.all(), write_only=True,allow_null=True,required=False)
+    # wp_category_id = serializers.PrimaryKeyRelatedField(queryset=wp_category.objects.all(), write_only=True, many=True,allow_null=True,required=False)
+    # wp_tag_id = serializers.PrimaryKeyRelatedField(queryset=wp_tag.objects.all(), write_only=True, many=True,allow_null=True,required=False)
     
+    workspace_id = serializers.PrimaryKeyRelatedField(
+        queryset=workspace.objects.all(), write_only=True, required=False, allow_null=True
+    )
+    created_by = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), write_only=True, required=False, allow_null=True
+    )
+    article_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=article_type.objects.all(), write_only=True, required=False, allow_null=True
+    )
+    domain_id = serializers.PrimaryKeyRelatedField(
+        queryset=domain.objects.all(), write_only=True, required=False, allow_null=True
+    )
+    prompt_id = serializers.PrimaryKeyRelatedField(
+        queryset=prompt.objects.all(), write_only=True, required=False, allow_null=True
+    )
+    wp_author_id = serializers.PrimaryKeyRelatedField(
+        queryset=wp_author.objects.all(), write_only=True, required=False, allow_null=True
+    )
+    wp_category_id = serializers.PrimaryKeyRelatedField(
+        queryset=wp_category.objects.all(), write_only=True, many=True, required=False, allow_null=True
+    )
+    wp_tag_id = serializers.PrimaryKeyRelatedField(
+        queryset=wp_tag.objects.all(), write_only=True, many=True, required=False, allow_null=True
+    )
+
     
 
     workspace_id_data = workspace_serializer(source='workspace_id', read_only=True) 
@@ -577,3 +620,12 @@ class notification_serializer(serializers.ModelSerializer):
         model = notification
         exclude = ['id', 'created_date']
         
+        
+class configuration_settings_serializer(serializers.ModelSerializer):
+    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    
+    created_by_data = user_serializer(source='created_by', read_only=True)  
+
+    class Meta:
+        model = configuration_settings
+        exclude = ['id', 'created_date', 'updated_date']  

@@ -105,6 +105,7 @@ def process_author(obj_data):
             author_obj.last_name = last_name
             author_obj.workspace_id = workspace_obj
             # author_obj.email = author['email']
+            author_obj.derived_by = 'wordpress'
             author_obj.save()
             
             install_log_obj = domain_install_log()

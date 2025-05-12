@@ -73,12 +73,19 @@ from apiApp.views.image_gen.generate_template.generate_template import generate_
 from apiApp.views.activity_log.activity_log import list_activity_log
 from apiApp.views.notification.notification import list_notification, delete_notification, process_notification
 from apiApp.views.fetch_user_workspaces.fetch_user_workspaces import fetch_user_workspaces
+from apiApp.views.fetch_user_permissions.fetch_user_permissions import fetch_user_permissions
 from apiApp.views.article_info.article_info import list_article_info
 
 from apiApp.views.supportive_prompt_type.supportive_prompt_type import list_supportive_prompt_type, add_supportive_prompt_type, update_supportive_prompt_type, delete_supportive_prompt_type
 from apiApp.views.supportive_prompt.supportive_prompt import list_supportive_prompt, add_supportive_prompt, update_supportive_prompt, delete_supportive_prompt
 from apiApp.views.variables.variables import list_variables
-
+from apiApp.views.rabbitmq_api.add_all_queues.add_all_queues import add_all_queues
+from apiApp.views.rabbitmq_api.list_queues.list_queues import list_queues
+from apiApp.views.rabbitmq_api.update_worker_scale.update_worker_scale import update_worker_scale
+from apiApp.views.rabbitmq_api.update_worker_scale.update_worker_scale import update_worker_scale
+from apiApp.views.rabbitmq_api.add_queue_api.add_queue_api import add_queue_api
+from apiApp.views.ai_rate_limiter_api.list_ai_rate_limiter_api import list_ai_rate_limiter_api
+from apiApp.views.configuration_settings.configuration_settings import list_configuration_settings,add_configuration_settings,update_configuration_settings,delete_configuration_settings,get_config_field
 
 ######### image gen  #########
 from apiApp.views.image_gen.image_tag.image_tag import list_image_tag, add_image_tag, update_image_tag, delete_image_tag
@@ -86,6 +93,7 @@ from apiApp.views.image_gen.image_template_category.image_template_category impo
 from apiApp.views.image_gen.image_template.image_template import list_image_template, get_superadmin_templates, add_image_template, update_image_template, delete_image_template
 from apiApp.views.image_gen.image_tag_template_category_template_mapping.image_tag_template_category_template_mapping import list_image_tag_template_category_template_mapping, add_image_tag_template_category_template_mapping, update_image_tag_template_category_template_mapping, delete_image_tag_template_category_template_mapping
 from apiApp.views.image_gen.generate_single_image.generate_single_image import generate_single_image
+from apiApp.views.image_gen.fetch_google_images.fetch_google_images import fetch_google_images
 
     
 ######### jwt Token  #########
@@ -106,6 +114,7 @@ permissions_list = [
     {"name": "check_otp", "route": "check-otp/", "description": "Check otp Mails", "status": "True", "group": "login"},
     {"name": "set_new_password", "route": "new-password/", "description": "Set New Password Page", "status": "True", "group": "login"},
     {"name": "fetch_user_workspaces", "route": "fetch-workspaces/", "description": "fetch-workspaces", "status": "True", "group": "login"},
+    {"name": "fetch_user_permissions", "route": "fetch-permissions/", "description": "fetch-permissions", "status": "True", "group": "login"},
 
     #  registration
     {"name": "check_invitation_code", "route": "check-invitation-code/", "description": "check-invitation-code Page", "status": "True", "group": "registration"},
@@ -409,8 +418,32 @@ permissions_list = [
     
     #  variables
     {"name": "list_variables", "route": "variables/", "description": "all variables", "status": "True", "group": "variables"},
-    # {"name": "add_variables", "route": "wp-supportive-variables/add/", "description": "add wp-supportive-variables", "status": "True", "group": "wp-supportive-variables"},
     # {"name": "update_variables", "route": "wp-supportive-variables/update/<slug:slug_id>", "description": "update wp-supportive-variables", "status": "True", "group": "wp-supportive-variables"},
+    
+    # add_all_queues
+    {"name": "add_all_queues", "route": "all-queues/add/", "description": "add all-queues", "status": "True", "group": "all-queues"},
+    
+    # queues
+    {"name": "list_queues", "route": "queues/", "description": "list-queues", "status": "True", "group": "list-queues"},
+    {"name": "update_worker_scale", "route": "worker-scale/update/", "description": "update-worker-scale", "status": "True", "group": "update-worker-scale"},
+    {"name": "add_queue_api", "route": "queue/add/", "description": "add-queue-api", "status": "True", "group": "add-queue-api"},
+    
+    # ai_rate_limiter_api
+    {"name": "list_ai_rate_limiter", "route": "ai-rate-limiter/", "description": "list-ai-rate-limiter", "status": "True", "group": "list-ai-rate-limiter"},
+
+    # fetch_google_images
+    {"name": "fetch_google_images", "route": "fetch/google-images/", "description": "fetch/google-images/", "status": "True", "group": "fetch/google-images/"},
+
+
+
+    # configuration settings
+    {"name": "list_configuration_settings", "route": "configuration-settings/", "description": "all configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "add_configuration_settings", "route": "configuration-settings/add/", "description": "add configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "update_configuration_settings", "route": "configuration-settings/update/<slug:slug_id>", "description": "update configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "delete_configuration_settings", "route": "configuration-settings/delete/<slug:slug_id>", "description": "delete configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "get_config_field", "route": "config-fields/", "description": "config-field", "status": "True", "group": "config-field"},
+
+
 
 
     ######### image gen  #########

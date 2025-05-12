@@ -128,6 +128,7 @@ var list_role_has_permissions_page = `${page_url}role-has-permissions/`;
 var list_notification_page = `${page_url}notifications/`;
 var list_activity_logs_page = `${page_url}activity-logs/`;
 
+var list_queues_page = `${url}queues/`;
 
 
 
@@ -145,6 +146,11 @@ var list_supportive_prompt_page_url = `${page_url}supportive-prompts/`;
 var add_supportive_prompt_page_url = `${page_url}supportive-prompt/add/`;
 var update_supportive_prompt_page_url = `${page_url}supportive-prompt/update/`;
 var delete_supportive_prompt_page_url = `${page_url}supportive-prompt/delete/`;
+
+var list_configuration_settings_page_url = `${page_url}configuration-settings/`;
+var add_configuration_settings_page_url = `${page_url}configuration-settings/add/`;
+var update_configuration_settings_page_url = `${page_url}configuration-settings/update/`;
+var delete_configuration_settings_page_url = `${page_url}configuration-settings/delete/`;
 
 
 

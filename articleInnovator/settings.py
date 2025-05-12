@@ -58,6 +58,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "apiApp.middleware.access_control.AccessControlMiddleware",  # custom access middleware for apiApp
     "apiApp.middleware.rate_limit.RateLimitMiddleware",  # custom rate limit middleware
+    # "apiApp.middleware.activity_log.ActivityLogMiddleware",  # custom log save for apiApp
     "frontendApp.middleware.access_control.AccessControlMiddleware",  # custom access middleware for frontendApp
     
 ]
@@ -185,7 +186,7 @@ SESSION_COOKIE_SECURE = False  # Set to True in production if using HTTPS
 
 
 SIMPLE_JWT = {
-    # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),    
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),    
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),  # Set to 2 hours
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
@@ -214,6 +215,10 @@ AWS_S3_REGION_NAME = 'us-east-1'
 # AWS_S3_SIGNATURE_VERSION = 's3v4'
 # AWS_DEFAULT_ACL = None
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"  
+
+
+
+
 
 # wayback-files
 

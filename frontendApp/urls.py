@@ -33,7 +33,9 @@ from frontendApp.views.notification.notification import list_notification_page
 from frontendApp.views.activity_log.activity_log import list_activity_log_page
 from frontendApp.views.error_page.error_page import error_page
 from frontendApp.views.progress_bar.progress_bar import progress_bar_page
-
+from frontendApp.views.rabbitmq.list_queues.list_queues import list_queues_page
+from frontendApp.views.ai_rate_limiter.list_ai_rate_limiter.list_ai_rate_limiter import list_ai_rate_limiter_page
+from frontendApp.views.configuration_settings.configuration_settings import list_configuration_settings_page,add_configuration_settings_page,update_configuration_settings_page
 
 from frontendApp.views.supportive_prompt_type.supportive_prompt_type import list_supportive_prompt_type_page, add_supportive_prompt_type_page, update_supportive_prompt_type_page
 from frontendApp.views.supportive_prompt.supportive_prompt import list_supportive_prompt_page, add_supportive_prompt_page, update_supportive_prompt_page
@@ -194,6 +196,20 @@ permissions_list = [
     {"name": "add_supportive_prompt_page", "route": "supportive-prompt/add/", "description": "add supportive-prompt", "status": "True", "group": "supportive-prompt"},
     {"name": "update_supportive_prompt_page", "route": "supportive-prompt/update/<slug:slug_id>", "description": "update supportive-prompt", "status": "True", "group": "supportive-prompt"},
     {"name": "delete_supportive_prompt_page", "route": "supportive-prompt/delete/<slug:slug_id>", "description": "delete supportive-prompt", "status": "True", "group": "supportive-prompt"},
+
+    # list_queues_page
+    {"name": "list_queues_page", "route": "queues/", "description": "all queues", "status": "True", "group": "list-queues"},
+    # list_ai_rate_limiter_page
+    {"name": "list_ai_rate_limiter_page", "route": "ai-rate-limiters/", "description": "all ai-rate-limiters", "status": "True", "group": "list-ai-rate-limiters"},
+
+
+    # configuration_settings
+    {"name": "list_configuration_settings_page", "route": "configuration-settings/", "description": "all configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "add_configuration_settings_page", "route": "configuration-settings/add/", "description": "add configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "update_configuration_settings_page", "route": "configuration-settings/update/<slug:slug_id>", "description": "update configuration-settings", "status": "True", "group": "configuration-settings"},
+    {"name": "delete_configuration_settings_page", "route": "configuration-settings/delete/<slug:slug_id>", "description": "delete configuration-settings", "status": "True", "group": "configuration-settings"},
+
+
 
 
     ######### image gen  #########

@@ -108,6 +108,14 @@ if (!step1 || !step2) {
 
         // Update URL
         updateURL("step1");
+
+        const temp_url = new URL(window.location);
+        temp_url.searchParams.delete("article_type_category");
+        temp_url.searchParams.delete("article_type_title");
+        temp_url.searchParams.delete("article_type_slug_id");
+    
+        window.history.pushState({}, "", temp_url);
+    
     }
 
     // Get step from URL

@@ -12,6 +12,7 @@ var new_password_url = `${url}new-password/`;
 var user_profile_url = `${url}user/profile/`;
 var update_user_profile_url = `${url}user/profile/update/`;
 var fetch_user_workspaces_url = `${url}fetch-workspaces/`;
+var fetch_user_permissions_url = `${url}fetch-permissions/`;
 
 var list_role_url = `${url}roles/`;
 var add_role_url = `${url}role/add/`;
@@ -192,8 +193,9 @@ var delete_notification_url = `${url}notification/delete/`;
 
 var list_perma_links_url = `${url}perma-links/`;
 
+var fetch_google_images_url = `${url}fetch/google-images/`;
 
-var find_google_image_url = `https://api.valueserp.com/search`;
+// var find_google_image_url = `https://api.valueserp.com/search`;
 
 var generate_single_image_url = `${url}generate-single-image/add/`;
 
@@ -208,12 +210,21 @@ var add_supportive_prompt_url = `${url}supportive-prompt/add/`;
 var update_supportive_prompt_url = `${url}supportive-prompt/update/`;
 var delete_supportive_prompt_url = `${url}supportive-prompt/delete/`;
 
+var list_configuration_settings_url = `${url}configuration-settings/`;
+var add_configuration_settings_url = `${url}configuration-settings/add/`;
+var update_configuration_settings_url = `${url}configuration-settings/update/`;
+var delete_configuration_settings_url = `${url}configuration-settings/delete/`;
+var get_config_field_url = `${url}config-fields/`;
+
 
 
 var list_article_info_url = `${url}info/articles/`;
 
 
 var list_variables_url = `${url}variables/`;
+var list_queues_url = `${url}queues/`;
+var update_worker_scale_url = `${url}worker-scale/update/`;
+var add_queue_url = `${url}queue/add/`;
 
 
 

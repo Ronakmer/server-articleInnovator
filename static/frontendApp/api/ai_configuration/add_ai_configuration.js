@@ -84,15 +84,20 @@ function add_ai_configuration_api() {
         
 
         if (data_obj && data_obj.data && data_obj.data.length > 0) {
+
+
             api_provider.value = data_obj.data[0].api_provider;
             api_type.value = data_obj.data[0].api_type;
             api_version.value = data_obj.data[0].api_version;
             api_key.value = data_obj.data[0].api_key;
-            api_model.value = data_obj.data[0].api_model;
             api_url.value = data_obj.data[0].api_url;
             email.value = data_obj.data[0].email;
+            api_model.value = data_obj.data[0].api_model;
+           
             // set_workspace_ids = data_obj.data[0].workspace_id.map(field => field.slug_id).join(', ')
             // alert(data_obj.data[0].api_model)
+
+
         } else {
             // name.value = ''; 
             window.location.href = error_page;

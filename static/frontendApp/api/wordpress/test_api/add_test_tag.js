@@ -16,9 +16,15 @@ async function add_test_tag() {
             body: JSON.stringify(data),
             // body: data,
         });
+
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
            
             console.log(data)
             
@@ -99,7 +105,7 @@ async function add_test_tag() {
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
 
             console.log(error_data)
             // Show api error

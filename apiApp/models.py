@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import uuid
 from datetime import datetime
-import random, os
+import random, os, json
 from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -22,7 +23,7 @@ class invitation_code_detail(models.Model):
     slug_id = models.CharField(max_length=100,default="", blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, related_name='created_by_user', on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, related_name='created_by_user', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -140,12 +141,13 @@ class dynamic_avatar_image(models.Model):
 #  workspace 
 class workspace(models.Model):
     name = models.CharField(max_length=200,default="", unique=True)
+    # rabbitmq_queue = models.TextField(null=True, blank=True, default="")
     logo = models.FileField(upload_to="workspace", null=True, blank=True)
     status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100,default="", blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -173,7 +175,7 @@ class ai_configuration(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -199,7 +201,7 @@ class image_kit_configuration(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -233,7 +235,7 @@ class user_detail(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date=models.DateTimeField(auto_now=True)
-    created_by=models.ForeignKey(to=User, related_name='created_by', on_delete=models.CASCADE, null=True, blank=True)
+    created_by=models.ForeignKey(to=User, related_name='created_by', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -279,7 +281,7 @@ class domain(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
     workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -291,7 +293,7 @@ class domain(models.Model):
         print(self.manager_id)
         return self.name
     
-    
+
 #  wordpress tag
 class wp_tag(models.Model):
     domain_id = models.ForeignKey(to=domain,on_delete=models.CASCADE)
@@ -303,6 +305,10 @@ class wp_tag(models.Model):
     slug_id = models.CharField(max_length=100,default="", blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    derived_by = models.CharField(max_length=200, default="", blank=True)
+    
+
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -325,6 +331,10 @@ class wp_category(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    derived_by = models.CharField(max_length=200, default="", blank=True)
+    
+
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -350,6 +360,10 @@ class wp_author(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    derived_by = models.CharField(max_length=200, default="", blank=True)
+
+
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -433,7 +447,7 @@ class motivation(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -475,6 +489,7 @@ class article_type(models.Model):
     CATEGORY_CHOICES = [
         ('keyword', 'Keyword'),
         ('url', 'Url'),
+        # ('manual', 'Manual'),
     ]
     ARTICLE_CATEGORY_CHOICES = [
         ('generative', 'Generative'),
@@ -486,7 +501,7 @@ class article_type(models.Model):
     article_type_field_id = models.ManyToManyField(article_type_field, blank=True)
     color_detail_id = models.ForeignKey(color_detail, on_delete=models.CASCADE,  null=True, blank=True)
     name = models.CharField(max_length=200,default="")
-    category = models.CharField(max_length=200, choices=CATEGORY_CHOICES, default='keyword')
+    category = models.CharField(max_length=200, choices=CATEGORY_CHOICES, null=True, blank=True)
     article_type_image = models.ImageField(upload_to="article-type", default="",  blank=True)    
     article_category = models.CharField(max_length=200, choices=ARTICLE_CATEGORY_CHOICES, null=True, blank=True)
     title = models.CharField(max_length=200, default="",  blank=True)
@@ -495,6 +510,8 @@ class article_type(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    # rabbitmq_queue = models.TextField(null=True, blank=True, default="")
+    rabbitmq_worker = models.CharField(max_length=200, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -508,6 +525,26 @@ class article_type(models.Model):
 
 
 
+#  rabbitmq_queue
+class rabbitmq_queue(models.Model):
+    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE, null=True, blank=True)
+    article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, default="",unique=True)
+    slug_id = models.CharField(max_length=100,default="",  blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    # Generate a slug using UUID
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
 #  supportive_prompt_type
 class supportive_prompt_type(models.Model):
     name = models.CharField(max_length=200, default="")
@@ -519,7 +556,7 @@ class supportive_prompt_type(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by=models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by=models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -568,7 +605,7 @@ class supportive_prompt(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by=models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by=models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -595,7 +632,7 @@ class prompt(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by=models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by=models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -650,7 +687,7 @@ class article(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -707,11 +744,11 @@ class internal_links(models.Model):
     from_post_id = models.IntegerField(null=True, blank=True)
     to_post_id = models.IntegerField(null=True, blank=True)
     ai_generated = models.BooleanField(default=False)
-    verify_by = models.ForeignKey(to=User, related_name='internal_links_verify_by', on_delete=models.CASCADE, null=True, blank=True)
+    verify_by = models.ForeignKey(to=User, related_name='internal_links_verify_by', on_delete=models.SET_NULL, null=True, blank=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, related_name='internal_links_created_by', on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, related_name='internal_links_created_by', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -731,11 +768,11 @@ class external_links(models.Model):
     domain_name = models.CharField(max_length=100, null=True, blank=True)
     url = models.CharField(max_length=100, null=True, blank=True)
     ai_generated = models.BooleanField(default=False)
-    verify_by = models.ForeignKey(to=User, related_name='external_links_verify_by', on_delete=models.CASCADE, null=True, blank=True)
+    verify_by = models.ForeignKey(to=User, related_name='external_links_verify_by', on_delete=models.SET_NULL, null=True, blank=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, related_name='external_links_created_by', on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, related_name='external_links_created_by', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -864,7 +901,7 @@ class competitor_domain_mapping(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     # Generate a slug using UUID
@@ -908,7 +945,7 @@ class competitor_sitemap_url_mapping(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     # Generate a slug using UUID
@@ -952,7 +989,7 @@ class competitor_article_url_mapping(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     # Generate a slug using UUID
@@ -975,7 +1012,7 @@ class competitor_extraction(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -1007,7 +1044,7 @@ class competitor_extraction_mapping(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -1037,7 +1074,7 @@ class competitor_seo_extraction_mapping(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -1079,7 +1116,7 @@ class keyword(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -1147,23 +1184,75 @@ class activity_log(models.Model):
     
 
 
+class configuration_settings(models.Model):
+    CONFIG_CHOICES = [
+        ('services', 'Services Configuration'),
+        ('retry', 'Retry Configuration'),
+        ('aws', 'AWS Configuration'),
+    ]
+
+    CONFIG_REQUIREMENTS = {
+        'services': ['url_endpoint'],
+        'retry': ['count'],
+        'aws': ['bucket_name', 'custom_domain', 'access_key', 'secret_key|textarea', 'region_name'],
+    }
+
+    name = models.CharField(max_length=50, choices=CONFIG_CHOICES)
+    config = models.JSONField(blank=True)
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    slug_id = models.CharField(max_length=100, default="", blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        config_type = self.name.lower()
+        required_keys = self.CONFIG_REQUIREMENTS.get(config_type)
+
+        if required_keys is None:
+            raise ValidationError("Invalid config name.")
+
+        missing = set(required_keys) - self.config.keys()
+        if missing:
+            raise ValidationError(f"Missing required keys in {self.name} config: {', '.join(missing)}")
+
+        if config_type == 'retry':
+            count = self.config.get('count')
+            if not isinstance(count, int) or count < 0:
+                raise ValidationError("RETRY count must be a non-negative integer.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+        super().save(*args, **kwargs)
+
+
+
+
+
 
 ######## image GEN ########
     
 #   image tag
 class image_tag(models.Model):
-    TAG_STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('suspend', 'Suspend'),
-    ]
+    # TAG_STATUS_CHOICES = [
+    #     ('active', 'Active'),
+    #     ('suspend', 'Suspend'),
+    # ]
 
     workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255, default="")
-    status = models.CharField( max_length=10, choices=TAG_STATUS_CHOICES, default='active')
+    # status = models.CharField( max_length=10, choices=TAG_STATUS_CHOICES, default='active')
+    status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -1181,14 +1270,16 @@ class image_template_category(models.Model):
     workspace_id = models.ForeignKey(to=workspace,on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255, default="", unique=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
+    status = models.BooleanField(default=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -1197,10 +1288,10 @@ class image_template_category(models.Model):
 
 #   image template
 class image_template(models.Model):
-    TEMPLATE_STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('suspend', 'Suspend'),
-    ]
+    # TEMPLATE_STATUS_CHOICES = [
+    #     ('active', 'Active'),
+    #     ('suspend', 'Suspend'),
+    # ]
 
     image_tag_id = models.ManyToManyField(image_tag, blank=True)
     image_template_category_id = models.ManyToManyField(image_template_category, blank=True)
@@ -1208,11 +1299,12 @@ class image_template(models.Model):
     name = models.CharField(max_length=255, default="")
     template_json = models.TextField()
     template_image_path = models.TextField()
-    status = models.CharField( max_length=10, choices=TEMPLATE_STATUS_CHOICES, default='active')
+    # status = models.CharField( max_length=10, choices=TEMPLATE_STATUS_CHOICES, default='active')
+    status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):
@@ -1234,7 +1326,7 @@ class image_tag_template_category_template_mapping(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User,on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(to=User,on_delete=models.SET_NULL, null=True, blank=True)
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):

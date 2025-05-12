@@ -184,15 +184,7 @@ def add_user_detail(request):
 @workspace_permission_required
 def update_user_detail(request, slug_id):
     try:
-        full_name=request.POST.get('full_name')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-        role_id=role.objects.get(name='user')                
-        workspace_slugs_str = request.POST.get('workspace_slug_id')
-        profile_image=request.FILES.get('profile_image')
-        logo = profile_image
-        avatar_image_path = request.data.get("avatar_image_path")
-            
+        
         try:
             user_obj = user_detail.objects.get(slug_id=slug_id)
         except user_detail.DoesNotExist:
@@ -201,6 +193,29 @@ def update_user_detail(request, slug_id):
                 "success": False,
             }, status=404) 
             
+            
+        status = request.data.get("status")
+        
+        if status is not None and status != "":
+            user_obj.status = status
+            user_obj.save()
+            serialized_admin_data = user_detail_serializer(user_obj).data
+
+            return JsonResponse({
+                "message": "Status updated successfully.",
+                "success": True,
+                "data": serialized_admin_data,
+            }, status=200)   
+        
+        full_name=request.POST.get('full_name')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        role_id=role.objects.get(name='user')                
+        workspace_slugs_str = request.POST.get('workspace_slug_id')
+        profile_image=request.FILES.get('profile_image')
+        logo = profile_image
+        avatar_image_path = request.data.get("avatar_image_path")
+                     
         if not user_obj.user_id.email == email:
             if User.objects.filter(username=email).exists():
                 return JsonResponse({

@@ -14,7 +14,8 @@ from apiApp.models import (
     competitor_article_url_mapping, competitor_extraction, 
     competitor_extraction_mapping, competitor_seo_extraction_mapping, 
     user_api_key, keyword, image_kit_configuration, notification,
-    activity_log, supportive_prompt_type, supportive_prompt, variables
+    activity_log, supportive_prompt_type, supportive_prompt, variables,
+    rabbitmq_queue, configuration_settings
 )
 # Register your models here.
 
@@ -64,3 +65,5 @@ admin.site.register(activity_log)
 admin.site.register(supportive_prompt_type)
 admin.site.register(supportive_prompt)
 admin.site.register(variables)
+admin.site.register(rabbitmq_queue)
+admin.site.register(configuration_settings)

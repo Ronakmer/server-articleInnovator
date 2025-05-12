@@ -150,7 +150,8 @@ function handleTabSelection(tab) {
     const showFields = {
         'OpenAI': ['key_id', 'model_id', 'button_id', 'email_id'],
         'Azure': ['version_id', 'url_id', 'type_id', 'email_id', 'model_id', 'key_id', 'button_id'],
-        'Claude': ['key_id', 'email_id', 'model_id', 'button_id']
+        'Claude': ['key_id', 'email_id', 'model_id', 'button_id'],
+        'Novita': ['url_id', 'type_id', 'email_id', 'model_id', 'key_id', 'button_id'],
     };
 
     if (showFields[tabName]) {
@@ -164,6 +165,7 @@ function handleTabSelection(tab) {
 
     // Set hidden input field if it exists
     const apiProviderInput = document.getElementById('api_provider');
+    // alert(apiProviderInput.value)
     if (apiProviderInput) {
         apiProviderInput.value = tabName;
     }
@@ -373,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('input[name="model_name[]"]').forEach(input => {
             input.addEventListener('input', updateApiModelInput);
         });
-    }, 100);
+    }, 500);
 
     // Pre-populate model inputs when the page loads
     prePopulateModelInputs();

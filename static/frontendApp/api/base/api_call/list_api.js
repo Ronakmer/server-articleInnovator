@@ -31,9 +31,13 @@ async function list_api(api_url, table_name, offset, limit, filters, delete_func
             },
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('fetched successfully:', data);
             console.log('fetched successfully:', data.pagination.total_count);
             const total_count = data.pagination.total_count;
@@ -45,7 +49,7 @@ async function list_api(api_url, table_name, offset, limit, filters, delete_func
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";

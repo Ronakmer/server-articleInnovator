@@ -26,9 +26,15 @@ async function delete_api(api_url, slug_id, domain_slug_id=NaN) {
             },
         });
 
+        
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('Roles fetched successfully:', data);
 
             show_toast("success", `${data.message}`);
@@ -40,7 +46,7 @@ async function delete_api(api_url, slug_id, domain_slug_id=NaN) {
             }
 
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";

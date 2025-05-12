@@ -80,3 +80,7 @@ class Handler:
 # Instantiate the handler
 db_handler = Handler()
 
+
+
+
+# Record was: {'elapsed': datetime.timedelta(seconds=14, microseconds=738284), 'exception': None, 'extra': {'extra': {'notify': True, 'status_code': 200, 'workspace_slug_id': '77b4ad49-db8a-4434-aad5-c2351c953cc7', 'url': '/api/roles/', 'request_user': <User: superadmin@gmail.com>, 'domain_slug_id': 'ec676a34-eb18-4610-b1b8-99ba7d26d87a', 'user_status': True}}, 'file': (name='role.py', path='C:\\Users\\DELL\\Desktop\\botxbyte\\0-Article Innovator\\articleInnovator\\apiApp\\views\\role\\role.py'), 'function': 'list_role', 'level': (name='INFO', no=20, icon='ℹ️'), 'line': 48, 'message': 'This is aan info log message', 'module': 'role', 'name': 'apiApp.views.role.role', 'process': (id=12024, name='MainProcess'), 'thread': (id=20768, name='Thread-50 (process_request_thread)'), 'time': datetime(2025, 5, 5, 13, 5, 12, 489183, tzinfo=datetime.timezone(datetime.timedelta(seconds=19800), 'India Standard Time'))}

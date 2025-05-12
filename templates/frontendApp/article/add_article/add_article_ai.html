@@ -17,8 +17,8 @@
                     </div>
                     <span class="ml-2 text-gray-600 text-center font-bold" name="article_type_title" id="article_type_title"></span>
                     
-                    <!--for api -->
-                    <input type="hidden" id="ai_article_type_slug_id" name="ai_article_type_slug_id" placeholder="Enter AI Article Type Slug ID"/>
+                    {% comment %} <!--for api -->
+                    <input type="hidden" id="ai_article_type_slug_id" name="ai_article_type_slug_id" placeholder="Enter AI Article Type Slug ID"/> {% endcomment %}
                 </div>                
 
                 <div class="flex flex-col md:flex-row items-start gap-3">
@@ -31,7 +31,7 @@
                                 </select>
 
                                 <!-- for pass data in api -->
-                                <input type="hidden" name="ai_domain_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                                <input type="text" name="ai_domain_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
                                 placeholder="">
 
                                 <!-- Custom dropdown arrow -->
@@ -111,7 +111,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row items-start gap-3" id="ai_url">
+                <div class="flex flex-col md:flex-row items-start gap-3 hidden" id="ai_url">
                     <div class="block w-full ">
                         <label for="countries"
                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Url
@@ -121,13 +121,13 @@
                             d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                             fill="#EF4444"></path>
                         </svg></label>
-                        <textarea id="default-search" name="url" rows="4" 
+                        <textarea id="url_id" name="url" rows="4" 
                         class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed" 
                         placeholder="https://domain.com/article1" required=""></textarea>
                     </div>
                 </div>
                 
-                <div class="flex flex-col md:flex-row items-start gap-3" id="ai_keyword">
+                <div class="flex flex-col md:flex-row items-start gap-3 hidden" id="ai_keyword">
                     <div class="block w-full ">
                         <label for="countries"
                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Keyword
@@ -137,7 +137,7 @@
                             d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                             fill="#EF4444"></path>
                         </svg></label>
-                        <textarea id="default-search" name="keyword" rows="4" 
+                        <textarea id="keyword_id" name="keyword" rows="4" 
                         class="block w-full px-3 py-1.5 pr-8 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed" 
                         placeholder="Keyword .." required=""></textarea>
                     </div>

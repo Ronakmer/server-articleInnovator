@@ -7,6 +7,11 @@ from django.db.models import Q
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
 from apiApp.views.variables.variables import add_variables, update_variables
 
+from apiApp.views.rabbitmq_api.create_rabbitmq_queues_for_article_type.create_rabbitmq_queues_for_article_type import create_rabbitmq_queues_for_article_type
+from apiApp.views.rabbitmq_api.delete_rabbitmq_queues_for_article_type.delete_rabbitmq_queues_for_article_type import delete_rabbitmq_queues_for_article_type
+from apiApp.views.rabbitmq_api.update_rabbitmq_queues_for_article_type.update_rabbitmq_queues_for_article_type import update_rabbitmq_queues_for_article_type
+
+import threading
 
 
 # show article type
@@ -76,28 +81,36 @@ def add_article_type(request):
         article_type_field_slug_ids = request.data.get('article_type_field_slug_id') 
         supportive_variables_data = request.data.get('supportive_variables_data') 
         print(supportive_variables_data,'supportive_variables_data')
+        article_category = request.data.get("article_category")
+        print(article_category,'article_category')
 
-        if article_type_field_slug_ids:
-            article_type_field_slugs = article_type_field_slug_ids.split(",") 
-            
+
         if not color_detail_slug_id:
             return JsonResponse({
                 "error": "color detail slug id are required.",
                 "success": False,
             }, status=400)
-        if not article_type_field_slug_ids:
-            return JsonResponse({
-                "error": "article type field slug id are required.",
-                "success": False,
-            }, status=400)
+
+        if article_category != "manual":
+            if article_type_field_slug_ids:
+                article_type_field_slugs = article_type_field_slug_ids.split(",") 
+                
+            if not article_type_field_slug_ids:
+                return JsonResponse({
+                    "error": "article type field slug id are required.",
+                    "success": False,
+                }, status=400)
+
+            try:
+                article_type_field_objs = article_type_field.objects.filter(slug_id__in=article_type_field_slugs)
+            except article_type_field.DoesNotExist:
+                return JsonResponse({"error": "No matching Article Type Fields found.","success": False}, status=404)
 
         try:
             color_detail_obj = color_detail.objects.get(slug_id=color_detail_slug_id)
-            article_type_field_objs = article_type_field.objects.filter(slug_id__in=article_type_field_slugs)
         except color_detail.DoesNotExist:
             return JsonResponse({"error": "Color Detail not found.","success": False}, status=404)
-        except article_type_field.DoesNotExist:
-            return JsonResponse({"error": "No matching Article Type Fields found.","success": False}, status=404)
+
 
         # Include `color_detail_id` in the request data for the serializer
         data = request.data.copy()
@@ -108,15 +121,27 @@ def add_article_type(request):
         if serialized_data.is_valid():
             
             article_type_obj = serialized_data.save()
-            article_type_obj.article_type_field_id.set(article_type_field_objs)
-            _, error = add_variables(supportive_variables_data, article_type_obj.slug_id)
+            if article_category != "manual":
+                article_type_obj.article_type_field_id.set(article_type_field_objs)
+                _, error = add_variables(supportive_variables_data, article_type_obj.slug_id)
             
-            if error:
-                return JsonResponse({
-                    "error": error,
-                    "success": False,
-                }, status=400)
-                
+                if error:
+                    return JsonResponse({
+                        "error": error,
+                        "success": False,
+                    }, status=400)
+            
+            def call_create_rabbitmq(slug_id):
+                try:
+                    rabbitmq_result, error = create_rabbitmq_queues_for_article_type(slug_id)
+                    print(rabbitmq_result, 'rabbitmq_result')
+                except Exception as ex:
+                    print(ex)
+
+            # Start both functions in separate threads
+            threading.Thread(target=call_create_rabbitmq, args=(article_type_obj.slug_id,)).start()
+
+
             return JsonResponse({
                 "message": "Data added successfully.",
                 "data": serialized_data.data,
@@ -147,31 +172,53 @@ def update_article_type(request, slug_id):
                 "success": False,
             }, status=404)   
             
+            
+        status = request.data.get("status")
+        if status is not None and status != "":
+            serialized_data = article_type_serializer(instance=obj, data=request.data, partial=True)
+            if serialized_data.is_valid():
+                serialized_data.save()
+                return JsonResponse({
+                    "message": "Status updated successfully.",
+                    "success": True,
+                    "data": serialized_data.data,
+                }, status=200)
+            else:
+                return JsonResponse({
+                    "error": "Invalid data.",
+                    "errors": serialized_data.errors,
+                    "success": False,
+                }, status=400)
+                
+            
         color_detail_slug_id = request.data.get('color_detail_slug_id') 
         supportive_variables_data = request.data.get('supportive_variables_data') 
+        article_category = request.data.get("article_category")
 
         article_type_field_slug_ids = request.data.get('article_type_field_slug_id') 
-        if article_type_field_slug_ids:
-            article_type_field_slugs = article_type_field_slug_ids.split(",") 
         
         if not color_detail_slug_id:
             return JsonResponse({
                 "error": "color detail slug id are required.",
                 "success": False,
             }, status=400)
-        if not article_type_field_slug_ids:
-            return JsonResponse({
-                "error": "article type field slug id are required.",
-                "success": False,
-            }, status=400)
+        if article_category != "manual":
+            if article_type_field_slug_ids:
+                article_type_field_slugs = article_type_field_slug_ids.split(",") 
+            if not article_type_field_slug_ids:
+                return JsonResponse({
+                    "error": "article type field slug id are required.",
+                    "success": False,
+                }, status=400)
 
+            try:
+                article_type_field_objs = article_type_field.objects.filter(slug_id__in=article_type_field_slugs)
+            except article_type_field.DoesNotExist:
+                return JsonResponse({"error": "No matching Article Type Fields found.","success": False}, status=404)
         try:
             color_detail_obj = color_detail.objects.get(slug_id=color_detail_slug_id)
-            article_type_field_objs = article_type_field.objects.filter(slug_id__in=article_type_field_slugs)
         except color_detail.DoesNotExist:
             return JsonResponse({"error": "Color Detail not found.","success": False}, status=404)
-        except article_type_field.DoesNotExist:
-            return JsonResponse({"error": "No matching Article Type Fields found.","success": False}, status=404)
 
         # Include `color_detail_id` in the request data for the serializer
         data = request.data.copy()
@@ -181,14 +228,27 @@ def update_article_type(request, slug_id):
         
         if serialized_data.is_valid():
             article_type_obj = serialized_data.save()
-            article_type_obj.article_type_field_id.set(article_type_field_objs)
-            _, error = update_variables(supportive_variables_data, article_type_obj.slug_id)
+            if article_category != "manual":
 
-            if error:
-                return JsonResponse({
-                    "error": error,
-                    "success": False,
-                }, status=400)
+                article_type_obj.article_type_field_id.set(article_type_field_objs)
+                _, error = update_variables(supportive_variables_data, article_type_obj.slug_id)
+
+                if error:
+                    return JsonResponse({
+                        "error": error,
+                        "success": False,
+                    }, status=400)
+
+            def call_update_rabbitmq(slug_id):
+                try:
+                    rabbitmq_result, error = update_rabbitmq_queues_for_article_type(slug_id)
+                    print(rabbitmq_result, 'rabbitmq_result')
+                except Exception as ex:
+                    print(ex)
+
+            # Start both functions in separate threads
+            threading.Thread(target=call_update_rabbitmq, args=(article_type_obj.slug_id,)).start()
+
 
             return JsonResponse({
                 "message": "Data updated successfully.",
@@ -219,6 +279,15 @@ def delete_article_type(request, slug_id):
                 "error": "article type not found.",
                 "success": False,
             }, status=404) 
+            
+
+        rabbitmq_delete_response, delete_error = delete_rabbitmq_queues_for_article_type(slug_id)
+        if delete_error or not rabbitmq_delete_response:
+            return JsonResponse({
+                "error": f"Failed to delete queues for the article_type. {delete_error or rabbitmq_delete_response}",
+                "success": False,
+            }, status=400)
+
                 
         obj.delete()
         

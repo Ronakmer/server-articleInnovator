@@ -29,10 +29,14 @@ async function user_workspace_data_api() {
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('successfully:', data);
 
             const user_data = data.data;
@@ -40,7 +44,7 @@ async function user_workspace_data_api() {
             set_user_workspace_data(user_data);
 
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";

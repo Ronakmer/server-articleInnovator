@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             }
-        }, 100);
+        }, 500);
 
 
     }) 
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const color_input = document.querySelector("input[name='color']");
                 color_input.value = set_color_slug_id;
             }
-        }, 100);
+        }, 500);
 
 
     }) 

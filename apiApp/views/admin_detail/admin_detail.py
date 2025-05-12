@@ -167,22 +167,7 @@ def add_admin_detail(request):
 @api_view(['PATCH'])
 def update_admin_detail(request, slug_id):
     try:
-        full_name=request.POST.get('full_name')
-        profile_image=request.FILES.get('profile_image')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-        role_id=role.objects.get(name='admin')                
-        article_limitation = request.POST.get('article_limitation')
-        domain_limitation = request.POST.get('domain_limitation')
-        workspace_limitation = request.POST.get('workspace_limitation')
         
-        if User.objects.filter(username=email).exists():
-            return JsonResponse({
-                "error": "User with this email already exists.",
-                "success": False,
-            }, status=400)
-
-
         try:
             admin_obj = user_detail.objects.get(slug_id=slug_id)
         except user_detail.DoesNotExist:
@@ -191,21 +176,55 @@ def update_admin_detail(request, slug_id):
                 "success": False,
             }, status=404) 
 
+        status = request.data.get("status")
+        
+        if status is not None and status != "":
+            admin_obj.status = status
+            admin_obj.save()
+            serialized_admin_data = user_detail_serializer(admin_obj).data
+
+            return JsonResponse({
+                "message": "Status updated successfully.",
+                "success": True,
+                "data": serialized_admin_data,
+            }, status=200)
+            
+        full_name=request.POST.get('full_name',admin_obj.full_name)
+        profile_image=request.FILES.get('profile_image')
+        password = request.POST.get('password',admin_obj.user_id.password)
+        email = request.POST.get('email',admin_obj.user_id.email)
+        role_id=role.objects.get(name='admin')                
+        article_limitation = request.POST.get('article_limitation',admin_obj.article_limitation)
+        domain_limitation = request.POST.get('domain_limitation',admin_obj.domain_limitation)
+        workspace_limitation = request.POST.get('workspace_limitation',admin_obj.workspace_limitation)
+        
+        if email != admin_obj.user_id.email and User.objects.filter(username=email).exists():
+            return JsonResponse({
+                "error": "User with this email already exists.",
+                "success": False,
+            }, status=400)
+
+
+        # Update user model
+        if password:
+            admin_obj.user_id.password = make_password(password)
+        if email:
+            admin_obj.user_id.email = email
+            admin_obj.user_id.username = email  # required by default User model
+
+        # Update user_detail model
+        admin_obj.full_name = full_name
         admin_obj.article_limitation = article_limitation
         admin_obj.domain_limitation = domain_limitation
         admin_obj.workspace_limitation = workspace_limitation
-
-        if password:
-            admin_obj.user_id.password = make_password(password)
-        admin_obj.full_name = full_name
         if profile_image:
             admin_obj.profile_image = profile_image
-        
+
         admin_obj.user_id.save()
         admin_obj.save()
-        
-        serialized_admin_data = user_detail_serializer(admin_obj).data
 
+        serialized_admin_data = user_detail_serializer(admin_obj).data
+        
         return JsonResponse({
             "message": "Data updated successfully.",
             "success": True,

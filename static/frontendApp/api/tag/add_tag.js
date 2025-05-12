@@ -24,6 +24,7 @@ function add_tag_api() {
     data.append("domain_slug_id", domain_slug_id);
     data.append("tag_wp_id", tag_wp_id);
     data.append("name", name);
+    data.append("derived_by", 'user');
 
     
     (async ()=>{ 

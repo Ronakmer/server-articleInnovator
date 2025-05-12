@@ -285,6 +285,125 @@ def verify_azure_api(api_key, api_models, api_url, api_version):
 
 
 
+# def verify_novita_api(api_key, api_models, api_url, api_version=None):
+#     """
+#     Verify Novita API configuration.
+    
+#     Args:
+#         api_key (str): Novita API key
+#         api_models (list): List of models to verify
+#         api_url (str): Novita API base URL
+#         api_version (str, optional): API version
+    
+#     Returns:
+#         dict: Verification results
+#     """
+#     success = False
+#     failed_models = []
+
+#     for model in api_models:
+#         try:
+#             url = f"{api_url}/v1/models/{model}/verify?api-version={api_version or 'v1'}"
+#             headers = {
+#                 "Authorization": f"Bearer {api_key}",
+#                 "Content-Type": "application/json"
+#             }
+#             data = {
+#                 "messages": [{"role": "user", "content": "Verify Novita API key?"}],
+#                 "max_tokens": 10
+#             }
+
+#             response = requests.post(
+#                 url, 
+#                 headers=headers, 
+#                 json=data,
+#                 timeout=10
+#             )
+            
+#             if response.status_code == 200:
+#                 success = True
+#             else:
+#                 failed_models.append(model)
+#                 logger.warning(f"Novita API verification failed for model {model}")
+#         except requests.RequestException as e:
+#             logger.error(f"Novita API request error: {e}")
+#             failed_models.append(model)
+
+#     return {
+#         "success": len(failed_models) == 0,
+#         "failed_models": failed_models
+#     }
+
+
+def verify_novita_api(api_key, api_models, api_url, api_version=None):
+    """
+    Verify Novita API configuration.
+    
+    Args:
+        api_key (str): Novita API key
+        api_models (list or str): List of models or single model string to verify
+        api_url (str): Novita API base URL
+        api_version (str, optional): API version
+    
+    Returns:
+        dict: Verification results
+    """
+    import requests
+    import logging
+
+    # Set up logger if not already configured
+    logger = logging.getLogger(__name__)
+    
+    success = True
+    failed_models = []
+
+    # Convert single model string to list if needed
+    if isinstance(api_models, str):
+        api_models = [api_models]
+
+    for model in api_models:
+        try:
+            # Build the URL correctly based on Novita API structure
+            # The URL should be the base endpoint, not model-specific
+            url = f"{api_url}/chat/completions"
+            
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            # Format the request payload according to Novita API
+            data = {
+                "model": model,
+                "messages": [{"role": "user", "content": "Verify Novita API key"}],
+                "max_tokens": 10
+            }
+
+            response = requests.post(
+                url, 
+                headers=headers, 
+                json=data,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                logger.info(f"Novita API verification successful for model {model}")
+            else:
+                failed_models.append(model)
+                logger.warning(f"Novita API verification failed for model {model}. Status code: {response.status_code}, Response: {response.text}")
+                success = False
+        except requests.RequestException as e:
+            logger.error(f"Novita API request error for model {model}: {e}")
+            failed_models.append(model)
+            success = False
+
+    return {
+        "success": success,
+        "failed_models": failed_models
+    }
+
+
+
 @api_view(['POST'])
 def verify_ai_configuration(request):
     try:
@@ -307,6 +426,9 @@ def verify_ai_configuration(request):
             verification_result = verify_openai_api(api_key, validated_models)
         elif api_provider == "Azure":
             verification_result = verify_azure_api(api_key, validated_models, api_url, api_version)
+        elif api_provider == "Novita":  # New case for Novita
+            verification_result = verify_novita_api(api_key, validated_models, api_url, api_version)
+
         else:
             return JsonResponse({
                 "success": False, 

@@ -68,6 +68,26 @@ function table_data_ai_configuration(tbody_name, response_data, delete_function_
                                 fill="#D97757" />
                         </svg>
                     `;
+                case "Novita":
+                    return `
+                       <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 300 300" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <defs>
+                            <style>
+                                .st0 {fill: none;}
+                                .st1 {fill: #010101;}
+                                .st2 {clip-path: url(#clippath);}
+                            </style>
+                            <clipPath id="clippath">
+                                <rect class="st0" x="43.2" y="84.4" width="213" height="131.6"/>
+                            </clipPath>
+                        </defs>
+                        <g class="st2">
+                            <path class="st1" d="M256.2,216h0s-85.9,0-85.9,0l-45.8-45.8v45.8H43.2s81.3-81.4,81.3-81.4v-50.3h0l131.6,131.6Z"/>
+                        </g>
+                    </svg>
+
+                    `;
+                    
             }
             })()}
 

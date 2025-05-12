@@ -92,7 +92,7 @@ function add_supportive_prompt_api() {
             // alert(supportive_variables_data)
             updateTimeout = setTimeout(() => {
                 updatePreview();  // Your actual update logic
-            }, 500); // Delay in milliseconds (adjust as needed)
+            }, 5000); // Delay in milliseconds (adjust as needed)
         
         } else {
             window.location.href = error_page;

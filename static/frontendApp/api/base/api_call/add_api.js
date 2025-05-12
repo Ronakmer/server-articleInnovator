@@ -29,10 +29,16 @@ async function add_api(api_url, data, redirect_url) {
         });
         
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+        
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
-           
+            const data = responseData;
+
+            
             console.log(data)
             show_toast("success", `${data.message}`);
 
@@ -51,7 +57,7 @@ async function add_api(api_url, data, redirect_url) {
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
 
             console.log(error_data)
             // Show api error

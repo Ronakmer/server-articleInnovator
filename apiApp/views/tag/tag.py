@@ -96,7 +96,8 @@ def add_tag(request):
         description = request.data.get('description')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
-            
+        request_user = request.user
+        
         if not (name and slug and description and domain_slug_id):
             return JsonResponse({"error": "name, slug, domain, workspace slug id is required fields.","success": False}, status=400)
         
@@ -158,6 +159,7 @@ def add_tag(request):
             tag_obj.domain_id = domain_id
             tag_obj.wp_tag_id = tag_id
             tag_obj.workspace_id = workspace_id
+            tag_obj.created_by = request_user.id 
             tag_obj.save()
                 
             serialized_tag_data = wp_tag_serializer(tag_obj).data

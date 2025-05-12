@@ -94,7 +94,7 @@ function table_data_role(tbody_name, response_data, delete_function_name, status
         `;
         tbody.appendChild(tr);
     });
-handle_permissions();
+// handle_permissions();
 
 }
 

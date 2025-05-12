@@ -8,9 +8,13 @@ from django.db.models import Q
 from apiApp.views.base.dynamic_avatar_image_process.dynamic_avatar_image_process import dynamic_avatar_image_process
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
-from apiApp.views.ai_rate_limiter_api.register_workspace_api.register_workspace_api import register_workspace_api
-from apiApp.views.ai_rate_limiter_api.delete_workspace_api.delete_workspace_api import delete_workspace_api
+from apiApp.views.ai_rate_limiter_api.register_ai_rate_limiter_workspace_api.register_ai_rate_limiter_workspace_api import register_ai_rate_limiter_workspace_api
+from apiApp.views.ai_rate_limiter_api.delete_ai_rate_limiter_workspace_api.delete_ai_rate_limiter_workspace_api import delete_ai_rate_limiter_workspace_api
 
+from apiApp.views.rabbitmq_api.create_rabbitmq_queues_for_workspace.create_rabbitmq_queues_for_workspace import create_rabbitmq_queues_for_workspace
+from apiApp.views.rabbitmq_api.delete_rabbitmq_queues_for_workspace.delete_rabbitmq_queues_for_workspace import delete_rabbitmq_queues_for_workspace
+
+import threading
 
 
 
@@ -75,11 +79,11 @@ def list_workspace(request):
 # @workspace_permission_required
 def add_workspace(request):
     try:
-        # Check if the user has exceeded their workspace limit
         request_user = request.user
         # print(request.abc,'request.abc')
         
-        if not request_user.is_superuser:   
+        # Check if the user has exceeded their workspace limit
+        if request.is_admin:   
             try:
                 # Get the user's workspace limit
                 user_obj = user_detail.objects.get(user_id=request_user.id)
@@ -136,11 +140,25 @@ def add_workspace(request):
 
                 print(workspace_obj.slug_id,'sssssssssssssssssssssssssssssssssss')
                 # Call register_workspace API
-                result, error = register_workspace_api(workspace_obj.slug_id)
-                print(result,'result-workspace')
+                def call_register_workspace(slug_id):
+                    try:
+                        ai_rate_limiter_result, error = register_ai_rate_limiter_workspace_api(slug_id)
+                        print(ai_rate_limiter_result, 'ai_rate_limiter_result cc')
+                    except Exception as ex:
+                        print(ex)
 
+                def call_create_rabbitmq(slug_id):
+                    try:
+                        rabbitmq_result, error = create_rabbitmq_queues_for_workspace(slug_id)
+                        print(rabbitmq_result, 'rabbitmq_result')
+                    except Exception as ex:
+                        print(ex)
 
-                if not request.user.is_superuser:
+                # Start both functions in separate threads
+                threading.Thread(target=call_register_workspace, args=(workspace_obj.slug_id,)).start()
+                threading.Thread(target=call_create_rabbitmq, args=(workspace_obj.slug_id,)).start()
+
+                if request.is_admin:
                     user_obj = user_detail.objects.get(user_id=request_user.id)
                     user_obj.workspace_id.add(workspace_obj)
                     user_obj.save()
@@ -249,13 +267,23 @@ def delete_workspace(request, slug_id):
                 "success": False,
             }, status=404) 
             
-        delete_response, delete_error = delete_workspace_api(slug_id)
+        _, error = delete_ai_rate_limiter_workspace_api(slug_id)
             
-        if delete_error or not delete_response or delete_response.get('status') != 'success':
+        if error:
             return JsonResponse({
-                "error": f"Failed to delete workspace via API. {delete_error or delete_response}",
+                "error": f"Failed to delete workspace via API. {error}",
                 "success": False,
             }, status=400)
+            
+            
+        rabbitmq_delete_response, delete_error = delete_rabbitmq_queues_for_workspace(slug_id)
+
+        if delete_error or not rabbitmq_delete_response:
+            return JsonResponse({
+                "error": f"Failed to delete queues for the workspace. {delete_error or rabbitmq_delete_response}",
+                "success": False,
+            }, status=400)
+
     
         
         obj.delete()

@@ -26,6 +26,9 @@ function table_data_article_type(tbody_name, response_data, delete_function_name
             <td class="py-3.5 pl-4 whitespace-nowrap font-normal text-gray-900 pb-6">
                 ${obj.category}
             </td>
+            <td class="py-3.5 pl-4 whitespace-nowrap font-normal text-gray-900 pb-6">
+                ${obj.rabbitmq_worker}
+            </td>
             <td class="py-3.5 pl-4 whitespace-nowrap hidden" data-permission="update_article_type">
                 <div class="flipswitch">
                     <input 

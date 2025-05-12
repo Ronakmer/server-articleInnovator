@@ -7,8 +7,9 @@ from django.db.models import Q
 from apiApp.views.decorator.workspace_decorator import workspace_permission_required
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
 
-from apiApp.views.ai_rate_limiter_api.add_provider_key_api.add_provider_key_api import add_provider_key_api
-from apiApp.views.ai_rate_limiter_api.delete_provider_key_api.delete_provider_key_api import delete_provider_key_api
+from apiApp.views.ai_rate_limiter_api.add_ai_rate_limiter_provider_key_api.add_ai_rate_limiter_provider_key_api import add_ai_rate_limiter_provider_key_api
+from apiApp.views.ai_rate_limiter_api.delete_ai_rate_limiter_provider_key_api.delete_ai_rate_limiter_provider_key_api import delete_ai_rate_limiter_provider_key_api
+from apiApp.views.ai_rate_limiter_api.update_ai_rate_limiter_provider_key_api.update_ai_rate_limiter_provider_key_api import update_ai_rate_limiter_provider_key_api
 
 
 
@@ -82,57 +83,6 @@ def list_ai_configuration(request):
 
 
 
-# # add ai configuration
-# @api_view(['POST'])
-# @workspace_permission_required
-# def add_ai_configuration(request):
-#     try:
-#         request_user = request.user
-
-#         # Retrieve workspace using slug ID
-#         workspace_slug_id = request.data.get("workspace_slug_id")  
-#         if not workspace_slug_id:
-#             return JsonResponse({
-#                 "error": "workspace slug id is required.",
-#                 "success": False,
-#             }, status=400)
-#         print(workspace_slug_id,'workspace_slug_id') 
-        
-#         try:
-#             workspace_obj = workspace.objects.get(slug_id=workspace_slug_id)
-#         except workspace.DoesNotExist:
-#             return JsonResponse({
-#                 "error": "workspace not found ",
-#                 "success": False,
-#             }, status=404)
-
-#         # Prepare the data for the serializer, replacing slug with the workspace instance's PK
-#         data = request.data.copy()
-#         data["workspace_id"] = workspace_obj.id
-#         data["created_by"] = request_user.id  
-
-#         serialized_data = ai_configuration_serializer(data=data)
-        
-#         if serialized_data.is_valid():
-
-#             serialized_data.save()
-
-#             return JsonResponse({
-#                 "message": "Data added successfully.",
-#                 "success": True,
-#                 "data": serialized_data.data,
-#             }, status=200)
-#         else:
-#             return JsonResponse({
-#                 "error": "Invalid data.",
-#                 "success": False,
-#                 "errors": serialized_data.errors,
-#             }, status=400)
-
-#     except Exception as e:
-#         print("This error is add_ai_configuration --->: ", e)
-#         return JsonResponse({"error": "Internal server error.","success": False}, status=500)
-
 
     
     
@@ -180,7 +130,7 @@ def add_ai_configuration(request):
                 data["api_model"] = ai_model  # Store a single model per entry
 
                 # Add provider key
-                provider_response = add_provider_key_api(workspace_obj.slug_id, data)
+                provider_response = add_ai_rate_limiter_provider_key_api(workspace_obj.slug_id, data)
 
                 # Extract key_id if available
                 if isinstance(provider_response, tuple):
@@ -227,6 +177,7 @@ def add_ai_configuration(request):
 def update_ai_configuration(request, slug_id):
     try:
 
+        print(request.data,'requestx')
         try:
             obj = ai_configuration.objects.get(slug_id=slug_id)
         except ai_configuration.DoesNotExist:
@@ -235,8 +186,27 @@ def update_ai_configuration(request, slug_id):
                 "success": False,
             }, status=404)   
 
+        status = request.data.get("status")
+        if status is not None and status != "":
+            serialized_data = ai_configuration_serializer(instance=obj, data=request.data, partial=True)
+            if serialized_data.is_valid():
+                serialized_data.save()
+                return JsonResponse({
+                    "message": "Status updated successfully.",
+                    "success": True,
+                    "data": serialized_data.data,
+                }, status=200)
+            else:
+                return JsonResponse({
+                    "error": "Invalid data.",
+                    "errors": serialized_data.errors,
+                    "success": False,
+                }, status=400)
+
+
         # Retrieve workspace using slug ID
         workspace_slug_id = request.data.get("workspace_slug_id")  
+        
         if not workspace_slug_id:
             return JsonResponse({
                 "error": "workspace slug id is required.",
@@ -256,11 +226,42 @@ def update_ai_configuration(request, slug_id):
                 "error": "workspace not found ",
                 "success": False,
             }, status=404)
+            
+            
+        delete_response, delete_error = delete_ai_rate_limiter_provider_key_api(workspace_obj.slug_id, obj.ai_rate_key_id)
+
+        if delete_error or not delete_response or delete_response.get('status') != 'success':
+            return JsonResponse({
+                "error": f"Failed to delete ai configuration via API. {delete_error or delete_response}",
+                "success": False,
+            }, status=400)
+        
+
+        provider_data = {
+            "api_provider": request.data.get('api_provider', ''),
+            "api_key": request.data.get('api_key', ''),
+            "api_model": request.data.get('api_model', ''),
+            "api_type": request.data.get('api_type', ''),
+            "api_version": request.data.get('api_version', ''),
+            "api_url": request.data.get('api_url', ''),
+            "email": request.data.get('email', ''),
+        }
+   
+        key_response, error = update_ai_rate_limiter_provider_key_api(workspace_obj.slug_id, provider_data)
+        if error:
+            return JsonResponse({
+                "error": "Failed to create new API key.",
+                "details": error,
+                "success": False
+            }, status=400)
+
 
         # Prepare the data for the serializer, replacing slug with the workspace instance's PK
         data = request.data.copy()
         data["workspace_id"] = workspace_obj.id 
-        data['created_by'] = obj.created_by.id
+        # data['created_by'] = obj.created_by.id
+        data["ai_rate_key_id"] = key_response.get("key_id", "")
+
 
         serialized_data = ai_configuration_serializer(instance=obj, data=data, partial=True)        
         
@@ -381,7 +382,7 @@ def delete_ai_configuration(request, slug_id):
         workspace_id = obj.workspace_id.slug_id
         key_id = obj.ai_rate_key_id
         
-        delete_response, delete_error = delete_provider_key_api(workspace_id, key_id)
+        delete_response, delete_error = delete_ai_rate_limiter_provider_key_api(workspace_id, key_id)
 
         if delete_error or not delete_response or delete_response.get('status') != 'success':
             return JsonResponse({

@@ -96,6 +96,7 @@ def process_tags(obj_data):
             tag_obj.domain_id = domain_obj 
             tag_obj.workspace_id = workspace_obj 
             tag_obj.wp_tag_id = tag['id']
+            tag_obj.derived_by = 'wordpress'
             tag_obj.save()
             
             install_log_obj = domain_install_log()

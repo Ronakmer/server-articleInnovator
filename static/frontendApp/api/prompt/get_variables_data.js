@@ -13,10 +13,14 @@ async function get_variables_data(api_url) {
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('00000xxxx:', data);
             // const fields = data.data_field; // Extract fields from response
             const selectedSlugId = data.slug_id;
@@ -26,7 +30,7 @@ async function get_variables_data(api_url) {
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";

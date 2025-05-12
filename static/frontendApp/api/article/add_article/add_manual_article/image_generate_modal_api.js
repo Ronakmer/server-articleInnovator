@@ -10,33 +10,39 @@ async function find_google_image_api() {
 
         const access_token = localStorage.getItem("access_token");
         
-        const query_params = new URLSearchParams();
+        // const query_params = new URLSearchParams();
 
-        const api_key = 'D92B03D0EC80405C8DE89B94F9887C8C';
-        const search_type = 'images';
+        // const api_key = 'D92B03D0EC80405C8DE89B94F9887C8C';
+        // const search_type = 'images';
         const query = document.querySelector('.search-keyword').value;
         
-        query_params.append("api_key", api_key);
-        query_params.append("search_type", search_type);
-        query_params.append("q", query);
+        // query_params.append("api_key", api_key);
+        // query_params.append("search_type", search_type);
+        // query_params.append("q", query);
 
-        const response = await fetch(`${find_google_image_url}?${query_params.toString()}`, {
-            method: 'GET',
+        const response = await fetch(fetch_google_images_url, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${access_token}`
             },
+            body: JSON.stringify({ query }) // Send query in body
         });
+
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('fetched successfully:', data);
 
-            set_google_image_data(data.image_results);
+            // set_google_image_data(data.image_results);
+            set_google_image_data(data.data);
                 
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -48,6 +54,7 @@ async function find_google_image_api() {
         show_toast("error", "Network error. Please try again later.");
     }
 }
+
 
 
 
@@ -84,9 +91,14 @@ async function find_template_category_api() {
             },
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
 
             
             // Get the select element
@@ -128,7 +140,7 @@ async function find_template_category_api() {
             
             
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -182,9 +194,15 @@ async function find_template_tag_api() {
             },
         });
 
+
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
 
             
             // Get the select element
@@ -227,7 +245,7 @@ async function find_template_tag_api() {
     
             
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -284,13 +302,19 @@ async function find_template_by_category_and_tag_api(name) {
             },
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             set_image_template_data(data);
                 
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -356,10 +380,14 @@ async function generate_single_image_api() {
             // body: data,
         });
         
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
            
             console.log(data)
             set_generated_images(data)
@@ -369,7 +397,7 @@ async function generate_single_image_api() {
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
             console.log(error_data)
             // Show api error
             var error_message = error_message_data(error_data);

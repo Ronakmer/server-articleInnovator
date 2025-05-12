@@ -33,9 +33,14 @@ async function perma_links_api(){
             body: data,
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('fetched successfully:', data);
 
             perma_links(data.data.current_structure)
@@ -43,7 +48,7 @@ async function perma_links_api(){
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -58,4 +63,14 @@ async function perma_links_api(){
 }
 
 
-perma_links_api()
+// perma_links_api()
+// Extract parameters from URL
+// const urlParams = new URLSearchParams(window.location.search);
+// const siteUrl = urlParams.get("site_url");
+// const wordpress_username = urlParams.get("user_login");
+// const wordpress_application_password = urlParams.get("password");
+
+// Call API only if all required values are present
+if (siteUrl) {
+    perma_links_api();
+}

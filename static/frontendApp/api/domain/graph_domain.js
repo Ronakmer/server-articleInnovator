@@ -28,17 +28,22 @@ async function domain_console_graph_api(api_url, domain_slug_id, start_date, end
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('domain_console_graph_api:', data);
             
             return data;
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -83,16 +88,20 @@ async function domain_analytics_graph_api(api_url, domain_slug_id, start_date, e
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('domain_analytics_graph_api:', data);
             return data;
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";
@@ -136,15 +145,20 @@ async function domain_article_graph_api(api_url, domain_slug_id, start_date, end
             },
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
             console.log('domain_article_graph_api:', data);
             return data;
 
             // show_toast("success", "Roles fetched successfully");
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch roles:', error_data);
 
             const errorMessage = error_data.error || "Something went wrong";

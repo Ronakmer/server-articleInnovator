@@ -44,6 +44,8 @@ function renderArticles(articleTypes) {
     container.innerHTML = articleTypes.map(createArticleCard).join(""); // Efficient DOM update
 }
 
+let article_type_list;
+
 // API function to fetch article types
 async function article_type_api(selectedCategory = null) {
     try {
@@ -62,13 +64,18 @@ async function article_type_api(selectedCategory = null) {
             },
         });
 
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
+
         if (response.ok) {
-            const data = await response.json();
+            const data = responseData;
             console.log('API Response Data:', data);
-            
+            article_type_list = data;
             renderArticles(data.data); // Render all fetched articles
         } else {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch article types:', error_data);
             show_toast("error", `Error: ${error_data.error || "Something went wrong"}`);
         }
@@ -121,11 +128,32 @@ function get_article_type(article_type_category, article_type_title, slug_id){
     const current_url = window.location.href;
 
     
-    // store step in session
-    localStorage.setItem("article_type_category", article_type_category);
-    localStorage.setItem("article_type_title", article_type_title);
-    localStorage.setItem("current_url", current_url);
-    localStorage.setItem("article_type_slug_id", slug_id);
+    // // store step in session
+    // localStorage.setItem("article_type_category", article_type_category);
+    // localStorage.setItem("article_type_title", article_type_title);
+    // localStorage.setItem("current_url", current_url);
+    // localStorage.setItem("article_type_slug_id", slug_id);
+
+
+    const url = new URL(window.location.href);
+
+    // Set or update query parameters
+    // url.searchParams.set("article_type_category", article_type_category);
+
+    // if (article_type_title) {
+    //     url.searchParams.set("article_type_title", article_type_title);
+    // } else {
+    //     url.searchParams.delete("article_type_title");
+    // }
+
+    if (slug_id) {
+        url.searchParams.set("article_type_slug_id", slug_id);
+    } else {
+        url.searchParams.delete("article_type_slug_id");
+    }
+
+    // Push updated URL to browser without reloading the page
+    window.history.pushState({}, "", url);
 
 
     const add_article_ai = document.getElementById("add_article_ai");
@@ -184,12 +212,39 @@ function get_article_type(article_type_category, article_type_title, slug_id){
 
 
 window.addEventListener('load', () => {
-    const stored_article_type_category = localStorage.getItem("article_type_category");
+    // const stored_article_type_category = localStorage.getItem("article_type_category");
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // const stored_article_type_category = urlParams.get("article_type_category");
+    // const stored_article_type_title = urlParams.get("article_type_title");
+    const stored_article_type_slug_id = urlParams.get("article_type_slug_id");
+    
+    if(stored_article_type_slug_id){
+
+        const articleTypeData = article_type_list.data.find(
+            obj => obj.slug_id === stored_article_type_slug_id
+        );
+        
+        if (!articleTypeData) {
+            show_toast("error", "Invalid article_type_slug_id: Not found in article_type_list");
+            return;
+        }
+    }
+
+
+
+    const stored_article_type_title = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.title;
+    const stored_article_type_category = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.article_category;
+    // const stored_slug_id = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.slug_id;
+    // alert(stored_article_type_category)
+
     if (stored_article_type_category) {
         // selected_article = false;
-        
-        get_article_type(stored_article_type_category, '');
-    }
+        alert(1)
+        // get_article_type(stored_article_type_category, '');
+        get_article_type(stored_article_type_category, stored_article_type_title, stored_article_type_slug_id);
+
+    } 
 
 });
 

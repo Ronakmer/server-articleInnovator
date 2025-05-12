@@ -56,15 +56,19 @@ async function progres_data_api(domain_slug_id) {
                 'Authorization': `Bearer ${access_token}`
             },
         });
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (!response.ok) {
-            const error_data = await response.json();
+            const error_data = responseData;
             console.error('Failed to fetch progress data:', error_data);
             show_toast("error", `Error: ${error_data.error || "Something went wrong"}`);
             return;
         }
 
-        const data = await response.json();
+        const data = responseData;
         console.log('Progress Data:', data);
 
         log_text = data.progress_data?.log_text ?? null;

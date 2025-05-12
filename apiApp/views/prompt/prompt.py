@@ -37,7 +37,14 @@ def list_prompt(request):
         if slug_id:
             filters &= Q(slug_id=slug_id)
         if search:
-            filters &= Q(name__icontains=search)
+            # filters &= Q(name__icontains=search)
+            filters &= (
+                Q(name__icontains=search) |
+                Q(article_type_id__slug_id__icontains=search)
+            )
+            
+        print(search,'searchx')
+
 
         if workspace_slug_id:
             try:
@@ -88,6 +95,8 @@ def list_prompt(request):
                     }, status=404)   
             
 
+        print(obj,'pppppppppppppppppppp')
+        print(len(obj),'qqqqqqqqqqqqqqqqqqq')
         # Apply pagination
         obj, total_count, page, total_pages = process_pagination(obj, offset, limit)
         
@@ -317,6 +326,24 @@ def update_prompt(request, slug_id):
                 "success": False,
             }, status=404)
 
+
+        status = request.data.get("status")
+        if status is not None and status != "":
+            serialized_data = prompt_serializer(instance=obj, data=request.data, partial=True)
+            if serialized_data.is_valid():
+                serialized_data.save()
+                return JsonResponse({
+                    "message": "Status updated successfully.",
+                    "success": True,
+                    "data": serialized_data.data,
+                }, status=200)
+            else:
+                return JsonResponse({
+                    "error": "Invalid data.",
+                    "errors": serialized_data.errors,
+                    "success": False,
+                }, status=400)
+                
         # Define required static fields
         required_fields = ["workspace_slug_id", "article_type_slug_id"]
 

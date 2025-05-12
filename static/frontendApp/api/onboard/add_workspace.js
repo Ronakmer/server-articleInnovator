@@ -39,14 +39,17 @@ async function add_workspace_api() {
             },
             body: data,
         });
-        
+        const responseData = await response.json();
+
+        check_authentication_error(responseData)
+
 
         if (response.ok) {
             // Handle successful response
-            const data = await response.json();
+            const data = responseData;
            
             console.log(data)
-            const temo_slug_id = data.workspace.slug_id;
+            const temo_slug_id = data.slug_id;
             
             localStorage.setItem("onboard_workspace_slug_id", temo_slug_id);
 
@@ -61,7 +64,7 @@ async function add_workspace_api() {
 
         } else {
             
-            const error_data = await response.json();
+            const error_data = responseData;
 
             console.log(error_data)
             // Show api error

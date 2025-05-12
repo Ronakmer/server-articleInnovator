@@ -13,9 +13,14 @@ from apiApp.views.decorator.workspace_decorator import workspace_permission_requ
 from apiApp.views.decorator.domain_decorator import domain_permission_required
 from django.db.models import Q
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
+import threading
 
-from apiApp.views.article.add_manual_article import add_manual_article
-from apiApp.views.article.add_ai_article import add_ai_article
+from apiApp.views.article.supportive_methods.add_manual_article import add_manual_article
+from apiApp.views.article.supportive_methods.add_ai_article import add_ai_article
+from apiApp.views.article.supportive_methods.create_input_json import create_input_json
+from apiApp.views.rabbitmq_api.send_rabbitmq_message_api.send_rabbitmq_message_api import send_rabbitmq_message_api
+
+
 
 # show article
 @api_view(['GET'])
@@ -111,16 +116,36 @@ def add_article(request):
     try:
         request_user = request.user
         
-        # print(request.data)
-        article_type_category = request.data.get('article_type_category')
-        
-        if not article_type_category:
-            return JsonResponse({"error": "article_type_category is required."}, status=400)
+        article_type_slug_id = request.data.get('article_type_slug_id')
+    
+        if not article_type_slug_id:
+            return JsonResponse({"error": "article_type_slug_id is required."}, status=400)
 
+        print(article_type_slug_id,'article_type_slug_idx')
+        try:
+            article_type_obj = article_type.objects.get(slug_id=article_type_slug_id)
+        except article_type.DoesNotExist:
+            return JsonResponse({"error": "Invalid article_type_slug_id."}, status=400)
 
+        article_type_category = article_type_obj.article_category.lower()
+        print(article_type_category,'article_type_category')
+
+        response = None
         if article_type_category in ["outliner", "generative", "rephrase"]:
+            print('jjjjjjjjjjjjjj')
             response = add_ai_article(request_user, request.data)
+            print(response,'ssxxss')
+            # if response.get("success"):
+            #     # Run rabbitmq_api in the background
+            #     def run_rabbitmq_api():
+            #         input_json = create_input_json(response.get("article_slug_id"))
+            #         send_rabbitmq_message_api(input_json)
+
+            #     threading.Thread(target=run_rabbitmq_api).start()
+
         elif article_type_category == "manual":
+            print('xxxxxxxxxxxxxxx')
+            
             response = add_manual_article(request_user, request.data)
 
         print(response,'response')
@@ -132,6 +157,10 @@ def add_article(request):
         else:
             return JsonResponse({"error": "Unexpected error."}, status=500)
 
+        
+        
+        
+        
         
         # temp_article_type = request.data.get('temp_article_type')
         # article_type_slug_id = request.data.get('article_type_slug_id')
@@ -344,10 +373,6 @@ def add_article(request):
         #     }, status=200)
         # else:
         #     return JsonResponse({"error": f"WordPress API error: {response.status_code} - {response.text}","success": False}, status=500)
-
-
-
-
 
     except Exception as e:
         print("This error is add_article --->: ", e)

@@ -24,6 +24,8 @@ function add_category_api() {
     data.append("domain_slug_id", domain_slug_id);
     data.append("category_wp_id", category_wp_id);
     data.append("name", name);
+    data.append("derived_by", 'user');
+
 
     
     (async ()=>{ 
