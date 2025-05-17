@@ -3,7 +3,16 @@
 
 // Function to create pagination UI using the provided Tailwind CSS structure
 function render_pagination( total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table=()=>{}, domain_slug_id) {
-    const pagination_container = document.getElementById('pagination');
+    let pagination_container;
+    if (["author_tbody", "tag_tbody", "categories_tbody"].includes(table_name)) {
+        pagination_container = document.getElementById(`pagination_${table_name}`);
+        // Use pagination_container as needed
+    }else {
+        pagination_container = document.getElementById('pagination');
+    }
+    
+    // const pagination_container = document.getElementById('pagination');
+    // const pagination_container = document.getElementById('pagination');
     pagination_container.innerHTML = ''; // Clear previous buttons
 
     const total_pages = Math.ceil(total_count / limit);

@@ -37,8 +37,8 @@ def fetch_user_permissions(request):
     try:
         request_user = request.user
         permissions_data = get_user_permissions(request_user)
-        print(permissions_data, 'permissions_data')
-        print(type(permissions_data), 'permissions_data')
+        # print(permissions_data, 'permissions_data')
+        # print(type(permissions_data), 'permissions_data')
 
         return JsonResponse({
             "message": "Permissions fetched successfully",

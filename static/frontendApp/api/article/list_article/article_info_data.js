@@ -3,7 +3,6 @@
 
 function set_article_info_data(obj, article_slug_id){
 
-    alert(obj.data[0].word_count)
     document.getElementById(`word_count_${article_slug_id}`).textContent = obj.data[0].word_count ?? "N/A";
     document.getElementById(`image_count_${article_slug_id}`).textContent = obj.data[0].image_count ?? "N/A";
     document.getElementById(`heading_count_${article_slug_id}`).textContent = obj.data[0].heading_count ?? "N/A";

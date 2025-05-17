@@ -1,6 +1,6 @@
 
 
-function render_data_to_table(response_data, current_page, limit){
+function render_data_to_table_author_tbody(response_data, current_page, limit){
     
     table_data_author('author_tbody', response_data, 'delete_author_api', 'status_author_api', '', current_page, limit)
 }
@@ -25,7 +25,7 @@ async function list_author_api() {
 
 
 
-    const response_data = await list_api(list_author_url, 'author_tbody', offset, limit, filters, 'delete_author_api', 'status_author_api', '', current_page, 'authors', domain_slug_id, render_data_to_table);
+    const response_data = await list_api(list_author_url, 'author_tbody', offset, limit, filters, 'delete_author_api', 'status_author_api', '', current_page, 'authors', domain_slug_id, render_data_to_table_author_tbody);
     console.log(response_data,'0')
     
     

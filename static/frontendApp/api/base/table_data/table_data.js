@@ -7,7 +7,6 @@
 // Function to render dynamic 
 function table_data(tbody_name, data_key, delete_function_name, status_function_name, update_page_url, response_key) {
 
-    // alert(data_key)
 
     const tbody = document.getElementById(tbody_name); 
 

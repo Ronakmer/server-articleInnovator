@@ -172,9 +172,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ronakmer942@gmail.com' 
-EMAIL_HOST_PASSWORD = 'onuu dkaq goyw qniz'
-
+EMAIL_HOST_USER = 'ronakmer.dev@gmail.com' 
+EMAIL_HOST_PASSWORD = 'oens yqpx zwxo tmbt'
 
 #  Iframe
 X_FRAME_OPTIONS = 'SAMEORIGIN'

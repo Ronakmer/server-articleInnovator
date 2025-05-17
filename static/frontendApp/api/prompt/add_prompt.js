@@ -46,7 +46,7 @@ function add_prompt_api() {
 
 
     const hiddenInputs = prompt_form.querySelectorAll('input[type="hidden"][name$="_id"]');
-    alert(hiddenInputs)
+    
     hiddenInputs.forEach(hiddenInput => {
         const fieldName = hiddenInput.name; // e.g., wp_prompt_somefield_id
         const fieldValue = hiddenInput.value;

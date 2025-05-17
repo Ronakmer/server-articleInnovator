@@ -17,8 +17,8 @@ function temp_set_ai_data() {
 
     const stored_article_type_title = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.title;
     const stored_article_type_category = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.category;
-    // alert(stored_article_type_title)
 
+    
     if(stored_article_type_title){
         // Check if the element exists before accessing its value
         // set_ai_article_type_slug_id.value = stored_article_type_slug_id;  // Set the value of the input field
@@ -47,7 +47,6 @@ function temp_set_ai_data() {
 function add_ai_article_api() {
 
     const current_page_url = window.location.href;
-    alert('000000000000000000000')
     
     // Get the form element
     const ai_article_form = document.querySelector('[name="ai_article_form"]');
@@ -82,7 +81,6 @@ function add_ai_article_api() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const ai_article_type_slug_id = urlParams.get("article_type_slug_id");
-    alert(ai_article_type_slug_id)
     const data = new FormData();
     data.append("article_type_slug_id", ai_article_type_slug_id);
     data.append("domain_slug_id", domain_slug_id);
@@ -115,7 +113,6 @@ get_domain_data()
 
 
 function get_prompt_data(){
-    alert('hiiiiiiiii')
     const urlParams = new URLSearchParams(window.location.search);
     const article_type_slug_id = urlParams.get("article_type_slug_id");
     const searchParams = article_type_slug_id;

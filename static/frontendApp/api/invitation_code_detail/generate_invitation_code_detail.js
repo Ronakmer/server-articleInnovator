@@ -28,7 +28,7 @@ async function generate_invitation_code_detail_api() {
                 
                 const invitation_code_detail_form = document.querySelector('[name="invitation_code_detail_form"]');
                 const invitation_code = invitation_code_detail_form.querySelector('[name="invitation_code"]');
-                invitation_code.value = data.invitation_code;
+                invitation_code.value = data.data;
 
 
             // show_toast("success", "Roles fetched successfully");

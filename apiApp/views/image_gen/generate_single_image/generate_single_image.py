@@ -222,7 +222,7 @@ def generate_image(data):
         headers = {"Content-Type": "application/json"}
         response = requests.post(GENERATE_IMAGE_LAMBDA_URL, data=payload, headers=headers)
 
-        if response.status_code == 200:
+        if response.status_code in [200, 201]:
             print(response.json())
             return response.json()
 

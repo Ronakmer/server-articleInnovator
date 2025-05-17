@@ -435,7 +435,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (selectedType) {
                 // Create buttons based on supportive variables
                 // createSupportiveVariableButtons(selectedType.supportive_variables, selectedSlugId);
-                // alert(selectedSlugId)
                 createSupportiveVariableButtons(selectedSlugId);
             }
 
@@ -495,7 +494,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("supportive_prompt_type_example").addEventListener("click", function () {
         const text = this.textContent;
         navigator.clipboard.writeText(text).then(() => {
-            // alert("Copied to clipboard: " + text);
             show_toast("success", `Copied to clipboard`);
         }).catch(err => {
             console.error("Error copying text: ", err);

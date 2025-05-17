@@ -1,0 +1,87 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Integration</h3>
+        <p class="text-xs text-gray-500">Create new Integration</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_integration_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+
+            Back
+        </a>
+    </div>
+</div>
+
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins">
+    <div class="col-span-12 lg:col-span-4">
+        <div class="p-4 border border-gray-200 rounded-2xl ">
+            <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                Integration Details</h5>
+
+            <form method="POST" action=""  id="integration_form" name="integration_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form">
+
+                <!-- Configuration Type -->
+                <div class="flex flex-col gap-2">
+                    <label for="name" class="text-sm font-medium text-gray-700">Integration Type</label>
+                    <select id="integration_type" name="integration_type"
+                        class="px-3 py-2 text-sm border rounded-lg border-gray-300 focus:outline-none focus:ring">
+                        <option value="">Select Type</option>
+                        {% comment %} <option value="services">Services </option>
+                        <option value="retry">Retry </option>
+                        <option value="aws">AWS </option> {% endcomment %}
+                    </select>
+                </div>
+
+                <!-- Dynamic Config Fields -->
+                {% comment %} <div id="config-fields" class="flex flex-col gap-3"></div> {% endcomment %}
+                <div id="integration-fields" class="flex flex-col gap-4 mt-4"></div>
+
+                <!-- Description -->
+                <div class="flex flex-col gap-2">
+                    <label for="description" class="text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="description" name="description"
+                        class="px-3 py-2 text-sm border rounded-lg border-gray-300 focus:outline-none focus:ring"
+                        placeholder="Optional description..."></textarea>
+                </div>
+
+                <!-- Submit -->
+                <div class="pt-2">
+                    <button type="button" onclick="add_integration_api()"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- end field data  -->
+
+<!-- integration api -->
+<script src="{% static 'frontendApp/api/integration/integration.js' %}"></script>
+<script src="{% static 'frontendApp/api/integration/add_integration.js' %}"></script>
+
+
+{% endblock body %}

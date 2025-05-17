@@ -20,7 +20,7 @@ def delete_ai_rate_limiter_workspace_api(workspace_slug_id):
 
         response = requests.delete(url, headers=headers)
 
-        if response.status_code == 200:
+        if response.status_code in [200, 201]:
             print("Response Code:", response.status_code)
             return response.json(), None  # Success
         else:

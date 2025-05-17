@@ -44,6 +44,15 @@ for pattern in permissions_list:
             "created_date": timezone.now(), 
         })
 
+permissions_data.append({
+    "name": "detail_domain",
+    "route": "detail_domain",
+    "description": "detail_domain",
+    "status": "True",
+    "group": "detail_domain",
+    "created_date": timezone.now(),
+})
+
 # Print permissions_data to verify its content
 # print(permissions_data, 'permissions_data')
 

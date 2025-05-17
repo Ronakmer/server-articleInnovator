@@ -44,6 +44,17 @@ async function list_api(api_url, table_name, offset, limit, filters, delete_func
             
             render_pagination(total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table, domain_slug_id);
             render_data_to_table(data, current_page, limit)
+            
+            // if (["author_tbody", "tag_tbody", "categories_tbody"].includes(table_name)) {
+
+            // if (["author_tbody","categories_tbody"].includes(table_name)) {
+            //     render_pagination( total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table, domain_slug_id);
+            //     render_data_to_table_categories_tbody(data, current_page, limit);
+            // }else{
+            //     render_pagination( total_count, limit, current_page, api_url, table_name, filters, delete_function_name, status_function_name, update_page_url, response_key, render_data_to_table, domain_slug_id);
+            //     render_data_to_table(data, current_page, limit);
+            // }
+
             return data;
                 
 

@@ -28,7 +28,7 @@ def register_ai_rate_limiter_workspace_api(workspace_slug_id):
 
         response = requests.post(url, headers=headers, json=data)
         print(response.json(),'responsexxxx')
-        if response.status_code == 200:
+        if response.status_code in [200, 201]:
             print('codess',response.status_code)
             return response.json(), None  # Return JSON response
         else:

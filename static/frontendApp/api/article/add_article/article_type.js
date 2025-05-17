@@ -236,11 +236,10 @@ window.addEventListener('load', () => {
     const stored_article_type_title = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.title;
     const stored_article_type_category = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.article_category;
     // const stored_slug_id = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.slug_id;
-    // alert(stored_article_type_category)
 
     if (stored_article_type_category) {
         // selected_article = false;
-        alert(1)
+
         // get_article_type(stored_article_type_category, '');
         get_article_type(stored_article_type_category, stored_article_type_title, stored_article_type_slug_id);
 

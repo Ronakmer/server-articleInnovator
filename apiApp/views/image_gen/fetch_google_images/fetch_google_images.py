@@ -50,7 +50,7 @@ def fetch_google_images(request):
         response = requests.get(GOOGLE_IMAGE_API_URL, params=params)
         response_data = response.json()
         print(response_data,'response_dataz')
-        if response.status_code == 200:
+        if response.status_code in [200, 201]:
             image_results = response_data.get('image_results', [])
             return JsonResponse({
                 "message": "Images fetched successfully.",

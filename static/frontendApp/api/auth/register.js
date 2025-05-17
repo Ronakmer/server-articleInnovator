@@ -97,7 +97,6 @@ async function admin_registration_api(){
             show_toast("success", `${data.message}`);
 
             // Redirect or show a success message
-            alert(data)
             if (response.ok) {
                 setTimeout(() => {
                     window.location.href = registration_enter_otp_page;
@@ -143,7 +142,6 @@ async function verify_otp_api(){
         verify_form.querySelector('[id="otp-4"]').value
     ].join(''); 
         
-    alert(registration_email)
 
 
     const data = {
@@ -169,7 +167,6 @@ async function verify_otp_api(){
             show_toast("success", `${data.message}`);
 
             // Redirect or show a success message
-            alert(data)
             if (response.ok) {
                 setTimeout(() => {
                     window.location.href = page_url;

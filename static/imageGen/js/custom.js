@@ -192,7 +192,6 @@
                  * @see http://fabricjs.com/docs/fabric.Canvas.html#toDataURL
                  */
                 var template_name = $("#palleon-json-save-name").val();
-                alert(template_name)
                 if(!template_name.trim()){
                     alert("Enter File Name.");
                     return;

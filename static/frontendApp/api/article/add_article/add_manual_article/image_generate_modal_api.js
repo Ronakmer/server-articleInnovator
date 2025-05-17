@@ -344,8 +344,6 @@ async function generate_single_image_api() {
     const workspace_slug_id = localStorage.getItem("workspace_slug_id");
 
 
-   alert(selectedCategory)
-
     
     if (selectedImages.length === 0) {  
         show_toast("error", "Please select at least one image.");  

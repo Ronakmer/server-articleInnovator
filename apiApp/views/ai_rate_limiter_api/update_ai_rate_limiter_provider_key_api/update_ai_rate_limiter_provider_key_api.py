@@ -12,20 +12,30 @@ def update_ai_rate_limiter_provider_key_api(workspace_slug_id, provider_data):
     try:
         print(provider_data, 'provider_datazx')
 
-        url = f'{AI_RATE_LIMITER_BASE_URL}/workspace/{workspace_slug_id}/key'
+        ai_rate_key_id = provider_data.get("ai_rate_key_id", "")
+        print(ai_rate_key_id,'ai_rate_key_idx')
+        url = f'{AI_RATE_LIMITER_BASE_URL}/provider-key/update/{ai_rate_key_id}'
 
-        # Get model from comma-separated string
+        # Extract and prepare model list
         api_models = provider_data.get("api_model", "")
         models = [m.strip() for m in api_models.split(",") if m.strip()]
         model = models[0] if models else ""
 
-        # Build request payload
+        # Set default values and override if provided
+        api_version = provider_data.get("api_version", "")
+        endpoint = provider_data.get("api_url", "")
+        provider_name = provider_data.get("api_provider", "").lower()
+
         payload = {
-            "provider": provider_data.get("api_provider", "OpenAI").lower(),
             "api_key": provider_data.get("api_key", ""),
-            "config": {"model": model},
+            "config": {
+                "api_version": api_version,
+                "endpoint": endpoint,
+                "model": model
+            },
+            "name": provider_name,
             "rate_limit": int(provider_data.get("rate_limit", 1000)),
-            "rate_limit_period": int(provider_data.get("rate_limit_period", 60))
+            "rate_limit_period": str(provider_data.get("rate_limit_period", 600)),
         }
 
         headers = {
@@ -34,14 +44,13 @@ def update_ai_rate_limiter_provider_key_api(workspace_slug_id, provider_data):
 
         print("Request payload:", payload)
 
-        # Send request
-        response = requests.post(url, headers=headers, json=payload)
+        response = requests.put(url, headers=headers, json=payload)
 
-        if response.status_code == 200:
+        if response.status_code in [200, 201]:
             print("API key updated successfully.")
             return response.json(), None
         else:
-            print("Failed API key update:", response.status_code, response.text)
+            print("Failed to update API key:", response.status_code, response.text)
             return None, f"API Error: {response.status_code}, {response.text}"
 
     except Exception as e:

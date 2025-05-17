@@ -7,7 +7,6 @@ function connect_domain() {
     const domain_name = document.getElementById('domain-name').value; 
     console.log(domain_name,'domain_name')
     if (!domain_name) {
-        // alert("Please enter a domain name");
         show_toast("error", `Error: Please enter a domain name`);
 
         return;

@@ -374,7 +374,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //             // Event listener to remove category when close button is clicked
 //             span.querySelector('button').addEventListener('click', function () {
-//                 alert(category.api_model)
 //                 toggleCategory(category.api_model, false); // Uncheck in dropdown
 //                 // selectedContainer.removeChild(span); // Remove from selected list
                 

@@ -21,7 +21,6 @@ function temp_set_manual_data() {
     const set_manual_article_type_title = document.querySelector('[name="manual_article_type_title"]'); 
 
     const stored_article_type_title = article_type_list.data.find(obj => obj.slug_id === stored_article_type_slug_id)?.title;
-    // alert(stored_article_type_title)
 
 
     if(stored_article_type_title){
@@ -102,7 +101,6 @@ function add_manual_article_api() {
 
 
     // const bas64_image = image_to_sting(wp_featured_image)
-    // alert(bas64_image)
 
 
     // image_to_string(wp_featured_image.files[0], function(base64) {
@@ -220,7 +218,6 @@ function handleFileUpload(event) {
     if (file) {
         image_to_string(file, function(base64) {
             console.log("Base64 String:", base64);
-            alert(base64)
             document.getElementById("image-url").value = base64; 
         });
     }

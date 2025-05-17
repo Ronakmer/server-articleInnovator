@@ -44,7 +44,6 @@ function add_article_type_api() {
     const data = new FormData();
     // If the category is 'manual', append only necessary data
     if(article_category === 'manual'){
-        alert(0);  // For debugging purposes, you can remove this after testing
         data.append("article_category", article_category);
         data.append("color_detail_slug_id", color_detail_slug_id);
         data.append("description", description);
@@ -292,7 +291,7 @@ async function populateSupportiveVariables(variables_data_obj) {
         nameInput.value = firstVar.name || '';
         valueInput.value = firstVar.value || '';
         requiredCheckbox.checked = firstVar.required || false;
-        // alert(firstVar.slug_id)
+
         if (slugIdInput) {
             slugIdInput.value = firstVar.slug_id || '';
         }

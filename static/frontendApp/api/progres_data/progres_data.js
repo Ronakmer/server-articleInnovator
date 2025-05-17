@@ -97,7 +97,6 @@ if (domain_slug_id) {
         if (log_text === prev_log_text || log_text === null) {
             console.log('Stopping interval: No new logs found.');
             clearInterval(intervalId);
-            // alert("Done");
             show_toast("success", `All Data are Fetch`);
             setTimeout(() => {
                 window.location.href = list_domain_page_url;

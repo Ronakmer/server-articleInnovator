@@ -15,7 +15,7 @@ from apiApp.models import (
     competitor_seo_extraction_mapping, user_api_key, keyword,
     console_metrics, image_kit_configuration, activity_log, notification,
     supportive_prompt_type, supportive_prompt, variables, rabbitmq_queue,
-    configuration_settings,
+    integration, integration_type
     
 )
 
@@ -403,6 +403,8 @@ class competitor_serializer(serializers.ModelSerializer):
         exclude = ['id', 'created_date', 'updated_date']  
         
         
+        
+        
 class competitor_domain_mapping_serializer(serializers.ModelSerializer): 
     domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
@@ -621,11 +623,20 @@ class notification_serializer(serializers.ModelSerializer):
         exclude = ['id', 'created_date']
         
         
-class configuration_settings_serializer(serializers.ModelSerializer):
+        
+class integration_type_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = integration_type
+        exclude = ['id', 'created_date', 'updated_date']  
+
+        
+class integration_serializer(serializers.ModelSerializer):
     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    
+    integration_type_id = serializers.PrimaryKeyRelatedField(queryset=integration_type.objects.all(), write_only=True)
+
     created_by_data = user_serializer(source='created_by', read_only=True)  
+    integration_type_id_data = integration_type_serializer(source='integration_type_id', read_only=True) 
 
     class Meta:
-        model = configuration_settings
+        model = integration
         exclude = ['id', 'created_date', 'updated_date']  

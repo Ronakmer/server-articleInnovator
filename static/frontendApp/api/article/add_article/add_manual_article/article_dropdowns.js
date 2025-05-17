@@ -9,7 +9,6 @@ function set_domain_dropdown(domain_data){
         console.log(domain_data)
         const selectElement = document.querySelector('[name="manual_domain_data"]');
         if(!selectElement){
-            alert(0)
         }
         // Clear existing options
         selectElement.innerHTML = '';

@@ -109,7 +109,6 @@ function add_supportive_prompt_type_api() {
 //         }
 //     });
 
-//     alert(JSON.stringify(variables));
 //     console.log(variables);
 //     return JSON.stringify(variables);
 
@@ -140,7 +139,6 @@ function add_supportive_prompt_type_api() {
 //         variables_data_obj.data.forEach((supportiveVar, index) => {
 //             const group = document.querySelector(`.name-value-group[data-index="${index}"]`);
 
-//             alert(group)
 //             if (group) {
 //                 const nameInput = group.querySelector('input[name="name[]"]');
 //                 const valueInput = group.querySelector('textarea[name="value[]"]');
@@ -288,7 +286,6 @@ async function populateSupportiveVariables(variables_data_obj) {
         nameInput.value = firstVar.name || '';
         valueInput.value = firstVar.value || '';
         requiredCheckbox.checked = firstVar.required || false;
-        // alert(firstVar.slug_id)
         if (slugIdInput) {
             slugIdInput.value = firstVar.slug_id || '';
         }

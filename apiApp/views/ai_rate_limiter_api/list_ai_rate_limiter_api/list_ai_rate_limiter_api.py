@@ -10,8 +10,10 @@ from django.db.models import Q
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
 import json
 import os, requests
-RABBITMQ_BASE_URL = os.getenv("RABBITMQ_BASE_URL")  
+AI_RATE_LIMITER_BASE_URL = os.getenv("AI_RATE_LIMITER_BASE_URL")  
 
+from apiApp.views.ai_rate_limiter_api.get_ai_rate_limiter_provider_key_api.get_ai_rate_limiter_provider_key_api import get_ai_rate_limiter_provider_data
+from apiApp.views.ai_rate_limiter_api.get_ai_rate_limiter_worker_api.get_ai_rate_limiter_worker_api import get_ai_rate_limiter_worker_data
 
 
 # show ai_rate_limiter
@@ -35,12 +37,12 @@ def list_ai_rate_limiter(request):
         filters = Q()
         if slug_id:
             filters &= Q(slug_id=slug_id)
-        if search:
-            # filters &= Q(name__icontains=search)
-            filters &= (
-                Q(name__icontains=search) |
-                Q(article_type_id__slug_id__icontains=search)
-            )
+        # if search:
+        #     # filters &= Q(name__icontains=search)
+        #     filters &= (
+        #         Q(name__icontains=search) |
+        #         Q(article_type_id__slug_id__icontains=search)
+        #     )
             
         print(search,'searchx')
 
@@ -65,28 +67,35 @@ def list_ai_rate_limiter(request):
         
         
         
-        ai_rate_limiter_obj = get_ai_rate_limiter_data(workspace_obj.slug_id) 
-        if not ai_rate_limiter_obj.get("success"):
-            return JsonResponse({"error": ai_rate_limiter_obj.get("error", "Unknown error"), "success": False}, status=500)
-        queue_results = ai_rate_limiter_obj.get("providers", [])
-       
-        # limit = 2
-        total_count = len(queue_results)  # Count the total number of queue results
-        queue_results = queue_results[offset:offset + limit]  # Apply pagination
+        ai_rate_limiter_provider_data = get_ai_rate_limiter_provider_data(workspace_obj.slug_id) 
+        print(ai_rate_limiter_provider_data,'ai_rate_limiter_provider_dataxxxxx')
         
-        page = (offset // limit) + 1 if limit > 0 else 1
-        total_pages = (total_count // limit) + (1 if total_count % limit > 0 else 0)
-
+        provider_status = ai_rate_limiter_provider_data.get("success")
+        if provider_status == False: 
+            return JsonResponse({"error": ai_rate_limiter_provider_data.get("error", "Unknown error"), "success": False}, status=500)
         
+        
+        ai_rate_limiter_worker_data = get_ai_rate_limiter_worker_data(workspace_obj.slug_id)
+        worker_status = ai_rate_limiter_worker_data.get("success")
+        if worker_status == False: 
+            return JsonResponse({"error": ai_rate_limiter_worker_data.get("error", "Unknown error"), "success": False}, status=500)
+        
+        
+        ai_rate_limiter_provider_data.pop("success", None)
+        ai_rate_limiter_worker_data.pop("success", None)
+        ai_rate_limiter_obj={
+            'ai_rate_limiter_provider_data':ai_rate_limiter_provider_data,
+            'ai_rate_limiter_worker_data':ai_rate_limiter_worker_data,
+        }
         
         return JsonResponse({
-            "data":queue_results,
+            "data":ai_rate_limiter_obj,
             "success": True,
             "pagination": {
-                "total_count": total_count,
-                "page": page,
-                "page_size": limit,
-                "total_pages": total_pages
+                "total_count": "",
+                "page": "",
+                "page_size": "",
+                "total_pages": ""
             },            
         }, status=200)
 
@@ -104,25 +113,3 @@ def list_ai_rate_limiter(request):
 
 
 
-
-
-def get_ai_rate_limiter_data(workspace_slug_id):
-    try:
-        print(workspace_slug_id, 'workspace_slug_idxxxx')
-        
-
-        url = f'{RABBITMQ_BASE_URL}/workspace/{workspace_slug_id}/keys'
-        response = requests.get(url)
-
-        # response.raise_for_status()
-        data = response.json()
-
-        if "providers" in data:
-            return {"success": True, "providers": data["providers"]}
-        else:
-            return {"error": "Missing 'providers' in response.", "success": False}
-
-
-    except Exception as e:
-        print("This error is get_ai_rate_limiter_data --->: ", e)
-        return {"error": "Internal Server error.", "success": False}

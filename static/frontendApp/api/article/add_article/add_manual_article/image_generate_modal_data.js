@@ -158,7 +158,6 @@ function set_generated_images(data){
         // Add event listener for radio buttons
         document.querySelectorAll('input[name="selectedImage"]').forEach(radio => {
             radio.addEventListener('change', function () {
-                alert("Selected Image URL: " + this.value);
                 document.getElementById("image-url").value = this.value; 
 
             });

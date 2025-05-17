@@ -69,7 +69,6 @@ async function domain_slug_value(){
 
 function set_slug_data(slug_data){
 
-    alert(slug_data)
     const permalink_pattern = slug_data
     // Hide all the permalink dropdowns initially
     const dropdown_ids = [

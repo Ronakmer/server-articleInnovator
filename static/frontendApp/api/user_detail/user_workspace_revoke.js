@@ -82,7 +82,6 @@ async function user_workspace_add_api() {
 
     const workspace_slug_id = document.querySelector('[name="workspace_id"]').value;
 
-    alert(workspace_slug_id)
     const data = {
         'workspace_slug_id': workspace_slug_id,
         'slug_id': slug_id,

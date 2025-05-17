@@ -89,7 +89,6 @@ function add_supportive_prompt_api() {
             set_ai_model = data_obj.data[0].ai_model;
 
 
-            // alert(supportive_variables_data)
             updateTimeout = setTimeout(() => {
                 updatePreview();  // Your actual update logic
             }, 5000); // Delay in milliseconds (adjust as needed)

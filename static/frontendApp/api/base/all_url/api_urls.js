@@ -210,11 +210,11 @@ var add_supportive_prompt_url = `${url}supportive-prompt/add/`;
 var update_supportive_prompt_url = `${url}supportive-prompt/update/`;
 var delete_supportive_prompt_url = `${url}supportive-prompt/delete/`;
 
-var list_configuration_settings_url = `${url}configuration-settings/`;
-var add_configuration_settings_url = `${url}configuration-settings/add/`;
-var update_configuration_settings_url = `${url}configuration-settings/update/`;
-var delete_configuration_settings_url = `${url}configuration-settings/delete/`;
-var get_config_field_url = `${url}config-fields/`;
+var list_integration_url = `${url}integrations/`;
+var add_integration_url = `${url}integration/add/`;
+var update_integration_url = `${url}integration/update/`;
+var delete_integration_url = `${url}integration/delete/`;
+var get_integration_field_url = `${url}integration-fields/`;
 
 
 
@@ -226,6 +226,9 @@ var list_queues_url = `${url}queues/`;
 var update_worker_scale_url = `${url}worker-scale/update/`;
 var add_queue_url = `${url}queue/add/`;
 
+var list_ai_rate_limiter_url = `${url}ai-rate-limiters/`;
+var update_scale_ai_rate_limiter_worker_url = `${url}scale-ai-rate-limiter-worker/`;
+var clear_ai_rate_limiter_worker_url = `${url}clear-ai-rate-limiter-worker/`;
 
 
 

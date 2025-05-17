@@ -165,7 +165,6 @@ function handleTabSelection(tab) {
 
     // Set hidden input field if it exists
     const apiProviderInput = document.getElementById('api_provider');
-    // alert(apiProviderInput.value)
     if (apiProviderInput) {
         apiProviderInput.value = tabName;
     }

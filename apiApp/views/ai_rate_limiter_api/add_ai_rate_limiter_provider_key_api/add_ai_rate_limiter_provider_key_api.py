@@ -41,7 +41,8 @@ def add_ai_rate_limiter_provider_key_api(workspace_slug_id, provider_data):
             print(f"Sending data to AI Rate Limiter: {payload}")
             response = requests.post(url, headers=headers, json=payload)
 
-            if response.status_code == 200:
+            if response.status_code in [200, 201]:
+
                 print(f"Response [200]: {response.json()}")
                 return response.json(), None
             else:

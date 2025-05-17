@@ -1184,52 +1184,48 @@ class activity_log(models.Model):
     
 
 
-class configuration_settings(models.Model):
-    CONFIG_CHOICES = [
-        ('services', 'Services Configuration'),
-        ('retry', 'Retry Configuration'),
-        ('aws', 'AWS Configuration'),
+class integration_type(models.Model):
+    PERMISSION_CHOICES = [
+        ('superadmin', 'Superadmin'),
+        ('admin', 'Admin'),
     ]
 
-    CONFIG_REQUIREMENTS = {
-        'services': ['url_endpoint'],
-        'retry': ['count'],
-        'aws': ['bucket_name', 'custom_domain', 'access_key', 'secret_key|textarea', 'region_name'],
-    }
+    name = models.CharField(max_length=250, blank=True)
+    permission_choice = models.CharField(max_length=250, choices=PERMISSION_CHOICES)
+    integration_field = models.JSONField(blank=True)  # Store only keys like ["bucket_name", "access_key"]
+    slug_id = models.CharField(max_length=100, default="", blank=True, unique=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True)
 
-    name = models.CharField(max_length=50, choices=CONFIG_CHOICES)
-    config = models.JSONField(blank=True)
+    def save(self, *args, **kwargs):
+        if not self.slug_id:
+            self.slug_id = str(uuid.uuid4())
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+
+class integration(models.Model):
+    integration_type_id = models.ForeignKey(to=integration_type,on_delete=models.CASCADE, null=True, blank=True)
+    integration_json_data = models.JSONField(blank=True)
     description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
+    status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100, default="", blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    def __str__(self):
-        return self.name
-
-    def clean(self):
-        config_type = self.name.lower()
-        required_keys = self.CONFIG_REQUIREMENTS.get(config_type)
-
-        if required_keys is None:
-            raise ValidationError("Invalid config name.")
-
-        missing = set(required_keys) - self.config.keys()
-        if missing:
-            raise ValidationError(f"Missing required keys in {self.name} config: {', '.join(missing)}")
-
-        if config_type == 'retry':
-            count = self.config.get('count')
-            if not isinstance(count, int) or count < 0:
-                raise ValidationError("RETRY count must be a non-negative integer.")
-
     def save(self, *args, **kwargs):
-        self.full_clean()
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
+            self.status = True  # forcefully override
         super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{self.description} - {self.integration_type_id.name}"
 
 
 

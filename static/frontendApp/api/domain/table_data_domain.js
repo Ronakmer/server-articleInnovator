@@ -73,7 +73,6 @@ function table_data_domain(tbody_name, response_data, delete_function_name, stat
 
         const div = document.createElement('div');
         div.classList.add('border-gray-200',  'mt-6', 'border',  'border-solid',  'rounded-xl');
-        // alert(obj.slug_id)
         div.innerHTML = `
         <div class="mb-4 px-4">  
 

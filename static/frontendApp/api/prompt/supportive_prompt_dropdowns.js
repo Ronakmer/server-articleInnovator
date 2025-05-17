@@ -278,7 +278,6 @@ async function populatePromptDropdowns(obj_data) {
             
             if (obj && obj.data && Array.isArray(obj.data)) {
                 obj.data.forEach(optionItem => {
-                    // alert(optionItem.supportive_prompt_data)   //  for test 
                     const option = document.createElement('option');
                     option.value = optionItem.slug_id;
                     option.textContent = optionItem.name;

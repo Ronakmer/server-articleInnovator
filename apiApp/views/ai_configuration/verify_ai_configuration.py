@@ -36,7 +36,7 @@ from rest_framework.decorators import api_view
 #             }
 #             response = requests.post('https://api.anthropic.com/v1/messages', headers=headers, json=json_data)
 #             print(response.json())
-#             if response.status_code == 200:
+#             if response.status_code in [200, 201]:
 #                 success = True
 
 #         if api_provider == "OpenAI":
@@ -44,7 +44,7 @@ from rest_framework.decorators import api_view
 #             headers = {"Authorization": f"Bearer {api_key}"}
 #             response = requests.get(url, headers=headers)
 #             print(response.json(),'//')
-#             if response.status_code == 200:
+#             if response.status_code in [200, 201]:
 #                 success = True
                 
 #         if api_provider == "Azure":
@@ -61,7 +61,7 @@ from rest_framework.decorators import api_view
 
 #             try:
 #                 response = requests.post(url, headers=headers, json=data)
-#                 if response.status_code == 200:
+#                 if response.status_code in [200, 201]:
 #                     print("Azure OpenAI API key is working.")
 #                     print("Response:", response.json())
 #                     success = True
@@ -168,7 +168,7 @@ def verify_claude_api(api_key, api_models, api_version=None):
                 timeout=10
             )
             
-            if response.status_code == 200:
+            if response.status_code in [200, 201]:
                 success = True
             else:
                 failed_models.append(model)
@@ -217,7 +217,7 @@ def verify_openai_api(api_key, api_models):
                 timeout=10
             )
             
-            if response.status_code == 200:
+            if response.status_code in [200, 201]:
                 success = True
             else:
                 failed_models.append(model)
@@ -268,7 +268,7 @@ def verify_azure_api(api_key, api_models, api_url, api_version):
                 timeout=10
             )
             
-            if response.status_code == 200:
+            if response.status_code in [200, 201]:
                 success = True
             else:
                 failed_models.append(model)
@@ -320,7 +320,7 @@ def verify_azure_api(api_key, api_models, api_url, api_version):
 #                 timeout=10
 #             )
             
-#             if response.status_code == 200:
+#             if response.status_code in [200, 201]:
 #                 success = True
 #             else:
 #                 failed_models.append(model)
@@ -386,7 +386,7 @@ def verify_novita_api(api_key, api_models, api_url, api_version=None):
                 timeout=10
             )
             
-            if response.status_code == 200:
+            if response.status_code in [200, 201]:
                 logger.info(f"Novita API verification successful for model {model}")
             else:
                 failed_models.append(model)

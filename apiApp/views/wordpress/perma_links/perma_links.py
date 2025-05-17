@@ -26,9 +26,10 @@ def get_perma_links(data):
         'Authorization': f'Basic {credentials}',
 
     }
-
+    print(api_url,'api_urlsdfsdf')
     try:
         response = requests.post(api_url, headers=headers)
+        print(response,'responsexxxd')
         response.raise_for_status()  # Raise an error for HTTP failures (e.g., 404, 500)
        
         return response.json()  # Return JSON response data

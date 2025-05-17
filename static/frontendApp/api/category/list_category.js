@@ -1,7 +1,5 @@
 
-function render_data_to_table(response_data, current_page, limit){
-    alert(0)
-
+function render_data_to_table_categories_tbody(response_data, current_page, limit){
     table_data_category('categories_tbody', response_data, 'delete_category_api', 'status_category_api', '', current_page, limit)
 
 }
@@ -24,9 +22,8 @@ async function list_category_api() {
     const current_page_url = window.location.href;
     const domain_slug_id = current_page_url.split('/').pop();
 
-    alert(render_data_to_table)
 
-    const response_data = await list_api(list_category_url, 'categories_tbody', offset, limit, filters, 'delete_category_api', 'status_category_api', '', current_page, 'categorys', domain_slug_id, render_data_to_table);
+    const response_data = await list_api(list_category_url, 'categories_tbody', offset, limit, filters, 'delete_category_api', 'status_category_api', '', current_page, 'categorys', domain_slug_id, render_data_to_table_categories_tbody);
     console.log(response_data,'0')
     
     

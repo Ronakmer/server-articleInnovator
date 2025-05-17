@@ -26,7 +26,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
     response_data.data.forEach((obj, index) => {
         const div_id = document.createElement('div_id');
 
-
+        console.log(obj.domain_id_data,'xxxxyy')
         const article_console_data = article_console_graph_api(article_console_metrics_url, obj.wp_slug, start_date_str, end_date_str);
         const article_analytics_data = article_analytics_graph_api(article_analytics_metrics_url, obj.wp_slug, start_date_str, end_date_str);
         // const article_article_data = article_article_graph_api(article_article_metrics_url, obj.wp_slug, start_date_str, end_date_str);
@@ -43,7 +43,6 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
         const hiddenTags = obj.wp_tag_id_data.slice(5).map(tag => tag.name).join(", ");
 
         const categoryData = obj.wp_category_id_data.map(item => item.name).join(', ');
-        // alert(categoryData)
 
         // // get article_info data  
         // const article_info_obj = await article_info_api(obj.slug_id)
@@ -391,7 +390,7 @@ function table_data_article(tbody_name, response_data, delete_function_name, sta
                                                 <!-- Steven Nice's Block -->
                                                 <div
                                                     class="flex items-center w-1/2 bg-gray-50 max-md:w-full rounded-xl border border-solid border-gray-200 p-3">
-                                                    <img src="${obj.domain_id_data.writer_id_data[0].profile_image}" alt="Profile Picture"
+                                                    <img src="${obj.domain_id_data.writer_id_data[0].profile_image || '/static/frontendApp/assets/images/ronald.png'}" alt="Profile Picture"
                                                         class="w-10 h-10 rounded-full mr-2" />
                                                     <div class="text-gray-600">
                                                         <span

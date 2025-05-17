@@ -202,7 +202,6 @@ function add_ai_article_api() {
 
 function get_domain_data(set_domain_id){
 
-    alert(set_domain_id)
     domain_data = get_data_api(list_domain_url)    
     //set_domain_dropdown
     set_domain_dropdown(domain_data)
@@ -226,7 +225,6 @@ function get_category_data(domain_slug_id){
 
 function get_tag_data(domain_slug_id){
 
-    // alert(set_tag_id)
     tag_data = get_data_api(list_tag_url, domain_slug_id)    
     //set_tag_dropdown
     set_tag_dropdown(tag_data, set_tag_id)

@@ -833,7 +833,7 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full font-poppins">
                         <thead>
-                            <tr class="w-full bg-gray-50 text-gray-900    text-sm leading-normal">
+                            <tr class="w-full bg-gray-50 text-gray-900 text-sm leading-normal">
                                 <th class="py-3 px-6 text-left font-medium">Page</th>
                                 <th class="py-3 px-6 text-left font-medium">Clicks</th>
                                 <th class="py-3 px-6 text-center font-medium">Impressions</th>
@@ -955,7 +955,7 @@
                 </tbody>
             </table>
             <!-- pagination -->
-            {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
+            <div id="pagination_categories_tbody" class="flex justify-center mt-4"></div>
 
           </div>
 
@@ -1035,9 +1035,9 @@
             </table>
             
             
+            <!-- pagination -->
+            <div id="pagination_tag_tbody" class="flex justify-center mt-4"></div>
         </div>
-        <!-- pagination -->
-        {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
 
            <!-- Tab 6 Table Author -->
            <div id="table6" class="tab-content hidden">
@@ -1119,7 +1119,7 @@
             <!-- start Pagignation  -->
             
             <!-- pagination -->
-            {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
+            <div id="pagination_author_tbody" class="flex justify-center mt-4"></div>
 
           </div>
 
@@ -1153,6 +1153,7 @@
             </div>
 
             <!-- Pagination -->
+            {% comment %} <div id="pagination" class="flex justify-center mt-4"></div> {% endcomment %}
             
         </div>
 
@@ -1162,11 +1163,11 @@
         </div>
     </div>
 
-    <div class="p-4">
+    {% comment %} <div class="p-4">
         <!-- pagination -->
         <div id="pagination" class="flex justify-center mt-4"></div>
     
-    </div>
+    </div> {% endcomment %}
 
     <!-- end table tabbed code  -->
     

@@ -95,7 +95,6 @@ function add_ai_configuration_api() {
             api_model.value = data_obj.data[0].api_model;
            
             // set_workspace_ids = data_obj.data[0].workspace_id.map(field => field.slug_id).join(', ')
-            // alert(data_obj.data[0].api_model)
 
 
         } else {

@@ -84,8 +84,11 @@ from apiApp.views.rabbitmq_api.list_queues.list_queues import list_queues
 from apiApp.views.rabbitmq_api.update_worker_scale.update_worker_scale import update_worker_scale
 from apiApp.views.rabbitmq_api.update_worker_scale.update_worker_scale import update_worker_scale
 from apiApp.views.rabbitmq_api.add_queue_api.add_queue_api import add_queue_api
-from apiApp.views.ai_rate_limiter_api.list_ai_rate_limiter_api import list_ai_rate_limiter_api
-from apiApp.views.configuration_settings.configuration_settings import list_configuration_settings,add_configuration_settings,update_configuration_settings,delete_configuration_settings,get_config_field
+from apiApp.views.ai_rate_limiter_api.list_ai_rate_limiter_api.list_ai_rate_limiter_api import list_ai_rate_limiter
+from apiApp.views.ai_rate_limiter_api.scale_ai_rate_limiter_worker_api.scale_ai_rate_limiter_worker_api import scale_ai_rate_limiter_worker
+from apiApp.views.ai_rate_limiter_api.clear_ai_rate_limiter_worker_api.clear_ai_rate_limiter_worker_api import clear_ai_rate_limiter_worker
+
+from apiApp.views.integration.integration import list_integration,add_integration,update_integration,delete_integration,get_integration_field
 
 ######### image gen  #########
 from apiApp.views.image_gen.image_tag.image_tag import list_image_tag, add_image_tag, update_image_tag, delete_image_tag
@@ -429,19 +432,21 @@ permissions_list = [
     {"name": "add_queue_api", "route": "queue/add/", "description": "add-queue-api", "status": "True", "group": "add-queue-api"},
     
     # ai_rate_limiter_api
-    {"name": "list_ai_rate_limiter", "route": "ai-rate-limiter/", "description": "list-ai-rate-limiter", "status": "True", "group": "list-ai-rate-limiter"},
+    {"name": "list_ai_rate_limiter", "route": "ai-rate-limiters/", "description": "list-ai-rate-limiter", "status": "True", "group": "ai-rate-limiter"},
+    {"name": "scale_ai_rate_limiter_worker", "route": "scale-ai-rate-limiter-worker/", "description": "scale-ai-rate-limiter-worker", "status": "True", "group": "ai-rate-limiter"},
+    {"name": "clear_ai_rate_limiter_worker", "route": "clear-ai-rate-limiter-worker/", "description": "clear-ai-rate-limiter-worker", "status": "True", "group": "ai-rate-limiter"},
 
     # fetch_google_images
     {"name": "fetch_google_images", "route": "fetch/google-images/", "description": "fetch/google-images/", "status": "True", "group": "fetch/google-images/"},
 
 
 
-    # configuration settings
-    {"name": "list_configuration_settings", "route": "configuration-settings/", "description": "all configuration-settings", "status": "True", "group": "configuration-settings"},
-    {"name": "add_configuration_settings", "route": "configuration-settings/add/", "description": "add configuration-settings", "status": "True", "group": "configuration-settings"},
-    {"name": "update_configuration_settings", "route": "configuration-settings/update/<slug:slug_id>", "description": "update configuration-settings", "status": "True", "group": "configuration-settings"},
-    {"name": "delete_configuration_settings", "route": "configuration-settings/delete/<slug:slug_id>", "description": "delete configuration-settings", "status": "True", "group": "configuration-settings"},
-    {"name": "get_config_field", "route": "config-fields/", "description": "config-field", "status": "True", "group": "config-field"},
+    # integration
+    {"name": "list_integration", "route": "integrations/", "description": "all integration", "status": "True", "group": "integration"},
+    {"name": "add_integration", "route": "integration/add/", "description": "add integration", "status": "True", "group": "integration"},
+    {"name": "update_integration", "route": "integration/update/<slug:slug_id>", "description": "update integration", "status": "True", "group": "integration"},
+    {"name": "delete_integration", "route": "integration/delete/<slug:slug_id>", "description": "delete integration", "status": "True", "group": "integration"},
+    {"name": "get_integration_field", "route": "integration-fields/", "description": "integration-field", "status": "True", "group": "integration"},
 
 
 

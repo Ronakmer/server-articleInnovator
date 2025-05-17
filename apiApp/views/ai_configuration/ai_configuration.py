@@ -225,17 +225,7 @@ def update_ai_configuration(request, slug_id):
             return JsonResponse({
                 "error": "workspace not found ",
                 "success": False,
-            }, status=404)
-            
-            
-        delete_response, delete_error = delete_ai_rate_limiter_provider_key_api(workspace_obj.slug_id, obj.ai_rate_key_id)
-
-        if delete_error or not delete_response or delete_response.get('status') != 'success':
-            return JsonResponse({
-                "error": f"Failed to delete ai configuration via API. {delete_error or delete_response}",
-                "success": False,
-            }, status=400)
-        
+            }, status=404)        
 
         provider_data = {
             "api_provider": request.data.get('api_provider', ''),
@@ -245,9 +235,10 @@ def update_ai_configuration(request, slug_id):
             "api_version": request.data.get('api_version', ''),
             "api_url": request.data.get('api_url', ''),
             "email": request.data.get('email', ''),
+            "ai_rate_key_id":obj.ai_rate_key_id,
         }
    
-        key_response, error = update_ai_rate_limiter_provider_key_api(workspace_obj.slug_id, provider_data)
+        _, error = update_ai_rate_limiter_provider_key_api(workspace_obj.slug_id, provider_data)
         if error:
             return JsonResponse({
                 "error": "Failed to create new API key.",
@@ -260,7 +251,6 @@ def update_ai_configuration(request, slug_id):
         data = request.data.copy()
         data["workspace_id"] = workspace_obj.id 
         # data['created_by'] = obj.created_by.id
-        data["ai_rate_key_id"] = key_response.get("key_id", "")
 
 
         serialized_data = ai_configuration_serializer(instance=obj, data=data, partial=True)        
@@ -382,11 +372,11 @@ def delete_ai_configuration(request, slug_id):
         workspace_id = obj.workspace_id.slug_id
         key_id = obj.ai_rate_key_id
         
-        delete_response, delete_error = delete_ai_rate_limiter_provider_key_api(workspace_id, key_id)
+        _, delete_error = delete_ai_rate_limiter_provider_key_api(workspace_id, key_id)
 
-        if delete_error or not delete_response or delete_response.get('status') != 'success':
+        if delete_error:
             return JsonResponse({
-                "error": f"Failed to delete ai configuration via API. {delete_error or delete_response}",
+                "error": f"Failed to delete ai configuration via API.",
                 "success": False,
             }, status=400)
         

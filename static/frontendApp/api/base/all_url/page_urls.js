@@ -147,10 +147,10 @@ var add_supportive_prompt_page_url = `${page_url}supportive-prompt/add/`;
 var update_supportive_prompt_page_url = `${page_url}supportive-prompt/update/`;
 var delete_supportive_prompt_page_url = `${page_url}supportive-prompt/delete/`;
 
-var list_configuration_settings_page_url = `${page_url}configuration-settings/`;
-var add_configuration_settings_page_url = `${page_url}configuration-settings/add/`;
-var update_configuration_settings_page_url = `${page_url}configuration-settings/update/`;
-var delete_configuration_settings_page_url = `${page_url}configuration-settings/delete/`;
+var list_integration_page_url = `${page_url}integrations/`;
+var add_integration_page_url = `${page_url}integration/add/`;
+var update_integration_page_url = `${page_url}integration/update/`;
+var delete_integration_page_url = `${page_url}integration/delete/`;
 
 
 
