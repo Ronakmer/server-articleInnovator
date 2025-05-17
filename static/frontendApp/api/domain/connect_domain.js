@@ -8,7 +8,6 @@ function connect_domain() {
     console.log(domain_name,'domain_name')
     if (!domain_name) {
         show_toast("error", `Error: Please enter a domain name`);
-
         return;
     }
 

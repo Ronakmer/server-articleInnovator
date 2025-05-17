@@ -1,6 +1,6 @@
 
-var url = 'https://127.0.0.1:8000/api/';
-// var url = 'https://192.168.1.5:8000/api/';
+// var url = 'https://127.0.0.1:8000/api/';
+var url = 'https://165.227.94.74:10001/api/';
 
 var refresh_token_url = `${url}get-refresh-token/`;
 
