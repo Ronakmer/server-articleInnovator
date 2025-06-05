@@ -15,7 +15,7 @@ permissions_list = [
     {"name": "list_ai_message", "route": "ai-messages/", "description": "all invitation code details", "status": "True", "group": "ai-message"},
     {"name": "add_ai_message", "route": "ai-message/add/", "description": "add invitation code details", "status": "True", "group": "ai-message"},
     {"name": "update_ai_message", "route": "ai-message/update/<str:article_id>/<str:message_id>/", "description": "update invitation code details", "status": "True", "group": "ai-message"},
-    {"name": "delete_ai_message", "route": "ai-message/delete/<str:article_id>/<str:message_id>/", "description": "delete invitation code details", "status": "True", "group": "ai-message"},
+    {"name": "delete_ai_message", "route": "ai-message/delete/<str:article_id>/", "description": "delete invitation code details", "status": "True", "group": "ai-message"},
     
 ]
 

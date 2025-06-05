@@ -138,10 +138,10 @@ def update_ai_message(request, article_id, message_id):
 
 # Delete AI Message
 @api_view(['DELETE'])
-def delete_ai_message(request, article_id, message_id):
+def delete_ai_message(request, article_id):
     try:
         try:
-            obj = ai_message.objects.get(article_id=article_id, message_id=message_id)
+            obj = ai_message.objects.filter(article_id=article_id)
         except ai_message.DoesNotExist:
             return JsonResponse({
                 "error": "AI message not found.",
