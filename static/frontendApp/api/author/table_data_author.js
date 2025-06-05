@@ -47,7 +47,7 @@ function table_data_author(tbody_name, response_data, delete_function_name, stat
             <td class="py-3.5 px-4 hidden" data-permission="update_author, delete_author">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <button class="mr-2 hidden" data-permission="update_author"  onclick="set_update_author_data('${obj.slug_id}', '${obj.username}', '${obj.first_name}', '${obj.last_name}', '${obj.email}', '${obj.bio}','${obj.password}','${obj.wp_author_id}')" >
+                    <button class="mr-2 hidden" data-permission="update_author"  onclick="set_update_author_data('${obj.slug_id}', '${obj.username}', '${obj.first_name}', '${obj.last_name}', '${obj.email}', '${obj.bio}','${obj.password}','${obj.wp_author_id}', '${obj.default_section}')" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>

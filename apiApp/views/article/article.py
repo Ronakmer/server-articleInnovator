@@ -135,13 +135,17 @@ def add_article(request):
             print('jjjjjjjjjjjjjj')
             response = add_ai_article(request_user, request.data)
             print(response,'ssxxss')
-            # if response.get("success"):
-            #     # Run rabbitmq_api in the background
-            #     def run_rabbitmq_api():
-            #         input_json = create_input_json(response.get("article_slug_id"))
-            #         send_rabbitmq_message_api(input_json)
+            
+            
+            if response.get("success"):
+                # Run rabbitmq_api in the background
+                def run_rabbitmq_api():
+                    input_json = create_input_json(response.get("article_slug_id"))
+                    print(input_json,'input_jsonsssssddfd')
+                    # send_rabbitmq_message_api(input_json)
 
-            #     threading.Thread(target=run_rabbitmq_api).start()
+                threading.Thread(target=run_rabbitmq_api).start()
+
 
         elif article_type_category == "manual":
             print('xxxxxxxxxxxxxxx')

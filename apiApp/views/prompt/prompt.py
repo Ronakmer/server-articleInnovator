@@ -195,19 +195,6 @@ def add_prompt(request):
         # Retrieve required fields
         # workspace_slugs = request.data.get("workspace_slug_id")
         # article_type_slug_id = request.data.get("article_type_slug_id")
-      
-        # wp_prompt_wp_meta_descriptions_id = request.data.get("wp_prompt_wp_meta_descriptions_id")
-        # wp_prompt_wp_meta_tags_id = request.data.get("wp_prompt_wp_meta_tags_id")
-        # wp_prompt_wp_external_links_id = request.data.get("wp_prompt_wp_external_links_id")
-        # wp_prompt_wp_internal_links_id = request.data.get("wp_prompt_wp_internal_links_id")
-        # wp_prompt_wp_authors_id = request.data.get("wp_prompt_wp_authors_id")
-        # wp_prompt_wp_categories_id = request.data.get("wp_prompt_wp_categories_id")
-        # wp_prompt_wp_tags_id = request.data.get("wp_prompt_wp_tags_id")
-        
-        
-        
-        
-        
         
         # if not workspace_slugs:
         #     return JsonResponse({
@@ -226,11 +213,12 @@ def add_prompt(request):
         required_fields = ["workspace_slug_id", "article_type_slug_id"]
 
         # Identify dynamic fields (keys starting with 'supportive_prompt_')
-        dynamic_fields = [key for key in request.data.keys() if key.startswith("supportive_prompt_")]
+        # dynamic_fields = [key for key in request.data.keys() if key.startswith("supportive_prompt_")]
 
         # Combine all required fields
-        all_required_fields = required_fields + dynamic_fields
-
+        # all_required_fields = required_fields + dynamic_fields
+        all_required_fields = required_fields
+        
         # Validate required fields
         missing_fields = [field for field in all_required_fields if not request.data.get(field)]
         if missing_fields:
@@ -275,15 +263,15 @@ def add_prompt(request):
             data["created_by"] = request_user.id
             
             # Extracting `supportive_prompt_*` fields and converting them into JSON format
-            wordpress_prompt_json_data = {
+            supportive_prompt_json_data = {
                 key: (value[0] if isinstance(value, list) and value else value)
                 for key, value in request.data.items()
                 if key.startswith("supportive_prompt_")
             }
-            print(wordpress_prompt_json_data,'wordpress_prompt_json_dataxxxxx')
+            print(supportive_prompt_json_data,'supportive_prompt_json_dataxxxxx')
 
             # Convert the dictionary to a JSON string
-            data["wordpress_prompt_json_data"] = json.dumps(wordpress_prompt_json_data)
+            data["supportive_prompt_json_data"] = json.dumps(supportive_prompt_json_data)
 
             serialized_data = prompt_serializer(data=data)
             if serialized_data.is_valid():
@@ -348,10 +336,11 @@ def update_prompt(request, slug_id):
         required_fields = ["workspace_slug_id", "article_type_slug_id"]
 
         # Identify dynamic fields (keys starting with 'supportive_prompt_')
-        dynamic_fields = [key for key in request.data.keys() if key.startswith("supportive_prompt_")]
+        # dynamic_fields = [key for key in request.data.keys() if key.startswith("supportive_prompt_")]
 
         # Combine all required fields
-        all_required_fields = required_fields + dynamic_fields
+        # all_required_fields = required_fields + dynamic_fields
+        all_required_fields = required_fields
 
         # Validate missing fields
         missing_fields = [field for field in all_required_fields if not request.data.get(field)]
@@ -388,12 +377,12 @@ def update_prompt(request, slug_id):
         data["created_by"] = request_user.id  # If you're using updated_by, replace accordingly
 
         # Handle supportive_prompt_* fields
-        wordpress_prompt_json_data = {
+        supportive_prompt_json_data = {
             key: (value[0] if isinstance(value, list) and value else value)
             for key, value in request.data.items()
             if key.startswith("supportive_prompt_")
         }
-        data["wordpress_prompt_json_data"] = json.dumps(wordpress_prompt_json_data)
+        data["supportive_prompt_json_data"] = json.dumps(supportive_prompt_json_data)
 
         # Serialize and update
         serialized_data = prompt_serializer(instance=obj, data=data, partial=True)

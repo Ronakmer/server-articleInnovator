@@ -30,6 +30,16 @@ def add_ai_article(request_user, request_data):
             "prompt_slug_id": request_data.get('prompt_slug_id'),
             "url": request_data.get('url'),
             "keyword": request_data.get('keyword'),
+            # "is_category_selected_by_ai": request_data.get('is_category_selected_by_ai'),
+            # "is_category_generated_by_ai": request_data.get('is_category_generated_by_ai'),
+            # "is_tag_selected_by_ai": request_data.get('is_tag_selected_by_ai'),
+            # "is_tag_generated_by_ai": request_data.get('is_tag_generated_by_ai'),
+            # "is_author_selected_by_ai": request_data.get('is_author_selected_by_ai'),
+            # "is_meta_description_generated_by_ai": request_data.get('is_meta_description_generated_by_ai'),
+            # "is_meta_keyword_generated_by_ai": request_data.get('is_meta_keyword_generated_by_ai'),
+            # "is_meta_title_generated_by_ai": request_data.get('is_meta_title_generated_by_ai'),
+            # "is_internal_links_generated_by_ai": request_data.get('is_internal_links_generated_by_ai'),
+            # "is_external_links_generated_by_ai": request_data.get('is_external_links_generated_by_ai'),
         }
 
         # Step 2: Handle wp_schedule_time separately
@@ -85,6 +95,63 @@ def add_ai_article(request_user, request_data):
         except prompt.DoesNotExist:
             return {"error": "Prompt not found.", "success": False}
 
+        category_ids = []
+        tag_ids = []
+        
+        category_names = []
+        tag_names = []
+        
+        wp_author_obj=None
+        print(prompt_obj.supportive_prompt_json_data,'xdsd2341')
+        
+        supportive_prompt_data = prompt_obj.supportive_prompt_json_data
+        print(supportive_prompt_data.get('supportive_prompt_category_selected_by_ai_id'),'23211111111111')
+        
+        if not supportive_prompt_data.get('supportive_prompt_category_selected_by_ai_id'):
+            print(request_data.get("category_slug_id"),'000000000000000000')
+            category_slugs = request_data.get("category_slug_id")
+            if category_slugs:
+                category_slug_list = category_slugs.split(",")
+                category_objs = wp_category.objects.filter(slug_id__in=category_slug_list)
+
+                # Get category names and list of objects
+                category_names = [cat.name for cat in category_objs]
+                category_ids = list(category_objs)
+            else:
+                return {"error": "Missing required category", "success": False}
+
+        print(category_ids,'category_idsxxx')
+
+        # Handle tag selection
+        if not supportive_prompt_data.get('supportive_prompt_tag_selected_by_ai_id'):
+            print(request_data.get("tag_slug_id"),'000000000000000000')
+            
+            tag_slugs = request_data.get("tag_slug_id")
+            if tag_slugs:
+                tag_slug_list = tag_slugs.split(",")
+                tag_objs = wp_tag.objects.filter(slug_id__in=tag_slug_list)
+
+                tag_names = [tag.name for tag in tag_objs]
+                tag_ids = list(tag_objs)
+            else:
+                return {"error": "Missing required tag", "success": False}
+
+        # Handle author selection
+        if not supportive_prompt_data.get('supportive_prompt_author_selected_by_ai_id'):
+            print(request_data.get("author_slug_id"),'000000000000000000')
+            
+            author_slug = request_data.get("author_slug_id")
+            if author_slug:
+                try:
+                    wp_author_obj = wp_author.objects.get(slug_id=author_slug)
+                except wp_author.DoesNotExist:
+                    return {"error": "Author not found.", "success": False}
+            else:
+                return {"error": "Missing required author", "success": False}
+
+
+
+
         print(data["wp_status"] ,'data["wp_status"] ')
         # Step 7: Save the article object
         article_obj = article.objects.create(
@@ -97,11 +164,37 @@ def add_ai_article(request_user, request_data):
             prompt_id=prompt_obj,
             url=data["url"],
             keyword=data["keyword"],
+            wp_author_id = wp_author_obj if wp_author_obj else None,
+            # is_category_selected_by_ai = str_to_bool(data.get("is_category_selected_by_ai", True)),
+            # is_category_generated_by_ai = str_to_bool(data.get("is_category_generated_by_ai", True)),
+            # is_tag_selected_by_ai = str_to_bool(data.get("is_tag_selected_by_ai", True)),
+            # is_tag_generated_by_ai = str_to_bool(data.get("is_tag_generated_by_ai", True)),
+            # is_author_selected_by_ai = str_to_bool(data.get("is_author_selected_by_ai", True)),
+            # is_meta_description_generated_by_ai = str_to_bool(data.get("is_meta_description_generated_by_ai", True)),
+            # is_meta_keyword_generated_by_ai = str_to_bool(data.get("is_meta_keyword_generated_by_ai", True)),
+            # is_meta_title_generated_by_ai = str_to_bool(data.get("is_meta_title_generated_by_ai", True)),
+            # is_internal_links_generated_by_ai = str_to_bool(data.get("is_internal_links_generated_by_ai", True)),
+            # is_external_links_generated_by_ai = str_to_bool(data.get("is_external_links_generated_by_ai", True)),
             created_by=request_user
         )
+        
+        # ✅ Assign ManyToMany fields AFTER saving
+        if category_ids:
+            article_obj.wp_category_id.set([cat.pk for cat in category_ids])  # .set() expects a list of IDs or objects
+
+        if tag_ids:
+            article_obj.wp_tag_id.set([tag.pk for tag in tag_ids])
 
         return {"message": "Data added successfully.", "success": True, "article_slug_id": article_obj.slug_id}
 
     except Exception as e:
         print("Unexpected error in add_ai_article:", e)
         return {"error": f"Internal server error: {str(e)}", "success": False}
+    
+    
+    
+    
+    
+    
+# def str_to_bool(val):
+#     return str(val).lower() == 'true'

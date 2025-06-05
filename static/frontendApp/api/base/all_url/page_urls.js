@@ -1,6 +1,6 @@
 
-// var page_url = 'https://127.0.0.1:8000/';
-var page_url = 'https://165.227.94.74:10001/';
+var page_url = 'https://127.0.0.1:8000/';
+// var page_url = 'https://165.227.94.74:10001/';
 
 var login_page_url = `${page_url}`;
 

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "apiApp",
     "frontendApp",
+    "AIMessageService",
     "django_extensions",
     "rest_framework",
     "rest_framework_simplejwt",
@@ -57,7 +58,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "apiApp.middleware.access_control.AccessControlMiddleware",  # custom access middleware for apiApp
-    "apiApp.middleware.rate_limit.RateLimitMiddleware",  # custom rate limit middleware
+    # "apiApp.middleware.rate_limit.RateLimitMiddleware",  # custom rate limit middleware
     # "apiApp.middleware.activity_log.ActivityLogMiddleware",  # custom log save for apiApp
     "frontendApp.middleware.access_control.AccessControlMiddleware",  # custom access middleware for frontendApp
     
@@ -105,6 +106,14 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1', 
+        'PORT': '5432',
+    },
+     'ai_messages_db': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ai_messages',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -316,11 +325,8 @@ USE_TZ = False
 
 
 
-
-
-
-
-
+# settings.py
+DATABASE_ROUTERS = ['AIMessageService.db_router.AiMessageRouter']
 
 
 

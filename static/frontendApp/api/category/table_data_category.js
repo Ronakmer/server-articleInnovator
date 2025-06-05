@@ -31,7 +31,7 @@ function table_data_category(tbody_name, response_data, delete_function_name, st
             <td class="py-3.5 px-4 hidden" data-permission="update_category, delete_category">
                 <div class="flex font-poppins">
                     <!-- update -->
-                    <button class="mr-2 hidden" data-permission="update_category" onclick="set_update_category_data('${obj.slug_id}', '${obj.name}', '${obj.slug}', '${obj.description}', '${obj.wp_cat_id}')" >
+                    <button class="mr-2 hidden" data-permission="update_category" onclick="set_update_category_data('${obj.slug_id}', '${obj.name}', '${obj.slug}', '${obj.description}', '${obj.wp_cat_id}', '${obj.default_section}')" >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="32" rx="16" fill="#EAECF0"></rect>

@@ -12,11 +12,12 @@ function add_category_api() {
     const name = category_form.querySelector('[name="name"]').value;
     const slug = category_form.querySelector('[name="slug"]').value;
     const description = category_form.querySelector('[name="description"]').value;
+    const category_default_section = category_form.querySelector('[name="category_default_section"]').checked;
     const category_wp_id = category_form.querySelector('[name="wp_cat_id"]').value;
     const category_slug_id = category_form.querySelector('[name="category_slug_id"]').value;
     const domain_slug_id = current_page_url.split('/').pop();
 
-    
+    // alert(category_default_section)
     const data = new FormData();
     data.append("name", name);
     data.append("slug", slug);
@@ -24,6 +25,7 @@ function add_category_api() {
     data.append("domain_slug_id", domain_slug_id);
     data.append("category_wp_id", category_wp_id);
     data.append("name", name);
+    data.append("default_section", category_default_section);
     data.append("derived_by", 'user');
 
 

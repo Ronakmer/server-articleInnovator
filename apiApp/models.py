@@ -296,6 +296,12 @@ class domain(models.Model):
 
 #  wordpress tag
 class wp_tag(models.Model):
+    
+    DERIVED_CHOICES = [
+        ('ai', 'Ai'),
+        ('wordpress', 'Wordpress'),
+    ]
+
     domain_id = models.ForeignKey(to=domain,on_delete=models.CASCADE)
     name = models.CharField(max_length=200,default="")
     slug = models.CharField(max_length=200,default="")
@@ -306,7 +312,7 @@ class wp_tag(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
-    derived_by = models.CharField(max_length=200, default="", blank=True)
+    derived_by =  models.CharField( max_length=50, choices=DERIVED_CHOICES, blank=True, null=True, default=None )
     
 
     
@@ -322,6 +328,12 @@ class wp_tag(models.Model):
     
 #  wordpress category
 class wp_category(models.Model):
+    DERIVED_CHOICES = [
+        ('ai', 'Ai'),
+        ('wordpress', 'Wordpress'),
+    ]
+
+
     domain_id = models.ForeignKey(to=domain,on_delete=models.CASCADE)
     name = models.CharField(max_length=200,default="")
     slug = models.CharField(max_length=200,default="")
@@ -332,8 +344,8 @@ class wp_category(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
-    derived_by = models.CharField(max_length=200, default="", blank=True)
-    
+    derived_by =  models.CharField( max_length=50, choices=DERIVED_CHOICES, blank=True, null=True, default=None )
+    default_section = models.BooleanField(default=False)
 
 
     # Generate a slug using UUID
@@ -342,12 +354,25 @@ class wp_category(models.Model):
             self.slug_id = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
+
+        # Ensure only one default_section=True per workspace
+        if self.default_section:
+            wp_category.objects.filter(domain_id=self.domain_id, default_section=True).update(default_section=False)
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
     
     
 #  wordpress author 
 class wp_author(models.Model):
+    
+    DERIVED_CHOICES = [
+        ('ai', 'Ai'),
+        ('wordpress', 'Wordpress'),
+    ]
+    
     domain_id = models.ForeignKey(to=domain,on_delete=models.CASCADE)
     username = models.CharField(max_length=200,default="")
     author_password=models.CharField(max_length=200,default="")
@@ -360,9 +385,11 @@ class wp_author(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    profile_image=models.ImageField(upload_to="wp_author", default="",  blank=True)
     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
-    derived_by = models.CharField(max_length=200, default="", blank=True)
+    derived_by =  models.CharField( max_length=50, choices=DERIVED_CHOICES, blank=True, null=True, default=None )
 
+    default_section = models.BooleanField(default=False)
 
     
     # Generate a slug using UUID
@@ -370,6 +397,13 @@ class wp_author(models.Model):
         if not self.slug_id:
             self.slug_id = str(uuid.uuid4())
         super().save(*args, **kwargs)
+
+        # Ensure only one default_section=True per workspace
+        if self.default_section:
+            wp_author.objects.filter(domain_id=self.domain_id, default_section=True).update(default_section=False)
+
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.username
@@ -410,7 +444,7 @@ class language(models.Model):
             self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
     
     
@@ -430,7 +464,7 @@ class country(models.Model):
             self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -456,7 +490,7 @@ class motivation(models.Model):
             self.status = True  # forcefully override
         super().save(*args, **kwargs)
         
-    def _str_(self):
+    def __str__(self):
         return f"{self.quote} - {self.quote_author}"
     
     
@@ -565,7 +599,7 @@ class supportive_prompt_type(models.Model):
             self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -588,7 +622,7 @@ class variables(models.Model):
             self.slug_id = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -614,7 +648,7 @@ class supportive_prompt(models.Model):
             self.status = True  # forcefully override
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -627,7 +661,7 @@ class prompt(models.Model):
     name = models.CharField(max_length=200, default="")
     ai_rate_model = models.CharField(max_length=200, default="")
     prompt_data = models.JSONField(default=dict)  
-    wordpress_prompt_json_data = models.JSONField(default=dict)  
+    supportive_prompt_json_data = models.JSONField(default=dict)  
     status = models.BooleanField(default=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -642,7 +676,7 @@ class prompt(models.Model):
 
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
     
     
@@ -685,6 +719,19 @@ class article(models.Model):
     article_status = models.CharField(max_length=200, choices=ARTICLE_STATUS_CHOICES, null=True, blank=True)    
     wp_schedule_time = models.DateTimeField(null=True, blank=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
+    
+    # is_category_selected_by_ai = models.BooleanField(default=True)
+    # is_category_generated_by_ai = models.BooleanField(default=True)
+    # is_tag_selected_by_ai = models.BooleanField(default=True)
+    # is_tag_generated_by_ai = models.BooleanField(default=True)
+    # is_author_selected_by_ai = models.BooleanField(default=True)
+    # is_meta_description_generated_by_ai = models.BooleanField(default=True)
+    # is_meta_keyword_generated_by_ai = models.BooleanField(default=True)
+    # is_meta_title_generated_by_ai = models.BooleanField(default=True)
+    # is_internal_links_generated_by_ai = models.BooleanField(default=True)
+    # is_external_links_generated_by_ai = models.BooleanField(default=True)
+
+
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -696,7 +743,7 @@ class article(models.Model):
         super().save(*args, **kwargs)
 
 
-    def _str_(self):
+    def __str__(self):
         return self.wp_title
 
 
@@ -728,15 +775,20 @@ class article_info(models.Model):
             self.slug_id = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.wp_title
 
     
     
 #  internal links
 class internal_links(models.Model):
+    
+    DERIVED_CHOICES = [
+        ('ai', 'Ai'),
+        ('wordpress', 'Wordpress'),
+    ]
+    
     article_id = models.ForeignKey(to=article, on_delete=models.CASCADE, null=True, blank=True)
-
     link_type = models.CharField(max_length=100, null=True, blank=True) # inbound / outbound
     post_title = models.CharField(max_length=100, null=True, blank=True)
     anchor_text = models.CharField(max_length=100, null=True, blank=True)
@@ -748,6 +800,7 @@ class internal_links(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    derived_by =  models.CharField( max_length=50, choices=DERIVED_CHOICES, blank=True, null=True, default=None )
     created_by = models.ForeignKey(to=User, related_name='internal_links_created_by', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
@@ -756,13 +809,19 @@ class internal_links(models.Model):
             self.slug_id = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.link_type
 
 
 
 #  external links
 class external_links(models.Model):
+    
+    DERIVED_CHOICES = [
+        ('ai', 'Ai'),
+        ('wordpress', 'Wordpress'),
+    ]
+    
     article_id = models.ForeignKey(to=article, on_delete=models.CASCADE, null=True, blank=True)
     anchor_text = models.CharField(max_length=100, null=True, blank=True)
     domain_name = models.CharField(max_length=100, null=True, blank=True)
@@ -772,6 +831,7 @@ class external_links(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
+    derived_by =  models.CharField( max_length=50, choices=DERIVED_CHOICES, blank=True, null=True, default=None )
     created_by = models.ForeignKey(to=User, related_name='external_links_created_by', on_delete=models.SET_NULL, null=True, blank=True)
     
     # Generate a slug using UUID
@@ -780,7 +840,7 @@ class external_links(models.Model):
             self.slug_id = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.anchor_text
     
     
@@ -1125,7 +1185,7 @@ class keyword(models.Model):
         super().save(*args, **kwargs)
 
 
-    def _str_(self):
+    def __str__(self):
         return self.keyword_value
 
 

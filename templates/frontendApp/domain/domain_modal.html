@@ -1,5 +1,7 @@
 
+{% load static %}
 
+<script src="{% static 'frontendApp/api/author/get_avatar_image.js' %}" ></script>
 
 <style>
     /* Modal Styles */
@@ -122,6 +124,11 @@
                                     placeholder="Description" required="">
                             </div>
         
+                        </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3 p-[10px]  border border-gray-300 rounded-lg">
+                            <input id="category_default_section" type="checkbox" value="" name="category_default_section"
+                                class="w-4 h-4 border border-gray-300 rounded-sm  hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-900"><label
+                                class=" text-sm font-medium text-gray-900 w-full flex items-center">Default</label>
                         </div>
                         <div class="flex flex-col md:flex-row items-start gap-3">
                             <button type="button" onclick="add_category_api()"
@@ -308,6 +315,90 @@
                             </div>
         
                         </div>
+                        <div class="flex flex-col md:flex-row items-start gap-3 p-[10px]  border border-gray-300 rounded-lg">
+                            <input id="author_default_section" type="checkbox" value="" name="author_default_section"
+                                class="w-4 h-4 border border-gray-300 rounded-sm  hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-900"><label
+                                class=" text-sm font-medium text-gray-900 w-full flex items-center">Default</label>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-start gap-3">
+                            <div class="block w-full ">
+                                <label for="countries"
+                                    class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Profile Image
+                                </label>
+                                <!-- image upload  -->
+                                <div
+                                    class="w-full py-9 bg-gray-50 rounded-2xl border-2 border-gray-300 gap-3 grid border-dashed">
+                                    <!-- Upload and Preview Section -->
+                                    <div class="grid gap-1">
+                                        <!-- Icon and Info -->
+                                        <div class="text-center" id="drag-logo-text">
+                                            <svg class="mx-auto" width="41" height="40" viewBox="0 0 41 40"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.4974 28.333V18.333L12.1641 21.6663"
+                                                    stroke="#4F46E5" stroke-width="2.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M15.5 18.333L18.8333 21.6663" stroke="#4F46E5"
+                                                    stroke-width="2.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M37.1693 16.6663V24.9997C37.1693 33.333 33.8359 36.6663 25.5026 36.6663H15.5026C7.16927 36.6663 3.83594 33.333 3.83594 24.9997V14.9997C3.83594 6.66634 7.16927 3.33301 15.5026 3.33301H23.8359"
+                                                    stroke="#4F46E5" stroke-width="2.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path
+                                                    d="M37.1693 16.6663H30.5026C25.5026 16.6663 23.8359 14.9997 23.8359 9.99967V3.33301L37.1693 16.6663Z"
+                                                    stroke="#4F46E5" stroke-width="2.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <h2 class="text-gray-600 text-sm leading-4 pt-2 pb-2">Drag logo
+                                                here</h2>
+                                            <span class="text-gray-400 font-normal text-sm"
+                                                id="choose-file-text">OR</span>
+                                        </div>
+
+                                        <!-- Image Preview & Crop Section -->
+                                        <div class="flex flex-col items-center justify-center mt-0">
+                                            <div id="preview-container"
+                                                class="relative w-64 h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md hidden">
+                                                <!-- Cropped Image Preview -->
+                                                <img id="cropped-image"
+                                                    class="object-cover w-full h-full" />
+                                            </div>
+
+                                            <!-- File Input -->
+                                            <label class="mt-4">
+                                                <input type="file" id="file-input" accept="image/*"name="profile_image" value=""  hidden>
+
+                                                <div
+                                                    class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-lg shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">
+                                                    Choose File
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Crop Controls (visible after upload) -->
+                                    <div id="crop-controls"
+                                        class="flex items-center justify-center gap-2 mt-2 hidden">
+                                        <button id="crop-button" type="button"
+                                            class="px-4 py-2 bg-indigo-600 text-xs text-white rounded-md">Crop</button>
+                                        <button id="reset-button" type="button"
+                                            class="px-4 py-2 bg-red-600 text-white text-xs rounded-md">Reset</button>
+
+                                    </div>  
+                                </div>
+                            
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap -m-2 mt-3">
+                            <label for="countries"
+                                class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">
+                                Avatar
+                            </label>
+
+                            <div id="avatar-images-container"></div>
+                        </div>
+
                         <div class="flex flex-col md:flex-row items-start gap-3">
                             <button type="button" onclick="add_author_api()"
                                 class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
@@ -326,31 +417,32 @@
 
 
 
-
 <script>
 
     // set update data in tag
     function set_update_tag_data(slug_id, name, slug, description, wp_tag_id){
 
-        tag_slug_id.value = slug_id
-        tag_name.value = name
-        tag_slug.value = slug
-        tag_description.value = description
-        tag_wp_id.value = wp_tag_id
+        tag_slug_id.value = slug_id;
+        tag_name.value = name;
+        tag_slug.value = slug;
+        tag_description.value = description;
+        tag_wp_id.value = wp_tag_id;
 
         // open modal
         openModal("tag")
     }
 
     // set update data in category
-    function set_update_category_data(slug_id, name, slug, description, wp_cat_id){
+    function set_update_category_data(slug_id, name, slug, description, wp_cat_id, default_section){
 
+        alert(default_section)
+        category_slug_id.value = slug_id;
+        category_name.value = name;
+        category_slug.value = slug;
+        category_description.value = description;
+        category_wp_id.value = wp_cat_id;
+        category_default_section.checked = String(default_section).toLowerCase() === "true";
 
-        category_slug_id.value = slug_id
-        category_name.value = name
-        category_slug.value = slug
-        category_description.value = description
-        category_wp_id.value = wp_cat_id
 
         // open modal
         openModal("category")
@@ -358,16 +450,18 @@
 
 
     // set update data in author
-    function set_update_author_data(slug_id, username, first_name, last_name, email, bio, password, wp_author_id){        
+    function set_update_author_data(slug_id, username, first_name, last_name, email, bio, password, wp_author_id, default_section){        
 
-        author_slug_id.value = slug_id
-        author_username.value = username
-        author_first_name.value = first_name
-        author_last_name.value = last_name
-        author_email.value = email
-        author_bio.value = bio
-        author_password.value = password
-        wp_author_id.value = wp_author_id
+        author_slug_id.value = slug_id;
+        author_username.value = username;
+        author_username.disabled = true;  
+        author_first_name.value = first_name;
+        author_last_name.value = last_name;
+        author_email.value = email;
+        author_bio.value = bio;
+        author_password.value = password;
+        wp_author_id.value = wp_author_id;
+        author_default_section.checked = String(default_section).toLowerCase() === "true";
 
 
         // open modal

@@ -27,7 +27,11 @@ function closeModal() {
 }
 
 // Toggle modal visibility
-toggleButton.addEventListener('click', openModal);
+// toggleButton.addEventListener('click', openModal);
+toggleButton.addEventListener('click', function () {
+    openModal('category');
+});
+
 closeModalButton.addEventListener('click', closeModal);
 
 

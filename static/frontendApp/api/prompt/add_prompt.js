@@ -112,8 +112,8 @@ function add_prompt_api() {
             set_ai_rate_model = data_obj.data[0].ai_rate_model;
 
 
-            console.log(data_obj.data[0].wordpress_prompt_json_data,'//////////////')
-            const obj_data = JSON.stringify(data_obj.data[0].wordpress_prompt_json_data);
+            console.log(data_obj.data[0].supportive_prompt_json_data,'//////////////')
+            const obj_data = JSON.stringify(data_obj.data[0].supportive_prompt_json_data);
             // const parsed_obj_data = JSON.parse(obj_data);
 
 

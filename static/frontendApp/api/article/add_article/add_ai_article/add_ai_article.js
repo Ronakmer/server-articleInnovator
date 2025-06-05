@@ -1,4 +1,57 @@
 
+// // show category, tag and author dropdwon
+// document.addEventListener("DOMContentLoaded", function () {
+//     const toggleVisibility = (checkboxId, divId) => {
+//         const checkbox = document.getElementById(checkboxId);
+//         const div = document.getElementById(divId);
+
+//         const updateDisplay = () => {
+//             if (checkbox.checked) {
+//                 div.classList.add("hidden");
+//             } else {
+//                 div.classList.remove("hidden");
+//             }
+//         };
+
+//         // Initial setup
+//         updateDisplay();
+
+//         // Listen for changes
+//         checkbox.addEventListener("change", updateDisplay);
+//     };
+
+//     toggleVisibility("is_author_selected_by_ai", "author_div_id");
+//     toggleVisibility("is_category_selected_by_ai", "category_div_id");
+//     toggleVisibility("is_tag_selected_by_ai", "tag_div_id");
+// });
+
+
+
+// // toggleVisibility function
+// const toggleVisibility = (checkboxId, divId) => {
+//     const checkbox = document.getElementById(checkboxId);
+//     const div = document.getElementById(divId);
+
+//     if (!checkbox || !div) {
+//         console.warn(`Element not found for checkboxId: ${checkboxId} or divId: ${divId}`);
+//         return;
+//     }
+
+//     const updateDisplay = () => {
+//         if (checkbox.checked) {
+//             div.classList.add("hidden");
+//         } else {
+//             div.classList.remove("hidden");
+//         }
+//     };
+
+//     // Initial setup
+//     updateDisplay();
+
+//     // Listen for changes
+//     checkbox.addEventListener("change", updateDisplay);
+// };
+
 
 
 function temp_set_ai_data() {
@@ -58,6 +111,21 @@ function add_ai_article_api() {
     // const wp_status = ai_article_form.querySelector('[name="wp_status_ai"]').value;
     const url = ai_article_form.querySelector('[name="url"]').value;
     const keyword = ai_article_form.querySelector('[name="keyword"]').value;
+    // const is_category_selected_by_ai = ai_article_form.querySelector('[name="is_category_selected_by_ai"]').checked;
+    // const is_category_generated_by_ai = ai_article_form.querySelector('[name="is_category_generated_by_ai"]').checked;
+    // const is_tag_selected_by_ai = ai_article_form.querySelector('[name="is_tag_selected_by_ai"]').checked;
+    // const is_tag_generated_by_ai = ai_article_form.querySelector('[name="is_tag_generated_by_ai"]').checked;
+    // const is_author_selected_by_ai = ai_article_form.querySelector('[name="is_author_selected_by_ai"]').checked;
+    // const is_meta_description_generated_by_ai = ai_article_form.querySelector('[name="is_meta_description_generated_by_ai"]').checked;
+    // const is_meta_keyword_generated_by_ai = ai_article_form.querySelector('[name="is_meta_keyword_generated_by_ai"]').checked;
+    // const is_meta_title_generated_by_ai = ai_article_form.querySelector('[name="is_meta_title_generated_by_ai"]').checked;
+    // const is_internal_links_generated_by_ai = ai_article_form.querySelector('[name="is_internal_links_generated_by_ai"]').checked;
+    // const is_external_links_generated_by_ai = ai_article_form.querySelector('[name="is_external_links_generated_by_ai"]').checked;
+
+    const author_slug_id_ai = ai_article_form.querySelector('input[name="author_slug_id_ai"]').value;
+    const category_slug_id_ai = ai_article_form.querySelector('input[name="category_slug_id_ai"]').value;
+    const tag_slug_id_ai = ai_article_form.querySelector('input[name="tag_slug_id_ai"]').value;
+
 
     const selectedRadio = ai_article_form.querySelector('input[name="wp_status_ai"]:checked');
     const wp_status_ai = selectedRadio ? selectedRadio.value : null;
@@ -88,6 +156,20 @@ function add_ai_article_api() {
     data.append("wp_status", wp_status_ai);
     data.append("url", url);
     data.append("keyword", keyword);
+    // data.append("is_category_selected_by_ai", is_category_selected_by_ai);
+    // data.append("is_category_generated_by_ai", is_category_generated_by_ai);
+    // data.append("is_tag_selected_by_ai", is_tag_selected_by_ai);
+    // data.append("is_tag_generated_by_ai", is_tag_generated_by_ai);
+    // data.append("is_author_selected_by_ai", is_author_selected_by_ai);
+    // data.append("is_meta_description_generated_by_ai", is_meta_description_generated_by_ai);
+    // data.append("is_meta_keyword_generated_by_ai", is_meta_keyword_generated_by_ai);
+    // data.append("is_meta_title_generated_by_ai", is_meta_title_generated_by_ai);
+    // data.append("is_internal_links_generated_by_ai", is_internal_links_generated_by_ai);
+    // data.append("is_external_links_generated_by_ai", is_external_links_generated_by_ai);
+    data.append("author_slug_id", author_slug_id_ai);
+    data.append("category_slug_id", category_slug_id_ai);
+    data.append("tag_slug_id", tag_slug_id_ai);
+
 
     
     (async ()=>{     
@@ -121,4 +203,30 @@ function get_prompt_data(){
     // const prompt_data = get_data_api(list_prompt_url)    
     set_prompt_dropdown(prompt_data)
 }
-// get_prompt_data();
+// get_prompt_data();\
+
+
+
+
+function get_author_data_ai(domain_slug_id){
+
+    const author_data = get_data_api(list_author_url, domain_slug_id)    
+    //set_author_dropdown
+    set_author_dropdown_ai(author_data)
+}
+
+function get_category_data_ai(domain_slug_id){
+
+    const category_data = get_data_api(list_category_url, domain_slug_id)    
+    //set_category_dropdown
+    set_category_dropdown_ai(category_data)
+}
+
+function get_tag_data_ai(domain_slug_id){
+
+    const tag_data = get_data_api(list_tag_url, domain_slug_id)    
+    //set_tag_dropdown
+    set_tag_dropdown_ai(tag_data)
+}
+
+

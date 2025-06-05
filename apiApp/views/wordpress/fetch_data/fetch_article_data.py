@@ -129,7 +129,8 @@ def process_article(obj_data):
                         post_title=link['post_title'],
                         anchor_text=link['anchor_text'],
                         url=link['url'],
-                        article_id=article_obj
+                        article_id=article_obj,
+                        derived_by='wordpress'
                     )
                     internal_links_obj.save()
 
@@ -139,7 +140,8 @@ def process_article(obj_data):
                 external_links_obj = external_links(
                     anchor_text=links['anchor_text'],
                     url=links['url'],
-                    article_id=article_obj
+                    article_id=article_obj,
+                    derived_by='wordpress'
                 )
                 external_links_obj.save()
 

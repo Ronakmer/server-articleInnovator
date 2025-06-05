@@ -9,6 +9,7 @@ from apiApp.views.decorator.workspace_decorator import workspace_permission_requ
 from apiApp.views.decorator.domain_decorator import domain_permission_required
 from django.db.models import Q
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
+from apiApp.views.base.dynamic_avatar_image_process.dynamic_avatar_image_process import dynamic_avatar_image_process
 
 
 # show wp author
@@ -95,8 +96,38 @@ def add_author(request):
         author_email = request.data.get('email')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
+        derived_by = request.data.get('derived_by')
+        default_section = request.data.get('default_section')
         request_user = request.user
+        
+        avatar_image_path = request.data.get("avatar_image_path")
+        profile_image=request.FILES.get('profile_image')
+
+        # Check if either the profile_image file or the avatar_image_path is provided
+        if not profile_image and not avatar_image_path:
+            return JsonResponse({
+                "error": "Please provide either a profile image or an avatar image path.",
+                "success": False
+            }, status=400)
+
+        # Optionally handle cases where both are provided
+        if profile_image and avatar_image_path:
+            return JsonResponse({
+                "error": "Please provide only one of profile image or avatar image path, not both.",
+                "success": False
+            }, status=400)
             
+        if avatar_image_path:
+            if not avatar_image_path.startswith('avatar/profile_'):
+                return JsonResponse({"error": "Invalid image path."}, status=400)
+        
+        #  set dynamic avatar image
+        profile_image = dynamic_avatar_image_process(profile_image, avatar_image_path)
+        if not profile_image:
+            return JsonResponse({"error": "profile image processing failed so give me correct image.","success": False}, status=400)
+
+
+
         if not (author_username and author_password and author_email and domain_slug_id and workspace_slug_id):
             return JsonResponse({"error": "author username, password, email, domain and  workspce slug id is required fields.","success": False}, status=400)
         
@@ -165,8 +196,14 @@ def add_author(request):
             author_obj.domain_id = domain_id
             author_obj.wp_author_id = author_id
             author_obj.workspace_id = workspace_obj
+            author_obj.profile_image = profile_image
+            author_obj.default_section = str(default_section).lower() == "true"
             author_obj.bio = bio
-            author_obj.created_by = request_user.id 
+            if derived_by:
+                author_obj.derived_by = derived_by
+            else:
+                author_obj.created_by = request_user.id
+
             author_obj.save()
                 
             serialized_author_data = wp_author_serializer(author_obj).data
@@ -197,9 +234,13 @@ def update_author(request, slug_id):
         author_first_name = request.data.get('first_name')
         author_last_name = request.data.get('last_name')
         author_email = request.data.get('email')
+        default_section = request.data.get('default_section')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
             
+        avatar_image_path = request.data.get("avatar_image_path")
+        profile_image=request.FILES.get('profile_image')
+
         if not (author_username and author_password and author_email and domain_slug_id and workspace_slug_id):
             return JsonResponse({"error": "author username, password, email, domain and  workspce slug id is required fields.","success": False}, status=400)
 
@@ -212,6 +253,30 @@ def update_author(request, slug_id):
             return JsonResponse({
                 "error": "You Don't have permission."
             }, status=404)
+            
+        
+        # If both images provided - error
+        if profile_image and avatar_image_path:
+            return JsonResponse({
+                "error": "Please provide only one of profile image or avatar image path, not both.",
+                "success": False
+            }, status=400)
+
+        # If avatar_image_path provided - validate path
+        if avatar_image_path and not avatar_image_path.startswith('avatar/profile_'):
+            return JsonResponse({"error": "Invalid image path."}, status=400)
+
+        # Process image:
+        # If neither profile_image nor avatar_image_path provided, use existing DB image
+        if not profile_image and not avatar_image_path:
+            # Use existing profile image from DB
+            profile_image = author_obj.profile_image
+        else:
+            # Process new image or avatar path
+            profile_image = dynamic_avatar_image_process(profile_image, avatar_image_path)
+            if not profile_image:
+                return JsonResponse({"error": "Profile image processing failed, provide correct image.", "success": False}, status=400)
+            
             
         try:
             workspace_id = workspace.objects.get(slug_id = workspace_slug_id)
@@ -261,6 +326,8 @@ def update_author(request, slug_id):
             author_obj.email = author_email
             author_obj.domain_id = domain_id
             author_obj.workspace_id = workspace_id
+            author_obj.profile_image = profile_image
+            author_obj.default_section = str(default_section).lower() == "true"
             author_obj.bio = bio
             author_obj.save()
                 

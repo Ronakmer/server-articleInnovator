@@ -191,6 +191,7 @@ function set_category_dropdown(category_data) {
         // set data for api
         function selected_category() {
             console.log('Selected cat Types:', categories_ids);
+            alert(0)
             
             const article_type_field_input = document.querySelector("input[name='category_slug_id']");
             article_type_field_input.value = categories_ids;

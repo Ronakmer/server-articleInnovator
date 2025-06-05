@@ -122,12 +122,17 @@
 <div id="pagination" class="flex justify-center mt-4"></div>
 
 
+
 <!-- color_detail api -->
-<script src="{% static 'frontendApp/api/color_detail/delete_color_detail.js' %}"></script>
-<script src="{% static 'frontendApp/api/color_detail/status_color_detail.js' %}"></script>
-<script src="{% static 'frontendApp/api/color_detail/list_color_detail.js' %}"></script>
-<script src="{% static 'frontendApp/api/color_detail/detail_color.js' %}"></script>
-<script src="{% static 'frontendApp/api/color_detail/table_data_color_detail.js' %}"></script>
-
-
+<script src="{% static 'frontendApp/api/color_detail/delete_color_detail.js' %}" defer></script>
+<script src="{% static 'frontendApp/api/color_detail/status_color_detail.js' %}" defer></script>
+<script src="{% static 'frontendApp/api/color_detail/list_color_detail.js' %}" defer></script>
+<script src="{% static 'frontendApp/api/color_detail/detail_color.js' %}" defer></script>
+<script src="{% static 'frontendApp/api/color_detail/table_data_color_detail.js' %}" defer></script>
 {% endblock body %}
+
+
+{% comment %} {% block scripts %} {% endcomment %}
+
+
+{% comment %} {% endblock %} {% endcomment %}

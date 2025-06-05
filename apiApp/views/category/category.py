@@ -94,8 +94,10 @@ def add_category(request):
         description = request.data.get('description')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
+        derived_by = request.data.get('derived_by')
+        default_section = request.data.get('default_section')
         request_user = request.user
-        
+        print(default_section,'default_sectionassd')
             
         if not (name and slug and description and domain_slug_id and workspace_slug_id):
             return JsonResponse({"error": "name, slug, domain, workspace slug id is required fields.","success": False}, status=400)
@@ -159,7 +161,11 @@ def add_category(request):
             category_obj.domain_id = domain_id
             category_obj.wp_cat_id = cat_id
             category_obj.workspace_id = workspace_id
-            category_obj.created_by = request_user.id 
+            category_obj.default_section = str(default_section).lower() == "true"
+            if derived_by:
+                category_obj.derived_by = derived_by 
+            else:
+                category_obj.created_by = request_user.id 
             category_obj.save()
                 
             serialized_category_data = wp_category_serializer(category_obj).data
@@ -189,6 +195,7 @@ def update_category(request, slug_id):
         description = request.data.get('description')
         domain_slug_id = request.data.get('domain_slug_id')
         workspace_slug_id = request.data.get('workspace_slug_id')
+        default_section = request.data.get('default_section')
         
         if not (name and slug and description and domain_slug_id and workspace_slug_id):
             return JsonResponse({"error": "name, slug, domain, workspace slug id is required fields.","success": False}, status=400)
@@ -250,6 +257,7 @@ def update_category(request, slug_id):
             category_obj.description = description
             category_obj.domain_id = domain_id
             category_obj.workspace_id = workspace_id
+            category_obj.default_section = default_section
             category_obj.save()
          
             serialized_category_data = wp_category_serializer(category_obj).data
