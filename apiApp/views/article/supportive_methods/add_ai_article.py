@@ -13,7 +13,7 @@ from django.http import HttpResponse
 # from imagekitio import ImageKit
 # from imagekitio.exceptions import ImageKitException
 import uuid
-
+import json
 
 
 def add_ai_article(request_user, request_data):
@@ -30,6 +30,7 @@ def add_ai_article(request_user, request_data):
             "prompt_slug_id": request_data.get('prompt_slug_id'),
             "url": request_data.get('url'),
             "keyword": request_data.get('keyword'),
+            "ai_content_flags": request_data.get('ai_content_flags'),
             # "is_category_selected_by_ai": request_data.get('is_category_selected_by_ai'),
             # "is_category_generated_by_ai": request_data.get('is_category_generated_by_ai'),
             # "is_tag_selected_by_ai": request_data.get('is_tag_selected_by_ai'),
@@ -107,7 +108,10 @@ def add_ai_article(request_user, request_data):
         supportive_prompt_data = prompt_obj.supportive_prompt_json_data
         print(supportive_prompt_data.get('supportive_prompt_category_selected_by_ai_id'),'23211111111111')
         
-        if not supportive_prompt_data.get('supportive_prompt_category_selected_by_ai_id'):
+        ai_content_flags = request_data.get('ai_content_flags')
+        ai_content_flags = json.loads(ai_content_flags)
+        
+        if not ai_content_flags.get("is_category_selected_by_ai", False):
             print(request_data.get("category_slug_id"),'000000000000000000')
             category_slugs = request_data.get("category_slug_id")
             if category_slugs:
@@ -123,7 +127,7 @@ def add_ai_article(request_user, request_data):
         print(category_ids,'category_idsxxx')
 
         # Handle tag selection
-        if not supportive_prompt_data.get('supportive_prompt_tag_selected_by_ai_id'):
+        if not ai_content_flags.get("is_tag_selected_by_ai", False):
             print(request_data.get("tag_slug_id"),'000000000000000000')
             
             tag_slugs = request_data.get("tag_slug_id")
@@ -137,7 +141,7 @@ def add_ai_article(request_user, request_data):
                 return {"error": "Missing required tag", "success": False}
 
         # Handle author selection
-        if not supportive_prompt_data.get('supportive_prompt_author_selected_by_ai_id'):
+        if not ai_content_flags.get("is_author_selected_by_ai", False):
             print(request_data.get("author_slug_id"),'000000000000000000')
             
             author_slug = request_data.get("author_slug_id")
@@ -153,9 +157,13 @@ def add_ai_article(request_user, request_data):
 
 
         print(data["wp_status"] ,'data["wp_status"] ')
+        
+        ai_content_flags_raw = data.get("ai_content_flags", "{}")
+
         # Step 7: Save the article object
         article_obj = article.objects.create(
-            article_status=data.get("article_status", "initiate"),  # Default to draft if no status is provided
+            article_status=data.get("article_status", "initiate"), 
+            ai_content_flags=json.loads(ai_content_flags_raw),
             wp_status=data["wp_status"] if data["wp_status"] in dict(article.WP_STATUS_CHOICES) else None,
             wp_schedule_time=wp_schedule_time if data["wp_status"] == 'future' else None,
             article_type_id=article_type_obj,

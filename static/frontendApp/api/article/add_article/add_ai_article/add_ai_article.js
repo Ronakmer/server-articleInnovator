@@ -27,6 +27,9 @@
 
 
 
+
+
+
 // // toggleVisibility function
 // const toggleVisibility = (checkboxId, divId) => {
 //     const checkbox = document.getElementById(checkboxId);
@@ -97,6 +100,22 @@ function temp_set_ai_data() {
 
 
 
+function collectAICheckboxesState() {
+    const wrapper = document.getElementById("ai-checkbox-wrapper");
+    const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]');
+    const result = {};
+
+    checkboxes.forEach(checkbox => {
+        // Use the checkbox name as the key, e.g., is_author_selected_by_ai
+        result[checkbox.name] = checkbox.checked;
+    });
+
+    return result;
+}
+
+
+
+
 function add_ai_article_api() {
 
     const current_page_url = window.location.href;
@@ -145,6 +164,8 @@ function add_ai_article_api() {
         }    
     }
 
+    const aiCheckboxStateJson = collectAICheckboxesState();
+    alert(aiCheckboxStateJson)
 
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -156,6 +177,8 @@ function add_ai_article_api() {
     data.append("wp_status", wp_status_ai);
     data.append("url", url);
     data.append("keyword", keyword);
+    data.append("ai_content_flags", JSON.stringify(aiCheckboxStateJson));
+
     // data.append("is_category_selected_by_ai", is_category_selected_by_ai);
     // data.append("is_category_generated_by_ai", is_category_generated_by_ai);
     // data.append("is_tag_selected_by_ai", is_tag_selected_by_ai);

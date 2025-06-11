@@ -82,20 +82,7 @@ function set_prompt_dropdown(prompt_data){
             selectElement.appendChild(option);
         });
 
-        // find tag, catgory, author dropdwon 
-        function getSelectedByAIIds(supportivePromptData) {
-            if (!supportivePromptData) {
-                console.warn('No supportive prompt data provided');
-                return {};
-            }
-
-            return {
-                categorySelectedByAI: supportivePromptData.supportive_prompt_category_selected_by_ai_id || null,
-                tagSelectedByAI: supportivePromptData.supportive_prompt_tag_selected_by_ai_id || null,
-                authorSelectedByAI: supportivePromptData.supportive_prompt_author_selected_by_ai_id || null,
-            };
-        }
-
+       
 
         // // set tag, catgory, author dropdwon
         // function setAIControlledCheckboxes(supportivePromptJsonData) {
@@ -147,17 +134,26 @@ function set_prompt_dropdown(prompt_data){
 
         function setAIControlledCheckboxes(supportivePromptJsonData) {
             const wrapper = document.getElementById("ai-checkbox-wrapper");
-            wrapper.innerHTML = "";  // Clear previous content, just in case
+            wrapper.innerHTML = "";  // Clear previous content
+
+            const relatedDivMap = {
+                "is_author_selected_by_ai": "author_div_id",
+                "is_category_selected_by_ai": "category_div_id",
+                "is_tag_selected_by_ai": "tag_div_id"
+            };
 
             const fields = Object.entries(supportivePromptJsonData)
                 .filter(([key]) => key.startsWith("supportive_prompt_") && key.endsWith("_id"))
                 .map(([key, value]) => {
                     const shortKey = key.replace("supportive_prompt_", "").replace("_id", "");
                     const labelText = shortKey.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-                    return { id: `is_${shortKey}`, label: labelText, checked: !!value, name: `is_${shortKey}` };
+                    return {
+                        id: `is_${shortKey}`,
+                        label: labelText,
+                        checked: !!value,
+                        name: `is_${shortKey}`
+                    };
                 });
-
-            let anyUnchecked = false;  // Track if any checkbox is unchecked
 
             for (let i = 0; i < fields.length; i += 2) {
                 const rowDiv = document.createElement("div");
@@ -174,13 +170,34 @@ function set_prompt_dropdown(prompt_data){
                     checkbox.id = field.id;
                     checkbox.name = field.name;
                     checkbox.checked = field.checked;
-                    checkbox.disabled = true;
+                    checkbox.disabled = !field.checked;
+
                     checkbox.className = "w-4 h-4 border border-gray-300 rounded-sm hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-900";
 
                     const label = document.createElement("label");
                     label.htmlFor = field.id;
                     label.className = "text-sm font-medium text-gray-900 w-full flex items-center";
                     label.textContent = field.label;
+
+                    // Handle show/hide on checkbox change
+                    checkbox.addEventListener("change", () => {
+                        const targetDivId = relatedDivMap[checkbox.id];
+                        if (targetDivId) {
+                            const relatedDiv = document.getElementById(targetDivId);
+                            if (relatedDiv) {
+                                relatedDiv.classList.toggle("hidden", checkbox.checked);
+                            }
+                        }
+                    });
+
+                    // Initial show/hide setup
+                    const initDivId = relatedDivMap[checkbox.id];
+                    if (initDivId) {
+                        const relatedDiv = document.getElementById(initDivId);
+                        if (relatedDiv) {
+                            relatedDiv.classList.toggle("hidden", checkbox.checked);
+                        }
+                    }
 
                     fieldDiv.appendChild(checkbox);
                     fieldDiv.appendChild(label);
@@ -189,28 +206,8 @@ function set_prompt_dropdown(prompt_data){
 
                 wrapper.appendChild(rowDiv);
             }
-
-            // Show/hide related divs based on checkbox checked status
-            const relatedDivMap = {
-                "is_author_selected_by_ai": "author_div_id",
-                "is_category_selected_by_ai": "category_div_id",
-                "is_tag_selected_by_ai": "tag_div_id"
-            };
-
-            Object.entries(relatedDivMap).forEach(([checkboxId, divId]) => {
-                const checkbox = document.getElementById(checkboxId);
-                const relatedDiv = document.getElementById(divId);
-                if (checkbox && relatedDiv) {
-                    if (checkbox.checked) {
-                        // If checkbox is checked, hide the related div
-                        relatedDiv.classList.add("hidden");
-                    } else {
-                        // If checkbox is unchecked, show the related div
-                        relatedDiv.classList.remove("hidden");
-                    }
-                }
-            });
         }
+
 
 
         // set slug_id in add time
@@ -232,12 +229,6 @@ function set_prompt_dropdown(prompt_data){
 
                 // create a dropdwon
                 setAIControlledCheckboxes(selectedPrompt.supportive_prompt_json_data)
-
-                const selectedAIIds = getSelectedByAIIds(selectedPrompt.supportive_prompt_json_data);
-                console.log('Category selected by AI ID:', selectedAIIds.categorySelectedByAI);
-                console.log('Tag selected by AI ID:', selectedAIIds.tagSelectedByAI);
-                console.log('Author selected by AI ID:', selectedAIIds.authorSelectedByAI);
-
             }
 
 

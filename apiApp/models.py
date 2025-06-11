@@ -719,7 +719,8 @@ class article(models.Model):
     article_status = models.CharField(max_length=200, choices=ARTICLE_STATUS_CHOICES, null=True, blank=True)    
     wp_schedule_time = models.DateTimeField(null=True, blank=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
-    
+    ai_content_flags = models.JSONField(default=dict, blank=True, null=True)
+
     # is_category_selected_by_ai = models.BooleanField(default=True)
     # is_category_generated_by_ai = models.BooleanField(default=True)
     # is_tag_selected_by_ai = models.BooleanField(default=True)

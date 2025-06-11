@@ -1,16 +1,15 @@
 
 
-import json
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from django.conf import settings
 from django.db.models import Q
 from AIMessageService.models import ai_message
 from AIMessageService.serializers import ai_message_serializer
-
+from AIMessageService.views.base.process_pagination.process_pagination import process_pagination
+import json
 # import redis
 
-from AIMessageService.views.base.process_pagination.process_pagination import process_pagination
 
 
 @api_view(['GET'])
@@ -20,7 +19,7 @@ def list_ai_message(request):
         limit = int(request.GET.get('limit', 100))
         status = request.GET.get('status', None)
         message_id = request.GET.get('message_id', None)
-        article_id = request.GET.get('article_id', None)
+        article_id = request.GET.get('article_alug_id', None)
         search = request.GET.get('search', '')
         order_by = request.GET.get('order_by', '-created_date')
 
@@ -104,6 +103,7 @@ def add_ai_message(request):
 @api_view(['PATCH'])
 def update_ai_message(request, article_id, message_id):
     try:
+        print(request.data,'sss222')
         try:
             obj = ai_message.objects.get(article_id=article_id, message_id=message_id)
         except ai_message.DoesNotExist:
