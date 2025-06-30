@@ -21,7 +21,6 @@ def list_supportive_prompt(request):
         order_by = request.GET.get('order_by', '-created_date')
         workspace_slug_id = request.GET.get('workspace_slug_id')
 
-
         # Initialize filters
         filters = Q()
         
@@ -45,7 +44,6 @@ def list_supportive_prompt(request):
                     "error": "workspace not found ",
                     "success": False,
                 }, status=404)
-
 
         print(search,'search')
 

@@ -137,9 +137,11 @@ function set_prompt_dropdown(prompt_data){
             wrapper.innerHTML = "";  // Clear previous content
 
             const relatedDivMap = {
-                "is_author_selected_by_ai": "author_div_id",
-                "is_category_selected_by_ai": "category_div_id",
-                "is_tag_selected_by_ai": "tag_div_id"
+                "is_wp_authors_selected_by_ai": "author_div_id",
+                "is_wp_categories_selected_by_ai": "category_div_id",
+                "is_wp_tags_selected_by_ai": "tag_div_id"
+
+             
             };
 
             const fields = Object.entries(supportivePromptJsonData)

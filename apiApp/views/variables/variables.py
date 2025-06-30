@@ -127,6 +127,7 @@ def add_variables(request_data, slug_id):
 
 def update_variables(request_data, slug_id):
     try:
+        print(request_data,'request_datasdfsdfsdf')
         if isinstance(request_data, str):
             request_data = json.loads(request_data)
 

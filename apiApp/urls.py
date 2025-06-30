@@ -39,6 +39,7 @@ from apiApp.views.motivation.motivation import list_motivation, add_motivation, 
 from apiApp.views.motivation.process_motivation import process_motivation
 from apiApp.views.article_type_field.article_type_field import list_article_type_field, add_article_type_field, update_article_type_field, delete_article_type_field
 from apiApp.views.article_type.article_type import list_article_type, add_article_type, update_article_type, delete_article_type, get_article_type_fields
+from apiApp.views.article_type.supportive_methods.replace_output_variable_for_article_type import replace_output_variable_for_article_type
 from apiApp.views.prompt.prompt import list_prompt, add_prompt, update_prompt, delete_prompt
 from apiApp.views.wordpress.fetch_data.fetch_category_data import fetch_category_data
 from apiApp.views.wordpress.fetch_data.fetch_tag_data import fetch_tag_data
@@ -78,6 +79,7 @@ from apiApp.views.article_info.article_info import list_article_info
 
 from apiApp.views.supportive_prompt_type.supportive_prompt_type import list_supportive_prompt_type, add_supportive_prompt_type, update_supportive_prompt_type, delete_supportive_prompt_type
 from apiApp.views.supportive_prompt.supportive_prompt import list_supportive_prompt, add_supportive_prompt, update_supportive_prompt, delete_supportive_prompt
+from apiApp.views.supportive_prompt.supportive_methods.replace_output_variable_for_supportive_prompt import replace_output_variable_for_supportive_prompt
 from apiApp.views.variables.variables import list_variables
 from apiApp.views.rabbitmq_api.add_all_queues.add_all_queues import add_all_queues
 from apiApp.views.rabbitmq_api.list_queues.list_queues import list_queues
@@ -266,7 +268,8 @@ permissions_list = [
     {"name": "add_article_type", "route": "article-type/add/", "description": "add article-type", "status": "True", "group": "article-type"},
     {"name": "update_article_type", "route": "article-type/update/<slug:slug_id>", "description": "update article-type", "status": "True", "group": "article-type"},
     {"name": "delete_article_type", "route": "article-type/delete/<slug:slug_id>", "description": "delete article-type", "status": "True", "group": "article-type"},
-    {"name": "get_article_type_fields", "route": "get/article-type-fields/<slug:slug_id>", "description": "get-article-type-fields", "status": "True", "group": "get-article-type-fields"},
+    {"name": "get_article_type_fields", "route": "get/article-type-fields/<slug:slug_id>", "description": "get-article-type-fields", "status": "True", "group": "article-type"},
+    {"name": "replace_output_variable_for_article_type", "route": "article-type/replace-output-variable/", "description": "article-type", "status": "True", "group": "article-type"},
     
     # prompt
     {"name": "list_prompt", "route": "prompts/", "description": "all prompt", "status": "True", "group": "prompt"},
@@ -418,6 +421,7 @@ permissions_list = [
     {"name": "add_supportive_prompt", "route": "supportive-prompt/add/", "description": "add supportive-prompt", "status": "True", "group": "supportive-prompt"},
     {"name": "update_supportive_prompt", "route": "supportive-prompt/update/<slug:slug_id>", "description": "update supportive-prompt", "status": "True", "group": "supportive-prompt"},
     {"name": "delete_supportive_prompt", "route": "supportive-prompt/delete/<slug:slug_id>", "description": "delete supportive-prompt", "status": "True", "group": "supportive-prompt"},
+    {"name": "replace_output_variable_for_supportive_prompt", "route": "supportive-prompt/replace-output-variable/", "description": "replace output variable in text supportive-prompt", "status": "True", "group": "supportive-prompt"},
     
     #  variables
     {"name": "list_variables", "route": "variables/", "description": "all variables", "status": "True", "group": "variables"},

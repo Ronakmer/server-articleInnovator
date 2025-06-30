@@ -176,6 +176,7 @@ function addNameValueGroup() {
     newGroup.querySelector('input[name="name[]"]').value = '';
     newGroup.querySelector('textarea[name="value[]"]').value = '';
     newGroup.querySelector('input[name="required[]"]').checked = false;
+    newGroup.querySelector('input[name="use_exact_value[]"]').checked = false;
     
     // Add data-index attribute
     newGroup.setAttribute('data-index', newIndex);
@@ -219,11 +220,13 @@ function create_variables_json() {
         const nameInput = group.querySelector('input[name="name[]"]');
         const valueInput = group.querySelector('textarea[name="value[]"]');
         const requiredCheckbox = group.querySelector('input[name="required[]"]');
+        const use_exact_valueCheckbox = group.querySelector('input[name="use_exact_value[]"]');
         const slugIdInput = group.querySelector('input[name="variables_slug_id[]"]');  // Get hidden slug_id
 
         const nameVal = nameInput.value.trim();
         const valueVal = valueInput.value.trim();
         const requiredVal = requiredCheckbox?.checked || false;
+        const use_exact_valueVal = use_exact_valueCheckbox?.checked || false;
         const slugIdVal = slugIdInput ? slugIdInput.value.trim() : '';
 
 
@@ -237,8 +240,9 @@ function create_variables_json() {
         if (nameVal && valueVal) {
             const entry = {
                 name: nameVal,
-                value: valueVal,
-                required: requiredVal
+                example_value: valueVal,
+                required: requiredVal,
+                use_exact_value: use_exact_valueVal,
             };
             if (slugIdVal) {
                 entry.slug_id = slugIdVal;
@@ -286,11 +290,13 @@ async function populateSupportiveVariables(variables_data_obj) {
         const nameInput = firstGroup.querySelector('input[name="name[]"]');
         const valueInput = firstGroup.querySelector('textarea[name="value[]"]');
         const requiredCheckbox = firstGroup.querySelector('input[name="required[]"]');
+        const use_exact_valueCheckbox = firstGroup.querySelector('input[name="use_exact_value[]"]');
         const slugIdInput = firstGroup.querySelector('input[name="variables_slug_id[]"]'); // ✅ added here
 
         nameInput.value = firstVar.name || '';
-        valueInput.value = firstVar.value || '';
+        valueInput.value = firstVar.example_value || '';
         requiredCheckbox.checked = firstVar.required || false;
+        use_exact_valueCheckbox.checked = firstVar.use_exact_value || false;
 
         if (slugIdInput) {
             slugIdInput.value = firstVar.slug_id || '';
@@ -307,6 +313,7 @@ async function populateSupportiveVariables(variables_data_obj) {
             const nameInput = newGroup.querySelector('input[name="name[]"]');
             const valueInput = newGroup.querySelector('textarea[name="value[]"]');
             const requiredCheckbox = newGroup.querySelector('input[name="required[]"]');
+            const use_exact_valueCheckbox = newGroup.querySelector('input[name="use_exact_value[]"]');
             
             const slugIdInput = newGroup.querySelector('input[name="variables_slug_id[]"]'); // ✅ added here
             if (slugIdInput) {
@@ -315,8 +322,9 @@ async function populateSupportiveVariables(variables_data_obj) {
 
 
             nameInput.value = supportiveVar.name || '';
-            valueInput.value = supportiveVar.value || '';
+            valueInput.value = supportiveVar.example_value || '';
             requiredCheckbox.checked = supportiveVar.required || false;
+            use_exact_valueCheckbox.checked = supportiveVar.use_exact_value || false;
         }
     }
     

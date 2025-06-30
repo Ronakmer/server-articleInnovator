@@ -150,7 +150,7 @@ function updatePreview() {
     // Replace each variable like {{test-1.2.1}} with its value
     supportive_variables_data.forEach(variable => {
         const name = variable.name;
-        const value = variable.value;
+        const value = variable.example_value;
 
         // Create regex for placeholder (e.g., {{test-1.2.1}})
         // const regex = new RegExp(`{{\\s*${escapeRegExp(name)}\\s*}}`, 'g');

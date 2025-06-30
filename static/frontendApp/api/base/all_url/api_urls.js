@@ -1,6 +1,9 @@
 
-var url = 'https://127.0.0.1:8000/api/';
-// var url = 'https://165.227.94.74:10001/api/';
+// var url = 'https://127.0.0.1:8000/api/';
+// // var url = 'https://165.227.94.74:10001/api/';
+
+var url = window.location.origin + '/api/';
+// alert(url)
 
 var refresh_token_url = `${url}get-refresh-token/`;
 
@@ -34,6 +37,7 @@ var add_article_type_url = `${url}article-type/add/`;
 var update_article_type_url = `${url}article-type/update/`;
 var delete_article_type_url = `${url}article-type/delete/`;
 var get_article_type_fields = `${url}get/article-type-fields/`;
+var replace_output_variable_for_article_type_url = `${url}article-type/replace-output-variable/`;
 
 var list_language_url = `${url}languages/`;
 var add_language_url = `${url}language/add/`;
@@ -209,6 +213,7 @@ var list_supportive_prompt_url = `${url}supportive-prompts/`;
 var add_supportive_prompt_url = `${url}supportive-prompt/add/`;
 var update_supportive_prompt_url = `${url}supportive-prompt/update/`;
 var delete_supportive_prompt_url = `${url}supportive-prompt/delete/`;
+var replace_output_variable_supportive_prompt_url = `${url}supportive-prompt/replace-output-variable//`;
 
 var list_integration_url = `${url}integrations/`;
 var add_integration_url = `${url}integration/add/`;

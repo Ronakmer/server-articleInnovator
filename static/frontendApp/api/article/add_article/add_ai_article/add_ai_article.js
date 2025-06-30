@@ -144,6 +144,7 @@ function add_ai_article_api() {
     const author_slug_id_ai = ai_article_form.querySelector('input[name="author_slug_id_ai"]').value;
     const category_slug_id_ai = ai_article_form.querySelector('input[name="category_slug_id_ai"]').value;
     const tag_slug_id_ai = ai_article_form.querySelector('input[name="tag_slug_id_ai"]').value;
+    const article_priority = ai_article_form.querySelector('[name="article_priority"]').value;
 
 
     const selectedRadio = ai_article_form.querySelector('input[name="wp_status_ai"]:checked');
@@ -165,7 +166,6 @@ function add_ai_article_api() {
     }
 
     const aiCheckboxStateJson = collectAICheckboxesState();
-    alert(aiCheckboxStateJson)
 
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -177,6 +177,7 @@ function add_ai_article_api() {
     data.append("wp_status", wp_status_ai);
     data.append("url", url);
     data.append("keyword", keyword);
+    data.append("article_priority", article_priority);
     data.append("ai_content_flags", JSON.stringify(aiCheckboxStateJson));
 
     // data.append("is_category_selected_by_ai", is_category_selected_by_ai);

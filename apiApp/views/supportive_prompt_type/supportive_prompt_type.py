@@ -109,7 +109,7 @@ def update_supportive_prompt_type(request, slug_id):
     try:
 
         supportive_variables_data = request.data.get('supportive_variables_data') 
-
+        print(supportive_variables_data,'supportive_variables_datasdfsdfsdf')
 
         try:
             obj = supportive_prompt_type.objects.get(slug_id=slug_id)

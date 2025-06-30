@@ -19,10 +19,10 @@ def list_ai_message(request):
         limit = int(request.GET.get('limit', 100))
         status = request.GET.get('status', None)
         message_id = request.GET.get('message_id', None)
-        article_id = request.GET.get('article_alug_id', None)
+        article_id = request.GET.get('article_slug_id', None)
         search = request.GET.get('search', '')
+        message_field_type = request.GET.get('message_field_type', '')
         order_by = request.GET.get('order_by', '-created_date')
-
 
         # Initialize filters
         filters = Q()
@@ -34,12 +34,18 @@ def list_ai_message(request):
             filters &= Q(message_id=message_id)
         if article_id:
             filters &= Q(article_id=article_id)
+        if message_field_type:
+            filters &= Q(message_field_type=message_field_type)
         if search:
             filters &= (
                 Q(message_id__icontains=search) |
-                Q(article_id__icontains=search)
+                Q(article_id__icontains=search) |
+                Q(message_field_type__icontains=search)
             )
 
+
+        print(message_field_type,'message_field_type')
+        print(article_id,'article_slug_id')
 
         try:
             obj = ai_message.objects.filter(filters).order_by(order_by)

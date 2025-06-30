@@ -611,7 +611,8 @@ class variables(models.Model):
     article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200, default="")
     required = models.BooleanField(default=True)
-    value = models.TextField(default="")
+    use_exact_value = models.BooleanField(default=True)
+    example_value = models.TextField(default="")
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
@@ -695,6 +696,7 @@ class article(models.Model):
         ('failed', 'Failed'),
         ('review', 'Review'),
     ]
+
     
     prompt_id = models.ForeignKey(to=prompt, on_delete=models.CASCADE, null=True, blank=True)
     article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
@@ -720,6 +722,7 @@ class article(models.Model):
     wp_schedule_time = models.DateTimeField(null=True, blank=True)
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     ai_content_flags = models.JSONField(default=dict, blank=True, null=True)
+    article_priority = models.IntegerField(blank=True, null=True)
 
     # is_category_selected_by_ai = models.BooleanField(default=True)
     # is_category_generated_by_ai = models.BooleanField(default=True)
@@ -963,7 +966,6 @@ class competitor_domain_mapping(models.Model):
     created_date=models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
-
 
     # Generate a slug using UUID
     def save(self, *args, **kwargs):

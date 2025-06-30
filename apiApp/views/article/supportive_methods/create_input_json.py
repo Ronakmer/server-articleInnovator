@@ -12,6 +12,7 @@ from django.http import HttpResponse
 import json
 import uuid, os
 
+from AIMessageService.views.article_input_json.article_input_json import add_article_input_json
 
 
 
@@ -27,12 +28,25 @@ def create_input_json(article_slug_id):
         # Get the article_type instance directly
         article_type_instance = article_obj.prompt_id.article_type_id
         article_type_id = article_type_instance.id
-
+        
         # Get all related article_type_fields (ManyToMany relationship)
         article_type_fields = article_type_instance.article_type_field_id.all()
 
-        # Fetch variables using the article_type_id
-        variables_data = variables.objects.filter(article_type_id=article_type_id)
+        # # Fetch variables using the article_type_id
+        # article_type_variables_data = variables.objects.filter(article_type_id=article_type_id)
+
+
+        # # Extract supportive prompt IDs from JSON
+        # supportive_prompt_json = article_obj.prompt_id.supportive_prompt_json_data
+        # supportive_prompt_ids = list(supportive_prompt_json.values())
+
+        # # Get supportive_prompt_type_ids
+        # prompt_qs = supportive_prompt.objects.filter(slug_id__in=supportive_prompt_ids)
+        # supportive_prompt_type_ids = prompt_qs.values_list("supportive_prompt_type_id", flat=True).distinct()
+
+        # # Get variables
+        # supportive_prompt_variables_data = variables.objects.filter(supportive_prompt_type_id__in=supportive_prompt_type_ids)
+
 
         input_json = {
             "message": {
@@ -41,6 +55,8 @@ def create_input_json(article_slug_id):
                 "wp_status": article_obj.wp_status,
                 "article_status": article_obj.article_status,
                 "wp_schedule_time": article_obj.wp_schedule_time.isoformat() if article_obj.wp_schedule_time else None,
+                "article_priority": article_obj.article_priority,
+                "ai_content_flags": article_obj.ai_content_flags,
 
                 # "is_category_selected_by_ai": article_obj.is_category_selected_by_ai,
                 # "is_category_generated_by_ai": article_obj.is_category_generated_by_ai,
@@ -81,14 +97,22 @@ def create_input_json(article_slug_id):
                         ]
                     }
                 },
-                "variables": [
-                    {
-                        "slug_id": var.slug_id,
-                        "name": var.name,
-                        "value": var.value,
-                        "required": var.required,
-                    } for var in variables_data
-                ],
+                # "article_type_variables_data": [
+                #     {
+                #         "slug_id": var.slug_id,
+                #         "name": var.name,
+                #         "value": var.value,
+                #         "required": var.required,
+                #     } for var in article_type_variables_data
+                # ],
+                # "supportive_prompt_variables_data": [
+                #     {
+                #         "slug_id": var.slug_id,
+                #         "name": var.name,
+                #         "value": var.value,
+                #         "required": var.required,
+                #     } for var in supportive_prompt_variables_data
+                # ],
                 "domain": {
                     "slug_id": article_obj.domain_id.slug_id,
                     "name": article_obj.domain_id.name,
@@ -114,7 +138,20 @@ def create_input_json(article_slug_id):
         with open(file_path, 'w') as json_file:
             json.dump(input_json, json_file, indent=4, default=str)
 
-        return input_json
+
+
+        article_input_json_data = {
+            "article_id": article_slug_id,
+            "input_json_data": input_json
+        }
+
+        save_result = add_article_input_json(article_input_json_data)
+        return {
+            "input_json": input_json,
+            "db_status": save_result
+        }
+
+        # return input_json
 
     except Exception as e:
         print("Unexpected error in create_input_json:", e)

@@ -31,6 +31,7 @@ def add_ai_article(request_user, request_data):
             "url": request_data.get('url'),
             "keyword": request_data.get('keyword'),
             "ai_content_flags": request_data.get('ai_content_flags'),
+            "article_priority": request_data.get('article_priority'),
             # "is_category_selected_by_ai": request_data.get('is_category_selected_by_ai'),
             # "is_category_generated_by_ai": request_data.get('is_category_generated_by_ai'),
             # "is_tag_selected_by_ai": request_data.get('is_tag_selected_by_ai'),
@@ -111,7 +112,7 @@ def add_ai_article(request_user, request_data):
         ai_content_flags = request_data.get('ai_content_flags')
         ai_content_flags = json.loads(ai_content_flags)
         
-        if not ai_content_flags.get("is_category_selected_by_ai", False):
+        if not ai_content_flags.get("is_wp_categories_selected_by_ai", False):
             print(request_data.get("category_slug_id"),'000000000000000000')
             category_slugs = request_data.get("category_slug_id")
             if category_slugs:
@@ -127,7 +128,7 @@ def add_ai_article(request_user, request_data):
         print(category_ids,'category_idsxxx')
 
         # Handle tag selection
-        if not ai_content_flags.get("is_tag_selected_by_ai", False):
+        if not ai_content_flags.get("is_wp_tags_selected_by_ai", False):
             print(request_data.get("tag_slug_id"),'000000000000000000')
             
             tag_slugs = request_data.get("tag_slug_id")
@@ -141,7 +142,7 @@ def add_ai_article(request_user, request_data):
                 return {"error": "Missing required tag", "success": False}
 
         # Handle author selection
-        if not ai_content_flags.get("is_author_selected_by_ai", False):
+        if not ai_content_flags.get("is_wp_authors_selected_by_ai", False):
             print(request_data.get("author_slug_id"),'000000000000000000')
             
             author_slug = request_data.get("author_slug_id")
@@ -163,6 +164,7 @@ def add_ai_article(request_user, request_data):
         # Step 7: Save the article object
         article_obj = article.objects.create(
             article_status=data.get("article_status", "initiate"), 
+            article_priority=data.get("article_priority"), 
             ai_content_flags=json.loads(ai_content_flags_raw),
             wp_status=data["wp_status"] if data["wp_status"] in dict(article.WP_STATUS_CHOICES) else None,
             wp_schedule_time=wp_schedule_time if data["wp_status"] == 'future' else None,

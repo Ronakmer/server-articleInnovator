@@ -680,7 +680,7 @@ function createSupportiveVariableButtons(selectedSlugId) {
 
         supportive_variables_data.forEach(item => {
             const buttonLabel = item.name || ''; // Display name on button
-            const variableValue = item.value || ''; // Copy this value instead
+            const variableValue = item.example_value || ''; // Copy this value instead
         
             // Create button for supportive variables
             const button = document.createElement('button');
