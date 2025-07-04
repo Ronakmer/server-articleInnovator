@@ -23,7 +23,7 @@ class ai_message(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Message {self.message_id} for Article {self.article_id}"
+        return f"Message {self.message_id} for Article {self.article_id} for Message field type:{self.message_field_type}"
 
 
 

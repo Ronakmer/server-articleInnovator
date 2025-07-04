@@ -6,18 +6,23 @@ from django.contrib.auth.decorators import login_required
 
 ######### file import  #########
 from AIMessageService.views.ai_message_api.ai_message_api import list_ai_message, add_ai_message, update_ai_message, delete_ai_message
+from AIMessageService.views.article_input_json.article_input_json import list_article_input_json
 
 
 
 permissions_list = [
     
+    # # input json
+    {"name": "list_article_input_json", "route": "article-input-json/", "description": "article-input-json", "status": "True", "group": "article-input-json"},
+
     # # ai_message_api
-    {"name": "list_ai_message", "route": "ai-messages/", "description": "all invitation code details", "status": "True", "group": "ai-message"},
-    {"name": "add_ai_message", "route": "ai-message/add/", "description": "add invitation code details", "status": "True", "group": "ai-message"},
-    {"name": "update_ai_message", "route": "ai-message/update/<str:article_id>/<str:message_id>/", "description": "update invitation code details", "status": "True", "group": "ai-message"},
-    {"name": "delete_ai_message", "route": "ai-message/delete/<str:article_id>/", "description": "delete invitation code details", "status": "True", "group": "ai-message"},
+    {"name": "list_ai_message", "route": "ai-messages/", "description": "get all ai-message", "status": "True", "group": "ai-message"},
+    {"name": "add_ai_message", "route": "ai-message/add/", "description": "add ai-message", "status": "True", "group": "ai-message"},
+    {"name": "update_ai_message", "route": "ai-message/update/<str:article_id>/<str:message_id>/", "description": "update ai-message", "status": "True", "group": "ai-message"},
+    {"name": "delete_ai_message", "route": "ai-message/delete/<str:article_id>/", "description": "delete ai-message", "status": "True", "group": "ai-message"},
     
 ]
+
 
 
 urlpatterns = []

@@ -407,6 +407,9 @@ def replace_output_variable_for_article_type(request):
 
         updated_prompt_data = replace_variables_recursive(prompt_data)
 
+
+        print(updated_prompt_data,'updated_prompt_dataszsdadawds')
+
         return JsonResponse({
             "updated_prompt_data": updated_prompt_data,
             "success": True

@@ -81,6 +81,17 @@ def list_ai_message(request):
 @api_view(['POST'])
 def add_ai_message(request):
     try:
+        message_id = request.data.get("message_id")
+
+        # Step 1: Check for existing message
+        if ai_message.objects.filter(message_id=message_id).exists():
+            return JsonResponse({
+                "message": f"Message with ID {message_id} already exists.",
+                "success": False,
+                "duplicate": True,
+            }, status=200)
+
+
         serialized_data = ai_message_serializer(data=request.data)
 
         if serialized_data.is_valid():

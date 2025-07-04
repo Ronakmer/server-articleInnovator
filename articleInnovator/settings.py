@@ -305,7 +305,7 @@ CACHES = {
 
 # ip host
 
-ALLOWED_HOSTS = ['http://192.168.1.3:8000', 'localhost', '192.168.1.3', '192.168.1.3','*']
+ALLOWED_HOSTS = ['http://192.168.1.3:8000', 'localhost', '192.168.1.3', '192.168.1.3', '*']
 
 # CORS_ALLOWED_ORIGINS = [
 #         'http://siteyouwantto.allow.com',
