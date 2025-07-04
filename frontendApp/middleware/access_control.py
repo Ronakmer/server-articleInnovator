@@ -67,18 +67,19 @@ class AccessControlMiddleware(MiddlewareMixin):
             route_name = resolver_match.url_name
             print(f"Resolved route name: {route_name}")
         except Exception as ex:
-            print(f"Error resolving route for path: {request.path}, Exception: {ex}")
+            print(f"Error resolving route for path: , Exception: {ex}")
             # return JsonResponse({"error": "Unable to resolve route."}, status=403)
             return render(request, 'frontendApp/base/error.html' , {'error': 403})
 
 
         # Check user permissions and workspaces
         try:
+            print(request_user,'request_user')
             # Fetch user details
             user_details_obj = user_detail.objects.get(user_id=request_user)
             permission_obj = role_has_permissions.objects.filter(role_id=user_details_obj.role_id)
             permission_list = [perm.permission_id.name for perm in permission_obj]
-            print(f"User permissions: {permission_list}")
+            # print(f"User permissions: {permission_list}")
 
             # Verify if the route is in the user's permissions
             if route_name.replace("_page", "") not in permission_list:

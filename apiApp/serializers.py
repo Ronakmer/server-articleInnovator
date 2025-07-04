@@ -8,11 +8,7 @@ from apiApp.models import (
     language, country, motivation, article_type_field,
     article_type, prompt, image_tag, image_template_category,
     image_template, image_tag_template_category_template_mapping,
-    article, article_info, competitor, competitor_domain_mapping,
-    competitor_sitemap_url, competitor_sitemap_url_mapping, 
-    competitor_article_url, competitor_article_url_mapping,
-    competitor_extraction, competitor_extraction_mapping,
-    competitor_seo_extraction_mapping, user_api_key, keyword,
+    article, article_info,  user_api_key, keyword,
     console_metrics, image_kit_configuration, activity_log, notification,
     supportive_prompt_type, supportive_prompt, variables, rabbitmq_queue,
     integration, integration_type
@@ -397,151 +393,98 @@ class article_info_serializer(serializers.ModelSerializer):
         
         
         
-class competitor_serializer(serializers.ModelSerializer):
-    class Meta:
-        model = competitor
-        exclude = ['id', 'created_date', 'updated_date']  
+# class competitor_serializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = competitor
+#         exclude = ['id', 'created_date', 'updated_date']  
         
         
         
         
-class competitor_domain_mapping_serializer(serializers.ModelSerializer): 
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    article_type_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True)
-    prompt_id = serializers.PrimaryKeyRelatedField(queryset=prompt.objects.all(), write_only=True)
+# class competitor_domain_mapping_serializer(serializers.ModelSerializer): 
+#     domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
+#     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+#     competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
+#     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+#     article_type_id = serializers.PrimaryKeyRelatedField(queryset=article_type.objects.all(), write_only=True)
+#     prompt_id = serializers.PrimaryKeyRelatedField(queryset=prompt.objects.all(), write_only=True)
 
-    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
-    created_by_data = user_serializer(source='created_by', read_only=True)  
-    article_type_id_data = article_type_serializer(source='article_type_id', read_only=True)  
-    prompt_id_data = prompt_serializer(source='prompt_id', read_only=True)  
-
-
-    class Meta:
-        model = competitor_domain_mapping
-        exclude = ['id', 'created_date', 'updated_date']  
-
-        
-        
-class competitor_sitemap_url_serializer(serializers.ModelSerializer):
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
+#     domain_id_data = domain_serializer(source='domain_id', read_only=True) 
+#     workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+#     competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
+#     created_by_data = user_serializer(source='created_by', read_only=True)  
+#     article_type_id_data = article_type_serializer(source='article_type_id', read_only=True)  
+#     prompt_id_data = prompt_serializer(source='prompt_id', read_only=True)  
 
 
-    class Meta:
-        model = competitor_sitemap_url
-        exclude = ['id', 'created_date', 'updated_date']  
+#     class Meta:
+#         model = competitor_domain_mapping
+#         exclude = ['id', 'created_date', 'updated_date']  
 
         
         
-        
-class competitor_sitemap_url_mapping_serializer(serializers.ModelSerializer):
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    competitor_sitemap_url_id = serializers.PrimaryKeyRelatedField(queryset=competitor_sitemap_url.objects.all(), write_only=True)
+# class competitor_sitemap_url_serializer(serializers.ModelSerializer):
+#     competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
 
-    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
-    created_by_data = user_serializer(source='created_by', read_only=True)  
-    competitor_sitemap_url_id_data = competitor_sitemap_url_serializer(source='competitor_sitemap_url_id', read_only=True)  
+#     competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
 
-    class Meta:
-        model = competitor_sitemap_url_mapping
-        exclude = ['id', 'created_date', 'updated_date']  
+
+#     class Meta:
+#         model = competitor_sitemap_url
+#         exclude = ['id', 'created_date', 'updated_date']  
 
         
         
-class competitor_article_url_serializer(serializers.ModelSerializer):
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
+        
+# class competitor_sitemap_url_mapping_serializer(serializers.ModelSerializer):
+#     domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
+#     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+#     competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
+#     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+#     competitor_sitemap_url_id = serializers.PrimaryKeyRelatedField(queryset=competitor_sitemap_url.objects.all(), write_only=True)
 
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
+#     domain_id_data = domain_serializer(source='domain_id', read_only=True) 
+#     workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+#     competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
+#     created_by_data = user_serializer(source='created_by', read_only=True)  
+#     competitor_sitemap_url_id_data = competitor_sitemap_url_serializer(source='competitor_sitemap_url_id', read_only=True)  
 
-    class Meta:
-        model = competitor_article_url
-        exclude = ['id', 'created_date', 'updated_date']  
+#     class Meta:
+#         model = competitor_sitemap_url_mapping
+#         exclude = ['id', 'created_date', 'updated_date']  
+
         
         
-class competitor_article_url_mapping_serializer(serializers.ModelSerializer):
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    competitor_article_url_id = serializers.PrimaryKeyRelatedField(queryset=competitor_article_url.objects.all(), write_only=True)
+# class competitor_article_url_serializer(serializers.ModelSerializer):
+#     competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
 
-    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
-    created_by_data = user_serializer(source='created_by', read_only=True)  
-    competitor_article_url_id_data = competitor_article_url_serializer(source='competitor_article_url_id', read_only=True)  
+#     competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
 
-    class Meta:
-        model = competitor_article_url_mapping
-        exclude = ['id', 'created_date', 'updated_date']  
-          
-        
-class competitor_extraction_serializer(serializers.ModelSerializer):
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-
-    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
-    created_by_data = user_serializer(source='created_by', read_only=True)  
-
-    class Meta:
-        model = competitor_extraction
-        exclude = ['id', 'created_date', 'updated_date']  
+#     class Meta:
+#         model = competitor_article_url
+#         exclude = ['id', 'created_date', 'updated_date']  
         
         
-        
-class competitor_extraction_mapping_serializer(serializers.ModelSerializer):
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    competitor_extraction_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-
-    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
-    created_by_data = user_serializer(source='created_by', read_only=True)  
-    competitor_extraction_id_data = competitor_extraction_serializer(source='competitor_extraction_id', read_only=True)  
-
-
-    class Meta:
-        model = competitor_extraction_mapping
-        exclude = ['id', 'created_date', 'updated_date']  
+#          
         
         
-        
-        
-class competitor_seo_extraction_mapping_serializer(serializers.ModelSerializer):
-    domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
-    workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
-    competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
-    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
-    competitor_extraction_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+# class competitor_seo_extraction_mapping_serializer(serializers.ModelSerializer):
+#     domain_id = serializers.PrimaryKeyRelatedField(queryset=domain.objects.all(), write_only=True)
+#     workspace_id = serializers.PrimaryKeyRelatedField(queryset=workspace.objects.all(), write_only=True)
+#     competitor_id = serializers.PrimaryKeyRelatedField(queryset=competitor.objects.all(), write_only=True)
+#     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+#     competitor_extraction_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
 
-    domain_id_data = domain_serializer(source='domain_id', read_only=True) 
-    workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
-    competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
-    created_by_data = user_serializer(source='created_by', read_only=True)  
-    competitor_extraction_id_data = competitor_extraction_serializer(source='competitor_extraction_id', read_only=True)  
+#     domain_id_data = domain_serializer(source='domain_id', read_only=True) 
+#     workspace_id_data = workspace_serializer(source='workspace_id', read_only=True)  
+#     competitor_id_data = color_detail_serializer(source='competitor_id', read_only=True)  
+#     created_by_data = user_serializer(source='created_by', read_only=True)  
+#     competitor_extraction_id_data = competitor_extraction_serializer(source='competitor_extraction_id', read_only=True)  
 
 
-    class Meta:
-        model = competitor_seo_extraction_mapping
-        exclude = ['id', 'created_date', 'updated_date']  
+#     class Meta:
+#         model = competitor_seo_extraction_mapping
+#         exclude = ['id', 'created_date', 'updated_date']  
 
         
         

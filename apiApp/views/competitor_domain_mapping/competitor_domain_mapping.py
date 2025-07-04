@@ -5,6 +5,8 @@ from apiApp.serializers import competitor_domain_mapping_serializer
 from apiApp.models import competitor_domain_mapping, workspace, domain, prompt, article_type, competitor
 from django.db.models import Q
 from apiApp.views.base.process_pagination.process_pagination import process_pagination
+from competitorApp.models import competitor_article_url
+from competitorApp.views.cronjob.main_checker import send_article_url_to_create_article
 
 
 # show competitor domain mapping
@@ -283,3 +285,45 @@ def delete_competitor_domain_mapping(request, slug_id):
         return JsonResponse({"error": "Internal server error.","success": False}, status=500)
 
 
+@api_view(['GET'])
+def send_article_url_to_create_article_api(request):
+    try:
+        competitor_domain_mapping_id = request.GET.get('competitor_domain_mapping_id')
+
+        if not competitor_domain_mapping_id:
+            return JsonResponse({"error": "Missing competitor_domain_mapping_id", "success": False}, status=400)
+
+        # Fetch domain mapping object
+        try:
+            competitor_domain_mapping_obj = competitor_domain_mapping.objects.get(slug_id=competitor_domain_mapping_id)
+        except competitor_domain_mapping.DoesNotExist:
+            return JsonResponse({"error": "Invalid competitor_domain_mapping_id", "success": False}, status=404)
+
+        # Fetch all unsent article URLs efficiently (just what's needed)
+        unsent_urls = competitor_article_url.objects.filter(
+            competitor_domain_mapping_id__slug_id=competitor_domain_mapping_id
+        ).exclude(delivery_status='sent').values_list('article_url', flat=True)
+
+        success_count = 0
+        fail_count = 0
+        failed_urls = []
+
+        for url in unsent_urls:
+            result = send_article_url_to_create_article(competitor_domain_mapping_obj, url)
+            if result:
+                success_count += 1
+            else:
+                fail_count += 1
+                failed_urls.append(url)
+
+        return JsonResponse({
+            "success": True,
+            "total": len(unsent_urls),
+            "processed": success_count,
+            "failed": fail_count,
+            "failed_urls": failed_urls[:20]  # show max 20 failed for readability
+        })
+
+    except Exception as e:
+        print("This error is send_article_url_to_create_article_api --->:", e)
+        return JsonResponse({"error": str(e), "success": False}, status=500)

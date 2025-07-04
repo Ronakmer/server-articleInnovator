@@ -8,11 +8,7 @@ from apiApp.models import (
     wp_category, wp_author, ai_configuration, color_detail,
     language, country, motivation, article_type_field,
     article_type, prompt, image_tag, image_template_category,
-    image_template, image_tag_template_category_template_mapping,
-    competitor, competitor_domain_mapping, competitor_sitemap_url,
-    competitor_sitemap_url_mapping, competitor_article_url,
-    competitor_article_url_mapping, competitor_extraction, 
-    competitor_extraction_mapping, competitor_seo_extraction_mapping, 
+    image_template, image_tag_template_category_template_mapping, 
     user_api_key, keyword, image_kit_configuration, notification,
     activity_log, supportive_prompt_type, supportive_prompt, variables,
     rabbitmq_queue, integration, integration_type
@@ -49,15 +45,15 @@ admin.site.register(image_tag)
 admin.site.register(image_template_category)
 admin.site.register(image_template)
 admin.site.register(image_tag_template_category_template_mapping)
-admin.site.register(competitor)
-admin.site.register(competitor_domain_mapping)
-admin.site.register(competitor_sitemap_url)
-admin.site.register(competitor_sitemap_url_mapping)
-admin.site.register(competitor_article_url)
-admin.site.register(competitor_article_url_mapping)
-admin.site.register(competitor_extraction)
-admin.site.register(competitor_extraction_mapping)
-admin.site.register(competitor_seo_extraction_mapping)
+# admin.site.register(competitor)
+# admin.site.register(competitor_domain_mapping)
+# admin.site.register(competitor_sitemap_url)
+# admin.site.register(competitor_sitemap_url_mapping)
+# admin.site.register(competitor_article_url)
+# admin.site.register(competitor_article_url_mapping)
+# admin.site.register(competitor_extraction)
+# admin.site.register(competitor_extraction_mapping)
+# admin.site.register(competitor_seo_extraction_mapping)
 admin.site.register(user_api_key)
 admin.site.register(keyword)
 admin.site.register(notification)

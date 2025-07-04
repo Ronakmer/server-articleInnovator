@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+import platform
+import sys
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,18 +42,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "corsheaders",  
+    # "storages",     
     "apiApp",
     "frontendApp",
     "AIMessageService",
     "django_extensions",
     "rest_framework",
     "rest_framework_simplejwt",
+    "competitorApp",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware", 
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -106,7 +111,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'PORT': '5433',
     },
      'ai_messages_db': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -114,7 +119,15 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PORT': '5433',
+    },
+    'competitor_db': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'competitor',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '5433',
     }
 }
 ############### end additional settings ###############
@@ -281,7 +294,6 @@ STORAGES = {
 
 
 
-
 #  image kit config
 IMAGEKIT = {
     'PUBLIC_KEY': 'public_tlF7GbY5ixVQhO3I49pUgym/4lA=',
@@ -331,3 +343,61 @@ DATABASE_ROUTERS = ['AIMessageService.db_router.AiMessageRouter']
 
 
 ############### end additional settings ###############
+
+
+############### Celery Configuration ###############
+# Celery settings
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+# Platform-specific worker configuration for MAXIMUM PARALLEL PROCESSING
+if sys.platform == 'win32':
+    # Windows - Use eventlet for high concurrency
+    CELERY_WORKER_POOL = 'eventlet'
+    CELERY_WORKER_CONCURRENCY = 100  # High concurrency for parallel processing
+    
+    # Windows-specific optimizations
+    CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+    CELERY_WORKER_DISABLE_RATE_LIMITS = False
+    
+    print(" Celery configured for Windows - MASSIVE PARALLEL MODE:")
+    print(f"   Pool: {CELERY_WORKER_POOL}")
+    print(f"   Concurrency: {CELERY_WORKER_CONCURRENCY}")
+    print(f"   Target: 50,000 URLs/minute")
+else:
+    # Linux/Mac - Use prefork for stability with high concurrency
+    CELERY_WORKER_POOL = 'prefork'
+    CELERY_WORKER_CONCURRENCY = 50  # High concurrency for parallel processing
+    
+    print(" Celery configured for Linux/Mac - MASSIVE PARALLEL MODE:")
+    print(f"   Pool: {CELERY_WORKER_POOL}")
+    print(f"   Concurrency: {CELERY_WORKER_CONCURRENCY}")
+    print(f"   Target: 50,000 URLs/minute")
+
+# Import Celery configuration for massive parallel processing
+from competitorApp.views.cronjob.celery_config import *
+
+# Additional database optimization for high-volume processing
+DATABASES['default']['CONN_MAX_AGE'] = 600  # Keep connections alive longer
+
+# Cache optimization for parallel processing
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'OPTIONS': {
+            'MAX_ENTRIES': 10000,  # Increase cache size for URL processing
+        }
+    }
+}
+
+# Performance optimizations for massive parallel processing
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+
+# Session optimization for parallel requests
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_CACHE_ALIAS = 'default'
+
+print(" Database and Cache optimized for parallel processing")
+
+############### end Celery Configuration ###############

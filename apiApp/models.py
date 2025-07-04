@@ -909,242 +909,242 @@ class domain_install_log_percentage(models.Model):
 
 
 
-#  competitor
-class competitor(models.Model):
-    competitor_domain_name = models.CharField(max_length=100,default="",  blank=True)
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
+# #  competitor
+# class competitor(models.Model):
+#     competitor_domain_name = models.CharField(max_length=100,default="",  blank=True)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return self.competitor_domain_name
+#     def __str__(self):
+#         return self.competitor_domain_name
 
 
-#  competitor domain mapping
-class competitor_domain_mapping(models.Model):
+# #  competitor domain mapping
+# class competitor_domain_mapping(models.Model):
         
-    COMPETITOR_TYPE_CHOICES = [
-        ('domain ', 'Domain'),
-        ('sitemap', 'Sitemap'),
-        ('category', 'Category'),
-    ]
-    INTERVAL_CHOICES = [
-        ('one-minute', 'One Minute'),
-        ('five-minutes', 'Five Minutes'),
-        ('thirty-minutes', 'Thirty Minutes'),
-        ('one-hour', 'One Hour'),
-        ('two-hours', 'Two Hours'),
-        ('five-hours', 'Five Hours'),
-        ('ten-hours', 'Ten Hours'),
-        ('twelve-hours', 'Twelve Hours'),
-        ('fifteen-hours', 'Fifteen Hours'),
-        ('one-day', 'One Day'),
-        ('three-days', 'Three Days'),
-        ('seven-days', 'Seven Days'),
-        ('fifteen-days', 'Fifteen Days'),
-    ]
+#     COMPETITOR_TYPE_CHOICES = [
+#         ('domain ', 'Domain'),
+#         ('sitemap', 'Sitemap'),
+#         ('category', 'Category'),
+#     ]
+#     INTERVAL_CHOICES = [
+#         ('one-minute', 'One Minute'),
+#         ('five-minutes', 'Five Minutes'),
+#         ('thirty-minutes', 'Thirty Minutes'),
+#         ('one-hour', 'One Hour'),
+#         ('two-hours', 'Two Hours'),
+#         ('five-hours', 'Five Hours'),
+#         ('ten-hours', 'Ten Hours'),
+#         ('twelve-hours', 'Twelve Hours'),
+#         ('fifteen-hours', 'Fifteen Hours'),
+#         ('one-day', 'One Day'),
+#         ('three-days', 'Three Days'),
+#         ('seven-days', 'Seven Days'),
+#         ('fifteen-days', 'Fifteen Days'),
+#     ]
 
-    prompt_id = models.ForeignKey(to=prompt, on_delete=models.CASCADE, null=True, blank=True)
-    article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
-    domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    competitor_type = models.CharField(max_length=200, choices=COMPETITOR_TYPE_CHOICES, default="")
-    interval = models.CharField(max_length=200, choices=INTERVAL_CHOICES, default="")
-    competitor_domain_name = models.CharField(max_length=100,default="",  blank=True)
-    last_col_time = models.DateField()
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+#     prompt_id = models.ForeignKey(to=prompt, on_delete=models.CASCADE, null=True, blank=True)
+#     article_type_id = models.ForeignKey(to=article_type, on_delete=models.CASCADE, null=True, blank=True)
+#     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
+#     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     competitor_type = models.CharField(max_length=200, choices=COMPETITOR_TYPE_CHOICES, default="")
+#     interval = models.CharField(max_length=200, choices=INTERVAL_CHOICES, default="")
+#     competitor_domain_name = models.CharField(max_length=100,default="",  blank=True)
+#     last_col_time = models.DateField()
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
+#     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return f"{self.competitor_domain_name} - {self.interval}" 
+#     def __str__(self):
+#         return f"{self.competitor_domain_name} - {self.interval}" 
 
         
         
         
-# competitor sitemap url
-class competitor_sitemap_url(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    site_map_url = models.CharField(max_length=200,default="",  blank=True)
-    last_modified_date = models.DateField()
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
+# # competitor sitemap url
+# class competitor_sitemap_url(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     site_map_url = models.CharField(max_length=200,default="",  blank=True)
+#     last_modified_date = models.DateField()
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return f"{self.site_map_url}" 
+#     def __str__(self):
+#         return f"{self.site_map_url}" 
    
 
-#  competitor sitemap url mapping
-class competitor_sitemap_url_mapping(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    competitor_sitemap_url_id = models.ForeignKey(to=competitor_sitemap_url, on_delete=models.CASCADE, null=True, blank=True)
-    domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
-    selected_sitemap_url = models.BooleanField(default=False)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+# #  competitor sitemap url mapping
+# class competitor_sitemap_url_mapping(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     competitor_sitemap_url_id = models.ForeignKey(to=competitor_sitemap_url, on_delete=models.CASCADE, null=True, blank=True)
+#     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
+#     selected_sitemap_url = models.BooleanField(default=False)
+#     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
+#     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return f"competitor_id: {self.competitor_id} | competitor_sitemap_url_id: {self.competitor_sitemap_url_id} | selected_sitemap_url: {self.selected_sitemap_url}"
-        
-        
+#     def __str__(self):
+#         return f"competitor_id: {self.competitor_id} | competitor_sitemap_url_id: {self.competitor_sitemap_url_id} | selected_sitemap_url: {self.selected_sitemap_url}"
         
         
-# competitor article url
-class competitor_article_url(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    last_modified_date = models.DateField()
-    article_url = models.CharField(max_length=200,default="",  blank=True)
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
+        
+        
+# # competitor article url
+# class competitor_article_url(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     last_modified_date = models.DateField()
+#     article_url = models.CharField(max_length=200,default="",  blank=True)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return f"{self.article_url}"  
+#     def __str__(self):
+#         return f"{self.article_url}"  
         
         
-# competitor article url mapping    
-class competitor_article_url_mapping(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    competitor_article_url_id = models.ForeignKey(to=competitor_article_url, on_delete=models.CASCADE, null=True, blank=True)
-    domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
-    selected_article_url = models.BooleanField(default=False)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+# # competitor article url mapping    
+# class competitor_article_url_mapping(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     competitor_article_url_id = models.ForeignKey(to=competitor_article_url, on_delete=models.CASCADE, null=True, blank=True)
+#     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
+#     selected_article_url = models.BooleanField(default=False)
+#     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
+#     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return f"competitor_id: {self.competitor_id} | competitor_article_url_id: {self.competitor_article_url_id} | selected_article_url: {self.selected_article_url}"
-
-        
-        
-#  competitor extraction
-class competitor_extraction(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
-    # selected_article_url = models.CharField(max_length=200,default="", null=True, blank=True)
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
-
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
-        
-    def __str__(self):
-        return f"{self.competitor_id.competitor_domain_name}"  
-        
+#     def __str__(self):
+#         return f"competitor_id: {self.competitor_id} | competitor_article_url_id: {self.competitor_article_url_id} | selected_article_url: {self.selected_article_url}"
 
         
-#  competitor extraction mapping
-class competitor_extraction_mapping(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    competitor_extraction_id = models.ForeignKey(to=competitor_extraction, on_delete=models.CASCADE, null=True, blank=True)
-    domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
-    selected_article_url = models.CharField(max_length=200,default="",  blank=True)
-    selecter_key = models.CharField(max_length=200,default="",  blank=True)
-    selecter_value = models.CharField(max_length=200,default="",  blank=True)
-    attribute_name = models.CharField(max_length=200,default="",  blank=True)
-    attribute_content = models.CharField(max_length=200,default="",  blank=True)
-    multiple_selection = models.BooleanField(default=False)
-    attribute_selection = models.BooleanField(default=False)
-    extra_selection = models.BooleanField(default=False)
-    remove_selection = models.BooleanField(default=False)
+        
+# #  competitor extraction
+# class competitor_extraction(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
+#     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
+#     # selected_article_url = models.CharField(max_length=200,default="", null=True, blank=True)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
+#     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
+        
+#     def __str__(self):
+#         return f"{self.competitor_id.competitor_domain_name}"  
+        
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
         
-    def __str__(self):
-        return f"{self.selected_article_url}"      
-        
-        
-#  competitor seo extraction_mapping
-class competitor_seo_extraction_mapping(models.Model):
-    competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
-    competitor_extraction_id = models.ForeignKey(to=competitor_extraction, on_delete=models.CASCADE, null=True, blank=True)
-    domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
-    workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
-    remove_blocker_images = models.BooleanField(default=False)
-    remove_google_analytics = models.BooleanField(default=False)
-    remove_google_adsense = models.BooleanField(default=False)
-    remove_script = models.BooleanField(default=False)
-    remove_style = models.BooleanField(default=False)
-    remove_404_internal_links = models.BooleanField(default=False)
-    meta_title_selection = models.BooleanField(default=False)
-    meta_description_selection = models.BooleanField(default=False)
-    meta_keyword_selection = models.BooleanField(default=False)
-    slug_id = models.CharField(max_length=100,default="",  blank=True)
-    created_date=models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+# #  competitor extraction mapping
+# class competitor_extraction_mapping(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     competitor_extraction_id = models.ForeignKey(to=competitor_extraction, on_delete=models.CASCADE, null=True, blank=True)
+#     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
+#     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
+#     selected_article_url = models.CharField(max_length=200,default="",  blank=True)
+#     selecter_key = models.CharField(max_length=200,default="",  blank=True)
+#     selecter_value = models.CharField(max_length=200,default="",  blank=True)
+#     attribute_name = models.CharField(max_length=200,default="",  blank=True)
+#     attribute_content = models.CharField(max_length=200,default="",  blank=True)
+#     multiple_selection = models.BooleanField(default=False)
+#     attribute_selection = models.BooleanField(default=False)
+#     extra_selection = models.BooleanField(default=False)
+#     remove_selection = models.BooleanField(default=False)
 
-    # Generate a slug using UUID
-    def save(self, *args, **kwargs):
-        if not self.slug_id:
-            self.slug_id = str(uuid.uuid4())
-        super().save(*args, **kwargs)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
+#     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
         
-    # def __str__(self):
-    #     return f"{self.selected_article_url}"  
+#     def __str__(self):
+#         return f"{self.selected_article_url}"      
+        
+        
+# #  competitor seo extraction_mapping
+# class competitor_seo_extraction_mapping(models.Model):
+#     competitor_id = models.ForeignKey(to=competitor, on_delete=models.CASCADE, null=True, blank=True)
+#     competitor_extraction_id = models.ForeignKey(to=competitor_extraction, on_delete=models.CASCADE, null=True, blank=True)
+#     domain_id = models.ForeignKey(to=domain, on_delete=models.CASCADE, null=True, blank=True)
+#     workspace_id = models.ForeignKey(to=workspace, on_delete=models.CASCADE)
+#     remove_blocker_images = models.BooleanField(default=False)
+#     remove_google_analytics = models.BooleanField(default=False)
+#     remove_google_adsense = models.BooleanField(default=False)
+#     remove_script = models.BooleanField(default=False)
+#     remove_style = models.BooleanField(default=False)
+#     remove_404_internal_links = models.BooleanField(default=False)
+#     meta_title_selection = models.BooleanField(default=False)
+#     meta_description_selection = models.BooleanField(default=False)
+#     meta_keyword_selection = models.BooleanField(default=False)
+#     slug_id = models.CharField(max_length=100,default="",  blank=True)
+#     created_date=models.DateTimeField(default=timezone.now)
+#     updated_date = models.DateTimeField(auto_now=True)
+#     created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+
+#     # Generate a slug using UUID
+#     def save(self, *args, **kwargs):
+#         if not self.slug_id:
+#             self.slug_id = str(uuid.uuid4())
+#         super().save(*args, **kwargs)
+        
+#     # def __str__(self):
+#     #     return f"{self.selected_article_url}"  
         
         
 

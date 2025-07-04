@@ -1,0 +1,1063 @@
+{% extends 'frontendApp/base/base.html' %}
+{% load static%}
+
+
+{% block body %}
+
+
+<div class="flex flex-col   lg:flex-row items-center justify-between gap-4 pb-6 border-b border-gray-200">
+
+    <!-- Left Side: Title Section -->
+    <div>
+        <h3 class="text-lg font-semibold text-black">Competitor</h3>
+        <p class="text-xs text-gray-500">Create new competitor</p>
+    </div>
+
+    <!-- Right Side: Buttons and Search -->
+    <div class="flex  items-center gap-2 max-md:flex-wrap max-md:justify-center  ">
+        <!-- Add Article Button -->
+        <a href="{% url 'list_prompt_page' %}"
+            class="flex items-center gap-1.5 px-4 py-2  text-sm font-medium text-white bg-custom-black border border-black-600 rounded-lg hover:bg-indigo-700"
+            fdprocessedid="fwfkzn">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5.99953 11.78C5.87286 11.78 5.7462 11.7333 5.6462 11.6333L1.29953 7.28668C0.592865 6.58001 0.592865 5.42001 1.29953 4.71335L5.6462 0.36668C5.83953 0.173346 6.15953 0.173346 6.35286 0.36668C6.5462 0.560013 6.5462 0.880013 6.35286 1.07335L2.0062 5.42001C1.6862 5.74001 1.6862 6.26001 2.0062 6.58001L6.35286 10.9267C6.5462 11.12 6.5462 11.44 6.35286 11.6333C6.25286 11.7267 6.1262 11.78 5.99953 11.78Z"
+                    fill="white" />
+            </svg>
+
+            Back
+        </a>
+    </div>
+</div>
+
+{% comment %} <form method="POST" action=""  id="prompt_form" name="prompt_form" enctype="multipart/form-data" class="flex flex-col gap-4 pt-4 dynamic-form"> {% endcomment %}
+
+<!-- start field data  -->
+<div class="grid grid-cols-12 gap-5 pt-6 font-poppins ">
+    <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
+        <div class="w-full">
+            <!-- Multi-Step Progress Bar -->
+            <div class="p-4 mb-4 border border-gray-200 rounded-2xl">
+                <div class="flex items-center justify-between max-md:block space-y-2">
+                    <!-- Step 1 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step1-circle"
+                            class="flex items-center justify-center w-[34px] h-[34px] bg-indigo-600 text-white rounded-full">
+                            1
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2">Select Type</p>
+                    </div>
+                    <div id="line1" class="flex-1 h-0.5 bg-gray-300"></div>
+                    <!-- Step 2 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step2-circle"
+                            class="flex ml-2 items-center justify-center w-[34px] h-[34px] bg-gray-200 text-white rounded-full">
+                            2
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2 mr-2">Articles Selector</p>
+                    </div>
+                    <div id="line2" class="flex-1 h-0.5 bg-gray-300"></div>
+                    <!-- Step 3 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step3-circle"
+                            class="flex items-center justify-center w-[34px] h-[34px] bg-gray-200 text-white rounded-full">
+                            3
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2">Article Urls</p>
+                    </div>
+                    <div id="line3" class="flex-1 h-0.5 bg-gray-300"></div>
+
+                    <!-- Step 4 -->
+                    <div class="flex-1 flex items-center justify-center">
+                        <div id="step4-circle"
+                            class="flex items-center justify-center w-[34px] h-[34px] bg-gray-200 text-white rounded-full">
+                            4
+                        </div>
+                        <p class="text-sm text-gray-500 ml-2">CheckArticle</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- start step 1 -->
+            <div id="step1" class="   p-4 mb-4 border border-gray-200 rounded-2xl w-full grid grid-cols-12 gap-4">
+                <div class="col-span-12 flex justify-between items-center p-4 rounded-lg shadow-sm">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Add Competitor</h2>
+                        <p class="text-gray-600 text-sm"> Add Competitor To Monitor And Analyze Their Content </p>
+                    </div>
+                    <div class="flex gap-4">
+                        <!-- Back Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400" onclick="showStep(3)">Back</button>
+                        <!-- Next Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="add_competitor()">Next</button>
+                    </div>
+                </div>
+                <div class="col-span-12 lg:col-span-5">
+                    <div class="p-4 border border-gray-200 rounded-2xl ">
+                        {% comment %} <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
+                            Add Competitor</h5> {% endcomment %}
+
+                                <div class="mb-4">
+                                    <label for="competitortype" class="block pb-1 text-sm  font-medium text-gray-600 mt-2">Competitor Type </label>
+                                    <div class="flex gap-4 mt-2">
+                                        <!-- Sitemap Radio -->
+                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
+                                            <input type="radio" name="competitor_type" value="sitemap"
+                                                class="form-radio text-indigo-600 mr-2">
+                                            <span>Sitemap</span>
+                                        </label>
+
+                                        <!-- Category Radio -->
+                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
+                                            <input type="radio" name="competitor_type" value="category"
+                                                class="form-radio text-indigo-600 mr-2">
+                                            <span>Category</span>
+                                        </label>
+
+                                        
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="interval" class="block pb-1 text-sm font-medium text-gray-600">Competitor Domain Name</label>
+                                    <div class="flex w-full">
+                                        <!-- Text input with full rounded corners -->
+                                        <input 
+                                            type="text"  
+                                            name="competitor_domain_name" 
+                                            placeholder="example.com"
+                                            class="flex-1 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="interval" class="block pb-1 text-sm font-medium text-gray-600">Interval</label>
+                                    <div class="flex w-full">
+                                        <!-- Number input -->
+                                        <input type="number" id="interval" name="interval_value" placeholder="30"
+                                            class="flex-1 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+
+                                        <!-- Unit dropdown -->
+                                        <select name="interval_unit"
+                                            class="min-w-[100px] px-3 py-2 text-sm text-gray-900 border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="minutes">Min</option>
+                                            <option value="hours">Hour</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="field-3" class="block pb-1 text-sm font-medium text-gray-600">Select Article Type</label>
+                                    <div class="flex">
+                                        <select id="type" name="article_type_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            <option value="1">Select Article Type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col md:flex-row items-start gap-3 mt-2">
+                                    <div class="block w-full">
+                                        <label for="countries"
+                                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Select Prompt</label>
+                                            <div class="relative">
+                                                <select id="type" name="prompt_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                    <option value="1">Select Prompt</option>
+                                                </select>
+
+                                                <!-- for pass data in api -->
+                                                <input type="hidden" name="prompt_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                                                placeholder="">
+                                                
+                                                <!-- Custom dropdown arrow -->
+                                                <div
+                                                    class="  pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col md:flex-row items-start gap-3">
+                                    <div class="block w-full">
+                                        <label for="countries"
+                                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Select Domain</label>
+                                            <div class="relative">
+                                                <select id="type" name="ai_domain_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                                </select>
+
+                                                <!-- for pass data in api -->
+                                                <input type="hidden" name="ai_domain_slug_id" class="flex-grow text-sm outline-none px-2 py-1"
+                                                placeholder="">
+
+                                                <!-- Custom dropdown arrow -->
+                                                <div
+                                                    class="  pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col md:flex-row items-start gap-3  hidden" id="author_div_id">
+                                    <div class="block w-full ">
+                                        <label for="countries"
+                                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Author
+                                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                        </svg></label>
+                                        <div class="relative author-search">
+                                            <div class="flex flex-wrap gap-2 mb-2 pt-2" id="selected-authors"></div>
+                                            <select id="type" name="author_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                            </select>
+
+                                            <!-- for pass data in api -->
+                                            <input type="hidden" name="author_slug_id_ai" class="flex-grow text-sm outline-none px-2 py-1"
+                                            placeholder="">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col md:flex-row items-start mt-2 gap-3 hidden" id="category_div_id">
+                                    <div class="block w-full ">
+                                        <label for="countries"
+                                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Categories
+                                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                        </svg></label>
+                                        <div class="category-search relative">
+                                            <div class="flex flex-wrap gap-2 mb-2 pt-2 " id="selected-categories"></div>
+                                            <input type="text" id="category-input" placeholder="Search Categories"
+                                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                            <div id="category-dropdown"
+                                                class="hidden absolute z-10  mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                            </div>
+                                        </div>
+                                        <!-- for pass data in api -->
+                                        <input type="hidden" name="category_slug_id_ai" class="flex-grow text-sm outline-none px-2 py-1"
+                                        placeholder=""> 
+                                    </div>
+                                </div>
+
+
+                                <div class="flex flex-col md:flex-row items-start gap-3 hidden" id="tag_div_id">
+                                    <div class="block w-full ">
+                                        <label for="countries"
+                                            class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Tags
+                                            <svg class="hidden" width="7" height="7" class="ml-1" viewBox="0 0 7 7"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444"></path>
+                                        </svg></label>
+                                        <div class="relative author-search">
+                                            <div class="tag-search relative">
+                                                <div class="flex flex-wrap gap-2 mb-2 pt-2 " id="selected-tag"></div>
+                                                <input type="text" id="tag-input" placeholder="Search Categories"
+                                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                                <div id="tag-dropdown"
+                                                    class="hidden absolute z-10  mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                                </div>
+                                            </div>
+                                            <!-- for pass data in api -->
+                                            <input type="hidden" name="tag_slug_id_ai" class="flex-grow text-sm outline-none px-2 py-1"
+                                            placeholder="">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="competitortype" class="block pb-1 text-sm  font-medium text-gray-600 mt-2">Wp Status</label>
+                                    <div class="flex gap-4 mt-2">
+                                        <!-- Sitemap Radio -->
+                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
+                                            <input type="radio" name="wp_status" value="publish"
+                                                class="form-radio text-indigo-600 mr-2">
+                                            <span>Publish</span>
+                                        </label>
+
+                                        <!-- Category Radio -->
+                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
+                                            <input type="radio" name="wp_status" value="draft"
+                                                class="form-radio text-indigo-600 mr-2">
+                                            <span>Draft</span>
+                                        </label>
+
+                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
+                                            <input type="radio" name="wp_status" value="future"
+                                                class="form-radio text-indigo-600 mr-2">
+                                            <span>Future</span>
+                                        </label>
+                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
+                                            <input type="radio" name="wp_status" value="trash"
+                                                class="form-radio text-indigo-600 mr-2">
+                                            <span>Trash</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 mt-2">
+                                    <label for="field-3" class="block pb-1 text-sm font-medium text-gray-600">Url</label>
+                                    <div class="flex w-full">
+                                        <input type="text" id="url-input" name="url" placeholder="https://example.com"
+                                            class="flex-1 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                                        <button type="button"
+                                            class="min-w-[80px] flex justify-center items-center px-4 py-2 bg-indigo-600 border border-transparent text-white text-sm font-semibold rounded-r-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- URL List -->
+                                <div class="mb-4 bg-white rounded-lg shadow">
+                                    <div class="bg-gray-50 border-b border-gray-200 px-6 py-4">
+                                        <h3 class="text-sm font-semibold text-gray-600">Url List</h3>
+                                    </div>
+                                    <div id="url-list-container" class="divide-y divide-gray-200">
+                                        <!-- URL Entry Template -->
+                                        <div class="hover:bg-gray-50 transition-colors duration-200">
+                                            <table class="w-full table-fixed border border-gray-200 rounded-lg overflow-hidden">
+                                                
+                                                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="flex flex-col md:flex-row items-start gap-3 mt-4">
+                                    {% comment %} <button type="button" id="submit_button" 
+                                        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+
+                                        Next
+                                    </button> {% endcomment %}
+                                </div>
+
+
+                            <div class="flex flex-col md:flex-row items-start gap-3 mb-3">
+                                <div class="block w-full" id="variables_btn">
+
+                                
+                                </div>
+                            </div>
+                            
+
+                            <div class="flex flex-col md:flex-row items-start gap-3">
+                                <div id="dynamic_fields_container" name="dynamic_fields_container" class="block w-full ">
+
+                                </div>
+                                <!-- for pass data in api -->
+                                <input type="hidden" name="prompt_data" class="flex-grow text-sm outline-none px-2 py-1"
+                                placeholder="">
+                                
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-7 ">    
+                    <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                        <!-- Header section -->
+                        <div class="p-4 border-b border-gray-200 bg-white">
+                            <div class="flex justify-between items-center">
+                                <h5 class="text-base font-semibold text-gray-900">Sitemap Finder</h5>
+
+                                <div class="flex items-center gap-4">
+                                    <!-- Search Box -->
+                                    <div class="relative w-full max-w-xs">
+                                        <input type="text" name="competitor_domain_name_sitemap" placeholder="Enter Domain. . ."
+                                            class="w-full py-2 pr-10 pl-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                        <button type="button" onclick="get_sitemap_api()"
+                                            class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-indigo-600">
+                                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <!-- Pagination -->
+                                    <div id="pagination" class="flex items-center gap-1">
+                                        {% comment %} <a href="#" class="inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                        <a href="#" aria-current="page"
+                                            class="z-10 inline-flex items-center bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold text-white">1</a>
+                                        <span class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300">...</span>
+                                        <a href="#"
+                                            class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50">10</a>
+                                        <a href="#" class="inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </a> {% endcomment %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="overflow-x-auto bg-white">
+                            <table class="w-full text-sm font-poppins">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900 whitespace-nowrap">#</th>
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900 whitespace-nowrap">URL</th>
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900 whitespace-nowrap">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200" id="sitemap_tbody">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <!-- Toast Message -->
+                <div id="toast-message" style="
+                        display: none;
+                        position: fixed;
+                        bottom: 16px;
+                        right: 16px;
+                        background-color: rgba(59, 130, 246, 0.5);
+                        color: white;
+                        padding: 6px 16px;
+                        font-size: 13px;
+                        border-radius: 6px;
+                        z-index: 1000;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    ">
+                    Copied to clipboard!
+                </div>
+            </div>
+
+
+            <!-- start step 2 -->
+            <div id="step2" class=" hidden p-4 mb-4 border border-gray-200 rounded-2xl w-full grid grid-cols-12 gap-4">
+                
+                
+                <div class="col-span-12 lg:col-span-12 w-full mb-4">
+                    <!-- Header Section -->
+                    <div class="flex justify-between items-center  p-4 rounded-lg shadow-sm">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-800">Article Selection</h2>
+                            <p class="text-gray-600 text-sm">Select Articles From The Sitemap or Category To Analyze And Extract Content</p>
+                        </div> 
+                        <div class="flex gap-4">
+                            <!-- Back Button -->
+                            <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400" onclick="back_step()">Back</button>
+                            <!-- Next Button -->
+                            <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="add_article_urls()">Next</button>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-2xl overflow-hidden mt-4">
+                        <!-- Unified Header + Table Wrapper -->
+                        <div class="p-4 border-b border-gray-200 bg-white">
+                            <div class="flex justify-between items-center">
+                                <h5 class="text-base font-semibold text-gray-900">Article Urls</h5>
+                                
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                                        <label for="limit" class="font-medium">Per Page:</label>
+
+                                        <!-- Dropdown with arrow -->
+                                        <div class="relative">
+                                            <select id="limit" name="limit"
+                                                class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <option value="10" selected>10</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+
+                                            <!-- Custom dropdown arrow -->
+                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Search Box -->
+                                    <div class="relative  text-gray-500 focus-within:text-gray-900 ">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                                                fill="none">
+                                                <path
+                                                    d="M15.75 15.75L13.875 13.875M14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25C9.90046 14.25 11.3953 13.5836 12.48 12.5052C13.5732 11.4184 14.25 9.91325 14.25 8.25Z"
+                                                    stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round"></path>
+                                            </svg>
+                                        </div>
+                                        <input type="text" id="search-input"  
+                                            class="block w-full max-w-xs pr-4 pl-8 py-2 text-sm font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none leading-relaxed"
+                                            placeholder="Search here . . .">
+                                    </div>
+
+                                    <!-- Pagination -->
+                                    <div class="flex items-center gap-1" id="pagination">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="overflow-x-auto bg-white">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900 whitespace-nowrap">
+                                            <input type="checkbox" id="select-all-checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="handleSelectAll(this.checked)">
+                                        </th>                                        
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">#</th>
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">Article Url</th>
+                                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">Last Modified</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200" id="article_tbody">
+                                     
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            {% comment %} <!-- start step 3-->
+            <div id="step2" class="p-4 mb-4 border border-gray-200 rounded-2xl hidden">
+                <div class="col-span-12 lg:col-span-8 w-full">
+                    <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                        <div class="flex w-full flex-wrap gap-3 p-4 mb-2 text-sm">
+                            <!-- Group 1: Radio Buttons -->
+                            <div class="w-full flex flex-wrap gap-3">
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Title</span>
+                                </label>
+                                
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Tag</span>
+                                </label>
+
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Category</span>
+                                </label>
+
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Author</span>
+                                </label>
+
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Date</span>
+                                </label>
+
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Image</span>
+                                </label>
+
+                                <label class="flex-1 min-w-[120px] flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                    <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                    <span class="text-gray-700">Content</span>
+                                </label>
+                                
+
+                                <!-- Add more radio buttons... -->
+                            </div>
+
+                            <!-- Group 2: Input + Submit (Left) and Next Button (Right) -->
+                            <div class="w-full flex flex-wrap justify-between items-center mt-2 gap-4">
+                                <!-- Left side -->
+                                <div class="flex items-center gap-2 flex-1 min-w-[250px]">
+                                <input type="text" placeholder="Enter value..."
+                                    class="w-full py-2 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <button class="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                                    Save
+                                </button>
+                                </div>
+
+                                <!-- Right side -->
+                                <div class="flex justify-end flex-1 min-w-[120px]">
+                                <button class="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                                    Next
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div> {% endcomment %}
+
+
+            <!-- start step 3-->
+            <div id="step3" class=" hidden p-6 mb-6 border border-gray-300 bg-white rounded-2xl shadow-md" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <style>
+                    #step3::-webkit-scrollbar {
+                        display: none;
+                    }
+                </style>
+                <!-- Header Section -->
+                <div class="flex justify-between items-center  p-4 rounded-lg shadow-sm">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Content Extraction</h2>
+                        <p class="text-gray-600 text-sm">Specify Selector For Title, Category And Configure Options To Tailor The Extraction Process, Like Handling Image And Links </p>
+                    </div>
+                    <div class="flex gap-4">
+                        <!-- Back Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400" onclick="back_step()">Back</button>
+                        <!-- Next Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="show_article_url_step()">Next</button>
+                    </div>
+                </div>
+
+                <!-- Tag Selection Section -->
+                <div class="mt-6 w-full space-y-4">
+                    <!-- Radio Buttons Group -->
+                    <div class="w-full flex flex-wrap justify-between items-center gap-4">
+                        <div class="w-full lg:w-1/3 flex items-center gap-2">
+                            <label  class="highlight-btn flex-1 min-w-[120px] text-sm flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                <span class="text-gray-700">Pagination</span>
+                            </label>
+                            <label class="highlight-btn flex-1 min-w-[120px] text-sm flex items-center justify-start rounded-lg border border-gray-200 px-3 py-2 cursor-pointer">
+                                <input type="radio" name="status" class="form-radio text-indigo-600 mr-2">
+                                <span class="text-gray-700">Article</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Input + Save Button -->
+                    <div class="w-full flex flex-wrap justify-between items-center gap-4">
+                        <!-- Left Side -->
+                        <div class="flex items-center gap-2 flex-1 min-w-[250px]">
+                            <div class="relative flex-1">
+                                <input type="text" id="category_selector_input" placeholder="Enter selector value..."
+                                    class="w-full py-2 px-3 pr-12 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <button type="button" id="category_search_btn" class="absolute inset-y-0 right-0 flex items-center px-3 bg-indigo-100 hover:bg-indigo-200 rounded-r-lg border-l transition-colors">
+                                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <button onclick="add_category_selector()" class="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                                Save
+                            </button>
+                        </div>
+
+                        <!-- Right Side (Optional Future Use) -->
+                        <div class="flex justify-end flex-1 min-w-[120px]">
+                            {% comment %} 
+                            <button class="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                                Next
+                            </button> 
+                            {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="" class="mt-4 flex">
+
+                </div> 
+                
+                
+                <!-- Content Viewer Section -->
+                <div class="mt-6 flex flex-col gap-6">
+                    <!-- HTML and Preview side by side -->
+                    <div class="flex gap-6">
+                        <!-- Article HTML Section - Increased height -->
+                        <div id="html-container-category" class="w-1/2 rounded-lg shadow-inner border border-gray-300 p-0">
+                            {% comment %} <h3 class="text-md font-semibold text-gray-800 mb-2">Article HTML</h3> {% endcomment %}
+                            {% comment %} <div 
+                                class="bg-white w-full p-4 border rounded-lg text-sm font-mono overflow-auto h-[1000px]">
+                                <!-- Dynamic HTML Content will be injected here -->
+                            </div> {% endcomment %}
+                        </div>
+
+                        <!-- Right Column: Preview and Table -->
+                        <div class="w-1/2 flex flex-col gap-6">
+                            <!-- Processed Preview -->
+                            <div class="bg-white border border-solid border-gray-200 rounded-lg">
+                                <h3 class="text-md font-semibold text-gray-800 p-4 border-b">Processed Preview</h3>
+                                <div id="processed-content-category"
+                                    class="p-4 text-sm overflow-auto max-h-[300px]">
+                                    <!-- Displayed Processed Content -->
+                                </div>
+                            </div>
+
+                            <!-- Table moved below preview on right side -->
+                            <div class="rounded-xl border border-solid border-gray-200 overflow-auto">
+                                <div id="extra_value_tbody" class="extra-value-cards">
+                                    <!-- Cards will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+
+            <!-- start step 4-->
+            <div id="step4" class=" hidden  p-6 mb-6 border border-gray-300 bg-white rounded-2xl shadow-md" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <style>
+                    #step3::-webkit-scrollbar {
+                        display: none;
+                    }
+                </style>
+                <div class="flex justify-between items-center  p-4 rounded-lg shadow-sm">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Content Extraction</h2>
+                    </div>
+                    <div class="flex gap-4">
+                        <!-- Back Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400" onclick="back_step()">Back</button>
+                        <!-- Next Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="show_list_competitor()">Next</button>
+                    </div>  
+                </div>
+                
+                <!-- Header Section -->
+                {% comment %} <div class="flex justify-between items-center  p-4 rounded-lg shadow-sm">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Content Extraction</h2>
+                        <p class="text-gray-600 text-sm">Specify Selector For Title, Category And Configure Options To Tailor The Extraction Process, Like Handling Image And Links </p>
+                    </div>
+                    <div class="flex gap-4">
+                        <!-- Back Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400" onclick="showStep(3)">Back</button>
+                        <!-- Next Button -->
+                        <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="list_wayback_article_urls()">Next</button>
+                    </div>
+                </div> {% endcomment %}
+
+                <!-- Tag Selection Section -->
+                <div class="mt-6 flex flex-wrap-nowrap justify-between w-full">
+                    <!-- Group 1: Radio Buttons -->
+                    <div class="w-full flex flex-wrap gap-3">
+                        <label id="title-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Title</span>
+                        </label>
+                        
+                        <label id="tag-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Tag</span>
+                        </label>
+
+                        <label id="category-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Category</span>
+                        </label>
+
+                        <label id="author-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Author</span>
+                        </label>
+
+                        <label id="date-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Date</span>
+                        </label>
+
+                        <label id="image-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Image</span>
+                        </label>
+
+                        <label id="content-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">Content</span>
+                        </label>
+
+                        <label id="seo-btn" class="highlight-btn text-sm flex items-center rounded-lg border border-gray-200 px-2 py-2 cursor-pointer" style="flex: 1; min-width: 90px;">
+                            <input type="radio" name="status" class="form-radio text-indigo-600 mr-2 flex-shrink-0">
+                            <span class="text-gray-700">SEO</span>
+                        </label>
+                        <!-- Add more radio buttons... -->
+                    </div>
+                </div>
+
+                <div id="input-fields-container" class="mt-4 flex">
+
+                </div> 
+                <div class="flex justify-between items-center mt-4 w-full">
+
+                    <button onclick="add_article_url_selector_api()" class="flex items-center mt-2 gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                        Save
+                    </button>
+                    {% comment %} <!-- Next Button (right) -->
+                    <button onclick="show_list_competitor()" class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-700">
+                        Next
+                    </button> {% endcomment %}
+                </div>
+                
+                <!-- Content Viewer Section -->
+                <div class="mt-6 flex flex-col gap-6">
+                    <!-- HTML and Preview side by side -->
+                    <div class="flex gap-6">
+                        <!-- Article HTML Section - Increased height -->
+                        <div id="html-container-article" class="w-1/2 p-0 rounded-lg shadow-inner border border-gray-300 overflow-hidden">
+                            {% comment %} <h3 class="text-md font-semibold text-gray-800 mb-2">Article HTML</h3> {% endcomment %}
+                            {% comment %} <div 
+                                class="bg-white w-full p-4 border rounded-lg text-sm font-mono overflow-auto h-[1000px]">
+                                <!-- Dynamic HTML Content will be injected here -->
+                            </div> {% endcomment %}
+                        </div>
+
+                        <!-- Right Column: Preview and Table -->
+                        <div class="w-1/2 flex flex-col gap-6">
+                            <!-- Processed Preview -->
+                            <div class="bg-white border border-solid border-gray-200 rounded-lg">
+                                <h3 class="text-md font-semibold text-gray-800 p-4 border-b">Processed Preview</h3>
+                                <div id="processed-content-article"
+                                    class="p-4 text-sm overflow-auto max-h-[300px]">
+                                    <!-- Displayed Processed Content -->
+                                </div>
+                            </div>
+
+                            <!-- Table moved below preview on right side -->
+                            <div class="rounded-xl border border-solid border-gray-200 overflow-auto">
+                                <div id="extra_value_tbody_article" class="extra-value-cards">
+                                    <!-- Cards will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        
+        </div>
+    </div>
+</div>
+
+{% comment %} <!-- Start Step 2 -->
+<div class="col-span-12 lg:col-span-8 mt-4">
+    <div class="border border-gray-200 rounded-2xl overflow-hidden">
+        <!-- Unified Header + Table Wrapper -->
+        <div class="p-4 border-b border-gray-200 bg-white">
+            <div class="flex justify-between items-center">
+                <h5 class="text-base font-semibold text-gray-900">Sitemap Finder</h5>
+
+                <div class="flex items-center gap-4">
+                    <!-- Search Box -->
+                    <div class="relative w-full max-w-xs">
+                        <input type="text" placeholder="Enter Domain. . ."
+                            class="w-full py-2 pr-10 pl-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        <button type="submit"
+                            class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-indigo-600">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex items-center gap-1">
+                        <a href="#" class="inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" class="z-10 inline-flex items-center bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold text-white">1</a>
+                        <span class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300">...</span>
+                        <a href="#" class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50">10</a>
+                        <a href="#" class="inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto bg-white">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">#</th>
+                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">URL</th>
+                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200" id="role_tbody">
+                    <tr class="bg-white">
+                        <td class="py-3.5 pl-4">1</td>
+                        <td class="py-3.5 pl-4">
+                            <div class="max-w-[300px] overflow-x-auto whitespace-nowrap">
+                                https://www.google.com
+                            </div>
+                        </td>
+                        <td class="py-3.5 pl-4">
+                            <button onclick="copyToClipboard('https://www.google.com')"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3">
+                                    </path>
+                                </svg>
+                                Copy
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+
+
+{% comment %} </form> {% endcomment %}
+
+
+
+<!-- Load dependencies first -->
+<script id="check_category_js" src="{% static 'frontendApp/api/competitors/check_category.js' %}" defer></script>
+<script id="check_article_js" src="{% static 'frontendApp/api/competitors/check_article.js' %}" defer></script>
+<script id="article_urls_js" src="{% static 'frontendApp/api/competitors/article_urls.js' %}" defer></script>
+<script id="table_data_sitemap_js" src="{% static 'frontendApp/api/competitors/table_data_sitemap.js' %}" defer></script>
+<script id="table_data_article_urls_js" src="{% static 'frontendApp/api/competitors/table_data_article_urls.js' %}" defer></script>
+
+<!-- Load main functionality after dependencies -->
+<script id="change_step_js" src="{% static 'frontendApp/api/competitors/change_step.js' %}" defer></script>
+<script id="back_step_js" src="{% static 'frontendApp/api/competitors/back_step.js' %}" defer></script>
+<script id="add_competitor_dropdown_js" src="{% static 'frontendApp/api/competitors/add_competitor_dropdown.js' %}" defer></script>
+<script id="add_competitor_js" src="{% static 'frontendApp/api/competitors/add_competitor.js' %}" defer></script>
+<!-- Ensure functions are available globally -->
+<script>
+    // Wait for all scripts to load
+    window.addEventListener('DOMContentLoaded', function() {
+        // Ensure functions are available globally
+        if (typeof get_html_content === 'undefined' && window.get_html_content) {
+            window.get_html_content = get_html_content;
+        }
+        if (typeof get_category_html_content === 'undefined' && window.get_category_html_content) {
+            window.get_category_html_content = get_category_html_content;
+        }
+    });
+</script>
+
+<script>
+    function showToastMessage() {
+        console.log('Showing toast message'); // Debug log
+        const toast = document.getElementById('toast-message');
+        toast.style.display = 'block';
+        
+        setTimeout(function() {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+
+    function copyToClipboard(text) {
+        console.log('Copy function called with:', text); // Debug log
+        try {
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('Text copied successfully'); // Debug log
+                showToastMessage();
+            }).catch(function(err) {
+                console.error('Failed to copy:', err);
+            });
+        } catch(err) {
+            console.error('Error in copy function:', err);
+        }
+    }
+
+    // Add event listeners when document loads
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Document loaded, setting up copy buttons'); // Debug log
+        
+        // Add click handlers to all copy buttons
+        const copyButtons = document.querySelectorAll('[data-copy-text]');
+        copyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const textToCopy = this.getAttribute('data-copy-text');
+                copyToClipboard(textToCopy);
+            });
+        });
+    });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.highlight-btn');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            // Call our JavaScript function from check_article.js
+            if (typeof handleSelectorButtonClick === 'function') {
+                handleSelectorButtonClick(this.id);
+            }
+            
+            buttons.forEach(b => {
+                // Reset radio button accent color
+                const radio = b.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.classList.remove('accent-indigo-600');
+                    radio.classList.add('accent-gray-300');
+                }
+
+                // Reset other styles if needed
+                b.classList.remove('bg-indigo-50', 'border-indigo-600', 'text-indigo-700');
+                b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            });
+
+            // Apply new accent color to selected radio
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                radio.classList.remove('accent-gray-300');
+                radio.classList.add('accent-indigo-600');
+            }
+
+            // Optional: update label styles
+            this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+            this.classList.add('bg-indigo-50', 'text-indigo-700', 'border-indigo-600');
+        });
+    });
+});
+</script>
+
+{% endblock body %}

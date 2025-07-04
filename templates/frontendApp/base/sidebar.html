@@ -812,7 +812,7 @@
           </li>
 
           <li>
-              <a href=""
+              <a href="{% url 'list_competitor_page' %}"
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
                   :class="{'justify-center': !isSidebarOpen}">
                   <span>
@@ -836,7 +836,7 @@
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Competitor</span>
               </a>
           </li>
-
+{% comment %} 
           <li>
               <a href=""
                   class="group flex items-center gap-3 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg transition-all duration-500 hover:bg-gray-50 active:bg-gray-50 hover:text-gray-900"
@@ -861,7 +861,7 @@
                   </span>
                   <span :class="{ 'lg:hidden': !isSidebarOpen }">Competitor Selector Category</span>
               </a>
-          </li>
+          </li> {% endcomment %}
 
           <li data-permission="list_invitation_code_detail" class="hidden" >
               <a href="{% url 'list_invitation_code_detail_page' %}"

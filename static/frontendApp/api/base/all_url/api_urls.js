@@ -1,7 +1,7 @@
 
 var url = 'https://127.0.0.1:8000/api/';
 // var url = 'https://165.227.94.74:10001/api/';
-
+// var url = 'https://192.168.1.5:8000/api/';
 var refresh_token_url = `${url}get-refresh-token/`;
 
 var login_url = `${url}login/`;
@@ -232,9 +232,24 @@ var clear_ai_rate_limiter_worker_url = `${url}clear-ai-rate-limiter-worker/`;
 
 
 
+var competitor_url = 'https://127.0.0.1:8000/competitor-api/';
+
+// competitors
+
+var list_competitor_url = `${competitor_url}competitors/`;
+var add_competitor_url = `${competitor_url}competitor/add/`;
+var update_competitor_url = `${competitor_url}competitor/update/`;
+var delete_competitor_url = `${competitor_url}competitor/delete/`;
+
+var scrap_sitemap_url = `${competitor_url}scrap-sitemap/`;
+var scrap_articles_url = `${competitor_url}scrap-articles/`;
+
+var add_competitor_selected_url_url = `${competitor_url}competitor-selected-url/add/`;
+
+var add_article_url_url = `${competitor_url}competitor-article-url/add/`;
+
+var scrap_html_content_url = `${competitor_url}scrap-html-content/`;
 
 
-
-
-
-
+var add_article_url_selector_url = `${competitor_url}article-url-selector/add/`;
+var add_category_url_selector_url = `${competitor_url}category-url-selector/add/`;

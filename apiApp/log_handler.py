@@ -1,4 +1,3 @@
-
 from loguru import logger
 from apiApp.models import activity_log, workspace, notification, domain
 from django.contrib.auth.models import User
@@ -19,7 +18,10 @@ class Handler:
         print(record,'record')
         
         # Extracting required data
-        workspace_slug_id = record['extra']['extra']['workspace_slug_id']
+        try:
+            workspace_slug_id = record['extra']['extra']['workspace_slug_id']
+        except (KeyError, TypeError):
+            workspace_slug_id = None  # or some default value
         domain_slug_id = record['extra']['extra']['domain_slug_id']
         url = record['extra']['extra']['url']
         function = record['function']

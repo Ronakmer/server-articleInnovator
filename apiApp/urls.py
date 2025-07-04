@@ -49,15 +49,15 @@ from apiApp.views.wordpress.fetch_data.fetch_analytics_metrics_data import fetch
 from apiApp.views.wordpress.fetch_data.fetch_wp_data import fetch_wp_data
 from apiApp.views.wordpress.perma_links.perma_links import list_perma_links, update_perma_links
 from apiApp.views.article.article import list_article, add_article, update_article, delete_article
-from apiApp.views.competitor.competitor import list_competitor, add_competitor, update_competitor, delete_competitor
-from apiApp.views.competitor_domain_mapping.competitor_domain_mapping import list_competitor_domain_mapping, add_competitor_domain_mapping, update_competitor_domain_mapping, delete_competitor_domain_mapping
-from apiApp.views.competitor_sitemap_url.competitor_sitemap_url import list_competitor_sitemap_url, add_competitor_sitemap_url, update_competitor_sitemap_url, delete_competitor_sitemap_url
-from apiApp.views.competitor_sitemap_url_mapping.competitor_sitemap_url_mapping import list_competitor_sitemap_url_mapping, add_competitor_sitemap_url_mapping, update_competitor_sitemap_url_mapping, delete_competitor_sitemap_url_mapping
-from apiApp.views.competitor_article_url.competitor_article_url import list_competitor_article_url, add_competitor_article_url, update_competitor_article_url, delete_competitor_article_url
-from apiApp.views.competitor_article_url_mapping.competitor_article_url_mapping import list_competitor_article_url_mapping, add_competitor_article_url_mapping, update_competitor_article_url_mapping, delete_competitor_article_url_mapping
-from apiApp.views.competitor_extraction.competitor_extraction import list_competitor_extraction, add_competitor_extraction, update_competitor_extraction, delete_competitor_extraction
-from apiApp.views.competitor_extraction_mapping.competitor_extraction_mapping import list_competitor_extraction_mapping, add_competitor_extraction_mapping, update_competitor_extraction_mapping, delete_competitor_extraction_mapping
-from apiApp.views.competitor_seo_extraction_mapping.competitor_seo_extraction_mapping import list_competitor_seo_extraction_mapping, add_competitor_seo_extraction_mapping, update_competitor_seo_extraction_mapping, delete_competitor_seo_extraction_mapping
+# from apiApp.views.competitor.competitor import list_competitor, add_competitor, update_competitor, delete_competitor
+# from apiApp.views.competitor_domain_mapping.competitor_domain_mapping import list_competitor_domain_mapping, add_competitor_domain_mapping, update_competitor_domain_mapping, delete_competitor_domain_mapping
+# from apiApp.views.competitor_sitemap_url.competitor_sitemap_url import list_competitor_sitemap_url, add_competitor_sitemap_url, update_competitor_sitemap_url, delete_competitor_sitemap_url
+# from apiApp.views.competitor_sitemap_url_mapping.competitor_sitemap_url_mapping import list_competitor_sitemap_url_mapping, add_competitor_sitemap_url_mapping, update_competitor_sitemap_url_mapping, delete_competitor_sitemap_url_mapping
+# from apiApp.views.competitor_article_url.competitor_article_url import list_competitor_article_url, add_competitor_article_url, update_competitor_article_url, delete_competitor_article_url
+# from apiApp.views.competitor_article_url_mapping.competitor_article_url_mapping import list_competitor_article_url_mapping, add_competitor_article_url_mapping, update_competitor_article_url_mapping, delete_competitor_article_url_mapping
+# from apiApp.views.competitor_extraction.competitor_extraction import list_competitor_extraction, add_competitor_extraction, update_competitor_extraction, delete_competitor_extraction
+# from apiApp.views.competitor_extraction_mapping.competitor_extraction_mapping import list_competitor_extraction_mapping, add_competitor_extraction_mapping, update_competitor_extraction_mapping, delete_competitor_extraction_mapping
+# from apiApp.views.competitor_seo_extraction_mapping.competitor_seo_extraction_mapping import list_competitor_seo_extraction_mapping, add_competitor_seo_extraction_mapping, update_competitor_seo_extraction_mapping, delete_competitor_seo_extraction_mapping
 from apiApp.views.user_api_key.user_api_key import list_user_api_key, add_user_api_key, update_user_api_key, delete_user_api_key
 from apiApp.views.user_api_key.generate_user_api_key import generate_user_api_key
 from apiApp.views.keyword.keyword import list_keyword, add_keyword, update_keyword, delete_keyword
@@ -310,60 +310,60 @@ permissions_list = [
     # list_article_info
     {"name": "list_article_info", "route": "info/articles/", "description": "info article", "status": "True", "group": "article"},
     
-    # competitor
-    {"name": "list_competitor", "route": "competitors/", "description": "all competitor", "status": "True", "group": "competitor"},
-    {"name": "add_competitor", "route": "competitor/add/", "description": "add competitor", "status": "True", "group": "competitor"},
-    {"name": "update_competitor", "route": "competitor/update/<slug:slug_id>", "description": "update competitor", "status": "True", "group": "competitor"},
-    {"name": "delete_competitor", "route": "competitor/delete/<slug:slug_id>", "description": "delete competitor", "status": "True", "group": "competitor"},
+    # # competitor
+    # {"name": "list_competitor", "route": "competitors/", "description": "all competitor", "status": "True", "group": "competitor"},
+    # {"name": "add_competitor", "route": "competitor/add/", "description": "add competitor", "status": "True", "group": "competitor"},
+    # {"name": "update_competitor", "route": "competitor/update/<slug:slug_id>", "description": "update competitor", "status": "True", "group": "competitor"},
+    # {"name": "delete_competitor", "route": "competitor/delete/<slug:slug_id>", "description": "delete competitor", "status": "True", "group": "competitor"},
     
-    # competitor domain mapping
-    {"name": "list_competitor_domain_mapping", "route": "competitor-domain-mappings/", "description": "all competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
-    {"name": "add_competitor_domain_mapping", "route": "competitor-domain-mapping/add/", "description": "add competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
-    {"name": "update_competitor_domain_mapping", "route": "competitor-domain-mapping/update/<slug:slug_id>", "description": "update competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
-    {"name": "delete_competitor_domain_mapping", "route": "competitor-domain-mapping/delete/<slug:slug_id>", "description": "delete competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
+    # # competitor domain mapping
+    # {"name": "list_competitor_domain_mapping", "route": "competitor-domain-mappings/", "description": "all competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
+    # {"name": "add_competitor_domain_mapping", "route": "competitor-domain-mapping/add/", "description": "add competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
+    # {"name": "update_competitor_domain_mapping", "route": "competitor-domain-mapping/update/<slug:slug_id>", "description": "update competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
+    # {"name": "delete_competitor_domain_mapping", "route": "competitor-domain-mapping/delete/<slug:slug_id>", "description": "delete competitor-domain-mapping", "status": "True", "group": "competitor-domain-mapping"},
     
-    # competitor sitemap url
-    {"name": "list_competitor_sitemap_url", "route": "competitor-sitemap-urls/", "description": "all competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
-    {"name": "add_competitor_sitemap_url", "route": "competitor-sitemap-url/add/", "description": "add competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
-    {"name": "update_competitor_sitemap_url", "route": "competitor-sitemap-url/update/<slug:slug_id>", "description": "update competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
-    {"name": "delete_competitor_sitemap_url", "route": "competitor-sitemap-url/delete/<slug:slug_id>", "description": "delete competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
+    # # competitor sitemap url
+    # {"name": "list_competitor_sitemap_url", "route": "competitor-sitemap-urls/", "description": "all competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
+    # {"name": "add_competitor_sitemap_url", "route": "competitor-sitemap-url/add/", "description": "add competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
+    # {"name": "update_competitor_sitemap_url", "route": "competitor-sitemap-url/update/<slug:slug_id>", "description": "update competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
+    # {"name": "delete_competitor_sitemap_url", "route": "competitor-sitemap-url/delete/<slug:slug_id>", "description": "delete competitor-sitemap-url", "status": "True", "group": "competitor-sitemap-url"},
   
-    # competitor sitemap url mapping
-    {"name": "list_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mappings/", "description": "all competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
-    {"name": "add_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mapping/add/", "description": "add competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
-    {"name": "update_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mapping/update/<slug:slug_id>", "description": "update competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
-    {"name": "delete_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mapping/delete/<slug:slug_id>", "description": "delete competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
+    # # competitor sitemap url mapping
+    # {"name": "list_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mappings/", "description": "all competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
+    # {"name": "add_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mapping/add/", "description": "add competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
+    # {"name": "update_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mapping/update/<slug:slug_id>", "description": "update competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
+    # {"name": "delete_competitor_sitemap_url_mapping", "route": "competitor-sitemap-url-mapping/delete/<slug:slug_id>", "description": "delete competitor-sitemap-url-mapping", "status": "True", "group": "competitor-sitemap-url-mapping"},
     
-    # competitor article url
-    {"name": "list_competitor_article_url", "route": "competitor-article-urls/", "description": "all competitor-article-url", "status": "True", "group": "competitor-article-url"},
-    {"name": "add_competitor_article_url", "route": "competitor-article-url/add/", "description": "add competitor-article-url", "status": "True", "group": "competitor-article-url"},
-    {"name": "update_competitor_article_url", "route": "competitor-article-url/update/<slug:slug_id>", "description": "update competitor-article-url", "status": "True", "group": "competitor-article-url"},
-    {"name": "delete_competitor_article_url", "route": "competitor-article-url/delete/<slug:slug_id>", "description": "delete competitor-article-url", "status": "True", "group": "competitor-article-url"},
+    # # competitor article url
+    # {"name": "list_competitor_article_url", "route": "competitor-article-urls/", "description": "all competitor-article-url", "status": "True", "group": "competitor-article-url"},
+    # {"name": "add_competitor_article_url", "route": "competitor-article-url/add/", "description": "add competitor-article-url", "status": "True", "group": "competitor-article-url"},
+    # {"name": "update_competitor_article_url", "route": "competitor-article-url/update/<slug:slug_id>", "description": "update competitor-article-url", "status": "True", "group": "competitor-article-url"},
+    # {"name": "delete_competitor_article_url", "route": "competitor-article-url/delete/<slug:slug_id>", "description": "delete competitor-article-url", "status": "True", "group": "competitor-article-url"},
     
-    # competitor article url mapping
-    {"name": "list_competitor_article_url_mapping", "route": "competitor-article-url-mappings/", "description": "all competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
-    {"name": "add_competitor_article_url_mapping", "route": "competitor-article-url-mapping/add/", "description": "add competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
-    {"name": "update_competitor_article_url_mapping", "route": "competitor-article-url-mapping/update/<slug:slug_id>", "description": "update competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
-    {"name": "delete_competitor_article_url_mapping", "route": "competitor-article-url-mapping/delete/<slug:slug_id>", "description": "delete competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
+    # # competitor article url mapping
+    # {"name": "list_competitor_article_url_mapping", "route": "competitor-article-url-mappings/", "description": "all competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
+    # {"name": "add_competitor_article_url_mapping", "route": "competitor-article-url-mapping/add/", "description": "add competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
+    # {"name": "update_competitor_article_url_mapping", "route": "competitor-article-url-mapping/update/<slug:slug_id>", "description": "update competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
+    # {"name": "delete_competitor_article_url_mapping", "route": "competitor-article-url-mapping/delete/<slug:slug_id>", "description": "delete competitor-article-url-mapping", "status": "True", "group": "competitor-article-url-mapping"},
 
 
-    # competitor extraction
-    {"name": "list_competitor_extraction", "route": "competitor-extractions/", "description": "all competitor-extraction", "status": "True", "group": "competitor-extraction"},
-    {"name": "add_competitor_extraction", "route": "competitor-extraction/add/", "description": "add competitor-extraction", "status": "True", "group": "competitor-extraction"},
-    {"name": "update_competitor_extraction", "route": "competitor-extraction/update/<slug:slug_id>", "description": "update competitor-extraction", "status": "True", "group": "competitor-extraction"},
-    {"name": "delete_competitor_extraction", "route": "competitor-extraction/delete/<slug:slug_id>", "description": "delete competitor-extraction", "status": "True", "group": "competitor-extraction"},
+    # # competitor extraction
+    # {"name": "list_competitor_extraction", "route": "competitor-extractions/", "description": "all competitor-extraction", "status": "True", "group": "competitor-extraction"},
+    # {"name": "add_competitor_extraction", "route": "competitor-extraction/add/", "description": "add competitor-extraction", "status": "True", "group": "competitor-extraction"},
+    # {"name": "update_competitor_extraction", "route": "competitor-extraction/update/<slug:slug_id>", "description": "update competitor-extraction", "status": "True", "group": "competitor-extraction"},
+    # {"name": "delete_competitor_extraction", "route": "competitor-extraction/delete/<slug:slug_id>", "description": "delete competitor-extraction", "status": "True", "group": "competitor-extraction"},
     
-    # competitor extraction mapping
-    {"name": "list_competitor_extraction_mapping", "route": "competitor-extraction-mappings/", "description": "all competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
-    {"name": "add_competitor_extraction_mapping", "route": "competitor-extraction-mapping/add/", "description": "add competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
-    {"name": "update_competitor_extraction_mapping", "route": "competitor-extraction-mapping/update/<slug:slug_id>", "description": "update competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
-    {"name": "delete_competitor_extraction_mapping", "route": "competitor-extraction-mapping/delete/<slug:slug_id>", "description": "delete competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
+    # # competitor extraction mapping
+    # {"name": "list_competitor_extraction_mapping", "route": "competitor-extraction-mappings/", "description": "all competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
+    # {"name": "add_competitor_extraction_mapping", "route": "competitor-extraction-mapping/add/", "description": "add competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
+    # {"name": "update_competitor_extraction_mapping", "route": "competitor-extraction-mapping/update/<slug:slug_id>", "description": "update competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
+    # {"name": "delete_competitor_extraction_mapping", "route": "competitor-extraction-mapping/delete/<slug:slug_id>", "description": "delete competitor-extraction-mapping", "status": "True", "group": "competitor-extraction-mapping"},
     
-    # competitor seo extraction mapping
-    {"name": "list_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mappings/", "description": "all competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
-    {"name": "add_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mapping/add/", "description": "add competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
-    {"name": "update_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mapping/update/<slug:slug_id>", "description": "update competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
-    {"name": "delete_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mapping/delete/<slug:slug_id>", "description": "delete competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
+    # # competitor seo extraction mapping
+    # {"name": "list_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mappings/", "description": "all competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
+    # {"name": "add_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mapping/add/", "description": "add competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
+    # {"name": "update_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mapping/update/<slug:slug_id>", "description": "update competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
+    # {"name": "delete_competitor_seo_extraction_mapping", "route": "competitor-seo-extraction-mapping/delete/<slug:slug_id>", "description": "delete competitor-seo-extraction-mapping", "status": "True", "group": "competitor-seo-extraction-mapping"},
     
     # user api key
     {"name": "list_user_api_key", "route": "user-api-keys/", "description": "all user-api-key", "status": "True", "group": "user-api-key"},

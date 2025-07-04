@@ -1,0 +1,1 @@
+# Cronjob package for competitor URL monitoring 

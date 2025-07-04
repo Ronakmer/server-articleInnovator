@@ -4,7 +4,7 @@
 // list api
 async function list_api(api_url, table_name, offset, limit, filters, delete_function_name, status_function_name, update_page_url, current_page, response_key, domain_slug_id, render_data_to_table=()=>{}) {
     try {
-
+        
         const access_token = localStorage.getItem("access_token");
         
         const workspace_slug_id = localStorage.getItem("workspace_slug_id");
