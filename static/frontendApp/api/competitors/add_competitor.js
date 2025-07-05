@@ -11,7 +11,7 @@ let urlInput, addButton, urlListContainer;
 var current_step = 1;
 // Initialize URL Manager
 function initializeUrlManager() {
-    urlInput = document.getElementById('url-input');
+    urlInput = document.getElementById('url-input');    
     addButton = urlInput.nextElementSibling;
     urlListContainer = document.getElementById('url-list-container');
 
@@ -276,36 +276,54 @@ async function add_competitor() {
     const interval_unit = document.querySelector('[name="interval_unit"]').value;
     const interval = document.querySelector('[name="interval_value"]').value;
     const competitor_type = document.querySelector('input[name="competitor_type"]:checked')?.value;
-    const wp_status = document.querySelector('input[name="wp_status"]:checked')?.value;
     const domain_slug_id = document.querySelector('[name="ai_domain_slug_id"]').value;
     const prompt_slug_id = document.querySelector('[name="prompt_slug_id"]').value;
-    const author_slug_id_ai = document.querySelector('[name="author_slug_id_ai"]').value;
+    const author_slug_id_ai = document.querySelector('[name="author_slug_id_ai"]').value || 'temp-author';
     const category_slug_id_ai = document.querySelector('[name="category_slug_id_ai"]').value;
     const tag_slug_id_ai = document.querySelector('[name="tag_slug_id_ai"]').value;
-    
-    
+    // const article_type_slug_id = document.querySelector('[name="article_type_slug_id"]').value || 'article-type-slug-id';
+    const article_type_slug_id = "article-type-slug-id";
+    const selectedRadio = document.querySelector('input[name="wp_status_ai"]:checked');
+    const wp_status_ai = selectedRadio ? selectedRadio.value : null;
+
+    if(wp_status_ai == 'future'){
+
+        const ai_date = document.querySelector("#ai_date_time_fields input[type='date']");
+        const ai_time = document.querySelector("#ai_date_time_fields input[type='time']");
+        
+        const date_value = ai_date.value;
+        const time_value = ai_time.value;
+        
+        if (date_value && time_value) {
+            formatted_date_time = `${date_value}T${time_value}:00Z`;      
+        }    
+    }
+
+
     const aiCheckboxStateJson = collectAICheckboxesState();
-    
-    
-    
+     
     const data = new FormData();
     data.append("competitor_domain_name", competitor_domain_name);
     data.append("interval_unit", interval_unit);
     data.append("interval", interval);
-    data.append("wp_status", wp_status);
+    data.append("wp_status", wp_status_ai);
     data.append("selected_urls", JSON.stringify(getAllUrlObjects()));
     data.append("competitor_type", competitor_type);
     data.append("created_by", "1");
-    data.append("domain_id", domain_id);
+    
     data.append("article_status", "publish");
-    data.append("wp_author", "test");
-    data.append("wp_schedule_time", "2025-06-30 10:00:00");
+    
+    if(wp_status_ai == "future"){
+        data.append("wp_schedule_time", formatted_date_time);
+    }
     data.append("ai_content_flags", JSON.stringify(aiCheckboxStateJson));
     data.append("domain_slug_id", domain_slug_id);
     data.append("prompt_slug_id", prompt_slug_id);
     data.append("author_slug_id_ai", author_slug_id_ai);
     data.append("category_slug_id_ai", category_slug_id_ai);
     data.append("tag_slug_id_ai", tag_slug_id_ai);
+    data.append("article_type_slug_id", article_type_slug_id);
+
     
     const response = await add_api(add_competitor_url, data, null);
     

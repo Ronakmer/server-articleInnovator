@@ -253,3 +253,5 @@ var scrap_html_content_url = `${competitor_url}scrap-html-content/`;
 
 var add_article_url_selector_url = `${competitor_url}article-url-selector/add/`;
 var add_category_url_selector_url = `${competitor_url}category-url-selector/add/`;
+
+var send_article_url_to_create_article_api_url = `${competitor_url}send-article-url-to-create-article/`;

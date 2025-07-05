@@ -56,7 +56,6 @@
 // };
 
 
-
 function temp_set_ai_data() {
     // const temp_article_type_slug_id = localStorage.getItem("article_type_slug_id");
     // const temp_article_type_title = localStorage.getItem("article_type_title");
@@ -96,9 +95,6 @@ function temp_set_ai_data() {
     get_prompt_data();
    
 }
-
-
-
 
 function collectAICheckboxesState() {
     const wrapper = document.getElementById("ai-checkbox-wrapper");

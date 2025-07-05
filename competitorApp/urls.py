@@ -8,7 +8,8 @@ from competitorApp.views.competitor.competitor import (
     list_competitor,
     add_competitor,
     update_competitor,
-    delete_competitor
+    delete_competitor,
+    send_article_url_to_create_article_api
     )
 from competitorApp.views.competitor_selected_url.competitor_selected_url import (
     list_competitor_selected_url,
@@ -48,6 +49,7 @@ permissions_list = [
     {"name": "add_competitor", "route": "competitor/add/", "description": "competitor", "status": "True", "group": "competitor"},
     {"name": "update_competitor", "route": "competitor/update/<slug:competitor_slug_id>", "description": "competitor", "status": "True", "group": "competitor"},
     {"name": "delete_competitor", "route": "competitor/delete/<slug:competitor_slug_id>", "description": "competitor", "status": "True", "group": "competitor"},
+    {"name": "send_article_url_to_create_article_api", "route": "send-article-url-to-create-article/", "description": "send article url to create article", "status": "True", "group": "send article url to create article"},
 
 
     # competitor selected url

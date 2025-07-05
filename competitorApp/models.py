@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import uuid
-
+from django.contrib.auth.models import User
 class competitor(models.Model):
     slug_id = models.CharField(max_length=100,default="",  blank=True)
     competitor_domain_name=models.CharField(max_length=255)
@@ -34,10 +34,10 @@ class competitor_domain_mapping(models.Model):
     workspace_id=models.CharField(max_length=255)
     wp_status=models.CharField(max_length=255)
     article_status=models.CharField(max_length=255)
-    wp_schedule_time=models.DateTimeField(default=timezone.now)
+    wp_schedule_time=models.DateTimeField(default=timezone.now,null=True,blank=True)
     article_priority=models.IntegerField(default=0)
     ai_content_flags=models.JSONField(default=dict)
-    wp_author=models.CharField(max_length=255)
+    wp_author=models.CharField(max_length=255,default="")
     wp_category=models.JSONField(default=dict)
     wp_tag=models.JSONField(default=dict)
     prompt=models.JSONField(default=dict)

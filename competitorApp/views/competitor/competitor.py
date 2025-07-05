@@ -2,13 +2,15 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from competitorApp.serializers import competitor_serializer, competitor_domain_mapping_serializer, competitor_selected_url_serializer
-from competitorApp.models import competitor, competitor_domain_mapping, competitor_selected_url
+from competitorApp.models import competitor, competitor_article_url, competitor_domain_mapping, competitor_selected_url
 from django.db.models import Q
 from loguru import logger
 import json
 from competitorApp.views.base.process_pagination.process_pagination import process_pagination
 from competitorApp.views.competitor.supportive_methods.extract_clean_domain import extract_clean_domain
 from django.utils import timezone
+
+from competitorApp.views.cronjob.main_checker import send_article_url_to_create_article
 
 
 @api_view(['GET'])
@@ -98,32 +100,27 @@ def add_competitor(request):
                 }, status=400)
             
         
-        wp_category = {
-            "category_slug_id": data.get('category_slug_id_ai')
-        }
-        wp_tag = {
-            "tag_slug_id": data.get('tag_slug_id_ai')
-        }
-        prompt = {
-            "prompt_slug_id": data.get('prompt_slug_id')
-        }
-
+        wp_category = {"category_slug_id": data["category_slug_id_ai"]} if data.get("category_slug_id_ai") else ''
+        wp_tag = {"tag_slug_id": data["tag_slug_id_ai"]} if data.get("tag_slug_id_ai") else ''
+        prompt = {"prompt_slug_id": data["prompt_slug_id"]} if data.get("prompt_slug_id") else ''
+        article_type = {"article_type_slug_id": data["article_type_slug_id"]} if data.get("article_type_slug_id") else ''
+        wp_schedule_time = data.get('wp_schedule_time') if data.get('wp_status') == 'future' else None
 
         # Now create or update the domain mapping
         domain_mapping_data = {
             'competitor_id': competitor_obj.pk,
-            'domain_id': data.get('domain_id'),
-            'workspace_id': data.get('workspace_slug_id'),
-            'wp_status': data.get('wp_status'),
+            'domain_id': data.get('domain_id','domainid'),
+            'workspace_id': data.get('workspace_slug_id',''),
+            'wp_status': data.get('wp_status',''),
             'article_status': data.get('article_status'),
-            'wp_schedule_time': data.get('wp_schedule_time'),
+            'wp_schedule_time': wp_schedule_time,
             'article_priority': data.get('article_priority', 0),
             'ai_content_flags': data.get('ai_content_flags', {}),
             'wp_author': data.get('author_slug_id_ai'),
             'wp_category': wp_category,
             'wp_tag': wp_tag,
             'prompt': prompt,
-            'article_type': data.get('article_type', {}),
+            'article_type': article_type,
             'competitor_type': data.get('competitor_type', 'sitemap'),
             'interval': data.get('interval', 30),
             'interval_unit': data.get('interval_unit', 'minute'),
@@ -131,6 +128,7 @@ def add_competitor(request):
             'workspace': data.get('workspace', {}),
             'domain': data.get('domain', {}),
         }
+        print(domain_mapping_data['wp_author'],'domain_mapping_data')
 
         # Create new domain mapping
         domain_mapping_serialized = competitor_domain_mapping_serializer(data=domain_mapping_data)
@@ -248,31 +246,28 @@ def update_competitor(request, competitor_slug_id):
             }, status=400)
 
 
-        wp_category = {
-            "category_slug_id": data.get('category_slug_id_ai')
-        }
-        wp_tag = {
-            "tag_slug_id": data.get('tag_slug_id_ai')
-        }
-        prompt = {
-            "prompt_slug_id": data.get('prompt_slug_id')
-        }
+        wp_category = {"category_slug_id": data["category_slug_id_ai"]} if data.get("category_slug_id_ai") else ''
+        wp_tag = {"tag_slug_id": data["tag_slug_id_ai"]} if data.get("tag_slug_id_ai") else ''
+        prompt = {"prompt_slug_id": data["prompt_slug_id"]} if data.get("prompt_slug_id") else ''
+        article_type = {"article_type_slug_id": data["article_type_slug_id"]} if data.get("article_type_slug_id") else ''
+        wp_schedule_time = data.get('wp_schedule_time') if data.get('wp_status') == 'future' else None
+
 
         # Now update or create domain mapping
         domain_mapping_data = {
             'competitor_id': competitor_obj.pk,
-            'domain_id': data.get('domain_id'),
-            'workspace_id': data.get('workspace_id'),
+            'domain_id': data.get('domain_id',''),
+            'workspace_id': data.get('workspace_id',''),
             'wp_status': data.get('wp_status'),
             'article_status': data.get('article_status'),
-            'wp_schedule_time': data.get('wp_schedule_time'),
+            'wp_schedule_time': wp_schedule_time,
             'article_priority': data.get('article_priority', 0),
             'ai_content_flags': data.get('ai_content_flags', {}),
             'wp_author': data.get('author_slug_id_ai'),
             'wp_category': wp_category,
             'wp_tag': wp_tag,
             'prompt': prompt,
-            'article_type': data.get('article_type', {}),
+            'article_type': article_type,
             'competitor_type': data.get('competitor_type', 'sitemap'),
             'interval': data.get('interval', 30),
             'interval_unit': data.get('interval_unit', 'minute'),
@@ -412,3 +407,54 @@ def delete_competitor(request, competitor_slug_id):
     except Exception as e:
         print("Error in delete_competitor:", e)
         return JsonResponse({"error": f"{str(e)}", "success": False}, status=500)
+    
+
+@api_view(['POST'])
+def send_article_url_to_create_article_api(request):
+    try:
+        competitor_domain_mapping_slug_id = request.data.get('competitor_domain_mapping_slug_id')
+        print(competitor_domain_mapping_slug_id,'competitor_domain_mapping_slug_id')
+        if not competitor_domain_mapping_slug_id:
+            return JsonResponse({"error": "Missing competitor_domain_mapping_slug_id", "success": False}, status=400)
+
+        # Fetch domain mapping object
+        try:
+            competitor_domain_mapping_obj = competitor_domain_mapping.objects.get(slug_id=competitor_domain_mapping_slug_id)
+        except competitor_domain_mapping.DoesNotExist:
+            return JsonResponse({"error": "Invalid competitor_domain_mapping_id", "success": False}, status=404)
+
+        # Fetch all unsent article URLs efficiently (just what's needed)
+        unsent_urls = competitor_article_url.objects.filter(
+            competitor_domain_mapping_id__slug_id=competitor_domain_mapping_slug_id
+        ).exclude(delivery_status='sent').values_list('article_url', flat=True)
+
+        success_count = 0
+        fail_count = 0
+        failed_urls = []
+
+        for url in unsent_urls:
+            result = send_article_url_to_create_article(competitor_domain_mapping_obj, url)
+            if result:
+                success_count += 1
+            else:
+                fail_count += 1
+                failed_urls.append(url)
+
+        if success_count > 0:
+            return JsonResponse({
+                "success": True,
+                "total": len(unsent_urls),
+                "message": "Article url sent to create article successfully.",
+                "processed": success_count,
+                "failed": fail_count,
+                "failed_urls": failed_urls[:20]  # show max 20 failed for readability
+            })
+        else:
+            return JsonResponse({
+                "success": False,
+                "error": "Article url not sent to create article.",
+            })
+
+    except Exception as e:
+        print("This error is send_article_url_to_create_article_api --->:", e)
+        return JsonResponse({"error": str(e), "success": False}, status=500)

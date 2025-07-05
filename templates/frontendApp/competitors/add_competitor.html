@@ -98,7 +98,7 @@
                         {% comment %} <h5 class="text-base font-semibold text-gray-900 pb-4 border-b border-gray-200">
                             Add Competitor</h5> {% endcomment %}
 
-                                <div class="mb-4">
+                                {% comment %} <div class="mb-4">
                                     <label for="competitortype" class="block pb-1 text-sm  font-medium text-gray-600 mt-2">Competitor Type </label>
                                     <div class="flex gap-4 mt-2">
                                         <!-- Sitemap Radio -->
@@ -117,9 +117,28 @@
 
                                         
                                     </div>
+                                </div> {% endcomment %}
+
+                                <div class="wordpress-status">
+                                    <label for="competitortype" class="block pb-1 text-sm  font-medium text-gray-600 mt-2">Competitor Type </label>
+
+                                    <div class="flex items-center">
+                                        <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                            <label>
+                                                <input type="radio" class="status-radio" name="competitor_type" value="sitemap"  checked> Sitemap
+                                            </label>
+                                        </div>
+                                        <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                            <label>
+                                                <input type="radio" class="status-radio" name="competitor_type" value="category"  checked> Category
+                                            </label>
+                                        </div>   
+                                    </div>
+                                    
                                 </div>
-                                <div class="mb-4">
-                                    <label for="interval" class="block pb-1 text-sm font-medium text-gray-600">Competitor Domain Name</label>
+
+                                <div class="mt-4">
+                                    <label  class="block pb-1 text-sm font-medium text-gray-600">Competitor Domain Name</label>
                                     <div class="flex w-full">
                                         <!-- Text input with full rounded corners -->
                                         <input 
@@ -131,7 +150,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-4">
+                                <div class="mt-4">
                                     <label for="interval" class="block pb-1 text-sm font-medium text-gray-600">Interval</label>
                                     <div class="flex w-full">
                                         <!-- Number input -->
@@ -141,13 +160,14 @@
                                         <!-- Unit dropdown -->
                                         <select name="interval_unit"
                                             class="min-w-[100px] px-3 py-2 text-sm text-gray-900 border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                            <option value="minutes">Min</option>
-                                            <option value="hours">Hour</option>
+                                            <option value="minute">Min</option>
+                                            <option value="hour">Hour</option>
+                                            <option value="day">Day</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="mb-4">
+                                <div class="mt-4">
                                     <label for="field-3" class="block pb-1 text-sm font-medium text-gray-600">Select Article Type</label>
                                     <div class="flex">
                                         <select id="type" name="article_type_data" class="!appearance-none bg-white border border-gray-300 text-gray-900 text-sm font-normal rounded-lg block w-full py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -155,7 +175,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="flex flex-col md:flex-row items-start gap-3 mt-2">
+
+                                <div class="mt-4 flex flex-col md:flex-row items-start gap-3 ">
                                     <div class="block w-full">
                                         <label for="countries"
                                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Select Prompt</label>
@@ -181,7 +202,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex flex-col md:flex-row items-start gap-3">
+                                <div class="mt-4 flex flex-col md:flex-row items-start gap-3">
                                     <div class="block w-full">
                                         <label for="countries"
                                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Select Domain</label>
@@ -206,8 +227,10 @@
                                             </div>
                                     </div>
                                 </div>
+                                
+                                <div id="ai-checkbox-wrapper" class="flex flex-col gap-4"></div>
 
-                                <div class="flex flex-col md:flex-row items-start gap-3  hidden" id="author_div_id">
+                                <div class="mt-4 flex flex-col md:flex-row items-start gap-3  hidden" id="author_div_id">
                                     <div class="block w-full ">
                                         <label for="countries"
                                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Author
@@ -231,7 +254,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="flex flex-col md:flex-row items-start mt-2 gap-3 hidden" id="category_div_id">
+                                <div class="mt-4 flex flex-col md:flex-row items-start mt-2 gap-3 hidden" id="category_div_id">
                                     <div class="block w-full ">
                                         <label for="countries"
                                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Categories
@@ -256,7 +279,7 @@
                                 </div>
 
 
-                                <div class="flex flex-col md:flex-row items-start gap-3 hidden" id="tag_div_id">
+                                <div class="mt-4 flex flex-col md:flex-row items-start gap-3 hidden" id="tag_div_id">
                                     <div class="block w-full ">
                                         <label for="countries"
                                             class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Tags
@@ -283,37 +306,44 @@
                                     </div>
                                 </div>
                                 
-                                <div class="mb-4">
-                                    <label for="competitortype" class="block pb-1 text-sm  font-medium text-gray-600 mt-2">Wp Status</label>
-                                    <div class="flex gap-4 mt-2">
-                                        <!-- Sitemap Radio -->
-                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
-                                            <input type="radio" name="wp_status" value="publish"
-                                                class="form-radio text-indigo-600 mr-2">
-                                            <span>Publish</span>
-                                        </label>
+                                <div class="mt-4 flex flex-col md:flex-row items-start gap-3">
+                                    <div class="block w-full">
+                                        <label for="countries"
+                                        class="mb-2 text-sm font-medium text-gray-600 w-full flex items-center">Wordpress Status</label>
 
-                                        <!-- Category Radio -->
-                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
-                                            <input type="radio" name="wp_status" value="draft"
-                                                class="form-radio text-indigo-600 mr-2">
-                                            <span>Draft</span>
-                                        </label>
-
-                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
-                                            <input type="radio" name="wp_status" value="future"
-                                                class="form-radio text-indigo-600 mr-2">
-                                            <span>Future</span>
-                                        </label>
-                                        <label class="flex items-center justify-start rounded-lg border border-solid border-gray-200 p-[10px] text-sm text-gray-700 cursor-pointer">
-                                            <input type="radio" name="wp_status" value="trash"
-                                                class="form-radio text-indigo-600 mr-2">
-                                            <span>Trash</span>
-                                        </label>
+                                        <div class="wordpress-status">
+                                            <div class="flex items-center">
+                                                <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                                    <label>
+                                                        <input type="radio" class="status-radio" name="wp_status_ai" value="draft" id="draft" onclick="ai_toggle_date_time_fields()" checked> Draft
+                                                    </label>
+                                                </div>
+                                                <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                                    <label>
+                                                        <input type="radio" class="status-radio" name="wp_status_ai" value="publish" id="publish" onclick="ai_toggle_date_time_fields()"> Publish
+                                                    </label>
+                                                </div>
+                                                <div class="p-3 mr-3 border border-gray-200 rounded-2xl">
+                                                    <label>
+                                                        <input type="radio" class="status-radio" name="wp_status_ai" value="future" id="ai_future" onclick="ai_toggle_date_time_fields()"> Scheduled
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <!-- Date and Time fields -->
+                                            <div id="ai_date_time_fields" class="flex items-center mt-4 hidden ">
+                                                <div class="mr-4">
+                                                    <input type="date" class="border border-gray-300 rounded-md p-2" />
+                                                </div>
+                                                <div class="mr-4">
+                                                    <input type="time" class="border border-gray-300 rounded-md p-2" />
+                                                </div>
+                                            
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mb-4 mt-2">
+                                <div class="mt-4 mt-2">
                                     <label for="field-3" class="block pb-1 text-sm font-medium text-gray-600">Url</label>
                                     <div class="flex w-full">
                                         <input type="text" id="url-input" name="url" placeholder="https://example.com"
@@ -326,7 +356,7 @@
                                 </div>
 
                                 <!-- URL List -->
-                                <div class="mb-4 bg-white rounded-lg shadow">
+                                <div class="mt-4 bg-white rounded-lg shadow">
                                     <div class="bg-gray-50 border-b border-gray-200 px-6 py-4">
                                         <h3 class="text-sm font-semibold text-gray-600">Url List</h3>
                                     </div>
@@ -353,13 +383,10 @@
 
 
                             <div class="flex flex-col md:flex-row items-start gap-3 mb-3">
-                                <div class="block w-full" id="variables_btn">
-
-                                
+                                <div class="block w-full" id="variables_btn"> 
                                 </div>
                             </div>
                             
-
                             <div class="flex flex-col md:flex-row items-start gap-3">
                                 <div id="dynamic_fields_container" name="dynamic_fields_container" class="block w-full ">
 
@@ -746,7 +773,7 @@
                         <!-- Back Button -->
                         <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400" onclick="back_step()">Back</button>
                         <!-- Next Button -->
-                        <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="show_list_competitor()">Next</button>
+                        <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700" onclick="send_url_for_aticle_api()">Next</button>
                     </div>  
                 </div>
                 
@@ -865,92 +892,7 @@
     </div>
 </div>
 
-{% comment %} <!-- Start Step 2 -->
-<div class="col-span-12 lg:col-span-8 mt-4">
-    <div class="border border-gray-200 rounded-2xl overflow-hidden">
-        <!-- Unified Header + Table Wrapper -->
-        <div class="p-4 border-b border-gray-200 bg-white">
-            <div class="flex justify-between items-center">
-                <h5 class="text-base font-semibold text-gray-900">Sitemap Finder</h5>
 
-                <div class="flex items-center gap-4">
-                    <!-- Search Box -->
-                    <div class="relative w-full max-w-xs">
-                        <input type="text" placeholder="Enter Domain. . ."
-                            class="w-full py-2 pr-10 pl-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                        <button type="submit"
-                            class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-indigo-600">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="flex items-center gap-1">
-                        <a href="#" class="inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" class="z-10 inline-flex items-center bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold text-white">1</a>
-                        <span class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300">...</span>
-                        <a href="#" class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50">10</a>
-                        <a href="#" class="inline-flex items-center rounded-lg px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <div class="overflow-x-auto bg-white">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">#</th>
-                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">URL</th>
-                        <th class="py-3.5 pl-4 text-left font-medium text-gray-900">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200" id="role_tbody">
-                    <tr class="bg-white">
-                        <td class="py-3.5 pl-4">1</td>
-                        <td class="py-3.5 pl-4">
-                            <div class="max-w-[300px] overflow-x-auto whitespace-nowrap">
-                                https://www.google.com
-                            </div>
-                        </td>
-                        <td class="py-3.5 pl-4">
-                            <button onclick="copyToClipboard('https://www.google.com')"
-                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3">
-                                    </path>
-                                </svg>
-                                Copy
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div> {% endcomment %}
-
-
-
-{% comment %} </form> {% endcomment %}
 
 
 
@@ -966,6 +908,9 @@
 <script id="back_step_js" src="{% static 'frontendApp/api/competitors/back_step.js' %}" defer></script>
 <script id="add_competitor_dropdown_js" src="{% static 'frontendApp/api/competitors/add_competitor_dropdown.js' %}" defer></script>
 <script id="add_competitor_js" src="{% static 'frontendApp/api/competitors/add_competitor.js' %}" defer></script>
+<script id="article_scheduled_js" src="{% static 'frontendApp/api/article/base/article_scheduled.js' %}" defer></script>
+<script id="send_url_for_aticle_js" src="{% static 'frontendApp/api/competitors/send_url_for_aticle.js' %}" defer></script>
+
 <!-- Ensure functions are available globally -->
 <script>
     // Wait for all scripts to load

@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.db import transaction
 from datetime import timedelta
 from urllib.parse import urljoin, urlparse
+from django.contrib.auth.models import User
 # from loguru import logger  # Removing this to fix logging issues
 
 from apiApp.views.article.supportive_methods.add_ai_article import add_ai_article
@@ -135,31 +136,64 @@ def update_daily_stats(url_obj, success=True, articles_found=0, new_articles=0):
     stats.save()
 
 # ============== Send Article Url To Create Article ==============
-def send_article_url_to_create_article(competitor_domain_mapping_obj,article_url):
-    try:
-        data = {
-                "article_type_slug_id": competitor_domain_mapping_obj.article_type['article_type_slug_id'],
-                "domain_slug_id": competitor_domain_mapping_obj.domain_slug_id,
-                "workspace_slug_id": competitor_domain_mapping_obj.workspace_slug_id,
-                "wp_status": competitor_domain_mapping_obj.wp_status,
-                "prompt_slug_id": competitor_domain_mapping_obj.prompt['prompt_slug_id'],
-                "article_priority": competitor_domain_mapping_obj.article_priority,
-                "article_status": competitor_domain_mapping_obj.article_status,
-                "wp_schedule_time": competitor_domain_mapping_obj.wp_schedule_time,
-                "url": article_url,
-                "keyword":None ,
-                "wp_author": competitor_domain_mapping_obj.wp_author,
-                "wp_category": competitor_domain_mapping_obj.wp_category['category_slug_id_ai'],
-                "wp_tag": competitor_domain_mapping_obj.wp_tag['tag_slug_id_ai'],
-                "ai_content_flags": competitor_domain_mapping_obj.ai_content_flags    
-        }
-        add_ai_article(data)
+import json
 
+def send_article_url_to_create_article(competitor_domain_mapping_obj, article_url):
+    try:
+        print(competitor_domain_mapping_obj, 'competitor_domain_mapping_obj')
+        print(article_url, 'article_url')
+        request_user = User.objects.get(username='superadmin@gmail.com')
+        # Ensure wp_category is a dict
+        wp_category = competitor_domain_mapping_obj.wp_category
+        if isinstance(wp_category, str) and wp_category.strip().startswith("{"):
+            wp_category = json.loads(wp_category)
+        elif not isinstance(wp_category, dict):
+            wp_category = {}
+
+        # Ensure wp_tag is a dict
+        wp_tag = competitor_domain_mapping_obj.wp_tag
+        if isinstance(wp_tag, str) and wp_tag.strip().startswith("{"):
+            wp_tag = json.loads(wp_tag)
+        elif not isinstance(wp_tag, dict):
+            wp_tag = {}
+
+        # Ensure prompt is a dict
+        prompt = competitor_domain_mapping_obj.prompt
+        if isinstance(prompt, str) and prompt.strip().startswith("{"):
+            prompt = json.loads(prompt)
+        elif not isinstance(prompt, dict):
+            prompt = {}
+
+        # Ensure article_type is a dict
+        article_type = competitor_domain_mapping_obj.article_type
+        if isinstance(article_type, str) and article_type.strip().startswith("{"):
+            article_type = json.loads(article_type)
+        elif not isinstance(article_type, dict):
+            article_type = {}
+
+        data = {
+            "article_type_slug_id": article_type.get('article_type_slug_id', ''),
+            "domain_slug_id": competitor_domain_mapping_obj.domain_id,
+            "workspace_slug_id": competitor_domain_mapping_obj.workspace_id,
+            "wp_status": competitor_domain_mapping_obj.wp_status,
+            "prompt_slug_id": prompt.get('prompt_slug_id', ''),
+            "article_priority": competitor_domain_mapping_obj.article_priority,
+            "article_status": competitor_domain_mapping_obj.article_status,
+            "wp_schedule_time": competitor_domain_mapping_obj.wp_schedule_time,
+            "url": article_url,
+            "keyword": None,
+            "wp_author": competitor_domain_mapping_obj.wp_author,
+            "wp_category": wp_category.get('category_slug_id_ai', ''),
+            "wp_tag": wp_tag.get('tag_slug_id_ai', ''),
+            "ai_content_flags": competitor_domain_mapping_obj.ai_content_flags
+        }
+
+        add_ai_article(request_user,data)
         return True
+
     except Exception as e:
         log_error(f"Error sending article url to create article: {e}")
         return False
-
 
 # ============== SITEMAP PROCESSING ==============
 
