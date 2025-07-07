@@ -9,7 +9,7 @@ __pycache__
 .help
 
 # Ignore env files
+venv/
 .env
-
 # Ignore media files
 media/

@@ -139,6 +139,8 @@ def update_daily_stats(url_obj, success=True, articles_found=0, new_articles=0):
 import json
 from requests.auth import HTTPBasicAuth
 import os
+USER_BASE_URL = os.getenv("USER_BASE_URL")  
+
 
 def send_article_url_to_create_article(competitor_domain_mapping_obj, article_url):
     try:
@@ -210,7 +212,7 @@ def login_and_add_article(article_data):
         ssl_verify = cert_path if os.path.exists(cert_path) else False
 
         # Step 1: Login
-        login_url = "https://127.0.0.1:8000/api/login/"
+        login_url = f"{USER_BASE_URL}/api/login/"
         login_payload = {
             'email': 'superadmin@gmail.com',
             'password': 'admin'
@@ -236,7 +238,7 @@ def login_and_add_article(article_data):
             return False
 
         # Step 2: Send add-article request
-        add_article_url = "https://127.0.0.1:8000/api/article/add/"
+        add_article_url = F"{USER_BASE_URL}/api/article/add/"
         headers = {
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json"
