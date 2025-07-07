@@ -23,6 +23,7 @@ def list_ai_message(request):
         search = request.GET.get('search', '')
         message_field_type = request.GET.get('message_field_type', '')
         order_by = request.GET.get('order_by', '-created_date')
+        publish_article = request.GET.get('publish_article')
 
         # Initialize filters
         filters = Q()
@@ -42,6 +43,10 @@ def list_ai_message(request):
                 Q(article_id__icontains=search) |
                 Q(message_field_type__icontains=search)
             )
+            
+        if publish_article:
+            # Exclude primer_keyword and content_message
+            filters &= ~Q(message_field_type__in=["primary_keyword_generated_by_ai", "content_message"])
 
 
         print(message_field_type,'message_field_type')

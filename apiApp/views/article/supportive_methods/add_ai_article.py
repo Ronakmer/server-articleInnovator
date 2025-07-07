@@ -14,6 +14,9 @@ from django.http import HttpResponse
 # from imagekitio.exceptions import ImageKitException
 import uuid
 import json
+import threading
+from apiApp.views.article.supportive_methods.create_input_json import create_input_json
+from apiApp.views.rabbitmq_api.send_rabbitmq_message_api.send_rabbitmq_message_api import send_rabbitmq_message_api
 
 
 def add_ai_article(request_user, request_data):
@@ -194,6 +197,18 @@ def add_ai_article(request_user, request_data):
 
         if tag_ids:
             article_obj.wp_tag_id.set([tag.pk for tag in tag_ids])
+
+
+        # # Run rabbitmq_api in the background
+        # def run_rabbitmq_api():
+        #     # input_json = create_input_json(response.get("article_slug_id"))
+        #     input_json = create_input_json(article_obj.slug_id)
+        #     print(input_json,'input_jsonsssssddfd')
+        #     send_rabbitmq_message_api(input_json)
+
+        # threading.Thread(target=run_rabbitmq_api).start()
+
+
 
         return {"message": "Data added successfully.", "success": True, "article_slug_id": article_obj.slug_id}
 

@@ -159,4 +159,9 @@ var delete_integration_page_url = `${page_url}integration/delete/`;
 
 
 
+//competitors
+
+var list_competitor_page_url = `${page_url}competitors/`;
+
+
 

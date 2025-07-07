@@ -118,7 +118,7 @@ def replace_output_variable_for_supportive_prompt(request):
 
             if category_variable and var.id == category_variable.id:
                 categories = list(
-                    wp_category.objects.filter(domain_id=domain_obj).values('wp_cat_id', 'name', 'slug', 'description')
+                    wp_category.objects.filter(domain_id=domain_obj).values('wp_cat_id', 'name', 'slug', 'description', 'slug_id')
                 )
                 try:
                     template = json.loads(example_value)
@@ -135,7 +135,7 @@ def replace_output_variable_for_supportive_prompt(request):
 
             elif tag_variable and var.id == tag_variable.id:
                 tags = list(
-                    wp_tag.objects.filter(domain_id=domain_obj).values('wp_tag_id', 'name', 'slug', 'description')
+                    wp_tag.objects.filter(domain_id=domain_obj).values('wp_tag_id', 'name', 'slug', 'description', 'slug_id')
                 )
                 try:
                     template = json.loads(example_value)
@@ -153,7 +153,7 @@ def replace_output_variable_for_supportive_prompt(request):
             elif author_variable and var.id == author_variable.id:
                 authors = list(
                     wp_author.objects.filter(domain_id=domain_obj).values(
-                        'wp_author_id', 'username', 'first_name', 'last_name', 'email', 'bio', 'profile_image'
+                        'wp_author_id', 'username', 'first_name', 'last_name', 'email', 'bio', 'profile_image', 'slug_id'
                     )
                 )
                 try:

@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include('frontendApp.urls')),
     path('api/', include('apiApp.urls')),
     path('message-service-api/', include('AIMessageService.urls')),
+    path('competitor-api/', include('competitorApp.urls')),
+    
     
 
 ]

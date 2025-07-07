@@ -1,0 +1,54 @@
+services:
+  database:
+    image: postgres
+    env_file:
+      - .env.docker
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    container_name: articleInnovator-database
+
+  redis:
+    image: redis:latest
+    container_name: articleInnovator-redis
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:10001:8000"
+    container_name: articleInnovator-backend
+    volumes:
+      - "./static:/app/static"
+      - "./media:/app/media"
+    depends_on:
+      - database
+      - redis
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A articleInnovator worker --loglevel=info
+    container_name: articleInnovator-celery-worker
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - redis
+      - database
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A articleInnovator beat --loglevel=info
+    container_name: articleInnovator-celery-beat
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - redis
+      - database

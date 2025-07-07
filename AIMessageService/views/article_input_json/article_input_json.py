@@ -46,6 +46,7 @@ def list_article_input_json(request):
 
         # print(message_field_type,'message_field_type')
         print(article_id,'article_slug_id')
+        print('hhhhhhhhhhhkkkkkkkkkkkkkkk')
 
         try:
             obj = input_json.objects.filter(filters).order_by(order_by)

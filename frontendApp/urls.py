@@ -54,6 +54,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 
+######### competitors  #########
+from frontendApp.views.competitors.add_competitor import add_competitor_page
+from frontendApp.views.competitors.list_competitor import list_competitor_page
+
+
+
 permissions_list = [
     
     # Login and forgot
@@ -233,6 +239,14 @@ permissions_list = [
     {"name": "list_image_tag_template_category_template_mapping_page", "route": "list-image-tag-template-category-template-mapping/", "description": "image-tag-template-category-template-mapping Page", "status": "True", "group": "image-tag-template-category-template-mapping"},
     # {"name": "add_image_template_category_page", "route": "image-template-category/add/", "description": "add image-template-category Page", "status": "True", "group": "image-template-category"},
     # {"name": "update_image_template_category_page", "route": "image-template-category/update/<slug:slug_id>", "description": "update image-template-category Page", "status": "True", "group": "image-template-category"},
+
+
+
+
+    # competitors
+    {"name": "add_competitor_page", "route": "competitor/add/", "description": "add competitors", "status": "True", "group": "competitors"},
+    {"name": "list_competitor_page", "route": "competitors/", "description": "list competitors", "status": "True", "group": "competitors"},
+
 
 ]
 

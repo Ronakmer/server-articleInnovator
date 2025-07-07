@@ -1,0 +1,13 @@
+from django.contrib import admin
+from competitorApp.models import competitor,competitor_domain_mapping,competitor_selected_url,competitor_article_url,category_url_selector,article_url_selector,competitor_selector_prompt,competitor_url_daily_stats
+
+
+
+admin.site.register(competitor)
+admin.site.register(competitor_domain_mapping)
+admin.site.register(competitor_selected_url)
+admin.site.register(category_url_selector)
+admin.site.register(competitor_selector_prompt)
+admin.site.register(article_url_selector)
+admin.site.register(competitor_article_url)
+admin.site.register(competitor_url_daily_stats)
